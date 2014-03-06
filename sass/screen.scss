@@ -35,3 +35,5 @@
 // * Use variables $column-master-outer-width and $column-master-gutter-width to define
 //   the correct percentages based on the desired gutter width at the desired contaienr
 //   width.
+
+@import 'ie';				// IE8/9 Tweaks.  See file for details on how to do it.
