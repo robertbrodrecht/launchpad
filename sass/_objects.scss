@@ -256,14 +256,14 @@ $i: 10;
 	}
 	
 	@if $i == 30 {
-		$i: $i + 3;
+		$i: $i + 3 !global;
 	} @else if $i == 33 {
-		$i: $i + 2;
+		$i: $i + 2 !global;
 	} @else if $i == 65 {
-		$i: $i + 1;
+		$i: $i + 1 !global;
 	} @else if $i == 66 {
-		$i: $i + 4;
+		$i: $i + 4 !global;
 	} @else {
-		$i: $i + 5;
+		$i: $i + 5 !global;
 	}
 }
