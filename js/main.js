@@ -373,7 +373,7 @@ function init() {
 		// Add listeners for cache updates.
 		applicationCache.addEventListener(
 				'updateready',
-				function(e) {
+				function() {
 					if(applicationCache.status === applicationCache.UPDATEREADY) {
 						if(window.dev) {
 							console.log('Appcache updated. Swapping now.');
@@ -391,10 +391,10 @@ function init() {
 				);
 			applicationCache.addEventListener(
 					'obsolete',
-					function(e) {
+					function() {
 						console.log('Appcache has been obsoleted.');
 					}
-				);		
+				);
 		}
 	}
 	
