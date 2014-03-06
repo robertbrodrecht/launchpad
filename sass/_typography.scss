@@ -1,0 +1,23 @@
+h1 {
+	@include rem('font-size', $body-font-size-px*3);
+	@include rem('line-height', $body-line-height-px*3);
+	@include rem('margin-bottom', $body-line-height-px);
+}
+
+h2 {
+	@include rem('font-size', $body-font-size-px*2);
+	@include rem('line-height', $body-line-height-px*2);
+	@include rem('margin-bottom', $body-line-height-px);
+}
+
+h3 {
+	@include rem('font-size', $body-font-size-px*1.5);
+	@include rem('line-height', $body-line-height-px*2);
+	margin-bottom: 0;
+}
+
+h4, h5, h6 {
+	@include rem('font-size', $body-font-size-px);
+	@include rem('line-height', $body-line-height-px);
+	margin-bottom: 0;
+}

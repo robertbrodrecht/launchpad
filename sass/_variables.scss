@@ -1,0 +1,13 @@
+// This is used to generate a percent of 16px on the html element so you can properly use @include rem().
+$root-font-px: 10px;
+
+// This is used to generate a vertical rhythm.
+$body-font-size-px: 12px;
+$body-line-height-px: 16px;
+
+// Column-related settings.  
+// Wrap columns in div.columns (usually) then use div.column-X on children columns.
+// X can be: 10 to 100 in increments of 5, 33, or 55.  X represents a column width percentage.
+// Also has .push-X and .pull-X.
+$column-master-outer-width: 960px; // Used to convert columns to percents.
+$column-master-gutter-width: 30px; // The column gutter in pixels.

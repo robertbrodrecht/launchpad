@@ -1,0 +1,32 @@
+@function rootRemPercent($px) {
+	@return $px/16px*100*1%;
+}
+
+@function toRems($px) {
+	$baseline-rem: $root-font-px / 1rem;
+
+	@if $px == 0 {
+		@return 0;
+	}
+
+	@if type-of(px) == "number" {
+		@return $px / $baseline-rem;
+	} @else {
+		$rems: ();
+
+		@each $value in $px {
+			@if $value == 0 {
+				$rems: append($rems, $value);
+			} @else {
+				$rems: append($rems, ($value / $baseline-rem));
+			}
+		}
+
+		@return $rems;
+	}
+}
+
+@mixin rem($property, $values) {
+	#{$property}: $values;
+	#{$property}: toRems($values);
+}

@@ -1,0 +1,11 @@
+// To target body > * elements, use .msie-8 ~ element or .msie-9 ~ element.
+
+// Put IE 8 Fixes here that are contained in elements that are not body > *.
+.msie-8 ~ * {
+	
+}
+
+// Put IE 9 Fixes here that are contained in elements that are not body > *.
+.msie-9 ~ * {
+	
+}

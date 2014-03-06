@@ -1,0 +1,269 @@
+form {
+}
+
+#skip-to-content {
+	@include rem('padding', 5px 20px);
+	
+	background: #FFF;
+	display: inline-block;
+	left: 0;
+	line-height: 1.5;
+	position: absolute;
+	top: 0;
+	-webkit-transition: all .25s ease-in;
+	-moz-transition: all .25s ease-in;
+	transition: all .25s ease-in;
+	-webkit-transform: translateY(-100%);
+	-moz-transform: translateY(-100%);
+	-ms-transform: translateY(-100%);
+	transform: translateY(-100%);
+	z-index: 100;
+}
+
+#skip-to-content:focus,
+#skip-to-content:active {
+	-webkit-transition: all .25s ease-out;
+	-moz-transition: all .25s ease-out;
+	transition: all .25s ease-out;
+	-webkit-transform: translateY(0);
+	-moz-transform: translateY(0);
+	-ms-transform: translateY(0);
+	transform: translateY(0);
+}
+
+.msie-8 ~ #skip-to-content {
+	top: -100%;
+	
+	&:focus,
+	&:active {
+		top: 0;
+	}
+}
+
+.button {
+	@include rem('padding', 2px 10px);
+	
+	background: #EFEFEF;
+	display: inline-block;
+	text-decoration: none;
+}
+
+.callout {
+	@include rem('padding', 10px);
+	
+	background: #E0E0E0;
+}
+
+.skate {
+	@include rem('padding', 10px);
+	
+	border: 1px dotted gray;
+}
+
+@-webkit-keyframes system-notification-swap {
+    0% {
+        -webkit-transform: translateY(100%);
+    }
+
+    10% {
+        -webkit-transform: translateY(0px);
+    }
+    
+    90% {
+        -webkit-transform: translateY(0px);
+    }
+    
+    100% {
+        -webkit-transform: translateY(100%);
+    }
+}
+
+@-moz-keyframes system-notification-swap {
+    0% {
+        -moz-transform: translateY(100%);
+    }
+
+    10% {
+        -moz-transform: translateY(0px);
+    }
+    
+    90% {
+        -moz-transform: translateY(0px);
+    }
+    
+    100% {
+        -moz-transform: translateY(100%);
+    }
+}
+
+@-ms-keyframes system-notification-swap {
+    0% {
+        -ms-transform: translateY(100%);
+    }
+
+    10% {
+        -ms-transform: translateY(0px);
+    }
+    
+    90% {
+        -ms-transform: translateY(0px);
+    }
+    
+    100% {
+        -ms-transform: translateY(100%);
+    }
+}
+
+@keyframes system-notification-swap {
+    0% {
+        transform: translateY(100%);
+    }
+
+    10% {
+        transform: translateY(0px);
+    }
+    
+    90% {
+        transform: translateY(0px);
+    }
+    
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+
+.system-notification {
+	@include rem('font-size', 14px);
+	
+	-webkit-animation-delay: .5s;
+	-webkit-animation-duration: 5s;
+	-webkit-animation-direction: normal;
+	-webkit-animation-fill-mode: normal;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-name: system-notification-swap;
+	-moz-animation-delay: .5s;
+	-moz-animation-duration: 5s;
+	-moz-animation-direction: normal;
+	-moz-animation-fill-mode: normal;
+	-moz-animation-timing-function: ease;
+	-moz-animation-name: system-notification-swap;
+	-ms-animation-delay: .5s;
+	-ms-animation-duration: 5s;
+	-ms-animation-direction: normal;
+	-ms-animation-fill-mode: normal;
+	-ms-animation-timing-function: ease;
+	-ms-animation-name: system-notification-swap;
+	animation-delay: .5s;
+	animation-duration: 5s;
+	animation-direction: normal;
+	animation-fill-mode: normal;
+	animation-timing-function: ease;
+	animation-name: system-notification-swap;
+	background: #FFFCDB;
+	border-top: 1px solid #CFCA99;
+	bottom: 0;
+	color: #666;
+	color: rgba(0, 0, 0, .75);
+	padding: 10px;
+	position: fixed;
+	text-align: center;
+	-webkit-transform: translateY(100%);
+	-moz-transform: translateY(100%);
+	-ms-transform: translateY(100%);
+	transform: translateY(100%);
+	width: 100%;
+	z-index: 999;
+	
+	&:first-letter {
+		font-size: 1.2em;
+		vertical-align: bottom;
+	}
+}
+
+$gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
+
+.row {
+	margin-left: 0-$gutter;
+	
+	&:before {
+		content: ' ';
+		display: table;
+	}
+	
+	&:after {
+		clear: both;
+		content: ' ';
+		display: table;
+	}
+}
+
+[class*=column-] {
+	float: left;
+	margin-left: $gutter;
+	
+	// Floating right is out of Foundation. 
+	// I'm not 100% sure I like it.
+	&:last-child {
+		float: right;
+	}
+}
+
+$i: 10;
+@while $i < 100 {
+	.column-#{$i} {
+		@if ($i == 33) or ($i == 66) {
+			width: $i*1%-$gutter+.3333;
+		} @else {
+			width: $i*1%-$gutter;
+		}
+	}
+	
+	.offset-#{$i} {
+		@if ($i == 33) or ($i == 66) {
+			margin-left: $i*1% + .3333*$i/33 + $gutter;
+		} @else {
+			margin-left: $i*1% + $gutter;
+		}
+	}
+	
+	.push-#{$i} {
+		position: relative;
+		@if ($i == 33) or ($i == 66) {
+			left: $i*1% + .3333*$i/33;
+		} @else {
+			left: $i*1%;
+		}
+		right: auto;
+		
+		&:last-child {
+			float: left;
+		}
+	}
+	
+	.pull-#{$i} {
+		position: relative;
+		left: auto;
+		@if ($i == 33) or ($i == 66) {
+			right: $i*1% + .3333*$i/33;
+		} @else {
+			right: $i*1%;
+		}
+		
+		&:last-child {
+			float: left;
+		}
+	}
+	
+	@if $i == 30 {
+		$i: $i + 3;
+	} @else if $i == 33 {
+		$i: $i + 2;
+	} @else if $i == 65 {
+		$i: $i + 1;
+	} @else if $i == 66 {
+		$i: $i + 4;
+	} @else {
+		$i: $i + 5;
+	}
+}

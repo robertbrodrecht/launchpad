@@ -1,0 +1,20 @@
+@import "variables";
+@import "mixins";
+@import "reset";
+@import "typography";
+
+#header,
+#footer,
+#navigation,
+#wpadminbar {
+	display: none;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+a:after {
+	content: " <" attr(href) ">";
+}

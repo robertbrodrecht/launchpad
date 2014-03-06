@@ -1,0 +1,104 @@
+.launchpad-side-metabox {
+	margin-bottom: 1em;
+}
+
+.launchpad-side-metabox label {
+	display: block;
+}
+
+.launchpad-side-metabox input[type=text],
+.launchpad-side-metabox select {
+	display: block;
+	width: 100%;
+}
+
+table.launchpad-metabox-table {
+	border-collapse: collapse;
+	margin-bottom: 1em;
+	width: 100%;
+}
+
+table.launchpad-metabox-table caption {
+	font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif;
+	font-size: 15px;
+	padding: 1em;
+}
+table.launchpad-metabox-table th {
+	border-bottom: 1px solid #21759B;
+}
+
+table.launchpad-metabox-table th,
+table.launchpad-metabox-table td {
+	padding: 5px;
+	text-align: center;
+}
+
+.launchpad-align-right {
+	text-align: right;
+}
+
+.launchpad-subfield {
+	display: block;
+	margin-bottom: 14px;
+	width: 25em;
+	
+	input, select, textarea {
+		display: block;
+		width: 100%;
+	}
+	
+	input[type=checkbox],
+	input[type=radio] {
+		display: inline-block;
+		width: auto;
+	}
+}
+
+.launchpad-subfield + .launchpad-block {
+	margin-bottom: 14px;
+	margin-top: -10px;
+}
+
+.launchpad-block {
+	display: block;
+	font-weight: normal;
+}
+
+.launchpad-inline {
+	display: inline-block;
+	font-weight: normal;
+}
+
+small.launchpad-inline {
+	margin-left: .5em;
+}
+
+.launchpad-subfield.phone-number {
+	float: left;
+	margin-right: 1em;
+	width: 12em;
+}
+.launchpad-subfield.fax-number {
+	float: left;
+	width: 12em;
+}
+
+.launchpad-subfield.street-address {
+	clear: both;
+}
+
+.launchpad-subfield.city {
+	float: left;
+	margin-right: 1em;
+	width: 12em;
+}
+
+.launchpad-subfield.state {
+	float: left;
+	margin-right: 1em;
+	width: 6em;
+}
+.launchpad-subfield.zip {
+	float: left;
+	width: 4em;
+}
