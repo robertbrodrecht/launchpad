@@ -42,3 +42,31 @@ function format_phone($number = '', $mask = '(###) ###-####', $ext = ' x', $coun
 	
 	return $return;
 }
+
+/**
+ * Use scandir for Recursive Directory Scanning
+ *
+ * @since   	Version 1.0
+ */
+function launchpad_scandir_deep($dir, $initial_dir = false) {
+	if(substr($dir, -1) !== '/') {
+		$dir = $dir . '/';
+	}
+	
+	if(!$initial_dir) {
+		$initial_dir = $dir;
+	}
+	
+	$output = array();
+	$files = scandir($dir);
+	foreach($files as $file) {
+		if(substr($file, 0, 1) !== '.') {
+			if(is_dir($dir . $file)) {
+				$output = array_merge(launchpad_scandir_deep($dir . $file, $initial_dir), $output);
+			} else {
+				$output[] = str_replace($initial_dir, '', $dir) . $file;
+			}
+		}
+	}
+	return $output;
+}

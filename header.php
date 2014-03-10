@@ -89,4 +89,5 @@ $excerpt = launchpad_excerpt();
 			<a href="#navigation" class="hamburger">Show Menu</a>
 			<?php launchpad_wp_nav_menu(array('theme_location' => 'primary', 'menu_class' => 'nav-header')); ?>
 		</nav>
-		<section id="main" role="main" data-ajax-target="<?php echo $ajax; ?>">
+		<section id="main" role="main" aria-live="polite" aria-relevant="text" data-ajax-target="<?php echo $ajax; ?>">
+			

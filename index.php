@@ -9,10 +9,6 @@
  * @since   	Version 1.0
  */
 
-if(!isset($_GET['launchpad_ajax'])) {
-	get_header();	
-}
+get_header();	
 launchpad_get_template_part('content', get_post_type());
-if(!isset($_GET['launchpad_ajax'])) {
-	get_footer();
-}
+get_footer();

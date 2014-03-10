@@ -22,30 +22,6 @@ function launchpad_hello_world() {
 add_action('wp_ajax_hello_world', 'launchpad_hello_world');
 add_action('wp_ajax_nopriv_hello_world', 'launchpad_hello_world');
 
-
-function launchpad_scandir_deep($dir, $initial_dir = false) {
-	if(substr($dir, -1) !== '/') {
-		$dir = $dir . '/';
-	}
-	
-	if(!$initial_dir) {
-		$initial_dir = $dir;
-	}
-	
-	$output = array();
-	$files = scandir($dir);
-	foreach($files as $file) {
-		if(substr($file, 0, 1) !== '.') {
-			if(is_dir($dir . $file)) {
-				$output = array_merge(launchpad_scandir_deep($dir . $file, $initial_dir), $output);
-			} else {
-				$output[] = str_replace($initial_dir, '', $dir) . $file;
-			}
-		}
-	}
-	return $output;
-}
-
 /**
  * Generate an App Cache Manifest
  *
@@ -110,7 +86,7 @@ function launchpad_cache_manifest() {
 	foreach($q->posts as $p) {
 		$pl = get_permalink($p->ID);
 		$file_list[] = $pl;
-		$file_list[] = $pl . (stristr($pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
+		//$file_list[] = $pl . (stristr($pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
 		
 		// Get the assets out of the page.
 		$output = file_get_contents($pl);
@@ -130,7 +106,7 @@ function launchpad_cache_manifest() {
 			$tmp_pl = implode('/', $pl) . '/';
 			if(!in_array($tmp_pl, $file_list)) {
 				$file_list[] = $tmp_pl;
-				$file_list[] = $tmp_pl . (stristr($tmp_pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
+				//$file_list[] = $tmp_pl . (stristr($tmp_pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
 			}
 		}
 		if(strtotime($p->post_date) > $latest) {
@@ -148,7 +124,7 @@ function launchpad_cache_manifest() {
 	foreach($q->posts as $p) {
 		$pl = get_permalink($p->ID);
 		$file_list[] = $pl;
-		$file_list[] = $pl . (stristr($pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
+		//$file_list[] = $pl . (stristr($pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
 		
 		// Get the assets out of the post.
 		$output = file_get_contents($pl);
@@ -168,7 +144,7 @@ function launchpad_cache_manifest() {
 			$tmp_pl = implode('/', $pl) . '/';
 			if(!in_array($tmp_pl, $file_list)) {
 				$file_list[] = $tmp_pl;
-				$file_list[] = $tmp_pl . (stristr($tmp_pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
+				//$file_list[] = $tmp_pl . (stristr($tmp_pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
 			}
 		}
 		if(strtotime($p->post_date) > $latest) {
@@ -185,7 +161,7 @@ function launchpad_cache_manifest() {
 		for($i = 1; $i < $total_pages; $i++) {
 			$tmp_pl = $posts_page . 'page/' . $i . '/';
 			$file_list[] = $tmp_pl;
-			$file_list[] = $tmp_pl . (stristr($tmp_pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
+			//$file_list[] = $tmp_pl . (stristr($tmp_pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
 		}
 	}
 	

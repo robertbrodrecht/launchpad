@@ -57,22 +57,46 @@ function initAjax() {
 				)
 				.done(
 					function(data) {
-						if(data.indexOf('<body') !== -1) {
+						var title = data.match(/<title>(.*?)<\/title>/),
+							bodyclass = data.match(/<body.*?class="(.*?)".*?>/),
+							htmlclass = data.match(/<html.*?class="(.*?)".*?>/),
+							content = $(
+									$.parseHTML(
+										'<div>' +
+										data.replace(/[\s\S]+<body.*?>/, '').replace(/<\/body>[\s\S]+/, '') +
+										'</div>'
+									)
+								),
+							replaceContent = content.find('[data-ajax-target]');
+						
+						if(replaceContent.length) {
+							if(window.dev) {
+								console.log('Swapping ajax results.');
+							}
+							if(title && title.length > 1) {
+								document.title = $('<span>' + title[1] + '</span>').html();
+							}
+							if(htmlclass && htmlclass.length > 1) {
+								document.documentRoot.className = htmlclass[1];
+							}
+							if(bodyclass && bodyclass.length > 1) {
+								document.body.className = bodyclass[1];
+							}
+							ajax_target.html(replaceContent.html());
+							
+							_gaq.push(['_trackPageview', href]);
+							
+							if(history.pushState && e.pushState !== false) {
+								if(window.dev) {
+									console.log('Handling pushState.');
+								}
+								history.pushState('', '', href);
+							}
+						} else {
 							if(window.dev) {
 								console.log('Ajax results were not compatible with theme. Manually redirecting.');
+								location.href = href;
 							}
-							location.href = href;
-							return;
-						}
-						if(window.dev) {
-							console.log('Swapping ajax results.');
-						}
-						ajax_target.html(data);
-						if(history.pushState && e.pushState !== false) {
-							if(window.dev) {
-								console.log('Handling pushState.');
-							}
-							history.pushState('', '', href);
 						}
 					}
 				)
@@ -81,7 +105,7 @@ function initAjax() {
 						if(window.dev) {
 							console.log('Ajax request failed.');
 						}
-						//location.href = href;
+						location.href = href;
 					}
 				).always(
 					function() {

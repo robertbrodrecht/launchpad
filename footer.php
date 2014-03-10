@@ -11,7 +11,7 @@ global $site_options;
 
 
 ?>
-
+			
 		</section>
 		<footer id="footer">
 			<div>
