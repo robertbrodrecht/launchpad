@@ -125,6 +125,62 @@ function initAjax() {
 
 
 /**
+ * Attempt to Manage ApplicationCache Refresh Intelligently
+ *
+ * @since   	Version 1.0
+ */
+function initMonitorLogin() {
+	var login_interval = false,
+		cache_update_interval = false,
+		logged_in = false,
+		is_first_run = true;
+	
+	function updateCache() {
+		if(logged_in && navigator.onLine && $('html[manifest]').length) {
+			if(window.dev) {
+				console.log('Forcing AppCache to update because user is logged in.');
+			}
+			applicationCache.update();
+		}
+	}
+	
+	function checkLogin() {
+		if(navigator.onLine) {
+			$.get('/api/?action=user_logged_in').done(
+				function(data) {
+					logged_in = data;
+					if(logged_in) {
+						if(!cache_update_interval) {
+							if(window.dev) {
+								console.log('Starting to invalidate AppCache every 60 seconds because user is logged in.');
+							}
+							updateCache();
+							cache_update_interval = setInterval(updateCache, 60000);
+						}
+					} else if(cache_update_interval) {
+						if(window.dev) {
+							console.log('Removing AppCache invalidation interval because user is not logged in.');
+						}
+						clearInterval(cache_update_interval);
+						cache_update_interval = false;
+					} else if(is_first_run) {
+						if(window.dev) {
+							console.log('User is not logged in.  Allowing AppCache to self-manage.');
+						}
+					}
+					is_first_run = false;
+				}
+			);
+		} else {
+			clearInterval(cache_update_interval);
+		}
+	}
+	
+	checkLogin();
+	login_interval = setInterval(checkLogin, 60000);
+}
+
+/**
  * Manage Height Matching
  *
  * @since   	Version 1.0
@@ -355,6 +411,9 @@ function init() {
 		).on('ajaxRequestEnd', reinit);
 	
 	if(window.applicationCache && $('html[manifest]').length) {
+		
+		// Watch to see if the user logs in or out so we can manage their cache.
+		initMonitorLogin();
 	
 		// Handle online/offline transitions.
 		$(window).on(
@@ -378,7 +437,7 @@ function init() {
 						applicationCache.update();
 					} catch(err) {
 						if(window.dev) {
-							console.log('Attempting to force an update to the appCache threw an error.', err);
+							console.log('Attempting to force an update to the appCache threw an error, but we caught it.', err);
 						}
 					}
 				}

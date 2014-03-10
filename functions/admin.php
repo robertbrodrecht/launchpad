@@ -210,6 +210,33 @@ function launchpad_get_setting_fields() {
 						),
 					)
 				)
+			),
+			'customizations' => array(
+				'name' => 'Login Customizations',
+				'args' => array(
+					'type' => 'subfield',
+					'subfields' => array(					
+						'primary_color' => array(
+							'name' => 'Primary Hex Color',
+							'args' => array(
+								'type' => 'text'
+							)
+						),
+						'secondary_color' => array(
+							'name' => 'Secondary Hex Color',
+							'args' => array(
+								'type' => 'text'
+							)
+						),
+						'logo' => array(
+							'name' => 'Logo File URL',
+							'args' => array(
+								'type' => 'text',
+								'default' => THEME_PATH . '/images/logo.png'
+							)
+						)
+					)
+				)
 			)
 /*
 			'sample_textarea' => array(
@@ -282,7 +309,7 @@ function launchpad_render_settings_field($args, $subfield = false) {
 	if(isset($vals[$args['name']]))  {
 		$val = $vals[$args['name']];
 	} else {
-		$val = '';
+		$val = isset($args['default']) ? $args['default'] : '';
 	}
 	
 	if($subfield) {
@@ -370,12 +397,18 @@ function launchpad_site_options_validate($input) {
 			} else {
 				$input[$key] = true;
 			}
+		} else if($setting['args']['type'] === 'file') {
+
 		}
 		
 		$site_options[$key] = $input[$key];
 	}
 	
 	flush_rewrite_rules(true);
+	
+	// Touch the API file to reset the appcache.
+	// This helps avoid confusing issues with time zones.
+	touch(str_replace('admin.php', 'api.php', __FILE__), time(), time());
 	
 	return $input;
 }
@@ -519,3 +552,86 @@ function launchpad_change_howdy($translated, $text, $domain) {
 	return $translated;
 }
 add_filter('gettext', 'launchpad_change_howdy', 10, 3);
+
+
+/**
+ * Customize the Login Screen
+ *
+ * @since   	Version 1.0
+ */
+function launchpad_custom_login() {
+	global $site_options;
+	
+?>
+
+	<style type="text/css">
+		body.login {
+			background: #333;
+			padding-top: 8%;
+		}
+		<?php if($site_options['logo'] && file_exists($site_options['logo'])) { ?>
+		body.login div#login h1 a {
+			background-image: url(<?php echo $site_options['logo'] ?>);
+			background-size: contain;
+			height: 120px;
+			width: 100%;
+		}
+		<?php } ?>
+		<?php if($site_options['primary_color']) { ?>
+		a:hover,
+		a:focus,
+		a:active,
+		.wp-core-ui .button-primary,
+		.wp-core-ui .button-primary:hover,
+		.wp-core-ui .button-primary:focus,
+		.wp-core-ui .button-primary:active {
+			background: <?php echo $site_options['primary_color'] ?>;
+			border: 0;
+			border-radius: 0;
+			box-shadow: none;
+		}
+		.wp-core-ui .button-primary:hover,
+		.wp-core-ui .button-primary:focus,
+		.wp-core-ui .button-primary:active {
+			opacity: .75;
+		}
+		<?php } ?>
+		#login {
+			background: #FFF;
+			padding: 20px;
+			width: auto;
+			max-width: 480px;
+		}
+		.login form {
+			box-shadow: none;
+			margin-bottom: 12px;
+			<?php if($site_options['secondary_color']) { ?>
+				border: 1px solid <?php echo $site_options['secondary_color']; ?>
+			<?php } ?>
+		}
+		
+		.login #nav {
+			float: right;
+			margin: 0;
+			padding: 0;
+		}
+		.login #backtoblog {
+			margin: 0;
+			padding: 0;
+		}
+		
+		.login .message {
+			background: #EFEFEF;
+			box-shadow: none;
+			border: 1px solid gray;
+			margin-left: 24px;
+			margin-right: 24px;
+			text-align: center;
+		}
+		
+	</style>
+	
+<?php 
+
+}
+add_action('login_enqueue_scripts', 'launchpad_custom_login');

@@ -305,6 +305,11 @@ add_filter( 'wp_get_attachment_image_attributes', 'launchpad_wp_get_attachment_i
  * @since   	Version 1.0
  */
 function launchpad_save_post_data($post_id) {
+	// Touch the API file to reset the appcache.
+	// This helps avoid confusing issues with time zones.
+	touch(str_replace('system.php', 'api.php', __FILE__), time(), time());
+	
+	// If there is no LaunchPad fields, don't affect anything.
 	if(empty($_POST) || !isset($_POST['launchpad_meta'])) {
 		return;
 	}

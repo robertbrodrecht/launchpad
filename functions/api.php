@@ -22,6 +22,20 @@ function launchpad_hello_world() {
 add_action('wp_ajax_hello_world', 'launchpad_hello_world');
 add_action('wp_ajax_nopriv_hello_world', 'launchpad_hello_world');
 
+
+/**
+ * Simple Test for User Logged In
+ *
+ * @since   	Version 1.0
+ */
+function launchpad_user_logged_in() {
+	header('Content-type: application/json');
+	echo json_encode(is_user_logged_in());
+	exit;
+}
+add_action('wp_ajax_user_logged_in', 'launchpad_user_logged_in');
+add_action('wp_ajax_nopriv_user_logged_in', 'launchpad_user_logged_in');
+
 /**
  * Generate an App Cache Manifest
  *
@@ -29,13 +43,6 @@ add_action('wp_ajax_nopriv_hello_world', 'launchpad_hello_world');
  */
 function launchpad_cache_manifest() {
 	$site_options = get_option('launchpad_site_options', '');
-	
-	if(is_user_logged_in() || $site_options['offline_support'] !== true) {
-		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', strtotime('-1 month')));
-		http_response_code(404);
-		exit;
-	}
-	
 
 	$file_list = array();
 	$latest = filemtime(__FILE__);
@@ -44,8 +51,7 @@ function launchpad_cache_manifest() {
 	$paths = array(
 			'/' . THEME_PATH . '/css/' => '/css/',
 			'/' . THEME_PATH . '/js/' => '/js/',
-			'/' . THEME_PATH . '/images/' => '/images/',
-			//'/' . THEME_PATH . '/support/' => '/support/'
+			'/' . THEME_PATH . '/images/' => '/images/'
 		);
 	
 	// Load all the images and CSS.
@@ -109,7 +115,7 @@ function launchpad_cache_manifest() {
 				//$file_list[] = $tmp_pl . (stristr($tmp_pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
 			}
 		}
-		if(strtotime($p->post_date) > $latest) {
+		if(strtotime($p->post_modified) > $latest) {
 			$latest = strtotime($p->post_date);
 		}
 	}
@@ -147,7 +153,7 @@ function launchpad_cache_manifest() {
 				//$file_list[] = $tmp_pl . (stristr($tmp_pl, '?') !== false ? '&' : '?') . 'launchpad_ajax=true';
 			}
 		}
-		if(strtotime($p->post_date) > $latest) {
+		if(strtotime($p->post_modified) > $latest) {
 			$latest = strtotime($p->post_date);
 		}
 	}
@@ -169,7 +175,7 @@ function launchpad_cache_manifest() {
 	
 	//header('Content-type: text/plain'); // Use this for debugging.
 	header('Content-type: text/cache-manifest');
-	header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', strtotime('-1 month')));
+	header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', strtotime('+1 second')));
 	
 	echo "CACHE MANIFEST\n\n";
 	echo "# Last Modified: " . date('Y-m-d H:i:s T', $latest) . " \n\n";
