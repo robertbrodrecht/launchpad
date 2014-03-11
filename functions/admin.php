@@ -580,7 +580,7 @@ function launchpad_custom_login() {
 		
 		body.login {
 			background: #333;
-			background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(255,255,255,.01) 1px, rgba(255,255,255,.01) 7px);
+			background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(255,255,255,.02) 1px, rgba(255,255,255,.02) 7px);
 			padding-top: 8%;
 		}
 		<?php 
@@ -619,8 +619,8 @@ function launchpad_custom_login() {
 			opacity: .75;
 		}
 		#login {
-			background: #FAFAFA;
-			background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,.5) 3px, rgba(255,255,255,.5) 7px);
+			background: #F6F6F6;
+			background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(0,0,0,.02) 1px, rgba(0,0,0,.02) 7px);
 			border: 15px solid rgba(0, 0, 0, .85);
 			border-radius: 20px;
 			padding: 20px;
