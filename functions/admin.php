@@ -573,8 +573,14 @@ function launchpad_custom_login() {
 ?>
 
 	<style type="text/css">
+		html,
+		body.login {
+			overflow: auto;
+		}
+		
 		body.login {
 			background: #333;
+			background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(255,255,255,.01) 1px, rgba(255,255,255,.01) 7px);
 			padding-top: 8%;
 		}
 		<?php 
@@ -590,15 +596,19 @@ function launchpad_custom_login() {
 			width: 100%;
 		}
 		<?php } ?>
-		<?php if($site_options['primary_color']) { ?>
-		a:hover,
-		a:focus,
-		a:active,
+		.login #nav a:hover, 
+		.login #backtoblog a:hover,
+		.login #nav a:focus,
+		.login #backtoblog a:focus,
+		a:active {
+			color: <?php echo $site_options['primary_color'] ? $site_options['primary_color'] : '#333' ?>;
+		}
+		
 		.wp-core-ui .button-primary,
 		.wp-core-ui .button-primary:hover,
 		.wp-core-ui .button-primary:focus,
 		.wp-core-ui .button-primary:active {
-			background: <?php echo $site_options['primary_color'] ?>;
+			background: <?php echo $site_options['primary_color'] ? $site_options['primary_color'] : '#333' ?>;
 			border: 0;
 			border-radius: 0;
 			box-shadow: none;
@@ -608,14 +618,17 @@ function launchpad_custom_login() {
 		.wp-core-ui .button-primary:active {
 			opacity: .75;
 		}
-		<?php } ?>
 		#login {
-			background: #FFF;
+			background: #FAFAFA;
+			background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,.5) 3px, rgba(255,255,255,.5) 7px);
+			border: 15px solid rgba(0, 0, 0, .85);
+			border-radius: 20px;
 			padding: 20px;
 			width: auto;
 			max-width: 480px;
 		}
 		.login form {
+			border-radius: 10px;
 			box-shadow: none;
 			margin-bottom: 12px;
 			<?php if($site_options['secondary_color']) { ?>
@@ -633,7 +646,8 @@ function launchpad_custom_login() {
 			padding: 0;
 		}
 		
-		.login .message {
+		.login .message,
+		.login #login_error {
 			background: #EFEFEF;
 			box-shadow: none;
 			border: 1px solid gray;
