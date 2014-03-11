@@ -199,6 +199,30 @@ add_action('wp_ajax_nopriv_cache_manifest', 'launchpad_cache_manifest');
 function launchpad_cache_manifest_obsolete() {
 	header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', strtotime('-1 month')));
 	http_response_code(404);
+	exit;
 }
 add_action('wp_ajax_cache_manifest_obsolete', 'launchpad_cache_manifest_obsolete');
 add_action('wp_ajax_nopriv_cache_manifest_obsolete', 'launchpad_cache_manifest_obsolete');
+
+
+/**
+ * Generate Icon Images
+ *
+ * @since   	Version 1.0
+ */
+function launchpad_generate_icon() {
+	$site_options = get_option('launchpad_site_options', '');
+	$icon = $site_options['icon'];
+	if(!$_GET['type'] || !$icon || !file_exists($icon)) {
+		http_response_code(404);
+		exit;
+	}
+	switch($_GET['type']) {
+		case 'favicon.ico':
+			
+		break;
+	}
+	exit;
+}
+add_action('wp_ajax_cache_generate_icon', 'launchpad_generate_icon');
+add_action('wp_ajax_nopriv_generate_icon', 'launchpad_generate_icon');

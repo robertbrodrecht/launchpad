@@ -235,7 +235,7 @@ function launchpad_get_setting_fields() {
 								'default' => THEME_PATH . '/images/logo.png'
 							)
 						),
-						'logo' => array(
+						'icon' => array(
 							'name' => 'Icon',
 							'args' => array(
 								'type' => 'text',
