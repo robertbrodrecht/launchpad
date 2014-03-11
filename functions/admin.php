@@ -581,7 +581,13 @@ function launchpad_custom_login() {
 		body.login {
 			background: #333;
 			background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(255,255,255,.02) 1px, rgba(255,255,255,.02) 7px);
-			padding-top: 8%;
+		}
+
+		body.login:after,		
+		body.login:before {
+			content: ' ';
+			display: block;
+			height: 80px;
 		}
 		<?php 
 		
