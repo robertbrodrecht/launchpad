@@ -234,6 +234,14 @@ function launchpad_get_setting_fields() {
 								'type' => 'text',
 								'default' => THEME_PATH . '/images/logo.png'
 							)
+						),
+						'logo' => array(
+							'name' => 'Icon',
+							'args' => array(
+								'type' => 'text',
+								'default' => THEME_PATH . '/images/icon.png',
+								'small' => 'This should be a square image at least 152x152.'
+							)
 						)
 					)
 				)
@@ -569,11 +577,16 @@ function launchpad_custom_login() {
 			background: #333;
 			padding-top: 8%;
 		}
-		<?php if($site_options['logo'] && file_exists($site_options['logo'])) { ?>
+		<?php 
+		
+		if($site_options['logo'] && file_exists($site_options['logo'])) { 
+			$size = getimagesize($site_options['logo']);
+			
+		?>
 		body.login div#login h1 a {
 			background-image: url(<?php echo $site_options['logo'] ?>);
 			background-size: contain;
-			height: 120px;
+			height: <?php echo ((!$size || $size[0] > $size[1]) ? '80px' : '400px'); ?>;
 			width: 100%;
 		}
 		<?php } ?>
