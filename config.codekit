@@ -138,13 +138,23 @@
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsSetByUser": 0
 		},
-	"\/images\/icon.png": {
+	"\/images\/icons\/favicon.png": {
 		"fileType": 32768,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"initialSize": 0,
-		"inputAbbreviatedPath": "\/images\/icon.png",
-		"outputAbbreviatedPath": "\/images\/icon.png",
+		"initialSize": 1232,
+		"inputAbbreviatedPath": "\/images\/icons\/favicon.png",
+		"outputAbbreviatedPath": "\/images\/icons\/favicon.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/favicon_2x.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 1386,
+		"inputAbbreviatedPath": "\/images\/icons\/favicon_2x.png",
+		"outputAbbreviatedPath": "\/images\/icons\/favicon_2x.png",
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},

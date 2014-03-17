@@ -34,12 +34,35 @@ $excerpt = launchpad_excerpt();
 		<link rel="stylesheet" type="text/css" id="screen-css" media="screen, projection, handheld, tv" href="/css/screen.css">
 		<link rel="stylesheet" type="text/css" media="print" href="/css/print.css">
 		
-		<link rel="icon" href="/favicon.ico">
+		<link rel="icon" href="/images/icons/favicon.png">
+		<link rel="icon" href="/images/icons/favicon_2x.png" media="(-webkit-min-device-pixel-ratio: 2)">
+		
 		<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name') ?> RSS Feed" href="/feed/">
 		<link rel="canonical" href="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
 		
+		<link rel="apple-touch-icon" href="/images/icons/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="/images/icons/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="/images/icons/apple-touch-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="/images/icons/apple-touch-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="/images/icons/apple-touch-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="/images/icons/apple-touch-icon-152x152.png">
+		
+		<!-- SEEMS WRONG ON THESE WxH -->
+		<link rel="apple-touch-startup-image" media="(max-device-width: 480px) and not (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/startup-iphone-320x460.png">
+		<link rel="apple-touch-startup-image" media="(max-device-width: 480px) and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/startup-iphone4-640x920.png">
+		<link rel="apple-touch-startup-image" media="(max-device-width: 548px) and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/startup-iphone5-640x1096.png">
+		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: portrait)  and not (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-mini-portrait-768x1004.jpg">
+		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: landscape) and not (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-mini-landscape-1024x748.jpg">
+		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: portrait)  and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-portrait-2008x1536.jpg">
+		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: landscape) and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-landscape-1496x2048.jpg">
+		
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 		<meta name="description" content="<?php echo $excerpt; ?>">
+		
+		<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-title" content="<?php bloginfo('name') ?>">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 		
 		<meta property="og:title" content="<?php launchpad_title(true); ?>">
 		<meta property="og:description" content="<?php echo $excerpt; ?>">
