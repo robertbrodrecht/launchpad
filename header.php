@@ -53,8 +53,8 @@ $excerpt = launchpad_excerpt();
 		<link rel="apple-touch-startup-image" media="(max-device-width: 548px) and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/startup-iphone5-640x1096.png">
 		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: portrait)  and not (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-mini-portrait-768x1004.jpg">
 		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: landscape) and not (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-mini-landscape-1024x748.jpg">
-		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: portrait)  and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-portrait-2008x1536.jpg">
-		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: landscape) and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-landscape-1496x2048.jpg">
+		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: portrait)  and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-portrait-1536x2008.jpg">
+		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: landscape) and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-landscape-2048x1496.jpg">
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 		<meta name="description" content="<?php echo $excerpt; ?>">
