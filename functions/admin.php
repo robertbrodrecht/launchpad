@@ -572,7 +572,7 @@ function launchpad_custom_login() {
 		
 		body.login {
 			background: #333;
-			background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(255,255,255,.02) 1px, rgba(255,255,255,.02) 7px);
+			background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(0,0,0,.05) 1px, rgba(0,0,0,.05) 7px);
 		}
 
 		body.login:after,		
