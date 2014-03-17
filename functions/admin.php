@@ -234,14 +234,6 @@ function launchpad_get_setting_fields() {
 								'type' => 'text',
 								'default' => THEME_PATH . '/images/logo.png'
 							)
-						),
-						'icon' => array(
-							'name' => 'Icon',
-							'args' => array(
-								'type' => 'text',
-								'default' => THEME_PATH . '/images/icon.png',
-								'small' => 'This should be a square image at least 152x152.'
-							)
 						)
 					)
 				)
