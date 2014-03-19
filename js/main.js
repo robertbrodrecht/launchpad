@@ -240,6 +240,8 @@ function detectTouchCapable() {
 		$(document.body).addClass('no-touch');
 		window.supports.touch = false;
 	}
+	
+	_gaq.push(['_setCustomVar', 1, 'Browser Support', 'Touch', window.supports.touch]);
 }
 
 /**
@@ -262,6 +264,8 @@ function detectTransitions() {
 	} else {
 		window.supports.transitions = false;
 	}
+	
+	_gaq.push(['_setCustomVar', 1, 'Browser Support', 'CSS Transitions', window.supports.transitions]);
 }
 
 /**
@@ -288,6 +292,8 @@ function detectPositionSticky() {
 		window.supports.sticky = false;
 		$(document.body).addClass('css-not-sticky');
 	}
+	
+	_gaq.push(['_setCustomVar', 1, 'Browser Support', 'Sticky Positioning', window.supports.sticky]);
 }
 
 /**
@@ -300,6 +306,7 @@ function detectDPI() {
 	if(window.devicePixelRatio !== undefined) {
 		window.supports.dpi = window.devicePixelRatio;
 	}
+	_gaq.push(['_setCustomVar', 1, 'Browser Support', 'Device Pixel Ratio', window.supports.dpi]);
 }
 
 /**
