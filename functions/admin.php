@@ -61,6 +61,45 @@ add_filter('image_size_names_choose', 'launchpad_image_sizes_options');
 function launchpad_get_setting_fields() {
 	
 	$opts = array(
+			'security' => array(
+				'name' => 'Security Settings',
+				'args' => array(
+					'type' => 'subfield',
+					'subfields' => array(	
+						'allowed_failures' => array(
+							'name' => 'Failures Before Lockout',
+							'args' => array(
+								'type' => 'select',
+								'options' => array(
+										'5' => '5',
+										'10' => '10',
+										'25' => '25',
+										'50' => '50',
+										'100' => '100'
+									),
+								'default' => '10'
+							)
+						),
+						'lockout_time' => array(
+							'name' => 'Lockout Time',
+							'args' => array(
+								'type' => 'select',
+								'options' => array(
+										'1' => '1',
+										'2' => '2',
+										'4' => '4',
+										'6' => '6',
+										'8' => '8',
+										'12' => '12',
+										'24' => '24',
+										'48' => '48'
+									),
+								'default' => '1'
+							)
+						),
+					)
+				)
+			),
 			'google_analytics_id' => array(
 				'name' => 'Google Analytics ID',
 				'args' => array(

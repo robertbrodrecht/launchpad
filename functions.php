@@ -82,6 +82,8 @@ $launchpad_mce_style_formats = array(
 include 'functions/system.php';
 /** Modifications to the admin area like options pages and admin cleanup. */
 include 'functions/admin.php';
+/** Security related features like limit login attempts. */
+include 'functions/security.php';
 /** Post Type related code for registering and creating metaboxes.  */
 include 'functions/post-types.php';
 /** Code for custom API calls.  */

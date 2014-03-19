@@ -40,28 +40,27 @@ $excerpt = launchpad_excerpt();
 		<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name') ?> RSS Feed" href="/feed/">
 		<link rel="canonical" href="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
 		
-		<link rel="apple-touch-icon" href="/images/icons/apple-touch-icon-57x57.png">
-		<link rel="apple-touch-icon" sizes="72x72" href="/images/icons/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="57x57"   href="/images/icons/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72"   href="/images/icons/apple-touch-icon-72x72.png">
 		<link rel="apple-touch-icon" sizes="114x114" href="/images/icons/apple-touch-icon-114x114.png">
 		<link rel="apple-touch-icon" sizes="120x120" href="/images/icons/apple-touch-icon-120x120.png">
 		<link rel="apple-touch-icon" sizes="144x144" href="/images/icons/apple-touch-icon-144x144.png">
 		<link rel="apple-touch-icon" sizes="152x152" href="/images/icons/apple-touch-icon-152x152.png">
 		
-		<link rel="apple-touch-startup-image" media="(max-device-width: 480px) and not (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/startup-iphone-320x460.png">
-		<link rel="apple-touch-startup-image" media="(max-device-width: 480px) and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/startup-iphone4-640x920.png">
-		<link rel="apple-touch-startup-image" media="(max-device-width: 548px) and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/startup-iphone5-640x1096.png">
-		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: portrait)  and not (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-portrait-768x1004.jpg">
-		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: landscape) and not (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-landscape-1024x748.jpg">
-		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: portrait)  and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-retina-portrait-1536x2008.jpg">
-		<link rel="apple-touch-startup-image" media="(min-device-width: 768px) and (orientation: landscape) and     (-webkit-min-device-pixel-ratio: 2)" href="/images/icons/ipad-retina-landscape-2048x1496.jpg">
-		
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<meta name="description" content="<?php echo $excerpt; ?>">
+		<link href="/images/icons/startup-iphone-320x460.png" rel="apple-touch-startup-image" media="(device-width: 320px)">
+		<link href="/images/icons/startup-iphone4-640x920.png" rel="apple-touch-startup-image" media="(device-width: 320px) and (-webkit-min-device-pixel-ratio: 2)">
+		<link href="/images/icons/startup-iphone5-640x1096.png" rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-min-device-pixel-ratio: 2)">
+		<link href="/images/icons/ipad-portrait-768x1004.png" rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait)">
+		<link href="/images/icons/ipad-landscape-1024x748.png" rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape)">
+		<link href="/images/icons/ipad-retina-portrait-1536x2008.png" rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)">
+		<link href="/images/icons/ipad-retina-landscape-2048x1496.png" rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)">
 		
 		<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-title" content="<?php bloginfo('name') ?>">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<meta name="description" content="<?php echo $excerpt; ?>">
 		
 		<meta property="og:title" content="<?php launchpad_title(true); ?>">
 		<meta property="og:description" content="<?php echo $excerpt; ?>">
@@ -111,5 +110,5 @@ $excerpt = launchpad_excerpt();
 			<a href="#navigation" class="hamburger">Show Menu</a>
 			<?php launchpad_wp_nav_menu(array('theme_location' => 'primary', 'menu_class' => 'nav-header')); ?>
 		</nav>
-		<section id="main" role="main" aria-live="polite" aria-relevant="text" data-ajax-target="<?php echo $ajax; ?>">
+		<section id="main" role="main" aria-live="polite" aria-relevant="text">
 			

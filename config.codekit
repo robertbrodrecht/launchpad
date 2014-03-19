@@ -106,6 +106,14 @@
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsSetByUser": 0
 		},
+	"\/functions\/security.php": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/functions\/security.php",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsSetByUser": 0
+		},
 	"\/functions\/system.php": {
 		"fileType": 8192,
 		"ignore": 0,
@@ -138,13 +146,153 @@
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsSetByUser": 0
 		},
-	"\/images\/icon.png": {
+	"\/images\/icons\/apple-touch-icon-114x114.png": {
 		"fileType": 32768,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"initialSize": 0,
-		"inputAbbreviatedPath": "\/images\/icon.png",
-		"outputAbbreviatedPath": "\/images\/icon.png",
+		"initialSize": 1945,
+		"inputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-114x114.png",
+		"outputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-114x114.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/apple-touch-icon-120x120.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 1980,
+		"inputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-120x120.png",
+		"outputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-120x120.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/apple-touch-icon-144x144.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 2193,
+		"inputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-144x144.png",
+		"outputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-144x144.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/apple-touch-icon-152x152.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 2209,
+		"inputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-152x152.png",
+		"outputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-152x152.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/apple-touch-icon-57x57.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 1529,
+		"inputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-57x57.png",
+		"outputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-57x57.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/apple-touch-icon-72x72.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 1644,
+		"inputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-72x72.png",
+		"outputAbbreviatedPath": "\/images\/icons\/apple-touch-icon-72x72.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/favicon.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 1209,
+		"inputAbbreviatedPath": "\/images\/icons\/favicon.png",
+		"outputAbbreviatedPath": "\/images\/icons\/favicon.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/favicon_2x.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 1352,
+		"inputAbbreviatedPath": "\/images\/icons\/favicon_2x.png",
+		"outputAbbreviatedPath": "\/images\/icons\/favicon_2x.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/ipad-landscape-1024x748.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 4670,
+		"inputAbbreviatedPath": "\/images\/icons\/ipad-landscape-1024x748.png",
+		"outputAbbreviatedPath": "\/images\/icons\/ipad-landscape-1024x748.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/ipad-portrait-768x1004.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 4765,
+		"inputAbbreviatedPath": "\/images\/icons\/ipad-portrait-768x1004.png",
+		"outputAbbreviatedPath": "\/images\/icons\/ipad-portrait-768x1004.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/ipad-retina-landscape-2048x1496.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 8046,
+		"inputAbbreviatedPath": "\/images\/icons\/ipad-retina-landscape-2048x1496.png",
+		"outputAbbreviatedPath": "\/images\/icons\/ipad-retina-landscape-2048x1496.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/ipad-retina-portrait-1536x2008.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 8554,
+		"inputAbbreviatedPath": "\/images\/icons\/ipad-retina-portrait-1536x2008.png",
+		"outputAbbreviatedPath": "\/images\/icons\/ipad-retina-portrait-1536x2008.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/startup-iphone-320x460.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 3316,
+		"inputAbbreviatedPath": "\/images\/icons\/startup-iphone-320x460.png",
+		"outputAbbreviatedPath": "\/images\/icons\/startup-iphone-320x460.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/startup-iphone4-640x920.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 4416,
+		"inputAbbreviatedPath": "\/images\/icons\/startup-iphone4-640x920.png",
+		"outputAbbreviatedPath": "\/images\/icons\/startup-iphone4-640x920.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/images\/icons\/startup-iphone5-640x1096.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 4726,
+		"inputAbbreviatedPath": "\/images\/icons\/startup-iphone5-640x1096.png",
+		"outputAbbreviatedPath": "\/images\/icons\/startup-iphone5-640x1096.png",
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -155,16 +303,6 @@
 		"initialSize": 21534,
 		"inputAbbreviatedPath": "\/images\/logo.png",
 		"outputAbbreviatedPath": "\/images\/logo.png",
-		"outputPathIsSetByUser": 0,
-		"processed": 0
-		},
-	"\/images\/static.png": {
-		"fileType": 32768,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"initialSize": 661,
-		"inputAbbreviatedPath": "\/images\/static.png",
-		"outputAbbreviatedPath": "\/images\/static.png",
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -202,6 +340,16 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/jquery-1.11.0.min.js",
 		"outputAbbreviatedPath": "\/js\/jquery-1.11.0.min-min.js",
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 2,
+		"syntaxCheckerStyle": 1
+		},
+	"\/js\/launchpad.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/js\/launchpad.js",
+		"outputAbbreviatedPath": "\/js\/launchpad-min.js",
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
