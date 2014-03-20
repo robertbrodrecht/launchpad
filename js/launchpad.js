@@ -410,6 +410,7 @@ function init() {
 						function() {
 							$('#apple-standalone-startup-image').animate(
 								{'opacity': 0},
+								750,
 								function() {
 									$(this).remove();
 								}
