@@ -15,13 +15,18 @@
  * @since   	Version 1.0
  */
 function launchpad_get_failures($username) {
-	global $launchpad_login_failures;
+	global $launchpad_login_failures, $site_options;
+	
+	$lockout_time = $site_options['lockout_time'];
+	if(!$lockout_time) {
+		$lockout_time = 1;
+	}
 	
 	$cache_path = launchpad_get_failures_cache($username);
 	if(!file_exists($cache_path)) {
 		$launchpad_login_failures = 0;
 	} else {
-		if(time()-filemtime($cache_path) > 3600) {
+		if(time()-filemtime($cache_path) > $lockout_time*60*60) {
 			unlink($cache_path);
 			$launchpad_login_failures = 0;
 		} else {
@@ -169,7 +174,7 @@ function launchpad_login_add_error_message() {
 	}
 	
 	if($logins_left > 0) {
-		$msg = '<br>You may try ' . $logins_left . ' more time' . ($logins_left !== 1 ? 's' : '') . ' before triggering a ' . $lockout_time . ' hour' . ($lockout_time !== 1 ? 's' : '') . ' lockout!';
+		$msg = '<br>You may try ' . $logins_left . ' more time' . ((int) $logins_left !== 1 ? 's' : '') . ' before triggering a ' . $lockout_time . ' hour' . ((int) $lockout_time !== 1 ? 's' : '') . ' lockout!';
 		
 		if($allowed_failures-$launchpad_login_failures < 3) {
 			$msg .= '<br><strong>Please consider <a href="wp-login.php?action=lostpassword">resetting your password!</a></strong>';
@@ -179,7 +184,7 @@ function launchpad_login_add_error_message() {
 		$lockout_time_seconds = $lockout_time * 60 * 60;
 		$lockout_time_left = ceil(($lockout_time_seconds-$lockout_elapsed)/60);
 	
-		$msg = '<br>You have been locked out.  You may try again in ' . $lockout_time_left . ' minutes.';
+		$msg = '<br>You have been locked out.  You may try again in ' . $lockout_time_left . ' minute' . ((int) $lockout_time_left !== 1 ? 's' : '') . '.';
 	}
 
 	if ($msg != '') {
