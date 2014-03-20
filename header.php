@@ -14,16 +14,6 @@ if($site_options['ajax_page_loads'] === true) {
 	$ajax = 'true';
 }
 
-/*
-$offline = '';
-if($site_options['offline_support'] === true) {
-	$offline = '/manifest.appcache';
-	if(is_404() || is_user_logged_in()) {
-		$offline = '/manifest.obsolete.appcache';
-	}
-}
-*/
-
 $excerpt = launchpad_excerpt();
 
 ?><!DOCTYPE html>
@@ -40,7 +30,10 @@ $excerpt = launchpad_excerpt();
 		<link rel="icon" href="/images/icons/favicon_2x.png" media="(-webkit-min-device-pixel-ratio: 2)">
 		
 		<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name') ?> RSS Feed" href="/feed/">
+		<?php if(is_single() || is_page()) { ?>
+		
 		<link rel="canonical" href="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
+		<?php } ?>
 		
 		<link rel="apple-touch-icon" sizes="57x57"   href="/images/icons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="72x72"   href="/images/icons/apple-touch-icon-72x72.png">

@@ -62,7 +62,7 @@ function launchpad_get_setting_fields() {
 	
 	$opts = array(
 			'security' => array(
-				'name' => 'Security Settings',
+				'name' => 'Security Settings <small class="launchpad-block">Save settings to clear all lockouts.</small>',
 				'args' => array(
 					'type' => 'subfield',
 					'subfields' => array(	
@@ -444,6 +444,14 @@ function launchpad_site_options_validate($input) {
 	}
 	
 	flush_rewrite_rules(true);
+	
+	$cache_folder = launchpad_get_cache_file();
+	$all_files = scandir($cache_folder);
+	foreach($all_files as $current_file) {
+		if(preg_match('/^limit\-logins\-/', $current_file)) {
+			unlink($cache_folder . $current_file);
+		}
+	}
 	
 	// Touch the API file to reset the appcache.
 	// This helps avoid confusing issues with time zones.

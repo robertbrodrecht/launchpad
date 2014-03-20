@@ -374,6 +374,14 @@
 		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
+	"\/README.html": {
+		"fileType": 8192,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/README.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsSetByUser": 0
+		},
 	"\/README.md": {
 		"enableFootnoteSupport": 0,
 		"enableSmartyPants": 1,
@@ -590,6 +598,16 @@
 		"inputAbbreviatedPath": "\/support\/offline.html",
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsSetByUser": 0
+		},
+	"\/support\/offline.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 3289,
+		"inputAbbreviatedPath": "\/support\/offline.png",
+		"outputAbbreviatedPath": "\/support\/offline.png",
+		"outputPathIsSetByUser": 0,
+		"processed": 0
 		}
 	},
 "hooks": [

@@ -534,7 +534,10 @@ function init() {
 	$(document.body).trigger('launchpadInit');
 	reinit();
 }
-jQuery(document).ready(init);
+
+if(window.jQuery) {
+	jQuery(document).ready(init);	
+}
 
 
 /**
@@ -548,6 +551,10 @@ jQuery(document).ready(init);
 	var customEvents = ['scrollStart', 'scrollEnd', 'resizeStart', 'resizeEnd'],
 		timeoutResize = 250,
 		timeoutScroll = 100;
+	
+	if($ === undefined) {
+		return;
+	}
 	
 	$.event.special.scrollStart = {
 		enabled: true,
@@ -695,7 +702,7 @@ jQuery(document).ready(init);
 	);
 	
 
-})(jQuery, this);
+})(window.jQuery, this);
 
 
 

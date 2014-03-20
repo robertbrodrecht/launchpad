@@ -1,0 +1,109 @@
+<h1>Launchpad</h1>
+
+<p>A WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly.  I use CodkeKit 2 to compile SASS and handle JavaScript includes and minification.  Child-theme support is on the list for possible features, but it is probably a long way off.</p>
+
+<h1>Features</h1>
+
+<p>This theme has been in the works for over a year.  After working with a team that was using the <a href="http://roots.io">Roots WordPress theme</a>, I adopted a few conventions from there (e.g. more useful body classes, root-relative URLs, built-in custom rewrites, and HTML5 Boilerplate integration) and combined them with some of my previous developer-friendly theme ideas.  I also had some thoughts on how to make a modern website work (e.g. built-in content caching, offline support with intelligent applicationCache reloading, and AJAX page loading), so I added those to it.</p>
+
+<p>I&rsquo;ll be building out current feature list as I get the time.</p>
+
+<h1>Front-end Features</h1>
+
+<ul>
+<li>CodeKit 2 support.</li>
+<li>Calculated percentage root font size based on SASS variable.  You enter &lsquo;10px&rsquo; and that gets converted to 62.5%.</li>
+<li>REM mixin based on root font size variable (see previous bullet) to make it dead easy to use REMs with a fallback.  E.g. <code>@include rem(&lsquo;padding&rsquo;, 5px 20px);</code></li>
+<li>Vertical rhythm based on SASS variables.</li>
+<li>Grid system using SASS variables to convert a gutter width as a percent at a particular container width.</li>
+<li>Conditional comments for IE8/9 that don&rsquo;t make your HTML look like a janky mess.  Use <code>.msie-8 ~ *</code> as your a prefix to a selector to change styles for IE8.</li>
+<li>Unsupported browser &ldquo;<a href="https://code.google.com/p/universal-ie6-css/">Universal Stylesheet</a>.&rdquo;</li>
+<li>Developer-mode test grid based on CSS rules.  Access by pressing &ldquo;g&rdquo; key.</li>
+<li>Offline support with intelligent cache refreshing via applicationCache.</li>
+<li>Ajax page loads with History PushState/PopState and Google Analytics pageview events.</li>
+<li>Limited JavaScript feature detection for features that matter (screen DPI, position sticky, css transitions, and touch-capable) instead of including the full Modernizr suite.</li>
+<li>Built-in <code>:target</code>-based &ldquo;hamburger&rdquo; menu.</li>
+<li><a href="http://www.thecssninja.com/javascript/follow-up-60fps-scroll">60FPS scrolling</a> option.</li>
+<li>Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit, ajaxRequestStart, ajaxRequestEnd.  More will be available eventually.</li>
+<li>jQuery Custom Events for scrollStart, scrollStop, resizeStart, and resizeStop so that you don&rsquo;t have to shoot yourself in the foot by using resize and scroll events when you don&rsquo;t have to.</li>
+<li>Input placeholder polyfill.</li>
+<li>Templates for Apple Startup Images and dummy files for Apple Touch Icons and Favicon.</li>
+<li>HTML5 Shiv included for IE8.</li>
+</ul>
+
+
+<h1>SEO-Related Features</h1>
+
+<ul>
+<li>Rel Canonical built in for posts, pages, and single custom post types.</li>
+<li>Meta Description generated from excerpts automatically.</li>
+<li>OpenGraph tags generated automatically.</li>
+<li>Google Analytics Support.</li>
+<li>hCard example in footer.</li>
+</ul>
+
+
+<h1>Back-end Features</h1>
+
+<ul>
+<li>Content caching with configurable cache timeouts and intelligent cache invalidating (i.e. on save).</li>
+<li>Automagic AppCache Manifest generation that pays attention to individual file size and total cache size to avoid overloading the cache.</li>
+<li>Custom rewites:
+
+<ul>
+<li>/images/ rewrites to the theme&rsquo;s /images/ folder.</li>
+<li>/css/ rewrites to the theme&rsquo;s /css/ folder.</li>
+<li>/js/ rewrites to the theme&rsquo;s /js/ folder.</li>
+<li>/api/ rewrites to /wp-admin/admin-ajax.php for easier JavaScript API calls.</li>
+<li>/support/ rewrites to the theme&rsquo;s /support/ folder.</li>
+<li>manifest.appcache rewrites to the API call for creating the manifest.</li>
+</ul>
+</li>
+<li>Phone number formatting function.</li>
+<li>Automatic headers for X-UA-Compatible (IE=edge,chrome=1) so you don&rsquo;t have to put it in your markup.</li>
+<li>Settings for HTML5 Boilerplate&rsquo;s .htaccess.</li>
+<li>Support for saving custom post fields and examples of how to set them up.</li>
+<li>Easy creation of custom post types.</li>
+</ul>
+
+
+<h1>WordPress Features</h1>
+
+<ul>
+<li>Visual editor and print stylesheets automatically generated from reset, typography, and objects SASS files.</li>
+<li>Support for a.button and a few other custom classes for the Visual Editor styles drop down.</li>
+<li>WordPress admin stylesheet.</li>
+<li>WordPress admin JavaScript.</li>
+<li>Sample admin-ajax API call.</li>
+<li>Automatically sets up a post and home page associations.</li>
+<li>Automatically sets /uploads/ as upload folder.</li>
+<li>Automatically adds header and footer navigation.</li>
+<li>Easily-modifiable theme options.  Fields go in an array and the code does the rest.</li>
+<li>Root-relative URLs in Visual Editor and beyond.</li>
+<li>Self-closing / void tag closing slash removal.</li>
+<li>Removal of title and alt attributes on images (because that is better than the default garbage most people leave).</li>
+<li>Change &ldquo;Howdy&rdquo; to &ldquo;Hello&rdquo; on the admin bar menu.</li>
+<li>Custom login skin with settings to change key colors and logo.</li>
+</ul>
+
+
+<h1>Security Features</h1>
+
+<ul>
+<li>Configurable login attempts limiter.  Locks a user out based on username+IP for a configurable amount of time after a configurable number of failed attempts.  Save the theme settings to clear all lockouts.</li>
+</ul>
+
+
+<h1>Notes</h1>
+
+<p>In many cases, I&rsquo;m trying to force best practices.  JavaScript embeds are in the footer, for example, and you can use <code>body.no-js</code> and <code>body.js</code> as hooks for styling with Progressive Enhancement.</p>
+
+<h1>To Do</h1>
+
+<ul>
+<li>Add hooks in WP code for modifying things that people may want to modify.</li>
+<li>Add more custom events to JavaScript to aid in development.</li>
+<li>Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.</li>
+<li>Easy way to add custom fields to post types.</li>
+</ul>
+
