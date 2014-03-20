@@ -14,6 +14,7 @@ if($site_options['ajax_page_loads'] === true) {
 	$ajax = 'true';
 }
 
+/*
 $offline = '';
 if($site_options['offline_support'] === true) {
 	$offline = '/manifest.appcache';
@@ -21,6 +22,7 @@ if($site_options['offline_support'] === true) {
 		$offline = '/manifest.obsolete.appcache';
 	}
 }
+*/
 
 $excerpt = launchpad_excerpt();
 
