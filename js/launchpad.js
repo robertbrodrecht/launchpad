@@ -370,9 +370,10 @@ function reinit() {
  * @since   	Version 1.0
  */
 function init() {
-	var scrollingIsJanky = false,
+	var body = $(document.body),
+		scrollingIsJanky = false,
 		doNotSupport = [/MSIE [1234567]\./],
-		l, i;
+		l, i, startupImage = false;
 	
 	window.supports = {};
 	
@@ -392,12 +393,42 @@ function init() {
 		}
 	}
 	
+	if(window.navigator.standalone) {
+		$('link[rel=apple-touch-startup-image]').each(
+			function() {
+				var me = $(this),
+					media = me.attr('media');
+				if(media && window.matchMedia(media).matches) {
+					startupImage = me.attr('href');
+				}
+			}
+		);
+		if(startupImage) {
+			startupImage = $('<img src="' + startupImage + '">').load(
+				function() {
+					setTimeout(
+						function() {
+							$('#apple-standalone-startup-image').animate(
+								{'opacity': 0},
+								function() {
+									$(this).remove();
+								}
+							);
+						}
+					, 1000);
+				}
+			);
+			body.append($('<div id="apple-standalone-startup-image"></div>'));
+			$('#apple-standalone-startup-image').append(startupImage);
+		}
+	}
+	
 	initHeightMatch();
 	if($('[data-ajax="true"]').length) {
 		initAjax();
 	}
 	
-	$(document.body).on(
+	body.on(
 			'click',
 			'*',
 			function(e) {
@@ -531,7 +562,7 @@ function init() {
 	if(window.dev === true) {
 		$(document).on('keyup', 'body', handleGrid);
 	}
-	$(document.body).trigger('launchpadInit');
+	body.trigger('launchpadInit');
 	reinit();
 }
 
