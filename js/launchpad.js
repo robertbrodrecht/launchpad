@@ -184,11 +184,11 @@ function initMonitorLogin() {
  */
 function initHeightMatch() {
 	function heightMatch() {
-		$('.height-match-group').css('height', 'auto').each(
+		$('[data-height-match-group]').css('height', 'auto').each(
 				function() {
 					var me = $(this),
 						height = 0;
-					me.children('.height-match').css('height', 'auto').each(
+					me.children('[data-height-match]').css('height', 'auto').each(
 							function() {
 								var h = $(this).outerHeight();
 								if(h > height) {
@@ -200,11 +200,11 @@ function initHeightMatch() {
 			);
 	}
 	
-	$('.height-match-children').removeClass('height-match-children')
-		.addClass('height-match-group')
+	$('[data-height-match-children]').removeAttr('data-height-match-children')
+		.attr('data-height-match-group', '')
 		.children().each(
 			function() {
-				$(this).addClass('height-match');
+				$(this).attr('data-height-match', '');
 			}
 		);
 	

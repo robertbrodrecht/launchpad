@@ -15,3 +15,17 @@
 	text-indent: 110%;
 	white-space: nowrap;
 }
+
+%ugly-clearfix {
+	
+	&:before {
+		content: ' ';
+		display: table;
+	}
+	
+	&:after {
+		clear: both;
+		content: ' ';
+		display: table;
+	}
+}

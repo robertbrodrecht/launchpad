@@ -39,6 +39,7 @@ add_action('after_setup_theme', 'launchpad_setup');
 function launchpad_image_setup() {
 	global $image_sizes;
 	add_image_size('opengraph', 1200, 1200, true);
+	add_image_size('gallery', 300, 300, false);
 	if($image_sizes) {
 		foreach($image_sizes as $image_size) {
 			add_image_size($image_size[0], $image_size[1], $image_size[2], $image_size[3]);
@@ -60,15 +61,7 @@ function launchpad_title($echo = false) {
 	$vals = get_option('launchpad_site_options', '');
 	
 	$title = '';
-	if($post && $post->post_type == 'launchpad_product') {
-		if(stristr($post->post_title, $vals['product_name_singular']) === false) {
-			$title .= wp_title('', false) . ' ' . $vals['product_name_singular'] . ' Review';
-		} else {
-			$title .= wp_title('', false) . ' Review';
-		}
-	} else {
-		$title .= wp_title('', false);
-	}
+	$title .= wp_title('', false);
 	if ($paged >= 2 || $page >= 2) {
 		$title .= ' (Page ' . max($paged, $page) . ')';
 	}
@@ -399,3 +392,77 @@ function launchpad_wp_nav_menu($args) {
 		launchpad_cache($cache_id, 'navigation-' . $nav_id);
 	}
 }
+
+
+/**
+ * A More Semantic Gallery Shortcode Handler
+ *
+ * @param		array $attr The attributes from the shortcode.
+ * @since   	Version 1.0
+ */
+function launchpad_gallery_shortcode($attr) {
+	// Defaults.
+	$linkto = 'post';  // Also file and none.
+	$columns = 3;
+	
+	foreach($attr as $k => $v) {
+		$attr[$k] = trim($v);
+	}
+	
+	if($attr['ids'] === '') {
+		return '';
+	}
+	
+	if($attr['columns']) {
+		$columns = (int) $attr['columns'];
+		if($columns < 1) {
+			$columns = 3;
+		}
+	}
+	
+	switch($attr['columns']) {
+		default:
+			$linkto = 'post';
+		break;
+		case 'file':
+			$linkto = 'file';
+		break;
+		case 'none':
+			$linkto = 'none';
+		break;
+	}
+	
+	
+	$ret = '<figure class="gallery gallery-columns-' . $columns . '">';
+	$ids = explode(',', $attr['ids']);
+	
+	if($attr['orderby'] === 'rand') {
+		shuffle($ids);
+	}
+	
+	$imgs = array();
+	foreach($ids as $id) {
+		$thumb = wp_get_attachment_image_src($id, 'gallery');
+		
+		if($linkto === 'post') {
+			$full_image = get_post($id);
+			$ret .= '<a href="' . get_permalink($full_image->ID) . '">';
+		} else if($linkto === 'file') {
+			$full_image = wp_get_attachment_image_src($id, 'full');
+			$ret .= '<a href="' . $full_image[0] . '">';
+		}
+		
+		$ret .= '<figure>';
+		$ret .= '<img src="' . $thumb[0] . '" width="' . $thumb[1] . '" height="' . $thumb[2] . '" alt="">';
+		$ret .= '</figure>';
+		
+		if($linkto !== 'none') {
+			$ret .= '</a>';
+		}
+	}
+	$ret .= '</figure>';
+	
+	return $ret;
+}
+remove_shortcode('gallery', 'gallery_shortcode');
+add_shortcode('gallery', 'launchpad_gallery_shortcode');

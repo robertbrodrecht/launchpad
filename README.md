@@ -9,34 +9,42 @@ Features
 
 This theme has been in the works for over a year.  After working with a team that was using the [Roots WordPress theme](http://roots.io), I adopted a few conventions from there (e.g. more useful body classes, root-relative URLs, built-in custom rewrites, and HTML5 Boilerplate integration) and combined them with some of my previous developer-friendly theme ideas.  I also had some thoughts on how to make a modern website work (e.g. built-in content caching, offline support with intelligent applicationCache reloading, and AJAX page loading), so I added those to it.
 
-I'll be building out current feature list as I get the time.
+I'll be building out the feature list as I get the time.
 
 
-Front-end Features
-==================
+## Front-end Features
 
 * CodeKit 2 support.
+* Developer-mode test grid based on CSS rules.  Access by pressing "g" key.
+
+### HTML-ish
+
+* Offline support with intelligent cache refreshing via applicationCache.
+* Input placeholder polyfill.
+* Templates for Apple Startup Images and dummy files for Apple Touch Icons and Favicon.
+* HTML5 Shiv included for IE8.
+
+### SASS / CSS
+
 * Calculated percentage root font size based on SASS variable.  You enter '10px' and that gets converted to 62.5%.
 * REM mixin based on root font size variable (see previous bullet) to make it dead easy to use REMs with a fallback.  E.g. <code>@include rem('padding', 5px 20px);</code>
 * Vertical rhythm based on SASS variables.
 * Grid system using SASS variables to convert a gutter width as a percent at a particular container width.
 * Conditional comments for IE8/9 that don't make your HTML look like a janky mess.  Use <code>.msie-8 ~ *</code> as your a prefix to a selector to change styles for IE8.
 * Unsupported browser "[Universal Stylesheet](https://code.google.com/p/universal-ie6-css/)."
-* Developer-mode test grid based on CSS rules.  Access by pressing "g" key.
-* Offline support with intelligent cache refreshing via applicationCache.
+
+### jQuery / JavaScript
+
 * Ajax page loads with History PushState/PopState and Google Analytics pageview events.
 * Limited JavaScript feature detection for features that matter (screen DPI, position sticky, css transitions, and touch-capable) instead of including the full Modernizr suite.
 * Built-in <code>:target</code>-based "hamburger" menu.
 * [60FPS scrolling](http://www.thecssninja.com/javascript/follow-up-60fps-scroll) option.
 * Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit, ajaxRequestStart, ajaxRequestEnd.  More will be available eventually.
 * jQuery Custom Events for scrollStart, scrollStop, resizeStart, and resizeStop so that you don't have to shoot yourself in the foot by using resize and scroll events when you don't have to.
-* Input placeholder polyfill.
-* Templates for Apple Startup Images and dummy files for Apple Touch Icons and Favicon.
-* HTML5 Shiv included for IE8.
+* JavaScript Height Match via <code>@data-height-match-group</code> with children containing <code>@data-height-match</code> or <code>@data-height-match-children</code> to height match all children.
 
 
-SEO-Related Features
-====================
+## SEO-Related Features
 
 * Rel Canonical built in for posts, pages, and single custom post types.
 * Meta Description generated from excerpts automatically.
@@ -45,8 +53,7 @@ SEO-Related Features
 * hCard example in footer.
 
 
-Back-end Features
-=================
+## Back-end Features
 
 * Content caching with configurable cache timeouts and intelligent cache invalidating (i.e. on save).
 * Automagic AppCache Manifest generation that pays attention to individual file size and total cache size to avoid overloading the cache.
@@ -64,8 +71,7 @@ Back-end Features
 * Easy creation of custom post types.
 
 
-WordPress Features
-==================
+## WordPress Features
 
 * Visual editor and print stylesheets automatically generated from reset, typography, and objects SASS files.
 * Support for a.button and a few other custom classes for the Visual Editor styles drop down.
@@ -81,10 +87,10 @@ WordPress Features
 * Removal of title and alt attributes on images (because that is better than the default garbage most people leave).
 * Change "Howdy" to "Hello" on the admin bar menu.
 * Custom login skin with settings to change key colors and logo.
+* Semantic rewrite of the WordPress Gallery shortcode.
 
 
-Security Features
-=================
+## Security Features
 
 * Configurable login attempts limiter.  Locks a user out based on username+IP for a configurable amount of time after a configurable number of failed attempts.  Save the theme settings to clear all lockouts.
 

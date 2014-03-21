@@ -202,6 +202,27 @@ add_action('generate_rewrite_rules', 'launchpad_add_h5bp_htaccess');
 
 
 /**
+ * The Preg Callback for Root Relative URLS
+ *
+ * @param		array $matches The preg matches.
+ * @see			launchpad_root_relative_url()
+ * @since   	Version 1.0
+ */
+function launchpad_root_relative_url_preg_callback($matches) {
+	if (
+		isset($matches[0]) && 
+		$matches[0] === home_url("/") && 
+		str_replace("http://", "", home_url("/", "http")) == $_SERVER["HTTP_HOST"]
+	) { 
+		return "/";
+	} else if (isset($matches[0]) && strpos($matches[0], home_url("/")) !== false) { 
+		return $matches[2];
+	} else { 
+		return $matches[0]; 
+	}
+}
+
+/**
  * Make links root-relative
  *
  * Strips out the base URL so that paths are root-relative instead of including the entire domain name.
@@ -217,12 +238,7 @@ add_action('generate_rewrite_rules', 'launchpad_add_h5bp_htaccess');
 function launchpad_root_relative_url($input) {
 	$output = preg_replace_callback(
 		'!(https?://[^/|"]+)([^"]+)?!',
-		create_function(
-			'$matches',
-			'if (isset($matches[0]) && $matches[0] === home_url("/") && str_replace("http://", "", home_url("/", "http"))==$_SERVER["HTTP_HOST"]) { return "/";' .
-			'} elseif (isset($matches[0]) && strpos($matches[0], home_url("/")) !== false) { return $matches[2];' .
-			'} else { return $matches[0]; };'
-		),
+		'launchpad_root_relative_url_preg_callback',
 		$input
 	);
 
