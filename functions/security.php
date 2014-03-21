@@ -53,7 +53,7 @@ function launchpad_get_failures_cache($username) {
 	}
 	
 	$ip = $_SERVER['REMOTE_ADDR'];
-	$file_name = 'limit-logins-' . sanitize_title($username) . '-' . $ip . '.txt';
+	$file_name = 'launchpad_limit_logins-' . sanitize_title($username) . '-' . $ip . '.txt';
 	$cache_path = $cache_folder . $file_name;
 	
 	$launchpad_login_failures_cache = $cache_path;

@@ -59,10 +59,34 @@ add_filter('image_size_names_choose', 'launchpad_image_sizes_options');
  * @since   	Version 1.0
  */
 function launchpad_get_setting_fields() {
+	global $site_options;
+	
+	$lockouts = '';
+	$lockout_time = $site_options['lockout_time'];
+	if(!$lockout_time) {
+		$lockout_time = 1;
+	}
+	
+	$cache_dir = launchpad_get_cache_file();
+	$cache_files = scandir($cache_dir);
+	
+	foreach($cache_files as $cache_file) {
+		$cache_path = $cache_dir . $cache_file;
+		$cache_file_split = explode('-', $cache_file);
+		if($cache_file_split[0] === 'launchpad_limit_logins') {
+			if(time()-filemtime($cache_path) <= $lockout_time*60*60) {
+				$lockouts .= $cache_file_split[1] . ' @ ' . str_replace('.txt', '', $cache_file_split[2]) . '<br>';
+			}
+		}
+	}
+	
+	if(!$lockouts) {
+		$lockouts = 'No current lockouts.';
+	}
 	
 	$opts = array(
 			'security' => array(
-				'name' => 'Security Settings <small class="launchpad-block">Save settings to clear all lockouts.</small>',
+				'name' => 'Security Settings <small class="launchpad-block">Save settings to clear all lockouts.<br><br><strong>Current Lockouts:</strong><br>' . $lockouts . '</small>',
 				'args' => array(
 					'type' => 'subfield',
 					'subfields' => array(	
@@ -448,7 +472,7 @@ function launchpad_site_options_validate($input) {
 	$cache_folder = launchpad_get_cache_file();
 	$all_files = scandir($cache_folder);
 	foreach($all_files as $current_file) {
-		if(preg_match('/^limit\-logins\-/', $current_file)) {
+		if(preg_match('/^launchpad_limit_logins\-/', $current_file)) {
 			unlink($cache_folder . $current_file);
 		}
 	}
@@ -491,9 +515,10 @@ add_action('admin_init', 'launchpad_site_options_init');
  * @since   	Version 1.0
  */
 function launchpad_theme_options_add_page() {
-	$theme_page = add_theme_page(
-		'Launchpad Settings',
-		'Theme Settings',
+	$theme_page = add_submenu_page(
+		'options-general.php',
+		'Launchpad Management',
+		'Launchpad',
 		'edit_theme_options',
 		'launchpad_settings',
 		'launchpad_theme_options_render_page'

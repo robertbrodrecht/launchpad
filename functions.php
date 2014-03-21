@@ -90,6 +90,8 @@ include 'functions/post-types.php';
 include 'functions/api.php';
 /** Template related modifications such as nav menu registration, header cleanup, page cache, etc.  */
 include 'functions/template.php';
+/** Cache-related functions.  */
+include 'functions/cache.php';
 /** Custom functions for handling various duties.  */
 include 'functions/utilities.php';
 

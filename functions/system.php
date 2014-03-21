@@ -107,7 +107,7 @@ add_action('after_switch_theme', 'launchpad_theme_activation_action');
 function launchpad_settings_redirect() {
 	global $pagenow;
 	if (is_admin() && isset($_GET['activated']) && $pagenow == 'themes.php') {
-		header('Location: themes.php?page=launchpad_settings');
+		header('Location: options-general.php?page=launchpad_settings');
 		exit;
 	}
 }
