@@ -46,7 +46,11 @@ function wp_base_dir() {
  * @since   	Version 1.0
  */
 function launchpad_theme_activation_action() {
-		
+	
+	for($p = 1; $p < 3; $p++) {
+		wp_delete_post($p, true);
+	}
+	
 	$page = new WP_Query('name=home&post_type=page');
 	if($page->post_count > 0) {
 		$home_page_id = $page->post->ID;

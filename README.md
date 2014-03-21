@@ -73,6 +73,7 @@ I'll be building out the feature list as I get the time.
 
 ## WordPress Features
 
+* Deletes sample page and hello world post on theme activations so you don't have to do it.
 * Visual editor and print stylesheets automatically generated from reset, typography, and objects SASS files.
 * Support for a.button and a few other custom classes for the Visual Editor styles drop down.
 * WordPress admin stylesheet.
@@ -109,3 +110,4 @@ To Do
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
 * Easy way to add custom fields to post types.
+* Add "basic" stylesheet that handles a wireframe related things.
