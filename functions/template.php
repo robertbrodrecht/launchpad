@@ -179,7 +179,7 @@ function launchpad_gallery_shortcode($attr) {
 		}
 	}
 	
-	switch($attr['columns']) {
+	switch($attr['link']) {
 		default:
 			$linkto = 'post';
 		break;
