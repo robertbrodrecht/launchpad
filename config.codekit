@@ -98,6 +98,14 @@
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsSetByUser": 0
 		},
+	"\/functions\/cache.php": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/functions\/cache.php",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsSetByUser": 0
+		},
 	"\/functions\/post-types.php": {
 		"fileType": 8192,
 		"ignore": 0,
@@ -236,33 +244,23 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
-	"\/images\/icons\/ipad-landscape-1024x748.png": {
-		"fileType": 32768,
+	"\/images\/icons\/ipad-portrait-768x1004.jpg": {
+		"fileType": 16384,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"initialSize": 4670,
-		"inputAbbreviatedPath": "\/images\/icons\/ipad-landscape-1024x748.png",
-		"outputAbbreviatedPath": "\/images\/icons\/ipad-landscape-1024x748.png",
+		"initialSize": 29016,
+		"inputAbbreviatedPath": "\/images\/icons\/ipad-portrait-768x1004.jpg",
+		"outputAbbreviatedPath": "\/images\/icons\/ipad-portrait-768x1004.jpg",
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
-	"\/images\/icons\/ipad-portrait-768x1004.png": {
-		"fileType": 32768,
+	"\/images\/icons\/ipad-retina-landscape-2048x1496.jpg": {
+		"fileType": 16384,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"initialSize": 4765,
-		"inputAbbreviatedPath": "\/images\/icons\/ipad-portrait-768x1004.png",
-		"outputAbbreviatedPath": "\/images\/icons\/ipad-portrait-768x1004.png",
-		"outputPathIsSetByUser": 0,
-		"processed": 0
-		},
-	"\/images\/icons\/ipad-retina-landscape-2048x1496.png": {
-		"fileType": 32768,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"initialSize": 8046,
-		"inputAbbreviatedPath": "\/images\/icons\/ipad-retina-landscape-2048x1496.png",
-		"outputAbbreviatedPath": "\/images\/icons\/ipad-retina-landscape-2048x1496.png",
+		"initialSize": 95777,
+		"inputAbbreviatedPath": "\/images\/icons\/ipad-retina-landscape-2048x1496.jpg",
+		"outputAbbreviatedPath": "\/images\/icons\/ipad-retina-landscape-2048x1496.jpg",
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -276,16 +274,6 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
-	"\/images\/icons\/ipad-retina-portrait-1536x2008.png": {
-		"fileType": 32768,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"initialSize": 8554,
-		"inputAbbreviatedPath": "\/images\/icons\/ipad-retina-portrait-1536x2008.png",
-		"outputAbbreviatedPath": "\/images\/icons\/ipad-retina-portrait-1536x2008.png",
-		"outputPathIsSetByUser": 0,
-		"processed": 0
-		},
 	"\/images\/icons\/startup-iphone-320x460.jpg": {
 		"fileType": 16384,
 		"ignore": 0,
@@ -293,16 +281,6 @@
 		"initialSize": 7448,
 		"inputAbbreviatedPath": "\/images\/icons\/startup-iphone-320x460.jpg",
 		"outputAbbreviatedPath": "\/images\/icons\/startup-iphone-320x460.jpg",
-		"outputPathIsSetByUser": 0,
-		"processed": 0
-		},
-	"\/images\/icons\/startup-iphone-320x460.png": {
-		"fileType": 32768,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"initialSize": 3316,
-		"inputAbbreviatedPath": "\/images\/icons\/startup-iphone-320x460.png",
-		"outputAbbreviatedPath": "\/images\/icons\/startup-iphone-320x460.png",
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -316,16 +294,6 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
-	"\/images\/icons\/startup-iphone4-640x920.png": {
-		"fileType": 32768,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"initialSize": 4416,
-		"inputAbbreviatedPath": "\/images\/icons\/startup-iphone4-640x920.png",
-		"outputAbbreviatedPath": "\/images\/icons\/startup-iphone4-640x920.png",
-		"outputPathIsSetByUser": 0,
-		"processed": 0
-		},
 	"\/images\/icons\/startup-iphone5-640x1096.jpg": {
 		"fileType": 16384,
 		"ignore": 0,
@@ -333,16 +301,6 @@
 		"initialSize": 26699,
 		"inputAbbreviatedPath": "\/images\/icons\/startup-iphone5-640x1096.jpg",
 		"outputAbbreviatedPath": "\/images\/icons\/startup-iphone5-640x1096.jpg",
-		"outputPathIsSetByUser": 0,
-		"processed": 0
-		},
-	"\/images\/icons\/startup-iphone5-640x1096.png": {
-		"fileType": 32768,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"initialSize": 4726,
-		"inputAbbreviatedPath": "\/images\/icons\/startup-iphone5-640x1096.png",
-		"outputAbbreviatedPath": "\/images\/icons\/startup-iphone5-640x1096.png",
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -423,6 +381,14 @@
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
+		},
+	"\/README.html": {
+		"fileType": 8192,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/README.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsSetByUser": 0
 		},
 	"\/README.md": {
 		"enableFootnoteSupport": 0,

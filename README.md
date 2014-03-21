@@ -88,6 +88,7 @@ I'll be building out the feature list as I get the time.
 * Change "Howdy" to "Hello" on the admin bar menu.
 * Custom login skin with settings to change key colors and logo.
 * Semantic rewrite of the WordPress Gallery shortcode.
+* Smart 404 page.  Presents options for "Go Back" (if HTTP_REFERER is present), check URL for typos, and go to home page.  Finally, the URL is parsed for search terms and a search is executed for matching pages.  If any are found, the user is presented with the results.
 
 
 ## Security Features

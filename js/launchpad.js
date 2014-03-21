@@ -5,16 +5,94 @@
  *
  * Handles all the JavaScript needs of the front end.
  *
- * @package 	Launchpad
- * @since   	Version 1.0
+ * @package	Launchpad
+ * @since	Version 1.0
  */
 
 
 
 /**
+ * Functionality Related to Offline Support.
+ *
+ * @since	Version 1.0
+ */
+function initOfflineSupport() {	
+	// Watch to see if the user logs in or out so we can manage their cache.
+	initMonitorLogin();
+
+	// Handle online/offline transitions.
+	$(window).on(
+			'offline',
+			function() {
+				if(window.dev) {
+					console.log('Browser is offline.');
+				}
+				$(document.body).append(
+					$('<div id="offline-notification" class="system-notification">✱ You are currently offline.</div>')
+				);
+			}
+		).on(
+			'online',
+			function() {
+				if(window.dev) {
+					console.log('Browser is online.');
+				}
+				$('#offline-notification').remove();
+				try {
+					applicationCache.update();
+				} catch(err) {
+					if(window.dev) {
+						console.log('Attempting to force an update to the appCache threw an error, but we caught it.', err);
+					}
+				}
+			}
+		);
+	
+	// Handle appcache updates.
+	if(!navigator.onLine) {
+		$(window).trigger('offline');
+	} else {
+		if(window.dev) {
+			console.log('Browser lacks cache. Initiating appcache update.');
+		}
+		$(window).trigger('online');
+	}
+	
+	// Add listeners for cache updates.
+	applicationCache.addEventListener(
+			'updateready',
+			function() {
+				if(applicationCache.status === applicationCache.UPDATEREADY) {
+					if(window.dev) {
+						console.log('Appcache updated. Swapping now.');
+					}
+					applicationCache.swapCache();
+				}
+			}
+		);
+	
+	// If in dev mode, show helpful event logs.
+	if(window.dev) {
+		applicationCache.addEventListener(
+				'progress',
+				function(e) {
+					console.log('Appcache loading ' + (e.loaded+1) + ' of ' + e.total + '.');
+				}
+			);
+		applicationCache.addEventListener(
+				'obsolete',
+				function() {
+					console.log('Appcache has been obsoleted.');
+				}
+			);
+	}
+}
+
+
+/**
  * Manage Ajax Page Loads
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function initAjax() {
 	var body = $(document.body);
@@ -43,7 +121,10 @@ function initAjax() {
 		if(href.indexOf('wp-admin') !== -1) {
 			return;
 		}
-		if(href.substr(0, 1) === '/' || location.href.split('/')[2] === href.split('/')[2]) {
+		if(
+			(href.substr(0, 1) === '/' || location.href.split('/')[2] === href.split('/')[2]) &&
+			!href.match(/\.(jpg|jpeg|gif|png|pdf|doc|docx)$/)
+		) {
 			if(window.dev) {
 				console.log('Initializing ajax request.');
 			}
@@ -82,7 +163,7 @@ function initAjax() {
 							}
 							body.html(content.html());
 							
-							_gaq.push(['_trackPageview', href]);
+							window._gaq.push(['_trackPageview', href]);
 							
 							if(history.pushState && e.pushState !== false) {
 								if(window.dev) {
@@ -124,7 +205,7 @@ function initAjax() {
 /**
  * Attempt to Manage ApplicationCache Refresh Intelligently
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function initMonitorLogin() {
 	var login_interval = false,
@@ -180,7 +261,7 @@ function initMonitorLogin() {
 /**
  * Manage Height Matching
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function initHeightMatch() {
 	function heightMatch() {
@@ -209,8 +290,14 @@ function initHeightMatch() {
 		);
 	
 	heightMatch();
+	
 	$(window).on(
 			'resizeEnd',
+			heightMatch
+		);
+		
+	$(document.body).on(
+			'ajaxRequestEnd',
 			heightMatch
 		);
 }
@@ -219,7 +306,7 @@ function initHeightMatch() {
 /**
  * Detect CSS Transition Support
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function detectTouchCapable() {
 	if(window.supports.touch !== undefined) {
@@ -238,13 +325,13 @@ function detectTouchCapable() {
 		window.supports.touch = false;
 	}
 	
-	_gaq.push(['_setCustomVar', 1, 'Browser Support', 'Touch', window.supports.touch]);
+	window._gaq.push(['_setCustomVar', 1, 'Browser Support', 'Touch', window.supports.touch]);
 }
 
 /**
  * Detect CSS Transition Support
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function detectTransitions() {
 	var test;
@@ -262,13 +349,13 @@ function detectTransitions() {
 		window.supports.transitions = false;
 	}
 	
-	_gaq.push(['_setCustomVar', 1, 'Browser Support', 'CSS Transitions', window.supports.transitions]);
+	window._gaq.push(['_setCustomVar', 1, 'Browser Support', 'CSS Transitions', window.supports.transitions]);
 }
 
 /**
  * Detect CSS Position Sticky
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function detectPositionSticky() {
 	var test;
@@ -290,20 +377,20 @@ function detectPositionSticky() {
 		$(document.body).addClass('css-not-sticky');
 	}
 	
-	_gaq.push(['_setCustomVar', 1, 'Browser Support', 'Sticky Positioning', window.supports.sticky]);
+	window._gaq.push(['_setCustomVar', 1, 'Browser Support', 'Sticky Positioning', window.supports.sticky]);
 }
 
 /**
  * Detect Screen DPI
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function detectDPI() {
 	window.supports.dpi = 1;
 	if(window.devicePixelRatio !== undefined) {
 		window.supports.dpi = window.devicePixelRatio;
 	}
-	_gaq.push(['_setCustomVar', 1, 'Browser Support', 'Device Pixel Ratio', window.supports.dpi]);
+	window._gaq.push(['_setCustomVar', 1, 'Browser Support', 'Device Pixel Ratio', window.supports.dpi]);
 }
 
 /**
@@ -313,7 +400,7 @@ function detectDPI() {
  * if the site is deemed to be in development mode (indicated by .dev in the domain name).
  *
  * @param		object e The event object
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function handleGrid(e) {
 	var win = $(window),
@@ -346,11 +433,11 @@ function handleGrid(e) {
  *
  * Some events do not bubble, so we need to initialize them every time we load new content.  Also, we need to update body classes.
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function reinit() {
 	if(window.dev) {
-		console.log('Executing reinit.');
+		console.log('Executing multi-run initialization.');
 	}
 	document.body.className = document.body.className.replace(/no-js/g, 'js');
 	if(window.navigator.standalone) {
@@ -367,7 +454,7 @@ function reinit() {
 /**
  * Initialize the Front End
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 function init() {
 	var body = $(document.body),
@@ -379,6 +466,10 @@ function init() {
 	
 	if(window.dev) {
 		window.dev = (window.console && window.dev);
+	}
+	
+	if(window.dev) {
+		console.log('Executing first run initialization.');
 	}
 	
 	if(!window._gaq) {
@@ -393,7 +484,22 @@ function init() {
 		}
 	}
 	
-	if(window.navigator.standalone) {
+	
+	initHeightMatch();
+	
+	if($('[data-ajax="true"]').length) {
+		window.supports.ajax = true;
+		initAjax();
+	} else {
+		window.supports.ajax = false;
+	}
+	
+	// Start up offline support code if needed.
+	if(window.applicationCache && $('html[manifest]').length) {
+		initOfflineSupport();
+	}
+	
+	if(window.navigator.standalone && window.supports.ajax) {
 		$('link[rel=apple-touch-startup-image]').each(
 			function() {
 				var me = $(this),
@@ -403,6 +509,7 @@ function init() {
 				}
 			}
 		);
+		
 		if(startupImage) {
 			startupImage = $('<img src="' + startupImage + '">').load(
 				function() {
@@ -415,8 +522,7 @@ function init() {
 									$(this).remove();
 								}
 							);
-						}
-					, 1000);
+						}, 1000);
 				}
 			);
 			body.append($('<div id="apple-standalone-startup-image"></div>'));
@@ -424,22 +530,26 @@ function init() {
 		}
 	}
 	
-	initHeightMatch();
-	if($('[data-ajax="true"]').length) {
-		initAjax();
-	}
-	
 	body.on(
 			'click',
 			'*',
 			function(e) {
 				var i = $(this),
+					href = i.attr('href'),
 					nav = $('#navigation');
+				if(!href) {
+					return;
+				}
 				if(i.is('a.hamburger')) {
 					e.preventDefault();
 					nav.toggleClass('target');
 					if(location.hash === '#navigation' && !nav.hasClass('target')) {
 						location.hash = '';
+					}
+				} else if(window.navigator.standalone && !window.supports.ajax) {
+					if(href.substr(0, 1) === '/' || location.href.split('/')[2] === href.split('/')[2]) {
+						e.preventDefault();
+						location.href = href;
 					}
 				} else {
 					nav.removeClass('target');
@@ -449,77 +559,6 @@ function init() {
 				}
 			}
 		).on('ajaxRequestEnd', reinit);
-	
-	if(window.applicationCache && $('html[manifest]').length) {
-		
-		// Watch to see if the user logs in or out so we can manage their cache.
-		initMonitorLogin();
-	
-		// Handle online/offline transitions.
-		$(window).on(
-				'offline',
-				function() {
-					if(window.dev) {
-						console.log('Browser is offline.');
-					}
-					$(document.body).append(
-						$('<div id="offline-notification" class="system-notification">✱ You are currently offline.</div>')
-					);
-				}
-			).on(
-				'online',
-				function() {
-					if(window.dev) {
-						console.log('Browser is online.');
-					}
-					$('#offline-notification').remove();
-					try {
-						applicationCache.update();
-					} catch(err) {
-						if(window.dev) {
-							console.log('Attempting to force an update to the appCache threw an error, but we caught it.', err);
-						}
-					}
-				}
-			);
-		
-		// Handle appcache updates.
-		if(!navigator.onLine) {
-			$(window).trigger('offline');
-		} else {
-			if(window.dev) {
-				console.log('Browser lacks cache. Initiating appcache update.');
-			}
-			$(window).trigger('online');
-		}
-		
-		// Add listeners for cache updates.
-		applicationCache.addEventListener(
-				'updateready',
-				function() {
-					if(applicationCache.status === applicationCache.UPDATEREADY) {
-						if(window.dev) {
-							console.log('Appcache updated. Swapping now.');
-						}
-						applicationCache.swapCache();
-					}
-				}
-			);
-		if(window.dev) {
-			applicationCache.addEventListener(
-					'progress',
-					function(e) {
-						console.log('Appcache loading ' + (e.loaded+1) + ' of ' + e.total + '.');
-					}
-				);
-			applicationCache.addEventListener(
-					'obsolete',
-					function() {
-						console.log('Appcache has been obsoleted.');
-					}
-				);
-		}
-	}
 	
 	/**
 	 * 60 Frames Per Second Scrolling
@@ -563,19 +602,27 @@ function init() {
 	if(window.dev === true) {
 		$(document).on('keyup', 'body', handleGrid);
 	}
+	
 	body.trigger('launchpadInit');
 	reinit();
 }
 
-if(window.jQuery) {
-	jQuery(document).ready(init);	
-}
+(function($, window, undefined) {
+	if($ === undefined) {
+		if(window.dev && window.console) {
+			console.log('jQuery failed to load in time.  Launchpad JavaScript is disabled.');
+		}
+		return;
+	}
+	
+	$(document).ready(init);
+})(window.jQuery, this);
 
 
 /**
  * Custom jQuery Events
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 (function($, window, undefined) {
 	'use strict';
@@ -743,7 +790,7 @@ if(window.jQuery) {
  * 
  * Required until we drop IE9.
  *
- * @since   	Version 1.0
+ * @since	Version 1.0
  */
 (function () {
 	function placeHolderFocus(e) {

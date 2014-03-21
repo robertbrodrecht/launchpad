@@ -9,9 +9,8 @@
  * @since   	Version 1.0
  */
 
-if(!isset($_GET['launchpad_ajax'])) {
-	get_header();	
-}
+
+get_header();
 
 ?>
 
@@ -44,21 +43,22 @@ if(!isset($_GET['launchpad_ajax'])) {
 				</ul>
 				<?php
 				
-				$s = str_replace('/', ' ', $_SERVER["REQUEST_URI"]);
-				$s = preg_replace('/\..*$/', '', $s);
+				$s = implode(' ', array_slice(explode('/', $pageURL), 3));
+				
+				$s = preg_replace('/\.....?$/', '', $s);
 				$s = preg_replace('/[^A-Z0-9]/i', ' ', $s);
 				$s = preg_replace('/([A-Z])/', ' $1', $s);
 				$s = preg_replace('/([A-Z])([0-9])/i', '$1 $2', $s);
 				$s = trim($s);
 				$s = preg_replace('/\s+/', ' ', $s);
-
+				
 				query_posts('s=' . $s);
 				if(have_posts()) {
 				
 				?>
 
 				<p>
-					We also ran a search for you to see if anything relevant turned up:
+					We also ran a search for "<kbd><?php echo $s ?></kbd>" you to see if anything relevant turned up:
 				</p>
 				<ul>
 				<?php while(have_posts()) { the_post(); ?>
@@ -75,6 +75,4 @@ if(!isset($_GET['launchpad_ajax'])) {
 
 <?php
 
-if(!isset($_GET['launchpad_ajax'])) {
-	get_footer();
-}
+get_footer();
