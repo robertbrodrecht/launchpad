@@ -7,6 +7,7 @@
  * @package 	Launchpad
  * @since		1.0
  * @todo		Determine where to trigger custom actions.  http://archive.extralogical.net/2007/06/wphooks/
+ * @todo		Add custom fields array to post types in custom.
  */
 
 global $site_options;
