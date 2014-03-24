@@ -124,6 +124,10 @@ To Do For 2.0
   * Build your own modules, all in code.
   * Image rotator / carousel.
   * Grid of content.
+  * WYSIWYG Editor.
+  * Ad Space
+  * Link Panel
+  * Accordion
 * Search includes flexible content modules / custom fields.
 * Ad Designer.
 * Custom Headers
