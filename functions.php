@@ -6,7 +6,6 @@
  * 
  * @package 	Launchpad
  * @since		1.0
- * @todo		Do a second pass on where filtering is supported.
  * @todo		Determine where to trigger custom actions.  http://archive.extralogical.net/2007/06/wphooks/
  */
 
