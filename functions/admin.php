@@ -666,7 +666,7 @@ function launchpad_custom_login() {
 		
 		body.login {
 			background: #333;
-			background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(0,0,0,.05) 1px, rgba(0,0,0,.05) 7px);
+			/* background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(0,0,0,.05) 1px, rgba(0,0,0,.05) 7px); */
 		}
 
 		body.login:after,		
@@ -712,7 +712,7 @@ function launchpad_custom_login() {
 		}
 		#login {
 			background: #F6F6F6;
-			background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(0,0,0,.02) 1px, rgba(0,0,0,.02) 7px);
+			/* background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(0,0,0,.02) 1px, rgba(0,0,0,.02) 7px); */
 			border: 15px solid rgba(0, 0, 0, .85);
 			border-radius: 20px;
 			padding: 20px;

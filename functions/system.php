@@ -46,12 +46,33 @@ function wp_base_dir() {
  * @since		1.0
  */
 function launchpad_theme_activation_action() {
+	// Default values.
+	$home_page_name = 'Home';
+	$articles_page_name = 'Articles';
+	$articles_path = '/articles/%postname%/';
+	$uploads_path = 'uploads';
 	
+	$home_page_name = apply_filters('launchpad_activate_home_name', $home_page_name);
+	$articles_page_name = apply_filters('launchpad_activate_articles_name', $articles_page_name);
+	$articles_path = apply_filters('launchpad_activate_articles_path', $articles_path);
+	$uploads_path = apply_filters('launchpad_activate_upload_path', $uploads_path);
+	
+	// Fix some common issues.
+	$articles_path = preg_replace('|/+|', '/', $articles_path);
+	$uploads_path = preg_replace('|^/|', '', $uploads_path);
+	$uploads_path = preg_replace('|/$|', '', $uploads_path);
+	
+	if(stristr($articles_path, '%postname%') === false) {
+		$articles_path .= '/%postname%/';
+	}
+	
+	// Delete the default stuff.
 	for($p = 1; $p < 3; $p++) {
 		wp_delete_post($p, true);
 	}
 	
-	$page = new WP_Query('name=home&post_type=page');
+	// Create a home page.
+	$page = new WP_Query('name=' . sanitize_title($home_page_name) . '&post_type=page');
 	if($page->post_count > 0) {
 		$home_page_id = $page->post->ID;
 	} else {
@@ -60,14 +81,15 @@ function launchpad_theme_activation_action() {
 				'post_type' => 'page',
 				'post_author' => 1,
 				'post_date' => date('Y-m-d H:i:s', strtotime('-2 days')),
-				'post_name' => 'home',
-				'post_title' => 'Home',
+				'post_name' => sanitize_title($home_page_name),
+				'post_title' => $home_page_name,
 				'post_status' => 'publish'
 			), false
 		);
 	}
-
-	$page = new WP_Query('name=articles&post_type=page');
+	
+	// Create an articles page.
+	$page = new WP_Query('name=' . sanitize_title($articles_page_name) . '&post_type=page');
 	if($page->post_count > 0) {
 		$articles_page_id = $page->post->ID;
 	} else {
@@ -76,29 +98,23 @@ function launchpad_theme_activation_action() {
 				'post_type' => 'page',
 				'post_author' => 1,
 				'post_date' => date('Y-m-d H:i:s', strtotime('-2 days')),
-				'post_name' => 'articles',
-				'post_title' => 'Articles',
+				'post_name' => sanitize_title($articles_page_name),
+				'post_title' => $articles_page_name,
 				'post_status' => 'publish'
 			), false
 		);
 	}
 	
+	// Update options.
 	if($home_page_id > 0 && $articles_page_id > 0) {
 		update_option('show_on_front', 'page');
 		update_option('page_for_posts', $articles_page_id);
 		update_option('page_on_front', $home_page_id);
 	}
 	
-	update_option('permalink_structure', '/articles/%postname%/');
-	update_option('upload_path', 'uploads');
+	update_option('permalink_structure', $articles_path);
+	update_option('upload_path', $uploads_path);
 	
-	//thumbnail_size_w = ?
-	//thumbnail_size_h = ?
-	//thumbnail_crop = 1
-	//medium_size_w = ?
-	//medium_size_h = ?
-	//large_size_w = ?
-	//large_size_h = ?
 }
 add_action('after_switch_theme', 'launchpad_theme_activation_action');
 
@@ -316,7 +332,7 @@ function launchpad_wp_get_attachment_image_attributes( $attr ) {
 	$attr['alt'] = '';
 	return $attr;
 }
-add_filter( 'wp_get_attachment_image_attributes', 'launchpad_wp_get_attachment_image_attributes' );
+add_filter('wp_get_attachment_image_attributes', 'launchpad_wp_get_attachment_image_attributes');
 
 
 /**

@@ -11,17 +11,24 @@
  * * launchpad_cache_manifest_file_paths: array of default manifest paths.
  * * launchpad_post_formats: array of post formats.
  * * launchpad_nav_menus: array of nav menus.
+ * * launchpad_title: string title.
  * * launchpad_excerpt: string excerpt.
  * * launchpad_setting_fields: array of theme settings fields.
  * * launchpad_cache_file_path: string $cache path, int/bool $post_id, int/bool $type.
+ * * launchpad_activate_home_name: string Name of home page. Only fires on activation.
+ * * launchpad_activate_articles_name: string Name of articles page. Only fires on activation.
+ * * launchpad_activate_articles_path: string Articles path Only fires on activation.
+ * * launchpad_activate_upload_path: string Upload path. Only fires on activation.  See example.
  * 
  * @package 	Launchpad
  * @since		1.0
  */
 
+
 // Change to true to use /img/ instead of /images/
 $use_img = false;
-
+// Change to true to use /assets/ instead of /uploads/
+$use_assets = false;
 
 /**
  * Manifest for /img/
@@ -43,16 +50,30 @@ function custom_launchpad_cache_manifest_file_paths($paths) {
  * @param		array $rewrites Rewrites to replace.
  * @since		1.0
  */
-function launchpad_rewrite_rules($rewrites) {
-	unset($paths['images/(.*)']);
-	$paths['img/(.*)'] = THEME_PATH . '/img/$1';
-	
+function custom_launchpad_rewrite_rules($rewrites) {
+	unset($rewrites['images/(.*)']);
+	$rewrites['img/(.*)'] = THEME_PATH . '/img/$1';
 	return $rewrites;
 }
 
 if($use_img) {
 	add_filter('launchpad_cache_manifest_file_paths', 'custom_launchpad_cache_manifest_file_paths');
 	add_filter('launchpad_rewrite_rules', 'custom_launchpad_rewrite_rules');
+}
+
+
+/**
+ * Set Upload Path to /assets/ 
+ * 
+ * @param		array $rewrites Rewrites to replace.
+ * @since		1.0
+ */
+function custom_launchpad_activate_upload_path($str) {
+	// This should really be 'assets' but the code will fix the additional slashes.
+	return '/assets/';
+}
+if($use_assets) {
+	add_filter('launchpad_activate_upload_path', 'custom_launchpad_activate_upload_path');
 }
 
 
@@ -99,6 +120,7 @@ function custom_launchpad_custom_post_types($post_types) {
 					)
 			)
 	);
+	
 	return array_merge($post_types, $custom_post_types);
 }
 add_filter('launchpad_custom_post_types', 'custom_launchpad_custom_post_types');

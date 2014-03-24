@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Template Features
  *
@@ -57,7 +56,7 @@ function launchpad_image_setup() {
 	
 	$image_sizes = apply_filters('launchpad_image_sizes', $image_sizes);
 	
-	add_image_size('opengraph', 1200, 1200, true);
+	add_image_size('opengraph', 1200, 1600, false);
 	add_image_size('gallery', 300, 300, false);
 	
 	if($image_sizes) {
@@ -87,6 +86,9 @@ function launchpad_title($echo = false) {
 	}
 	$title = ($title != '' ? $title . ' | ' : '');
 	$title .= get_bloginfo('name') . ': ' . get_bloginfo('description', 'display');
+	
+	$title = apply_filters('launchpad_title', $title);
+	
 	if($echo) {
 		echo $title;
 	}

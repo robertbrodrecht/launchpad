@@ -2,6 +2,8 @@
 /**
  * Security Related Features
  *
+ * Lockout code inspired by the Limit Login Attempts plugin.
+ * 
  * @package 	Launchpad
  * @since		1.0
  */

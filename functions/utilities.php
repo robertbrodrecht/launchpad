@@ -7,6 +7,8 @@
  *
  * @package 	Launchpad
  * @since		1.0
+ * @todo		US / CA Postal Code Format
+ * @todo		Validation: Phone, E-mail, US/CA Postal Code
  */
 
 

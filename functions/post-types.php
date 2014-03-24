@@ -1,5 +1,4 @@
 <?php
-
 /**
  * WordPress Post Types
  *
@@ -8,6 +7,18 @@
  * @package 	Launchpad
  * @since		1.0
  */
+
+
+/**
+ * Get Post Types
+ * 
+ * @since		1.0
+ */
+function launchpad_get_post_types() {
+	$post_types = array();
+	$post_types = apply_filters('launchpad_custom_post_types', $post_types);
+	return $post_types;
+}
 
 
 /**
@@ -21,8 +32,8 @@
  * @since		1.0
  */
 function launchpad_register_post_types() {
-	$post_types = array();
-	$post_types = apply_filters('launchpad_custom_post_types', $post_types);
+	
+	$post_types = launchpad_get_post_types();
 	
 	if(!$post_types) {
 		return;
