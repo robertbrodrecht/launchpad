@@ -114,6 +114,7 @@ To Do For 1.0
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme and a child theme.
   * CSS and JS may be part of the second theme.
+  * Probably need to use locate_template instead of include.
 * Updates through WP Admin.
 
 
