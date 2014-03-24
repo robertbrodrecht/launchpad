@@ -57,14 +57,16 @@ function launchpad_theme_activation_action() {
 	$articles_path = apply_filters('launchpad_activate_articles_path', $articles_path);
 	$uploads_path = apply_filters('launchpad_activate_upload_path', $uploads_path);
 	
-	// Fix some common issues.
-	$articles_path = preg_replace('|/+|', '/', $articles_path);
-	$uploads_path = preg_replace('|^/|', '', $uploads_path);
-	$uploads_path = preg_replace('|/$|', '', $uploads_path);
-	
 	if(stristr($articles_path, '%postname%') === false) {
 		$articles_path .= '/%postname%/';
 	}
+	
+	
+	// Fix some common issues.
+	$uploads_path = preg_replace('|^/|', '', $uploads_path);
+	$uploads_path = preg_replace('|/$|', '', $uploads_path);
+	$uploads_path = preg_replace('|/+|', '/', $uploads_path);
+	$articles_path = preg_replace('|/+|', '/', $articles_path);
 	
 	// Delete the default stuff.
 	for($p = 1; $p < 3; $p++) {
