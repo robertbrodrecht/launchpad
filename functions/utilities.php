@@ -6,14 +6,14 @@
  * Custom functions for handling various duties.
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 
 /**
  * Phone Number Formatting
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function format_phone($number = '', $mask = '(###) ###-####', $ext = ' x', $country = '+# ') {
 	$return = '';
@@ -46,7 +46,7 @@ function format_phone($number = '', $mask = '(###) ###-####', $ext = ' x', $coun
 /**
  * Use scandir for Recursive Directory Scanning
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_scandir_deep($dir, $initial_dir = false) {
 	if(substr($dir, -1) !== '/') {

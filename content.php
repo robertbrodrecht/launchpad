@@ -7,7 +7,7 @@
  * use a duplicate of this file with content-post_type.php
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 if(!have_posts()) {

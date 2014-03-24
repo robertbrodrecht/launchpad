@@ -3,12 +3,12 @@
  *
  * Handles all the JavaScript needs of the admin area.
  *
- * @package 	Launchpad
- * @since   	Version 1.0
+ * @package		Launchpad
+ * @since		1.0
  */
 
 jQuery(document).ready(
-	function($) {
+	function() {
 		// Do admin stuff.
 	}
 );

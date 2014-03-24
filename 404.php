@@ -6,7 +6,7 @@
  * The majority of the template-deciding work can be done here.
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 

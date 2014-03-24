@@ -6,7 +6,7 @@
  * Creation and low-level support of custom post types.
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 
@@ -18,10 +18,11 @@
  * the script assumes that the user has specified a real post type arguments
  * array and will use that as is instead of trying to set up a generic one.
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_register_post_types() {
-	global $post_types;
+	$post_types = array();
+	$post_types = apply_filters('launchpad_custom_post_types', $post_types);
 	
 	if(!$post_types) {
 		return;
@@ -131,7 +132,7 @@ add_action('init', 'launchpad_register_post_types');
 /**
  * Add Post Type Meta Boxes
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_add_meta_boxs() {
 	// A sample metabox registration
@@ -153,7 +154,7 @@ add_action('add_meta_boxes', 'launchpad_add_meta_boxs', 10, 1);
  *
  * @param		object $post The current post
  * @param		array $args Arguments passed from the metabox
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_sample_meta_box($post, $args) {
 

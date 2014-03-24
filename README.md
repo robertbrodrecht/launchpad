@@ -69,6 +69,7 @@ I'll be building out the feature list as I get the time.
 * Settings for HTML5 Boilerplate's .htaccess.
 * Support for saving custom post fields and examples of how to set them up.
 * Easy creation of custom post types.
+* A ton of filters for modifying stuff.  See the functions-custom.php file for details.  More details eventually and more coming.
 
 
 ## WordPress Features
@@ -106,8 +107,8 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do
 =====
 
-* Add hooks in WP code for modifying things that people may want to modify.
-* Add more custom events to JavaScript to aid in development.
-* Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
+* Add filters/actions in WP code for modifying things that people may want to modify. Partially implemented.
 * Easy way to add custom fields to post types.
 * Add "basic" stylesheet that handles a wireframe related things.
+* Add more custom events to JavaScript to aid in development.
+* Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.

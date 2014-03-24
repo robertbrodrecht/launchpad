@@ -2,14 +2,14 @@
 /**
  * Content Cache Functions
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 
 /**
  * Get Unique Site String
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_site_unique_string() {
 	return md5($_SERVER['HTTP_HOST']);
@@ -19,7 +19,7 @@ function launchpad_site_unique_string() {
 /**
  * Get Current Cache ID
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_get_cache_id() {
 	global $post, $wp_query;
@@ -50,7 +50,7 @@ function launchpad_get_cache_id() {
 /**
  * Get the Cache File for A Post
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_get_cache_file($post_id = false, $type = false) {
 	if(!USE_CACHE) {
@@ -67,13 +67,15 @@ function launchpad_get_cache_file($post_id = false, $type = false) {
 		$cache = sys_get_temp_dir() . '/' . $site_unique_string  . '/';
 	}
 	
+	$cache = apply_filters('launchpad_cache_file_path', $cache, $post_id, $type);
+	
 	return $cache;
 }
 
 /**
  * Check If A Cache Is Valid
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_cached($post_id, $type) {
 	global $site_options;
@@ -106,7 +108,7 @@ function launchpad_cached($post_id, $type) {
 /**
  * Cache a Post Part
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_cache($post_id, $type) {
 	global $site_options;
@@ -142,7 +144,7 @@ function launchpad_cache($post_id, $type) {
 /**
  * Clear Post Part Cache
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_clear_cache($post_id) {
 	global $post;
@@ -177,7 +179,7 @@ add_action('save_post', 'launchpad_clear_cache');
 /**
  * Clear All Caches
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_clear_all_cache() {
 	$cachefolder = launchpad_get_cache_file();
@@ -199,7 +201,7 @@ add_action('wp_update_nav_menu', 'launchpad_clear_all_cache');
 /**
  * Get Template Part Passthru with Caching
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_get_template_part($slug = false, $name = false) {
 	$cache_id = launchpad_get_cache_id();
@@ -234,7 +236,7 @@ function launchpad_get_template_part($slug = false, $name = false) {
 /**
  * Get Nav Menu Passthru with Caching
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_wp_nav_menu($args) {
 	$cache_id = launchpad_get_cache_id();

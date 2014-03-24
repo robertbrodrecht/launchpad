@@ -6,17 +6,118 @@
  * Handles all the JavaScript needs of the front end.
  *
  * @package	Launchpad
- * @since	Version 1.0
+ * @since	1.0
  */
 
 
 
 /**
+ * Attempt to Manage ApplicationCache Refresh Intelligently
+ *
+ * @since	1.0
+ */
+function initMonitorLogin() {
+	var login_interval = false,
+		cache_update_interval = false,
+		logged_in = false,
+		is_first_run = true;
+	
+	function updateCache() {
+		if(logged_in && navigator.onLine && $('html[manifest]').length) {
+			if(window.dev) {
+				console.log('Forcing AppCache to update because user is logged in.');
+			}
+			applicationCache.update();
+		}
+	}
+	
+	function checkLogin() {
+		if(navigator.onLine) {
+			$.get('/api/?action=user_logged_in').done(
+				function(data) {
+					logged_in = data;
+					if(logged_in) {
+						if(!cache_update_interval) {
+							if(window.dev) {
+								console.log('Starting to invalidate AppCache every 60 seconds because user is logged in.');
+							}
+							updateCache();
+							cache_update_interval = setInterval(updateCache, 60000);
+						}
+					} else if(cache_update_interval) {
+						if(window.dev) {
+							console.log('Removing AppCache invalidation interval because user is not logged in.');
+						}
+						clearInterval(cache_update_interval);
+						cache_update_interval = false;
+					} else if(is_first_run) {
+						if(window.dev) {
+							console.log('User is not logged in.  Allowing AppCache to self-manage.');
+						}
+					}
+					is_first_run = false;
+				}
+			);
+		} else {
+			clearInterval(cache_update_interval);
+		}
+	}
+	
+	checkLogin();
+	login_interval = setInterval(checkLogin, 60000);
+}
+
+/**
+ * Manage Height Matching
+ *
+ * @since	1.0
+ */
+function initHeightMatch() {
+	function heightMatch() {
+		$('[data-height-match-group]').css('height', 'auto').each(
+				function() {
+					var me = $(this),
+						height = 0;
+					me.children('[data-height-match]').css('height', 'auto').each(
+							function() {
+								var h = $(this).outerHeight();
+								if(h > height) {
+									height = h;
+								}
+							}
+						).add(me).css('height', height);
+				}
+			);
+	}
+	
+	$('[data-height-match-children]').removeAttr('data-height-match-children')
+		.attr('data-height-match-group', '')
+		.children().each(
+			function() {
+				$(this).attr('data-height-match', '');
+			}
+		);
+	
+	heightMatch();
+	
+	$(window).on(
+			'resizeEnd',
+			heightMatch
+		);
+		
+	$(document.body).on(
+			'ajaxRequestEnd',
+			heightMatch
+		);
+}
+
+
+/**
  * Functionality Related to Offline Support.
  *
- * @since	Version 1.0
+ * @since	1.0
  */
-function initOfflineSupport() {	
+function initOfflineSupport() {
 	// Watch to see if the user logs in or out so we can manage their cache.
 	initMonitorLogin();
 
@@ -92,7 +193,7 @@ function initOfflineSupport() {
 /**
  * Manage Ajax Page Loads
  *
- * @since	Version 1.0
+ * @since	1.0
  */
 function initAjax() {
 	var body = $(document.body);
@@ -203,110 +304,9 @@ function initAjax() {
 
 
 /**
- * Attempt to Manage ApplicationCache Refresh Intelligently
- *
- * @since	Version 1.0
- */
-function initMonitorLogin() {
-	var login_interval = false,
-		cache_update_interval = false,
-		logged_in = false,
-		is_first_run = true;
-	
-	function updateCache() {
-		if(logged_in && navigator.onLine && $('html[manifest]').length) {
-			if(window.dev) {
-				console.log('Forcing AppCache to update because user is logged in.');
-			}
-			applicationCache.update();
-		}
-	}
-	
-	function checkLogin() {
-		if(navigator.onLine) {
-			$.get('/api/?action=user_logged_in').done(
-				function(data) {
-					logged_in = data;
-					if(logged_in) {
-						if(!cache_update_interval) {
-							if(window.dev) {
-								console.log('Starting to invalidate AppCache every 60 seconds because user is logged in.');
-							}
-							updateCache();
-							cache_update_interval = setInterval(updateCache, 60000);
-						}
-					} else if(cache_update_interval) {
-						if(window.dev) {
-							console.log('Removing AppCache invalidation interval because user is not logged in.');
-						}
-						clearInterval(cache_update_interval);
-						cache_update_interval = false;
-					} else if(is_first_run) {
-						if(window.dev) {
-							console.log('User is not logged in.  Allowing AppCache to self-manage.');
-						}
-					}
-					is_first_run = false;
-				}
-			);
-		} else {
-			clearInterval(cache_update_interval);
-		}
-	}
-	
-	checkLogin();
-	login_interval = setInterval(checkLogin, 60000);
-}
-
-/**
- * Manage Height Matching
- *
- * @since	Version 1.0
- */
-function initHeightMatch() {
-	function heightMatch() {
-		$('[data-height-match-group]').css('height', 'auto').each(
-				function() {
-					var me = $(this),
-						height = 0;
-					me.children('[data-height-match]').css('height', 'auto').each(
-							function() {
-								var h = $(this).outerHeight();
-								if(h > height) {
-									height = h;
-								}
-							}
-						).add(me).css('height', height);
-				}
-			);
-	}
-	
-	$('[data-height-match-children]').removeAttr('data-height-match-children')
-		.attr('data-height-match-group', '')
-		.children().each(
-			function() {
-				$(this).attr('data-height-match', '');
-			}
-		);
-	
-	heightMatch();
-	
-	$(window).on(
-			'resizeEnd',
-			heightMatch
-		);
-		
-	$(document.body).on(
-			'ajaxRequestEnd',
-			heightMatch
-		);
-}
-
-
-/**
  * Detect CSS Transition Support
  *
- * @since	Version 1.0
+ * @since	1.0
  */
 function detectTouchCapable() {
 	if(window.supports.touch !== undefined) {
@@ -331,7 +331,7 @@ function detectTouchCapable() {
 /**
  * Detect CSS Transition Support
  *
- * @since	Version 1.0
+ * @since	1.0
  */
 function detectTransitions() {
 	var test;
@@ -355,7 +355,7 @@ function detectTransitions() {
 /**
  * Detect CSS Position Sticky
  *
- * @since	Version 1.0
+ * @since	1.0
  */
 function detectPositionSticky() {
 	var test;
@@ -383,7 +383,7 @@ function detectPositionSticky() {
 /**
  * Detect Screen DPI
  *
- * @since	Version 1.0
+ * @since	1.0
  */
 function detectDPI() {
 	window.supports.dpi = 1;
@@ -400,7 +400,7 @@ function detectDPI() {
  * if the site is deemed to be in development mode (indicated by .dev in the domain name).
  *
  * @param		object e The event object
- * @since	Version 1.0
+ * @since	1.0
  */
 function handleGrid(e) {
 	var win = $(window),
@@ -433,7 +433,7 @@ function handleGrid(e) {
  *
  * Some events do not bubble, so we need to initialize them every time we load new content.  Also, we need to update body classes.
  *
- * @since	Version 1.0
+ * @since	1.0
  */
 function reinit() {
 	if(window.dev) {
@@ -454,7 +454,7 @@ function reinit() {
 /**
  * Initialize the Front End
  *
- * @since	Version 1.0
+ * @since	1.0
  */
 function init() {
 	var body = $(document.body),
@@ -622,7 +622,7 @@ function init() {
 /**
  * Custom jQuery Events
  *
- * @since	Version 1.0
+ * @since	1.0
  */
 (function($, window, undefined) {
 	'use strict';
@@ -790,7 +790,7 @@ function init() {
  * 
  * Required until we drop IE9.
  *
- * @since	Version 1.0
+ * @since	1.0
  */
 (function () {
 	function placeHolderFocus(e) {

@@ -4,7 +4,7 @@
  * The default page header
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 global $site_options;

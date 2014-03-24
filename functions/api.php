@@ -6,14 +6,14 @@
  * Handles the AJAX API calls for the basic functionality of the front end.
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 
 /**
  * Sample API Call
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_hello_world() {
 	echo json_encode('Hello, World!');
@@ -26,7 +26,7 @@ add_action('wp_ajax_nopriv_hello_world', 'launchpad_hello_world');
 /**
  * Simple Test for User Logged In
  *
- * @since   	Version 1.0
+ * @since	1.0
  */
 function launchpad_user_logged_in() {
 	header('Content-type: application/json');
@@ -39,7 +39,7 @@ add_action('wp_ajax_nopriv_user_logged_in', 'launchpad_user_logged_in');
 /**
  * Generate an App Cache Manifest
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_cache_manifest() {
 	$site_options = get_option('launchpad_site_options', '');
@@ -58,6 +58,8 @@ function launchpad_cache_manifest() {
 			'/' . THEME_PATH . '/js/' => '/js/',
 			'/' . THEME_PATH . '/images/' => '/images/'
 		);
+		
+	$paths = apply_filters('launchpad_cache_manifest_file_paths', $paths);
 	
 	// Load all the images and CSS.
 	foreach($paths as $path => $rewrite_path) {
@@ -310,7 +312,7 @@ add_action('wp_ajax_nopriv_cache_manifest', 'launchpad_cache_manifest');
 /**
  * Obsolete an App Cache Manifest
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_cache_manifest_obsolete() {
 	header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', strtotime('-1 month')));

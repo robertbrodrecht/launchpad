@@ -3,7 +3,7 @@
  * Security Related Features
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 
@@ -12,7 +12,7 @@
  *
  * @param		string $username
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_get_failures($username) {
 	global $launchpad_login_failures, $site_options;
@@ -42,7 +42,7 @@ function launchpad_get_failures($username) {
  *
  * @param		string $username
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_get_failures_cache($username) {
 	global $launchpad_login_failures_cache;
@@ -67,7 +67,7 @@ function launchpad_get_failures_cache($username) {
  *
  * @param		string $username
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_login_failed($username) {
 	global $site_options;
@@ -94,7 +94,7 @@ add_action('wp_login_failed', 'launchpad_login_failed');
  * @param		object $user
  * @param		string $password
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_wp_authenticate_user($user, $password) {
 	global $site_options;
@@ -135,7 +135,7 @@ add_filter('wp_authenticate_user', 'launchpad_wp_authenticate_user', 99999, 2);
  * 
  * @param		object $error_codes
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_login_failure_shake($error_codes) {
 	$error_codes[] = 'too_many_retries';
@@ -148,7 +148,7 @@ add_filter('shake_error_codes', 'launchpad_login_failure_shake');
  * Add messaging to the login screen.
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_login_add_error_message() {
 	global $error, $site_options, $launchpad_login_failures, $launchpad_login_failures_cache;
@@ -201,7 +201,7 @@ add_action('login_head', 'launchpad_login_add_error_message');
  * 
  * @param		object $error_codes
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_clear_login_failures($user_login, $user) {
 	$cache_file = launchpad_get_failures_cache($user_login);

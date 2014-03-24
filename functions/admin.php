@@ -6,7 +6,7 @@
  * Tweaks to admin-related WordPress features, including meta boxes and custom fields.
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 
@@ -14,7 +14,7 @@
 /**
  * Activate the Style Selector
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_activate_style_select( $buttons ) {
 	array_unshift($buttons, 'styleselect');
@@ -26,10 +26,28 @@ add_filter('mce_buttons_2', 'launchpad_activate_style_select');
 /**
  * Add Common Styles.
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_add_custom_mcs_styles( $init_array ) {  
-	global $launchpad_mce_style_formats;
+	$launchpad_mce_style_formats = array(  
+		array(  
+			'title' => 'Button',
+			'classes' => 'button',
+			'wrapper' => false,
+			'selector' => 'a'
+		),
+		array(  
+			'title' => 'Crossfade Rotator',  
+			'block' => 'div',  
+			'classes' => 'skate',
+			'wrapper' => true,
+			'attributes' => (object) array('data-skate' => 'crossfade')
+		)
+	);
+	
+	$launchpad_mce_style_formats = apply_filters('launchpad_mce_style_formats', $launchpad_mce_style_formats);
+	$launchpad_mce_style_formats = unique($launchpad_mce_style_formats);
+	
 	$init_array['style_formats'] = json_encode($launchpad_mce_style_formats);  
 	return $init_array;  
   
@@ -40,7 +58,7 @@ add_filter('tiny_mce_before_init', 'launchpad_add_custom_mcs_styles');
 /**
  * Add Custom Image Sizes to Admin Selector
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_image_sizes_options($sizes) {
 	global $_wp_additional_image_sizes;
@@ -56,7 +74,7 @@ add_filter('image_size_names_choose', 'launchpad_image_sizes_options');
 /**
  * Define basic theme settings fields
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_get_setting_fields() {
 	global $site_options;
@@ -317,6 +335,9 @@ function launchpad_get_setting_fields() {
 			)
 */
 		);
+		
+
+	$opts = apply_filters('launchpad_setting_fields', $opts);
 	
 	// Add the ID as the name for each item
 	foreach($opts as $k => $v) {
@@ -342,7 +363,7 @@ function launchpad_get_setting_fields() {
  *
  * @param		array $options The array of options to build
  * @param		array $values The array of values to pick selected options
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_create_select_options($options, $values) {
 	$ret = '';
@@ -365,7 +386,7 @@ function launchpad_create_select_options($options, $values) {
  *
  * @param		array $args The array of settings
  * @see			launchpad_get_setting_fields
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_render_settings_field($args, $subfield = false) {
 	$vals = get_option('launchpad_site_options', '');
@@ -445,7 +466,7 @@ function launchpad_render_settings_field($args, $subfield = false) {
  * Validate the inputs
  *
  * @param		array $input The array of options to validate
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_site_options_validate($input) {
 	global $site_options;
@@ -488,7 +509,7 @@ function launchpad_site_options_validate($input) {
 /**
  * Register theme options page
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_site_options_init() {
 	register_setting('launchpad_options', 'launchpad_site_options', 'launchpad_site_options_validate');
@@ -512,7 +533,7 @@ add_action('admin_init', 'launchpad_site_options_init');
 /**
  * Initialize theme options
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_theme_options_add_page() {
 	$theme_page = add_submenu_page(
@@ -531,7 +552,7 @@ add_action('admin_menu', 'launchpad_theme_options_add_page');
  * Add theme options capability to theme
  *
  * @param		string $capability
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_option_page_capability($capability) {
 	return 'edit_theme_options';
@@ -542,7 +563,7 @@ add_filter('option_page_capability_launchpad_options', 'launchpad_option_page_ca
 /**
  * Render the theme option page
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_theme_options_render_page() {
 	if(!current_user_can('manage_options')) {
@@ -569,7 +590,7 @@ function launchpad_theme_options_render_page() {
 /**
  * Remove access to certain pages for non-admins
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_remove_menu_pages() {
 	$user = wp_get_current_user();
@@ -584,7 +605,7 @@ add_action('admin_menu', 'launchpad_remove_menu_pages');
 /**
  * Provides a stylesheet and script hooks for the admin area
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_admin_script_includes() {
 	wp_register_style('launchpad_wp_admin_css', get_template_directory_uri() . '/css/admin-style.css', false, '1.0.0' );
@@ -598,6 +619,7 @@ add_action('admin_enqueue_scripts', 'launchpad_admin_script_includes');
  * Remove unnecessary dashboard widgets
  * This is modified from the Roots theme.
  *
+ * @since		1.0
  * @link http://www.deluxeblogtips.com/2011/01/remove-dashboard-widgets-in-wordpress.html
  */
 function launchpad_remove_dashboard_widgets() {
@@ -615,7 +637,7 @@ add_action('admin_init', 'launchpad_remove_dashboard_widgets');
  * @param		string $translated The original text
  * @param		string $text
  * @param		string $domain
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_change_howdy($translated, $text, $domain) {
 	if (false !== strpos($translated, 'Howdy')) {
@@ -629,7 +651,7 @@ add_filter('gettext', 'launchpad_change_howdy', 10, 3);
 /**
  * Customize the Login Screen
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_custom_login() {
 	global $site_options;

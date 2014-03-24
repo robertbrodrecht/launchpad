@@ -6,7 +6,7 @@
  * Functions that modify / augment the lower-level system (e.g. htaccess, image sizes, menus, and the like).
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 $get_theme_name = explode('/themes/', get_template_directory());
@@ -25,7 +25,7 @@ define('THEME_PATH', RELATIVE_CONTENT_PATH . '/themes/' . THEME_NAME);
  * 
  * This is modified from the Roots theme.
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function wp_base_dir() {
 	preg_match('!(https?://[^/|"]+)([^"]+)?!', site_url(), $matches);
@@ -43,7 +43,7 @@ function wp_base_dir() {
  * * Create home page, articles page, and user pages
  * * Assign home URL and posts URL
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_theme_activation_action() {
 	
@@ -106,7 +106,7 @@ add_action('after_switch_theme', 'launchpad_theme_activation_action');
 /**
  * Handle Settings Redirect After Theme Switch
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_settings_redirect() {
 	global $pagenow;
@@ -125,7 +125,7 @@ add_action('after_switch_theme', 'launchpad_settings_redirect', 9999);
  * This is modified from the Roots theme.
  *
  * @param		string $content
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_rewrite_rules($content) {
 	global $wp_rewrite;
@@ -133,13 +133,15 @@ function launchpad_rewrite_rules($content) {
 		'css/(.*)' => THEME_PATH . '/css/$1',
 	  	'js/(.*)' => THEME_PATH . '/js/$1',
 	  	'images/(.*)' => THEME_PATH . '/images/$1',
-	  	'img/(.*)' => THEME_PATH . '/images/$1',
 	  	'support/(.*)' => THEME_PATH . '/support/$1',
 		'api/(.*)' => 'wp-admin/admin-ajax.php',
 		'manifest.appcache' => 'wp-admin/admin-ajax.php?action=cache_manifest',
 		'manifest.obsolete.appcache' => 'wp-admin/admin-ajax.php?action=cache_manifest_obsolete',
 		'favicon.ico' => THEME_PATH . '/favicon.ico'
 	);
+	
+	$add_rewrite = apply_filters('launchpad_rewrite_rules', $add_rewrite);
+	
 	$wp_rewrite->non_wp_rules = array_merge($wp_rewrite->non_wp_rules, $add_rewrite);
 	return $content;
 }
@@ -149,7 +151,7 @@ add_action('generate_rewrite_rules', 'launchpad_rewrite_rules');
 /**
  * Add Specific Headers
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_http_headers() {
 	header('X-UA-Compatible: IE=edge,chrome=1');
@@ -165,7 +167,7 @@ add_action('send_headers', 'launchpad_http_headers');
  * This is modified from the Roots theme.
  *
  * @param		string $content
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_add_h5bp_htaccess($content) {
 	global $wp_rewrite, $site_options;
@@ -210,7 +212,7 @@ add_action('generate_rewrite_rules', 'launchpad_add_h5bp_htaccess');
  *
  * @param		array $matches The preg matches.
  * @see			launchpad_root_relative_url()
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_root_relative_url_preg_callback($matches) {
 	if (
@@ -237,7 +239,7 @@ function launchpad_root_relative_url_preg_callback($matches) {
  * This is modified from the Roots theme.
  *
  * @param		text $input The string to make root-relative
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_root_relative_url($input) {
 	$output = preg_replace_callback(
@@ -289,12 +291,11 @@ foreach($launchpad_rel_filters as $launchpad_rel_filter) {
  * This is modified from the Roots theme.
  *
  * @param		array $input The string to remove the self-closing part of the tag
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_remove_self_closing_tags($input) {
 	return str_replace(' />', '>', $input);
 }
-
 add_filter('get_avatar', 'launchpad_remove_self_closing_tags');
 add_filter('comment_id_fields', 'launchpad_remove_self_closing_tags');
 add_filter('post_thumbnail_html', 'launchpad_remove_self_closing_tags');
@@ -308,7 +309,7 @@ add_filter('post_thumbnail_html', 'launchpad_remove_self_closing_tags');
  * invisible to screen readers.
  *
  * @param		array $attr The image attributes to modify
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_wp_get_attachment_image_attributes( $attr ) {
 	unset($attr['title']);
@@ -322,7 +323,7 @@ add_filter( 'wp_get_attachment_image_attributes', 'launchpad_wp_get_attachment_i
  * Save launchpad_meta fields
  *
  * @param		number $post_id The post ID that the meta applies to
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_save_post_data($post_id) {
 	// Touch the API file to reset the appcache.

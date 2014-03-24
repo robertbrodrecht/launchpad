@@ -6,24 +6,34 @@
  * Additional template tags and tweaks that affect the general front end of WordPress
  *
  * @package 	Launchpad
- * @since   	Version 1.0
+ * @since		1.0
  */
 
 
 /**
  * Setup of basic theme support
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_setup() {
-	register_nav_menus(
-			array(
-				'primary' => 'Primary Navigation',
-				'footer' => 'Footer Navigation',
-			)
-		);
-	add_editor_style();
-	//add_theme_support('post-formats', array('aside', 'gallery'));
+	$menus = array(
+		'primary' => 'Primary Navigation',
+		'footer' => 'Footer Navigation',
+	);
+	$menus = apply_filters('launchpad_nav_menus', $menus);
+	
+	if($menus) {
+		register_nav_menus($menus);
+	}
+	
+	$formats = array();
+	$formats = apply_filters('launchpad_post_formats', $formats);
+	
+	if($formats) {
+		add_theme_support('post-formats', $formats);
+	}
+	
+	add_theme_support('html5', array('comment-list', 'comment-form', 'search-form'));
 	add_theme_support('post-thumbnails');
 	add_editor_style('css/editor-style.css');
 }
@@ -33,13 +43,23 @@ add_action('after_setup_theme', 'launchpad_setup');
 /**
  * Setup of basic theme support
  *
- * @since   	Version 1.0
+ * @since		1.0
  * @link		https://developers.facebook.com/docs/opengraph/howtos/maximizing-distribution-media-content/
  */
 function launchpad_image_setup() {
-	global $image_sizes;
+	$image_sizes = array(
+		array('XL', '1200', '1200', false),
+		array('L', '1000', '1000', false),
+		array('M', '800', '800', false),
+		array('S', '600', '600', false),
+		array('XS', '400', '400', false),
+	);
+	
+	$image_sizes = apply_filters('launchpad_image_sizes', $image_sizes);
+	
 	add_image_size('opengraph', 1200, 1200, true);
 	add_image_size('gallery', 300, 300, false);
+	
 	if($image_sizes) {
 		foreach($image_sizes as $image_size) {
 			add_image_size($image_size[0], $image_size[1], $image_size[2], $image_size[3]);
@@ -53,7 +73,7 @@ add_action('after_setup_theme', 'launchpad_image_setup');
  * Create the page title
  *
  * @param		$echo bool Whether or not to echo the title
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_title($echo = false) {
 	global $post, $page, $paged;
@@ -79,7 +99,7 @@ function launchpad_title($echo = false) {
  *
  * @param		$max_words int The number of words to use if we generate from content based on space characters
  * @param		$echo bool Whether or not to echo the excerpt
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_excerpt($max_words = 60, $echo = false) {
 	global $post;
@@ -100,6 +120,9 @@ function launchpad_excerpt($max_words = 60, $echo = false) {
 			$excerpt .= '...';
 		}
 	}
+	
+	$excerpt = apply_filters('launchpad_excerpt', $excerpt);
+	
 	if($echo) {
 		echo $excerpt;
 	}
@@ -112,7 +135,7 @@ function launchpad_excerpt($max_words = 60, $echo = false) {
  * This is modified from the Roots theme.
  *
  * @param		array $classes The WordPress-created classes for the body
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_modify_body_class($classes) {
 	if (is_single() || is_page() && !is_front_page()) {
@@ -125,6 +148,8 @@ function launchpad_modify_body_class($classes) {
 			$home_id_class
 		);
 	$classes = array_diff($classes, $remove_classes);
+	
+	$classes = apply_filters('launchpad_body_class', $classes);
 
 	return $classes;
 }
@@ -137,7 +162,7 @@ add_filter('body_class', 'launchpad_modify_body_class');
  * Removes useless header junk so the developer can DIY.
  * This is modified from the Roots theme.
  *
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_head_cleanup() {
 	remove_action('wp_head', 'feed_links', 2);
@@ -153,11 +178,28 @@ function launchpad_head_cleanup() {
 add_action('init', 'launchpad_head_cleanup');
 
 
+/** 
+ * Set a couple of definitions for the template.
+ *
+ * @since		1.0
+ */
+function launchpad_set_page_defines() {
+	global $site_options;
+	
+	/** Google Analytics ID. */
+	define('GA_ID', $site_options['google_analytics_id']);
+
+	/** Whether to use cache. If things get weird, turn it off by setting the value to 0. */
+	define('USE_CACHE', (int) $site_options['cache_timeout']);
+}
+add_action('template_redirect', 'launchpad_set_page_defines');
+
+
 /**
  * A More Semantic Gallery Shortcode Handler
  *
  * @param		array $attr The attributes from the shortcode.
- * @since   	Version 1.0
+ * @since		1.0
  */
 function launchpad_gallery_shortcode($attr) {
 	// Defaults.
