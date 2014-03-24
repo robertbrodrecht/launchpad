@@ -104,11 +104,28 @@ Notes
 In many cases, I'm trying to force best practices.  JavaScript embeds are in the footer, for example, and you can use <code>body.no-js</code> and <code>body.js</code> as hooks for styling with Progressive Enhancement.
 
 
-To Do
-=====
+To Do For 1.0
+=============
 
 * Add filters/actions in WP code for modifying things that people may want to modify. Partially implemented.
 * Easy way to add custom fields to post types.
-* Add "basic" stylesheet that handles a wireframe related things.
+* Add "basic" stylesheet that handles wireframe related things.
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
+  * Probably have the core theme and a child theme.
+  * CSS and JS may be part of the second theme.
+* Updates through WP Admin.
+
+
+To Do For 2.0
+=============
+* Flexible content modules.
+  * Build your own modules, all in code.
+  * Image rotator / carousel.
+  * Grid of content.
+* Search includes flexible content modules / custom fields.
+* Ad Designer.
+* Custom Headers
+  * Single Image
+  * Ads
+* Something about widgets.
