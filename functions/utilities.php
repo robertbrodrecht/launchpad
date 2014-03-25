@@ -72,3 +72,24 @@ function launchpad_scandir_deep($dir, $initial_dir = false) {
 	}
 	return $output;
 }
+
+/**
+ * Get a File (API Call) and Cache the Results
+ *
+ * @param		string $url Path to remote API.
+ * @param		int $cachetime Time to cache.
+ * @since		1.0
+ */
+function file_get_contents_cache($url, $cachetime = 60) {
+	$cache_file = sys_get_temp_dir();
+	$cache_file = $cache_file . '/' . md5($url);
+	if(!file_exists($cache_file) && time()-filemtime($cache_file) >= $cachetime) {
+		$results = file_get_contents($url);
+		if($results) {
+			$f = fopen($cache_file, 'w');
+			fwrite($f, $results);
+			fclose($f);
+		}
+	}
+	return file_get_contents($cache_file);
+}
