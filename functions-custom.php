@@ -117,6 +117,20 @@ function custom_launchpad_custom_post_types($post_types) {
 								'single' => 'Sample Taxonomy',
 								'slug' => 'sample_taxonomy'
 							)
+					),
+				'fields' => array(
+						'side' => array(
+							'launchpad_sample_side_metabox' => array(
+								'name' => 'Sample Side Metabox',
+								'position' => 'default',
+								'fields' => array(
+									'sample_side_metabox_value' => array(
+									)
+								)
+							)
+						),
+						'normal' => array(
+						)
 					)
 			)
 	);

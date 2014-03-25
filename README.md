@@ -120,7 +120,7 @@ To Do For 1.0
 
 To Do For 2.0
 =============
-* Flexible content modules.
+* Flexible content modules (Assuming this isn't on the fast track to WordPress Core).
   * Build your own modules, all in code.
   * Image rotator / carousel.
   * Grid of content.
