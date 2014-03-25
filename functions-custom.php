@@ -118,18 +118,30 @@ function custom_launchpad_custom_post_types($post_types) {
 								'slug' => 'sample_taxonomy'
 							)
 					),
-				'fields' => array(
-						'side' => array(
-							'launchpad_sample_side_metabox' => array(
-								'name' => 'Sample Side Metabox',
-								'position' => 'default',
-								'fields' => array(
-									'sample_side_metabox_value' => array(
+				'metaboxes' => array(
+						'launchpad_sample_side_metabox' => array(
+							'name' => 'Sample Side Metabox',
+							'location' => 'side',
+							'position' => 'default',
+							'fields' => array(
+								'sample_side_metabox_value' => array(
+									'name' => 'Some Value',
+									'args' => array(
+										'type' => 'text'
+									)
+								),
+								'sample_side_metabox_value' => array(
+									'name' => 'Some Other Value',
+									'args' => array(
+										'type' => 'select',
+										'options' => array(
+											'A' => 'A',
+											'B' => 'B',
+											'C' => 'C'
+										)
 									)
 								)
 							)
-						),
-						'normal' => array(
 						)
 					)
 			)

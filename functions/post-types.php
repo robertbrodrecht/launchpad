@@ -146,15 +146,27 @@ add_action('init', 'launchpad_register_post_types');
  * @since		1.0
  */
 function launchpad_add_meta_boxs() {
-	// A sample metabox registration
-	add_meta_box(
-		'launchpad_sample_box',
-		'Sample Meta Box',
-		'launchpad_sample_meta_box',
-		'launchpad_sample',
-		'side',
-		'default'
-	);
+	$post_types = launchpad_get_post_types();
+	
+	if(!$post_types) {
+		return;
+	}
+	
+	foreach($post_types as $post_type => $post_type_details) {
+		if(isset($post_type_details['metaboxes'])) {
+			foreach($post_type_details['metaboxes'] as $metabox_id => $metabox_details) {
+				// A sample metabox registration
+				add_meta_box(
+					$metabox_id,
+					$metabox_details['name'],
+					'launchpad_meta_box_handler',
+					$post_type,
+					$metabox_details['location'],
+					$metabox_details['position']
+				);
+			}
+		}
+	}
 	
 }
 add_action('add_meta_boxes', 'launchpad_add_meta_boxs', 10, 1);
@@ -167,8 +179,10 @@ add_action('add_meta_boxes', 'launchpad_add_meta_boxs', 10, 1);
  * @param		array $args Arguments passed from the metabox
  * @since		1.0
  */
-function launchpad_sample_meta_box($post, $args) {
-
+function launchpad_meta_box_handler($post, $args) {
+	
+	var_dump($post, $args);
+	
 	?>
 	<div class="launchpad-side-metabox">
 		<label for="launchpad-sample_field">Sample Field</label>
