@@ -124,13 +124,14 @@ function custom_launchpad_custom_post_types($post_types) {
 							'location' => 'side',
 							'position' => 'default',
 							'fields' => array(
-								'sample_side_metabox_value' => array(
+								'sample_side_metabox_value_1' => array(
 									'name' => 'Some Value',
 									'args' => array(
-										'type' => 'text'
+										'type' => 'text',
+										'default' => 'Hello'
 									)
 								),
-								'sample_side_metabox_value' => array(
+								'sample_side_metabox_value_2' => array(
 									'name' => 'Some Other Value',
 									'args' => array(
 										'type' => 'select',

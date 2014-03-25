@@ -45,6 +45,7 @@ function format_phone($number = '', $mask = '(###) ###-####', $ext = ' x', $coun
 	return $return;
 }
 
+
 /**
  * Use scandir for Recursive Directory Scanning
  *
@@ -72,6 +73,7 @@ function launchpad_scandir_deep($dir, $initial_dir = false) {
 	}
 	return $output;
 }
+
 
 /**
  * Get a File (API Call) and Cache the Results

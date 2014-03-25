@@ -388,12 +388,19 @@ function launchpad_create_select_options($options, $values) {
  * @see			launchpad_get_setting_fields
  * @since		1.0
  */
-function launchpad_render_settings_field($args, $subfield = false) {
-	$vals = get_option('launchpad_site_options', '');
-	if(isset($vals[$args['name']]))  {
-		$val = $vals[$args['name']];
+function launchpad_render_settings_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
+	if($field_prefix === 'launchpad_site_options') {
+		$vals = get_option('launchpad_site_options', '');
+		if(isset($vals[$args['name']]))  {
+			$val = $vals[$args['name']];
+		} else {
+			$val = isset($args['default']) ? $args['default'] : '';
+		}
 	} else {
-		$val = isset($args['default']) ? $args['default'] : '';
+		$val = $args['value'];
+		if(!$val && $val !== '' && isset($args['default'])) {
+			$val = $args['default'];
+		}
 	}
 	
 	if($subfield) {
@@ -405,7 +412,7 @@ function launchpad_render_settings_field($args, $subfield = false) {
 			if($subfield) {
 				echo '<label class="' . $class . '">';
 			}
-			echo '<input type="checkbox" name="launchpad_site_options[' . $args['name'] . ']" id="' . $args['name'] . '" ' . ($val ? ' checked="checked"' : '') . '>';
+			echo '<input type="checkbox" name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" ' . ($val ? ' checked="checked"' : '') . '>';
 			if($subfield) {
 				echo ' ' . $subfield . '</label>';
 			}
@@ -414,19 +421,19 @@ function launchpad_render_settings_field($args, $subfield = false) {
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
-			echo '<input type="text" name="launchpad_site_options[' . $args['name'] . ']" id="' . $args['name'] . '" value="' . $val . '" class="regular-text">';
+			echo '<input type="text" name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" value="' . $val . '" class="regular-text">';
 			if($subfield) {
 				echo '</label>';
 			}
 		break;
 		case 'textarea':
-			echo '<textarea name="launchpad_site_options[' . $args['name'] . ']" id="' . $args['name'] . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
+			echo '<textarea name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
 		break;
 		case 'select':
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
-			echo '<select name="launchpad_site_options[' . $args['name'] . ']" id="' . $args['name'] . '">';
+			echo '<select name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '">';
 			echo '<option value="">Select One</option>';
 			echo launchpad_create_select_options($args['options'], $val);
 			echo '</select>';
@@ -438,7 +445,7 @@ function launchpad_render_settings_field($args, $subfield = false) {
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
-			echo '<select name="launchpad_site_options[' . $args['name'] . '][]" size="10" multiple="multiple" id="' . $args['name'] . '">';
+			echo '<select name="' . $field_prefix . '[' . $args['name'] . '][]" size="10" multiple="multiple" id="' . $args['name'] . '">';
 			echo launchpad_create_select_options($args['options'], $val);
 			echo '</select>';
 			if($subfield) {

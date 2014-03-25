@@ -162,7 +162,8 @@ function launchpad_add_meta_boxs() {
 					'launchpad_meta_box_handler',
 					$post_type,
 					$metabox_details['location'],
-					$metabox_details['position']
+					$metabox_details['position'],
+					$metabox_details
 				);
 			}
 		}
@@ -181,14 +182,25 @@ add_action('add_meta_boxes', 'launchpad_add_meta_boxs', 10, 1);
  */
 function launchpad_meta_box_handler($post, $args) {
 	
-	var_dump($post, $args);
+	foreach($args['args']['fields'] as $k => $v) {
+		?>
+		<div class="launchpad-metabox-field">
+			<label>
+				<?php 
+					
+					echo $v['name']; 
+					$v['args']['name'] = $k;
+					
+					if($post->$k) {
+						$v['args']['value'] = $post->$k;
+					}
+					
+				?>
+				<?php launchpad_render_settings_field($v['args'], false, 'launchpad_meta'); ?>
+			</label>
+		</div>
 	
-	?>
-	<div class="launchpad-side-metabox">
-		<label for="launchpad-sample_field">Sample Field</label>
-		<input type="text" name="launchpad_meta[sample_field]" id="launchpad-sample_field" value="<?php echo get_post_meta($post->ID, 'sample_field', true); ?>">
-	</div>
-
-	<?php
+		<?php
+	}
 }
 

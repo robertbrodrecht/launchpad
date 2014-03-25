@@ -1,15 +1,15 @@
-.launchpad-side-metabox {
+.launchpad-metabox-field {
 	margin-bottom: 1em;
-}
+	
+	label {
+		display: block;
+	}
 
-.launchpad-side-metabox label {
-	display: block;
-}
-
-.launchpad-side-metabox input[type=text],
-.launchpad-side-metabox select {
-	display: block;
-	width: 100%;
+	input[type=text],
+	select {
+		display: block;
+		width: 100%;
+	}
 }
 
 table.launchpad-metabox-table {
