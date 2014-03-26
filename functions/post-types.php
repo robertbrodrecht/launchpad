@@ -191,7 +191,7 @@ function launchpad_meta_box_handler($post, $args) {
 					echo $v['name']; 
 					$v['args']['name'] = $k;
 					
-					if($post->$k) {
+					if($post->$k && get_post_meta($post->ID, $k)) {
 						$v['args']['value'] = $post->$k;
 					}
 					
