@@ -245,11 +245,19 @@ img.aligncenter {
 	@extend %ugly-clearfix;
 	
 	margin-left: 0-$gutter;
+	
+	&.no-gutter {
+		margin-left: 0;
+	}
 }
 
 [class*=column-] {
 	float: left;
 	margin-left: $gutter;
+	
+	.no-gutter & {
+		margin-left: 0;
+	}
 	
 	// Floating right is out of Foundation. 
 	// I'm not 100% sure I like it.
@@ -266,6 +274,14 @@ $i: 10;
 		} @else {
 			width: $i*1%-$gutter;
 		}
+		
+		.no-gutter & {
+			@if ($i == 33) or ($i == 66) {
+				width: $i*1%+.3333;
+			} @else {
+				width: $i*1%;
+			}
+		}
 	}
 	
 	.offset-#{$i} {
@@ -273,6 +289,14 @@ $i: 10;
 			margin-left: $i*1% + .3333*$i/33 + $gutter;
 		} @else {
 			margin-left: $i*1% + $gutter;
+		}
+		
+		.no-gutter & {
+			@if ($i == 33) or ($i == 66) {
+				margin-left: $i*1% + .3333*$i/33;
+			} @else {
+				margin-left: $i*1%;
+			}
 		}
 	}
 	
