@@ -30,3 +30,24 @@
 	#{$property}: $values;
 	#{$property}: toRems($values);
 }
+
+@mixin media-max($size) {
+	
+	@media (max-width: toRems(map-get($screen-widths, $size))) {
+		@content;
+	}
+}
+
+@mixin media-min($size) {
+	
+	@media (min-width: toRems(map-get($screen-widths, $size))) {
+		@content;
+	}
+}
+
+@mixin media-range($small, $large) {
+	
+	@media (min-width: toRems(map-get($screen-widths, $small))) and (max-width: toRems(map-get($screen-widths, $large))) {
+		@content;
+	}
+}

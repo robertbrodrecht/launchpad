@@ -26,46 +26,6 @@
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsSetByUser": 0
 		},
-	"\/css\/admin-style.css": {
-		"fileType": 16,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/css\/admin-style.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsSetByUser": 0
-		},
-	"\/css\/editor-style.css": {
-		"fileType": 16,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/css\/editor-style.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsSetByUser": 0
-		},
-	"\/css\/print.css": {
-		"fileType": 16,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/css\/print.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsSetByUser": 0
-		},
-	"\/css\/screen.css": {
-		"fileType": 16,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/css\/screen.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsSetByUser": 0
-		},
-	"\/css\/unsupported.css": {
-		"fileType": 16,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/css\/unsupported.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsSetByUser": 0
-		},
 	"\/footer.php": {
 		"fileType": 8192,
 		"ignore": 0,
@@ -411,7 +371,7 @@
 		},
 	"\/sass\/_extend.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 1,
@@ -426,7 +386,7 @@
 		},
 	"\/sass\/_ie.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 1,
@@ -441,7 +401,7 @@
 		},
 	"\/sass\/_mixins.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 1,
@@ -456,7 +416,7 @@
 		},
 	"\/sass\/_objects.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 1,
@@ -471,7 +431,7 @@
 		},
 	"\/sass\/_reset.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 1,
@@ -486,7 +446,7 @@
 		},
 	"\/sass\/_typography.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 1,
@@ -501,7 +461,7 @@
 		},
 	"\/sass\/_variables.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 1,
@@ -516,7 +476,7 @@
 		},
 	"\/sass\/admin-style.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 0,
@@ -531,7 +491,7 @@
 		},
 	"\/sass\/editor-style.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 0,
@@ -546,7 +506,7 @@
 		},
 	"\/sass\/print.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 0,
@@ -561,7 +521,7 @@
 		},
 	"\/sass\/screen.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 0,
@@ -576,7 +536,7 @@
 		},
 	"\/sass\/unsupported.scss": {
 		"createSourceMap": 1,
-		"debugStyle": 0,
+		"debugStyle": 2,
 		"decimalPrecision": 5,
 		"fileType": 4,
 		"ignore": 0,
@@ -1201,7 +1161,7 @@
 	"sassAutoOutputPathReplace2": "css",
 	"sassAutoOutputPathStyle": 2,
 	"sassCreateSourceMap": 1,
-	"sassDebugStyle": 0,
+	"sassDebugStyle": 2,
 	"sassDecimalPrecision": 5,
 	"sassOutputStyle": 1,
 	"sassUseLibsass": 0,

@@ -8,6 +8,12 @@ $body-line-height-px: 16px;
 // Column-related settings.  
 // Wrap columns in div.columns (usually) then use div.column-X on children columns.
 // X can be: 10 to 100 in increments of 5, 33, or 55.  X represents a column width percentage.
-// Also has .push-X and .pull-X.
-$column-master-outer-width: 960px; // Used to convert columns to percents.
+// Also has .offset-X, .push-X, and .pull-X.
+// Use the .no-gutter class on the containing row to remove the gutter.
+$column-master-outer-width: 1200px; // Used to convert columns to percents.
 $column-master-gutter-width: 30px; // The column gutter in pixels.
+
+// Determine large, medium, small sizes.  Anything over large is "normal" desktop size.
+// This is used for classes .small-to-X classes and use mixins for media-max, media-min, media-range.
+// You can add your own, like xlarge: 1200.
+$screen-widths: (large: 1024px, medium: 768px, small: 480px);
