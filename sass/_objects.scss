@@ -345,15 +345,15 @@ $i: 10;
 }
 
 // Having this separate loop reduces output size by around 1.5kb.
-@each $screen-width-name, $screen-width-size in $screen-widths {
+@each $break-point-name, $break-point-size in $break-points {
 	
-	$screen-width-size: toRems($screen-width-size);
+	$break-point-size: toRems($break-point-size);
 	
-	@include media-max($screen-width-name) {
+	@include media-max($break-point-name) {
 		$i: 10;
 		@while $i <= 100 {
 		
-			[class*=column-].#{$screen-width-name}-to-#{$i} {
+			[class*=column-].#{$break-point-name}-to-#{$i} {
 				@if ($i == 33) or ($i == 66) {
 					width: $i*1%-$gutter+.3333;
 				} @else {
@@ -364,7 +364,7 @@ $i: 10;
 					clear: both;
 				}
 				
-				.#{$screen-width-name}-to-no-gutter &,
+				.#{$break-point-name}-to-no-gutter &,
 				.no-gutter & {
 					@if ($i == 33) or ($i == 66) {
 						width: $i*1%+.3333;
@@ -373,7 +373,7 @@ $i: 10;
 					}
 				}
 				
-				.#{$screen-width-name}-to-gutter & {
+				.#{$break-point-name}-to-gutter & {
 					margin-left: $gutter;
 					
 					@if ($i == 33) or ($i == 66) {
@@ -404,19 +404,19 @@ $i: 10;
 			}
 			
 			.row {
-				&.#{$screen-width-name}-to-100 [class*=column-], 
-				&.#{$screen-width-name}-to-100 [class*=column-].#{$screen-width-name}-to-#{$i} {
+				&.#{$break-point-name}-to-100 [class*=column-], 
+				&.#{$break-point-name}-to-100 [class*=column-].#{$break-point-name}-to-#{$i} {
 					margin-left: 0;
 					clear: both;
 					width: 100%;
 				}
 				
-				&.no-gutter.#{$screen-width-name}-to-gutter {
+				&.no-gutter.#{$break-point-name}-to-gutter {
 					margin-left: 0-$gutter;
 				}
 				
-				&.#{$screen-width-name}-to-100,
-				&.#{$screen-width-name}-to-100[class*=-to-gutter] {
+				&.#{$break-point-name}-to-100,
+				&.#{$break-point-name}-to-100[class*=-to-gutter] {
 					margin-left: 0;
 				}
 			}
