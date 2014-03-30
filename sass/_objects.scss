@@ -271,6 +271,7 @@ img.aligncenter {
 
 $i: 1;
 @while $i <= 100 {
+
 	@if index($column-create-classes, $i) {
 		.column-#{$i} {
 			@if ($i == 33) or ($i == 66) {
