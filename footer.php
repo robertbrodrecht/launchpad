@@ -18,7 +18,7 @@ global $site_options;
 				<section>
 					<h1 class="frontload">Site Links</h1>
 					<nav>
-						<?php launchpad_wp_nav_menu(array('theme_location' => 'footer', 'menu_class' => 'nav-footer')); ?>
+						<?php launchpad_wp_nav_menu(array('theme_location' => 'footer', 'menu_class' => 'nav-footer', 'container' => false)); ?>
 					</nav>
 				</section>
 				

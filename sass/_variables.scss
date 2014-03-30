@@ -12,6 +12,7 @@ $body-line-height-px: 16px;
 // Use the .no-gutter class on the containing row to remove the gutter.
 $column-master-outer-width: 1200px; // Used to convert columns to percents.
 $column-master-gutter-width: 30px; // The column gutter in pixels.
+$column-create-classes: 25 33 50 66 75 100; // To save file size, pick which percentages to make classes.
 
 // Determine large, medium, small sizes.  Anything over large is "normal" desktop size.
 // This is used for classes .medium-to-X, .medium-to-gutter, small-to-100  classes and use mixins for media-max, media-min, media-range.

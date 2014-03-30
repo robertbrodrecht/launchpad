@@ -36,4 +36,18 @@
 //   the correct percentages based on the desired gutter width at the desired contaienr
 //   width.
 
+#header {
+	position: relative;
+	z-index: 999;
+}
+
+.nav-header {
+	@extend %dropdown;
+	@extend %dropdown-style-fade;
+	
+	&, ul {
+		background: silver;
+	}
+}
+
 @import 'ie';				// IE8/9 Tweaks.  See file for details on how to do it.
