@@ -44,6 +44,7 @@
 .nav-header {
 	@extend %dropdown;
 	@extend %dropdown-style-fade;
+	@extend %dropdown-fit-width;
 	
 	&, ul {
 		background: silver;

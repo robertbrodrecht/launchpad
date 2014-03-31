@@ -1,48 +1,7 @@
 // Calculate the gutter width.
 $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 
-
-
 form {
-}
-
-#skip-to-content {
-	@include rem('padding', 5px 20px);
-	
-	background: #FFF;
-	display: inline-block;
-	left: 0;
-	line-height: 1.5;
-	position: absolute;
-	top: 0;
-	-webkit-transition: all .25s ease-in;
-	-moz-transition: all .25s ease-in;
-	transition: all .25s ease-in;
-	-webkit-transform: translateY(-100%);
-	-moz-transform: translateY(-100%);
-	-ms-transform: translateY(-100%);
-	transform: translateY(-100%);
-	z-index: 100;
-}
-
-#skip-to-content:focus,
-#skip-to-content:active {
-	-webkit-transition: all .25s ease-out;
-	-moz-transition: all .25s ease-out;
-	transition: all .25s ease-out;
-	-webkit-transform: translateY(0);
-	-moz-transform: translateY(0);
-	-ms-transform: translateY(0);
-	transform: translateY(0);
-}
-
-.msie-8 ~ #skip-to-content {
-	top: -100%;
-	
-	&:focus,
-	&:active {
-		top: 0;
-	}
 }
 
 .button {

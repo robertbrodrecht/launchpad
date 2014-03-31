@@ -98,3 +98,13 @@
 		}
 	}
 }
+
+%dropdown-fit-width {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	
+	> li {
+		display: table-cell;
+	}
+}
