@@ -158,30 +158,10 @@ img.aligncenter {
 .system-notification {
 	@include rem('font-size', 14px);
 	
-	-webkit-animation-delay: .5s;
-	-webkit-animation-duration: 5s;
-	-webkit-animation-direction: normal;
-	-webkit-animation-fill-mode: normal;
-	-webkit-animation-timing-function: ease;
-	-webkit-animation-name: system-notification-swap;
-	-moz-animation-delay: .5s;
-	-moz-animation-duration: 5s;
-	-moz-animation-direction: normal;
-	-moz-animation-fill-mode: normal;
-	-moz-animation-timing-function: ease;
-	-moz-animation-name: system-notification-swap;
-	-ms-animation-delay: .5s;
-	-ms-animation-duration: 5s;
-	-ms-animation-direction: normal;
-	-ms-animation-fill-mode: normal;
-	-ms-animation-timing-function: ease;
-	-ms-animation-name: system-notification-swap;
-	animation-delay: .5s;
-	animation-duration: 5s;
-	animation-direction: normal;
-	animation-fill-mode: normal;
-	animation-timing-function: ease;
-	animation-name: system-notification-swap;
+	-webkit-animation: system-notification-swap .5s ease .5s 1 normal normal;
+	-moz-animation: system-notification-swap .5s ease .5s 1 normal normal;
+	-ms-animation: system-notification-swap .5s ease .5s 1 normal normal;
+	animation: system-notification-swap .5s ease .5s 1 normal normal;
 	background: #FFFCDB;
 	border-top: 1px solid #CFCA99;
 	bottom: 0;
