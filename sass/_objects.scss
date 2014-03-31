@@ -335,26 +335,38 @@ $i: 1;
 					}
 				}
 				
-				.row {
-					&.#{$break-point-name}-to-100 [class*=column-], 
-					&.#{$break-point-name}-to-100 [class*=column-].#{$break-point-name}-to-#{$i} {
-						margin-left: 0;
-						clear: both;
-						width: 100%;
-					}
-					
-					&.no-gutter.#{$break-point-name}-to-gutter {
-						margin-left: 0-$gutter;
-					}
-					
-					&.#{$break-point-name}-to-100,
-					&.#{$break-point-name}-to-100[class*=-to-gutter] {
-						margin-left: 0;
-					}
-				}
 			}
 			
 			$i: $i + 1 !global;	
+		}
+		
+		[class*=column-].#{$break-point-name}-hide,
+		.#{$break-point-name}-hide {
+			display: none;
+		}
+		
+		[class*=column-].#{$break-point-name}-show,
+		.#{$break-point-name}-show {
+			display: inherit;
+		}
+		
+		.row {
+			
+			&.no-gutter.#{$break-point-name}-to-gutter {
+				margin-left: 0-$gutter;
+			}
+			
+			&.#{$break-point-name}-to-100 [class*=column-], 
+			&.#{$break-point-name}-to-100 [class*=column-][class*=#{$break-point-name}-to-] {
+				margin-left: 0;
+				clear: both;
+				width: auto;
+			}
+			
+			&.#{$break-point-name}-to-100,
+			&.#{$break-point-name}-to-100[class*=-to-gutter] {
+				margin-left: 0;
+			}
 		}
 	}
 }
