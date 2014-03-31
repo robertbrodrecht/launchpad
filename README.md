@@ -108,7 +108,7 @@ To Do For 1.0
 =============
 
 * Add filters/actions in WP code for modifying things that people may want to modify. Partially implemented.
-* Easy way to add custom fields to post types.  Implemented but only lightly tested.  NEEDS SERIOUS TESTING (i.e. make sure it works, make sure it isn't blowing up the output size).
+* Easy way to add custom fields to post types.  Implemented but only lightly tested.  NEEDS SERIOUS TESTING (i.e. make sure it works, make sure it isn't blowing up the output size).  Main issues are coming from .size-to-X stuff and .no-gutter.
 * Image and upload support in custom fields.
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * Add more custom events to JavaScript to aid in development.

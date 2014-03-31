@@ -197,7 +197,7 @@ img.aligncenter {
 	float: left;
 	margin-left: $gutter;
 	
-	.no-gutter & {
+	.no-gutter > & {
 		margin-left: 0;
 	}
 	
@@ -219,7 +219,7 @@ $i: 1;
 				width: $i*1%-$gutter;
 			}
 			
-			.no-gutter & {
+			.no-gutter > & {
 				@if ($i == 33) or ($i == 66) {
 					width: $i*1%+.3333;
 				} @else {
@@ -235,7 +235,7 @@ $i: 1;
 				margin-left: $i*1% + $gutter;
 			}
 			
-			.no-gutter {
+			.no-gutter > & {
 				@if ($i == 33) or ($i == 66) {
 					margin-left: $i*1% + .3333*$i/33;
 				} @else {
@@ -297,7 +297,7 @@ $i: 1;
 					}
 					
 					.#{$break-point-name}-to-no-gutter &,
-					.no-gutter & {
+					.no-gutter > & {
 						@if ($i == 33) or ($i == 66) {
 							width: $i*1%+.3333;
 						} @else {
@@ -318,7 +318,7 @@ $i: 1;
 					&[class*=offset-] {
 						margin-left: auto;
 						
-						.no-gutter & {
+						.no-gutter > & {
 							margin-left: auto;
 						}
 					}
@@ -347,7 +347,7 @@ $i: 1;
 		
 		[class*=column-].#{$break-point-name}-show,
 		.#{$break-point-name}-show {
-			display: inherit;
+			display: block;
 		}
 		
 		.row {
