@@ -398,17 +398,6 @@
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsSetByUser": 0
 		},
-	"\/README.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 0,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/README.md",
-		"outputAbbreviatedPath": "\/README.html",
-		"outputPathIsSetByUser": 0
-		},
 	"\/sass\/_extend.scss": {
 		"createSourceMap": 1,
 		"debugStyle": 2,
@@ -553,21 +542,6 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/sass\/print.scss",
 		"outputAbbreviatedPath": "\/css\/print.css",
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"shouldRunAutoprefixer": 1,
-		"shouldRunBless": 0,
-		"useLibsass": 0
-		},
-	"\/sass\/screen.scss": {
-		"createSourceMap": 1,
-		"debugStyle": 2,
-		"decimalPrecision": 5,
-		"fileType": 4,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/sass\/screen.scss",
-		"outputAbbreviatedPath": "\/css\/screen.css",
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"shouldRunAutoprefixer": 1,

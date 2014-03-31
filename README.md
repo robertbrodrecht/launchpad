@@ -109,6 +109,7 @@ To Do For 1.0
 
 * Add filters/actions in WP code for modifying things that people may want to modify. Partially implemented.
 * Easy way to add custom fields to post types.  Implemented but only lightly tested.
+* Image and upload support in custom fields.
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
