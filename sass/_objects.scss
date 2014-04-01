@@ -201,9 +201,7 @@ img.aligncenter {
 		margin-left: 0;
 	}
 	
-	// Floating right is out of Foundation. 
-	// I'm not 100% sure I like it.
-	&:last-child {
+	:first-child ~ &:last-child {
 		float: right;
 	}
 }
@@ -328,10 +326,6 @@ $i: 1;
 						position: inherit;
 						left: auto;
 						right: auto;
-						
-						&:last-child {
-							float: none;
-						}
 					}
 				}
 				

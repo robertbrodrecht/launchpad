@@ -8,7 +8,7 @@ images_dir = "images"
 javascripts_dir = "js"
 fonts_dir = "css/fonts"
 
-output_style = :expanded
+output_style = :compressed
 
 # To enable relative paths to assets via compass helper functions. Uncomment:
 # relative_assets = true

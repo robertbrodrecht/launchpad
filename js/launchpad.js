@@ -459,7 +459,7 @@ function reinit() {
 function init() {
 	var body = $(document.body),
 		scrollingIsJanky = false,
-		doNotSupport = [/MSIE [1234567]\./],
+		doNotSupport = [/MSIE [1234567]\.(?!.*IEMobile)/],
 		l, i, startupImage = false;
 	
 	window.supports = {};
