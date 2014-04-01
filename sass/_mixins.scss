@@ -9,8 +9,12 @@
 		@return 0;
 	}
 
-	@if type-of(px) == "number" {
-		@return $px / $baseline-rem;
+	@if type-of($px) == "number" {
+		@if unit($px) == "rem" {
+			@return $px;
+		} @else {
+			@return $px / $baseline-rem;
+		}
 	} @else {
 		$rems: ();
 
@@ -32,22 +36,65 @@
 }
 
 @mixin media-max($size) {
-	
-	@media (max-width: toRems(map-get($break-points, $size))) {
+	@if type-of($size) == "number" {
+		$size: toRems($size);
+	} @else {
+		$size: toRems(map-get($break-points, $size));
+	}
+	@media (max-width: $size) {
 		@content;
 	}
 }
 
 @mixin media-min($size) {
-	
-	@media (min-width: toRems(map-get($break-points, $size))) {
+	@if type-of($size) == "number" {
+		$size: toRems($size);
+	} @else {
+		$size: toRems(map-get($break-points, $size));
+	}
+	@media (min-width: $size) {
 		@content;
 	}
 }
 
 @mixin media-range($small, $large) {
-	
-	@media (min-width: toRems(map-get($break-points, $small))) and (max-width: toRems(map-get($break-points, $large))) {
+	@if type-of($small) == "number" {
+		$small: toRems($small);
+	} @else {
+		$small: toRems(map-get($break-points, $small));
+	}
+	@if type-of($large) == "number" {
+		$large: toRems($large);
+	} @else {
+		$large: toRems(map-get($break-points, $large));
+	}
+	@if $small > $large {
+		$tmp_small: $small;
+		$small: $large;
+		$large: $tmp_small;
+	}
+	@media (min-width: $small) and (max-width: $large) {
 		@content;
+	}
+}
+
+@mixin media-guess($small, $large) {
+	@if $small != "" and $large != "" {
+		@if map-get($break-points, $small) > map-get($break-points, $large) {
+			$tmp_small: $small;
+			$small: $large;
+			$large: $tmp_small;
+		}
+		@include media-range($small, $large) {
+			@content;
+		}		
+	} @else if $large == "" {
+		@include media-max($small) {
+			@content;
+		}
+	} @else if $small == "" {
+		@include media-min($large) {
+			@content;
+		}
 	}
 }

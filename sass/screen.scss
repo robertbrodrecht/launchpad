@@ -36,18 +36,9 @@
 //   the correct percentages based on the desired gutter width at the desired contaienr
 //   width.
 
-#header {
-	position: relative;
-	z-index: 999;
-}
-
-.nav-header {
-	@extend %dropdown;
-	@extend %dropdown-style-fade;
-	@extend %dropdown-fit-width;
-	
-	&, ul {
-		background: silver;
+@include media-range(medium, large) {
+	body {
+		background: red;
 	}
 }
 

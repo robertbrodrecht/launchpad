@@ -1,5 +1,7 @@
 // Calculate the gutter width.
 $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
+$break-point-size-names: map-keys($break-points);
+$break-point-size-widths: map-values($break-points);
 
 form {
 }
@@ -200,10 +202,6 @@ img.aligncenter {
 	.no-gutter > & {
 		margin-left: 0;
 	}
-	
-	:first-child ~ &:last-child {
-		float: right;
-	}
 }
 
 $i: 1;
@@ -250,10 +248,6 @@ $i: 1;
 				left: $i*1%;
 			}
 			right: auto;
-			
-			&:last-child {
-				float: left;
-			}
 		}
 		
 		.pull-#{$i} {
@@ -263,10 +257,6 @@ $i: 1;
 				right: $i*1% + .3333*$i/33;
 			} @else {
 				right: $i*1%;
-			}
-			
-			&:last-child {
-				float: left;
 			}
 		}
 	}
@@ -279,8 +269,16 @@ $i: 1;
 	
 	$break-point-size: toRems($break-point-size);
 	
-	@include media-max($break-point-name) {
+	// Get the next breakpoint size so we can figure out how to break thhings down.
+	$break-point-next-name: "";
+	@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
+		$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
+	}
+	
+	@include media-guess($break-point-name, $break-point-next-name) {
+		
 		$i: 1 !global;
+		
 		@while $i <= 100 {
 			@if index($column-create-classes, $i) {
 				[class*=column-].#{$break-point-name}-to-#{$i} {
@@ -334,14 +332,8 @@ $i: 1;
 			$i: $i + 1 !global;	
 		}
 		
-		[class*=column-].#{$break-point-name}-hide,
 		.#{$break-point-name}-hide {
 			display: none;
-		}
-		
-		[class*=column-].#{$break-point-name}-show,
-		.#{$break-point-name}-show {
-			display: block;
 		}
 		
 		.row {
