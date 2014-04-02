@@ -78,6 +78,28 @@
 	}
 }
 
+
+@mixin media-range-outer($small, $large) {
+	@if type-of($small) == "number" {
+		$small: toRems($small);
+	} @else {
+		$small: toRems(map-get($break-points, $small));
+	}
+	@if type-of($large) == "number" {
+		$large: toRems($large);
+	} @else {
+		$large: toRems(map-get($break-points, $large));
+	}
+	@if $small > $large {
+		$tmp_small: $small;
+		$small: $large;
+		$large: $tmp_small;
+	}
+	@media (max-width: $small), (min-width: $large) {
+		@content;
+	}
+}
+
 @mixin media-guess($small, $large) {
 	@if $small != "" and $large != "" {
 		@if map-get($break-points, $small) > map-get($break-points, $large) {

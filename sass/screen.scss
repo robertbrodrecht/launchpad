@@ -36,10 +36,4 @@
 //   the correct percentages based on the desired gutter width at the desired contaienr
 //   width.
 
-@include media-range(medium, large) {
-	body {
-		background: red;
-	}
-}
-
 @import 'ie';				// IE8/9 Tweaks.  See file for details on how to do it.
