@@ -2,6 +2,7 @@
 @import "variables";		// Custom variables.
 @import "mixins";			// Custom mixins.
 @import "extend";			// Things to extend.
+@import "grid";				// Generate the grid.
 @import "objects";			// OOCSS stuff. Generates vertical grids from variables.
 //@import "foundation";		// Foundation?
 @import "reset";			// Reset with user-configured baseline grid.

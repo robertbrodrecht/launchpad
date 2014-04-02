@@ -1,0 +1,176 @@
+// Calculate the gutter width.
+$gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
+$break-point-size-names: map-keys($break-points);
+$break-point-size-widths: map-values($break-points);
+
+.row {
+	@extend %ugly-clearfix;
+	
+	margin-left: 0-$gutter;
+	
+	&.no-gutter {
+		margin-left: 0;
+	}
+}
+
+[class*=column-] {
+	float: left;
+	margin-left: $gutter;
+	
+	.no-gutter > & {
+		margin-left: 0;
+	}
+}
+
+$i: 1;
+@while $i <= 100 {
+
+	@if index($column-create-classes, $i) {
+		.column-#{$i} {
+			@if ($i == 33) or ($i == 66) {
+				width: $i*1%-$gutter+.3333;
+			} @else {
+				width: $i*1%-$gutter;
+			}
+			
+			.no-gutter > & {
+				@if ($i == 33) or ($i == 66) {
+					width: $i*1%+.3333;
+				} @else {
+					width: $i*1%;
+				}
+			}
+		}
+		
+		.offset-#{$i} {
+			@if ($i == 33) or ($i == 66) {
+				margin-left: $i*1% + .3333*$i/33 + $gutter;
+			} @else {
+				margin-left: $i*1% + $gutter;
+			}
+			
+			.no-gutter > & {
+				@if ($i == 33) or ($i == 66) {
+					margin-left: $i*1% + .3333*$i/33;
+				} @else {
+					margin-left: $i*1%;
+				}
+			}
+		}
+		
+		.push-#{$i} {
+			position: relative;
+			@if ($i == 33) or ($i == 66) {
+				left: $i*1% + .3333*$i/33;
+			} @else {
+				left: $i*1%;
+			}
+			right: auto;
+		}
+		
+		.pull-#{$i} {
+			position: relative;
+			left: auto;
+			@if ($i == 33) or ($i == 66) {
+				right: $i*1% + .3333*$i/33;
+			} @else {
+				right: $i*1%;
+			}
+		}
+	}
+	
+	$i: $i + 1 !global;	
+}
+
+// Having this separate loop reduces output size by around 1.5kb.
+@each $break-point-name, $break-point-size in $break-points {
+	
+	$break-point-size: toRems($break-point-size);
+	
+	// Get the next breakpoint size so we can figure out how to break thhings down.
+	$break-point-next-name: "";
+	@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
+		$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
+	}
+	
+	@include private-media-guess($break-point-name, $break-point-next-name) {
+		
+		$i: 1 !global;
+		
+		@while $i <= 100 {
+			@if index($column-create-classes, $i) {
+				[class*=column-].#{$break-point-name}-to-#{$i} {
+					@if ($i == 33) or ($i == 66) {
+						width: $i*1%-$gutter+.3333;
+					} @else {
+						width: $i*1%-$gutter;
+					}
+					
+					@if ($i == 100) {
+						clear: both;
+					}
+					
+					.#{$break-point-name}-to-no-gutter > &,
+					.no-gutter > & {
+						@if ($i == 33) or ($i == 66) {
+							width: $i*1%+.3333;
+						} @else {
+							width: $i*1%;
+						}
+					}
+					
+					.#{$break-point-name}-to-gutter > & {
+						margin-left: $gutter;
+						
+						@if ($i == 33) or ($i == 66) {
+							width: $i*1%-$gutter+.3333;
+						} @else {
+							width: $i*1%-$gutter;
+						}
+					}
+					
+					&[class*=offset-] {
+						margin-left: auto;
+						
+						.no-gutter > & {
+							margin-left: auto;
+						}
+					}
+					
+					&[class*=push-],
+					&[class*=pull-] {
+						position: inherit;
+						left: auto;
+						right: auto;
+					}
+				}
+				
+			}
+			
+			$i: $i + 1 !global;	
+		}
+		
+		.#{$break-point-name}-hide {
+			display: none;
+		}
+		
+		.row {
+			
+			&.no-gutter.#{$break-point-name}-to-gutter {
+				margin-left: 0-$gutter;
+			}
+			
+			&.#{$break-point-name}-to-100 [class*=column-], 
+			&.#{$break-point-name}-to-100 [class*=column-][class*=#{$break-point-name}-to-] {
+				margin-left: 0;
+				clear: both;
+				width: auto;
+			}
+			
+			&.#{$break-point-name}-to-100,
+			&.#{$break-point-name}-to-100[class*=-to-gutter] {
+				margin-left: 0;
+			}
+		}
+	}
+}
