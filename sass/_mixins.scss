@@ -1,7 +1,9 @@
+// Figure out the root font percentage from a pixel value.
 @function rootRemPercent($px) {
 	@return $px/16px*100*1%;
 }
 
+// Convert a pixel value to REMs.
 @function toRems($px) {
 	$baseline-rem: $root-font-px / 1rem;
 
@@ -30,11 +32,13 @@
 	}
 }
 
+// Make a REM'd propert with pixel fallback.
 @mixin rem($property, $values) {
 	#{$property}: $values;
 	#{$property}: toRems($values);
 }
 
+// Max-width media query.
 @mixin media-max($size) {
 	@if type-of($size) == "number" {
 		$size: toRems($size);
@@ -46,6 +50,7 @@
 	}
 }
 
+// Min-width media query.
 @mixin media-min($size) {
 	@if type-of($size) == "number" {
 		$size: toRems($size);
@@ -57,6 +62,7 @@
 	}
 }
 
+// Create a media query that matches the inner range of two values.
 @mixin media-range($small, $large) {
 	@if type-of($small) == "number" {
 		$small: toRems($small);
@@ -78,7 +84,7 @@
 	}
 }
 
-
+// Create a media query that matches the outer range of two values.
 @mixin media-range-outer($small, $large) {
 	@if type-of($small) == "number" {
 		$small: toRems($small);
@@ -100,7 +106,8 @@
 	}
 }
 
-@mixin media-guess($small, $large) {
+// DO NOT USE THIS MIXIN.  INTERNAL USE ONLY!
+@mixin private-media-guess($small, $large) {
 	@if $small != "" and $large != "" {
 		@if map-get($break-points, $small) > map-get($break-points, $large) {
 			$tmp_small: $small;

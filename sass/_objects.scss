@@ -275,7 +275,7 @@ $i: 1;
 		$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
 	}
 	
-	@include media-guess($break-point-name, $break-point-next-name) {
+	@include private-media-guess($break-point-name, $break-point-next-name) {
 		
 		$i: 1 !global;
 		
