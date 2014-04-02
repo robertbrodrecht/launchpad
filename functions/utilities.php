@@ -85,7 +85,7 @@ function launchpad_scandir_deep($dir, $initial_dir = false) {
 function file_get_contents_cache($url, $cachetime = 60) {
 	$cache_file = sys_get_temp_dir();
 	$cache_file = $cache_file . '/' . md5($url);
-	if(!file_exists($cache_file) && time()-filemtime($cache_file) >= $cachetime) {
+	if(!file_exists($cache_file) || time()-filemtime($cache_file) >= $cachetime) {
 		$results = file_get_contents($url);
 		if($results) {
 			$f = fopen($cache_file, 'w');
