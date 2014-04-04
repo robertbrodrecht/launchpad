@@ -77,26 +77,37 @@ function initHeightMatch() {
 		$('[data-height-match-group]').css('height', 'auto').each(
 				function() {
 					var me = $(this),
-						height = 0;
-					me.children('[data-height-match]').css('height', 'auto').each(
-							function() {
-								var h = $(this).outerHeight();
-								if(h > height) {
-									height = h;
+						height = 0,
+						lowest_width = +me.attr('data-height-match-group');
+					if(lowest_width < $(document.body).width()) {
+						me.children('[data-height-match]').css('height', 'auto').each(
+								function() {
+									var h = $(this).outerHeight();
+									if(h > height) {
+										height = h;
+									}
 								}
-							}
-						).add(me).css('height', height);
+							).add(me).css('height', height);
+					} else {
+						me.children('[data-height-match]').css('height', 'auto');
+					}
 				}
 			);
 	}
 	
-	$('[data-height-match-children]').removeAttr('data-height-match-children')
-		.attr('data-height-match-group', '')
-		.children().each(
-			function() {
-				$(this).attr('data-height-match', '');
-			}
-		);
+	$('[data-height-match-children]').each(
+		function() {
+			var me = $(this),
+				cur_height_match = me.attr('data-height-match-children');
+			me.removeAttr('data-height-match-children')
+			.attr('data-height-match-group', cur_height_match)
+			.children().each(
+				function() {
+					$(this).attr('data-height-match', '');
+				}
+			);
+		}
+	);
 	
 	heightMatch();
 	

@@ -271,6 +271,12 @@ function launchpad_get_setting_fields() {
 								'type' => 'text'
 							)
 						),
+						'organization_linkedin' => array(
+							'name' => 'LinkedIn',
+							'args' => array(
+								'type' => 'text'
+							)
+						),
 						'organization_instagram' => array(
 							'name' => 'Instagram',
 							'args' => array(

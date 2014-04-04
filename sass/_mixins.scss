@@ -36,6 +36,21 @@
 	}
 }
 
+// Browser support for rem-based media queries is broken.  
+// Safari gets it right (based on html font size), but FF and Chrome do not (based on browser stylesheet font size).
+// All browsers use the browser stylesheet font size for em-based media queries.  
+// So, we need to do what is predictable, even if it isn't ideal.
+@function mqRemToEm($rem) {
+	$root_font_fix: $root-font-px/16px;
+	
+	@if type-of($rem) == "number" and unit($rem) == "rem" {
+		$rem: ($rem / ($rem * 0 + 1)) * ($root_font_fix / ($root_font_fix * 0 + 1));
+		@return $rem + "em";
+	} @else {
+		@return $rem;
+	}
+}
+
 // Make a REM'd propert with pixel fallback.
 @mixin rem($property, $values) {
 	#{$property}: $values;
@@ -62,6 +77,9 @@
 	} @else {
 		$size: toRems(map-get($break-points, $size));
 	}
+	
+	$size: mqRemToEm($size);
+	
 	@media (max-width: $size) {
 		@content;
 	}
@@ -74,6 +92,9 @@
 	} @else {
 		$size: toRems(map-get($break-points, $size));
 	}
+	
+	$size: mqRemToEm($size);
+	
 	@media (min-width: $size) {
 		@content;
 	}
@@ -96,6 +117,10 @@
 		$small: $large;
 		$large: $tmp_small;
 	}
+	
+	$small: mqRemToEm($small);
+	$large: mqRemToEm($large);
+	
 	@media (min-width: $small) and (max-width: $large) {
 		@content;
 	}
@@ -113,6 +138,10 @@
 	} @else {
 		$large: toRems(map-get($break-points, $large));
 	}
+	
+	$small: mqRemToEm($small);
+	$large: mqRemToEm($large);
+	
 	@if $small > $large {
 		$tmp_small: $small;
 		$small: $large;

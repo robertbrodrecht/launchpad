@@ -8,77 +8,77 @@ $break-point-size-widths: map-values($break-points);
 	
 	margin-left: 0-$gutter;
 	
+	> [class*=column-] {
+		float: left;
+		margin-left: $gutter;
+	}
+	
 	&.no-gutter {
 		margin-left: 0;
-	}
-}
-
-[class*=column-] {
-	float: left;
-	margin-left: $gutter;
-	
-	.no-gutter > & {
-		margin-left: 0;
+		
+		> [class*=column-] {
+			margin-left: 0;
+		}
 	}
 }
 
 $i: 1;
 @while $i <= 100 {
-
-	@if index($column-create-classes, $i) {
-		.column-#{$i} {
-			@if ($i == 33) or ($i == 66) {
-				width: $i*1%-$gutter+.3333;
-			} @else {
-				width: $i*1%-$gutter;
+	.row {
+		@if index($column-create-classes, $i) {
+			> .column-#{$i} {
+				@if ($i == 33) or ($i == 66) {
+					width: $i*1%-$gutter+.3333;
+				} @else {
+					width: $i*1%-$gutter;
+				}
 			}
 			
-			.no-gutter > & {
+			&.no-gutter > .column-#{$i} {
 				@if ($i == 33) or ($i == 66) {
 					width: $i*1%+.3333;
 				} @else {
 					width: $i*1%;
 				}
 			}
-		}
-		
-		.offset-#{$i} {
-			@if ($i == 33) or ($i == 66) {
-				margin-left: $i*1% + .3333*$i/33 + $gutter;
-			} @else {
-				margin-left: $i*1% + $gutter;
+			
+			> .offset-#{$i} {
+				@if ($i == 33) or ($i == 66) {
+					margin-left: $i*1% + .3333*$i/33 + $gutter;
+				} @else {
+					margin-left: $i*1% + $gutter;
+				}
 			}
 			
-			.no-gutter > & {
+			&.no-gutter > .offset-#{$i} {
 				@if ($i == 33) or ($i == 66) {
 					margin-left: $i*1% + .3333*$i/33;
 				} @else {
 					margin-left: $i*1%;
 				}
 			}
-		}
-		
-		.push-#{$i} {
-			position: relative;
-			@if ($i == 33) or ($i == 66) {
-				left: $i*1% + .3333*$i/33;
-			} @else {
-				left: $i*1%;
+			
+			> .push-#{$i} {
+				position: relative;
+				@if ($i == 33) or ($i == 66) {
+					left: $i*1% + .3333*$i/33;
+				} @else {
+					left: $i*1%;
+				}
+				right: auto;
 			}
-			right: auto;
-		}
-		
-		.pull-#{$i} {
-			position: relative;
-			left: auto;
-			@if ($i == 33) or ($i == 66) {
-				right: $i*1% + .3333*$i/33;
-			} @else {
-				right: $i*1%;
+			
+			> .pull-#{$i} {
+				position: relative;
+				left: auto;
+				@if ($i == 33) or ($i == 66) {
+					right: $i*1% + .3333*$i/33;
+				} @else {
+					right: $i*1%;
+				}
 			}
 		}
 	}
-	
 	$i: $i + 1 !global;	
 }
 
@@ -99,7 +99,7 @@ $i: 1;
 		
 		@while $i <= 100 {
 			@if index($column-create-classes, $i) {
-				[class*=column-].#{$break-point-name}-to-#{$i} {
+				.row > .#{$break-point-name}-to-#{$i} {
 					@if ($i == 33) or ($i == 66) {
 						width: $i*1%-$gutter+.3333;
 					} @else {
@@ -110,26 +110,9 @@ $i: 1;
 						clear: both;
 					}
 					
-					.#{$break-point-name}-to-no-gutter > &,
-					.no-gutter > & {
-						@if ($i == 33) or ($i == 66) {
-							width: $i*1%+.3333;
-						} @else {
-							width: $i*1%;
-						}
-					}
 					
-					.#{$break-point-name}-to-gutter > & {
-						margin-left: $gutter;
-						
-						@if ($i == 33) or ($i == 66) {
-							width: $i*1%-$gutter+.3333;
-						} @else {
-							width: $i*1%-$gutter;
-						}
-					}
-					
-					&[class*=offset-] {
+					&[class^=offset-],
+					&[class*=" offset-"] {
 						margin-left: auto;
 						
 						.no-gutter > & {
@@ -137,14 +120,64 @@ $i: 1;
 						}
 					}
 					
-					&[class*=push-],
-					&[class*=pull-] {
+					&[class^=push-],
+					&[class*=" push-"],
+					&[class^=pull-],
+					&[class*=" pull-"] {
 						position: inherit;
 						left: auto;
 						right: auto;
 					}
 				}
 				
+				.row > .#{$break-point-name}-push-#{$i},
+				.row > .#{$break-point-name}-push-#{$i}[class^=push-],
+				.row > .#{$break-point-name}-push-#{$i}[class*=" push-"],
+				.row > .#{$break-point-name}-push-#{$i}[class^=pull-],
+				.row > .#{$break-point-name}-push-#{$i}[class*=" pull-"] {
+					position: relative;
+					@if ($i == 33) or ($i == 66) {
+						left: $i*1% + .3333*$i/33;
+					} @else {
+						left: $i*1%;
+					}
+					right: auto;
+				}
+				
+				.row > .#{$break-point-name}-pull-#{$i},
+				.row > .#{$break-point-name}-pull-#{$i}[class^=push-],
+				.row > .#{$break-point-name}-pull-#{$i}[class*=" push-"],
+				.row > .#{$break-point-name}-pull-#{$i}[class^=pull-],
+				.row > .#{$break-point-name}-pull-#{$i}[class*=" pull-"] {
+					position: relative;
+					left: auto;
+					@if ($i == 33) or ($i == 66) {
+						right: $i*1% + .3333*$i/33;
+					} @else {
+						right: $i*1%;
+					}
+				}
+				
+				.row.no-gutter,
+				.row.#{$break-point-name}-to-no-gutter {
+					> .#{$break-point-name}-to-#{$i} {
+						@if ($i == 33) or ($i == 66) {
+							width: $i*1%+.3333;
+						} @else {
+							width: $i*1%;
+						}
+					}
+				}
+				
+				.row.#{$break-point-name}-to-gutter > .#{$break-point-name}-to-#{$i} {
+					margin-left: $gutter;
+					
+					@if ($i == 33) or ($i == 66) {
+						width: $i*1%-$gutter+.3333;
+					} @else {
+						width: $i*1%-$gutter;
+					}
+				}
 			}
 			
 			$i: $i + 1 !global;	
