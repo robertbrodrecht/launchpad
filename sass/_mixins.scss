@@ -162,7 +162,7 @@
 		}
 		@include media-range($small, $large) {
 			@content;
-		}		
+		}
 	} @else if $large == "" {
 		@include media-max($small) {
 			@content;
