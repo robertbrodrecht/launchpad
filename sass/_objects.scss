@@ -65,7 +65,7 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 		margin-left: $gutter;
 	}
 	
-	$i: 1;
+	$i: 1 !global;
 	@while $i < 10 {
 		
 		&.gallery-columns-#{$i} {
@@ -79,7 +79,7 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 				width: 100%;
 			}
 		}
-		$i: $i + 1;
+		$i: $i + 1 !global;
 	}
 }
 

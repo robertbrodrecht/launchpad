@@ -3,207 +3,391 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 $break-point-size-names: map-keys($break-points);
 $break-point-size-widths: map-values($break-points);
 
-.row {
+
+
+%row {
 	@extend %ugly-clearfix;
 	
 	margin-left: 0-$gutter;
 	
-	> [class*=column-] {
+	> * {
 		float: left;
 		margin-left: $gutter;
 	}
 	
-	&.no-gutter {
-		margin-left: 0;
+	$count: 5;
+	
+	@while $count <= 100 {
 		
-		> [class*=column-] {
-			margin-left: 0;
-		}
-	}
-}
-
-$i: 1;
-@while $i <= 100 {
-	.row {
-		@if index($column-create-classes, $i) {
-			> .column-#{$i} {
-				@if ($i == 33) or ($i == 66) {
-					width: $i*1%-$gutter+.3333;
-				} @else {
-					width: $i*1%-$gutter;
-				}
+		> %column-#{$count} {
+			@if ($count == 33) or ($count == 66) {
+				width: $count*1%-$gutter+.3333;
+			} @else {
+				width: $count*1%-$gutter;
 			}
 			
-			&.no-gutter > .column-#{$i} {
-				@if ($i == 33) or ($i == 66) {
-					width: $i*1%+.3333;
-				} @else {
-					width: $i*1%;
-				}
+			@if ($count == 100) {
+				clear: both;
 			}
 			
-			> .offset-#{$i} {
-				@if ($i == 33) or ($i == 66) {
-					margin-left: $i*1% + .3333*$i/33 + $gutter;
+			%row-no-gutter & {
+				@if ($count == 33) or ($count == 66) {
+					width: $count*1%+.3333;
 				} @else {
-					margin-left: $i*1% + $gutter;
-				}
-			}
-			
-			&.no-gutter > .offset-#{$i} {
-				@if ($i == 33) or ($i == 66) {
-					margin-left: $i*1% + .3333*$i/33;
-				} @else {
-					margin-left: $i*1%;
-				}
-			}
-			
-			> .push-#{$i} {
-				position: relative;
-				@if ($i == 33) or ($i == 66) {
-					left: $i*1% + .3333*$i/33;
-				} @else {
-					left: $i*1%;
-				}
-				right: auto;
-			}
-			
-			> .pull-#{$i} {
-				position: relative;
-				left: auto;
-				@if ($i == 33) or ($i == 66) {
-					right: $i*1% + .3333*$i/33;
-				} @else {
-					right: $i*1%;
-				}
+					width: $count*1%;
+				}				
 			}
 		}
-	}
-	$i: $i + 1 !global;	
-}
-
-// Having this separate loop reduces output size by around 1.5kb.
-@each $break-point-name, $break-point-size in $break-points {
-	
-	$break-point-size: toRems($break-point-size);
-	
-	// Get the next breakpoint size so we can figure out how to break thhings down.
-	$break-point-next-name: "";
-	@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
-		$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
-	}
-	
-	@include private-media-guess($break-point-name, $break-point-next-name) {
 		
-		$i: 1 !global;
+		> %push-#{$count} {
+			position: relative;
+			@if ($count == 33) or ($count == 66) {
+				left: $count*1% + .3333*$count/33;
+			} @else {
+				left: $count*1%;
+			}
+			right: auto;
+		}
 		
-		@while $i <= 100 {
-			@if index($column-create-classes, $i) {
-				.row > .#{$break-point-name}-to-#{$i} {
-					@if ($i == 33) or ($i == 66) {
-						width: $i*1%-$gutter+.3333;
+		> %pull-#{$count} {
+			position: relative;
+			left: auto;
+			@if ($count == 33) or ($count == 66) {
+				right: $count*1% + .3333*$count/33;
+			} @else {
+				right: $count*1%;
+			}
+		}
+		
+		@each $break-point-name, $break-point-size in $break-points {
+			
+			// Get the next breakpoint size so we can figure out how to break thhings down.
+			$break-point-next-name: "";
+			@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
+				$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
+			}
+			
+			// TODO: You're adding intro logic to do ranges and large-up-to-100, large-down-to-100, etc
+						
+			> %#{$break-point-name}-to-#{$count} {
+				@include private-media-guess($break-point-name, $break-point-next-name) {
+					@if ($count == 33) or ($count == 66) {
+						width: $count*1%-$gutter+.3333;
 					} @else {
-						width: $i*1%-$gutter;
+						width: $count*1%-$gutter;
 					}
-					
-					@if ($i == 100) {
+						
+					@if ($count == 100) {
 						clear: both;
 					}
 					
-					
-					&[class^=offset-],
-					&[class*=" offset-"] {
-						margin-left: auto;
-						
-						.no-gutter > & {
-							margin-left: auto;
-						}
-					}
-					
-					&[class^=push-],
-					&[class*=" push-"],
-					&[class^=pull-],
-					&[class*=" pull-"] {
-						position: inherit;
-						left: auto;
-						right: auto;
+					%row-no-gutter & {
+						@if ($count == 33) or ($count == 66) {
+							width: $count*1%+.3333;
+						} @else {
+							width: $count*1%;
+						}				
 					}
 				}
-				
-				.row > .#{$break-point-name}-push-#{$i},
-				.row > .#{$break-point-name}-push-#{$i}[class^=push-],
-				.row > .#{$break-point-name}-push-#{$i}[class*=" push-"],
-				.row > .#{$break-point-name}-push-#{$i}[class^=pull-],
-				.row > .#{$break-point-name}-push-#{$i}[class*=" pull-"] {
-					position: relative;
-					@if ($i == 33) or ($i == 66) {
-						left: $i*1% + .3333*$i/33;
+			}
+			
+			> %#{$break-point-name}-up-to-#{$count} {
+				@include private-media-guess("", $break-point-name) {
+					@if ($count == 33) or ($count == 66) {
+						width: $count*1%-$gutter+.3333;
 					} @else {
-						left: $i*1%;
+						width: $count*1%-$gutter;
+					}
+						
+					@if ($count == 100) {
+						clear: both;
+					}
+					
+					%row-no-gutter & {
+						@if ($count == 33) or ($count == 66) {
+							width: $count*1%+.3333;
+						} @else {
+							width: $count*1%;
+						}				
+					}
+				}
+			}
+			
+			> %#{$break-point-name}-down-to-#{$count} {
+				@include private-media-guess($break-point-name, "") {
+					@if ($count == 33) or ($count == 66) {
+						width: $count*1%-$gutter+.3333;
+					} @else {
+						width: $count*1%-$gutter;
+					}
+						
+					@if ($count == 100) {
+						clear: both;
+					}
+					
+					%row-no-gutter & {
+						@if ($count == 33) or ($count == 66) {
+							width: $count*1%+.3333;
+						} @else {
+							width: $count*1%;
+						}				
+					}
+				}
+			}
+			
+			> %#{$break-point-name}-push-#{$count} {
+				@include private-media-guess($break-point-name, $break-point-next-name) {
+					position: relative;
+					@if ($count == 33) or ($count == 66) {
+						left: $count*1% + .3333*$count/33;
+					} @else {
+						left: $count*1%;
 					}
 					right: auto;
 				}
-				
-				.row > .#{$break-point-name}-pull-#{$i},
-				.row > .#{$break-point-name}-pull-#{$i}[class^=push-],
-				.row > .#{$break-point-name}-pull-#{$i}[class*=" push-"],
-				.row > .#{$break-point-name}-pull-#{$i}[class^=pull-],
-				.row > .#{$break-point-name}-pull-#{$i}[class*=" pull-"] {
+			}
+			
+			> %#{$break-point-name}-pull-#{$count} {
+				@include private-media-guess($break-point-name, $break-point-next-name) {
 					position: relative;
 					left: auto;
-					@if ($i == 33) or ($i == 66) {
-						right: $i*1% + .3333*$i/33;
+					@if ($count == 33) or ($count == 66) {
+						right: $count*1% + .3333*$count/33;
 					} @else {
-						right: $i*1%;
-					}
-				}
-				
-				.row.no-gutter,
-				.row.#{$break-point-name}-to-no-gutter {
-					> .#{$break-point-name}-to-#{$i} {
-						@if ($i == 33) or ($i == 66) {
-							width: $i*1%+.3333;
-						} @else {
-							width: $i*1%;
-						}
-					}
-				}
-				
-				.row.#{$break-point-name}-to-gutter > .#{$break-point-name}-to-#{$i} {
-					margin-left: $gutter;
-					
-					@if ($i == 33) or ($i == 66) {
-						width: $i*1%-$gutter+.3333;
-					} @else {
-						width: $i*1%-$gutter;
+						right: $count*1%;
 					}
 				}
 			}
+
+			> %#{$break-point-name}-push-none,			
+			> %#{$break-point-name}-pull-none {
+				@include private-media-guess($break-point-name, $break-point-next-name) {
+					position: inherit;
+					left: auto;
+					right: auto;
+				}
+			}
 			
-			$i: $i + 1 !global;	
+			
+			> %#{$break-point-name}-up-push-#{$count} {
+				@include private-media-guess("", $break-point-name) {
+					position: relative;
+					@if ($count == 33) or ($count == 66) {
+						left: $count*1% + .3333*$count/33;
+					} @else {
+						left: $count*1%;
+					}
+					right: auto;
+				}
+			}
+			
+			> %#{$break-point-name}-up-pull-#{$count} {
+				@include private-media-guess("", $break-point-name) {
+					position: relative;
+					left: auto;
+					@if ($count == 33) or ($count == 66) {
+						right: $count*1% + .3333*$count/33;
+					} @else {
+						right: $count*1%;
+					}
+				}
+			}
+
+			> %#{$break-point-name}-up-push-none,			
+			> %#{$break-point-name}-up-pull-none {
+				@include private-media-guess("", $break-point-name) {
+					position: inherit;
+					left: auto;
+					right: auto;
+				}
+			}
+			
+			
+			> %#{$break-point-name}-down-push-#{$count} {
+				@include private-media-guess($break-point-name, "") {
+					position: relative;
+					@if ($count == 33) or ($count == 66) {
+						left: $count*1% + .3333*$count/33;
+					} @else {
+						left: $count*1%;
+					}
+					right: auto;
+				}
+			}
+			
+			> %#{$break-point-name}-down-pull-#{$count} {
+				@include private-media-guess($break-point-name, "") {
+					position: relative;
+					left: auto;
+					@if ($count == 33) or ($count == 66) {
+						right: $count*1% + .3333*$count/33;
+					} @else {
+						right: $count*1%;
+					}
+				}
+			}
+
+			> %#{$break-point-name}-down-push-none,			
+			> %#{$break-point-name}-down-pull-none {
+				@include private-media-guess($break-point-name, "") {
+					position: inherit;
+					left: auto;
+					right: auto;
+				}
+			}
+			
+			%#{$break-point-name}-hide {
+				@include private-media-guess($break-point-name, $break-point-next-name) {
+					display: none;
+				}
+			}
+			
+			%#{$break-point-name}-up-hide {
+				@include private-media-guess("", $break-point-name) {
+					display: none;
+				}
+			}
+			
+			%#{$break-point-name}-down-hide {
+				@include private-media-guess($break-point-name, "") {
+					display: none;
+				}
+			}
+		
+		}	
+		@if $count == 30 {
+			$count: $count + 3;
+		}
+		@else if $count == 33 {
+			$count: $count + 2;			
+		}
+		@else if $count == 65 {
+			$count: $count + 1;			
+		}
+		@else if $count == 66 {
+			$count: $count + 4;			
+		}
+		@else {
+			$count: $count + 5;
+		}
+	}
+}
+
+%row-no-gutter {
+	@extend %row;
+	
+	margin-left: 0;
+	
+	> * {
+		margin-left: 0;
+	}
+}
+
+@if length($column-create-classes) > 0 {
+
+	.row {
+		@extend %row;
+		
+		&.no-gutter {
+			@extend %row-no-gutter;
+		}
+	}
+	
+	@each $count in $column-create-classes {
+		> .column-#{$count} {
+			@extend %column-#{$count};
 		}
 		
-		.#{$break-point-name}-hide {
-			display: none;
+		> .push-#{$count} {
+			@extend %push-#{$count};
 		}
 		
-		.row {
+		> .pull-#{$count} {
+			@extend %pull-#{$count};
+		}
+		
+		@each $break-point-name, $break-point-size in $break-points {
 			
-			&.no-gutter.#{$break-point-name}-to-gutter {
-				margin-left: 0-$gutter;
+			// Get the next breakpoint size so we can figure out how to break thhings down.
+			$break-point-next-name: "";
+			@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
+				$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
 			}
 			
-			&.#{$break-point-name}-to-100 [class*=column-], 
-			&.#{$break-point-name}-to-100 [class*=column-][class*=#{$break-point-name}-to-] {
-				margin-left: 0;
-				clear: both;
-				width: auto;
+			// TODO: You're adding intro logic to do ranges and large-up-to-100, large-down-to-100, etc
+						
+			> .#{$break-point-name}-to-#{$count} {
+				@extend %#{$break-point-name}-to-#{$count};
 			}
 			
-			&.#{$break-point-name}-to-100,
-			&.#{$break-point-name}-to-100[class*=-to-gutter] {
-				margin-left: 0;
+			> .#{$break-point-name}-up-to-#{$count} {
+				@extend %#{$break-point-name}-up-to-#{$count};
 			}
+			
+			> .#{$break-point-name}-down-to-#{$count} {
+				@extend %#{$break-point-name}-down-to-#{$count};
+			}
+			
+			> .#{$break-point-name}-push-#{$count} {
+				@extend %#{$break-point-name}-push-#{$count};
+			}
+			
+			> .#{$break-point-name}-pull-#{$count} {
+				@extend %#{$break-point-name}-pull-#{$count};
+			}
+
+			> .#{$break-point-name}-push-none {
+				@extend %#{$break-point-name}-push-none;
+			}
+			
+			> .#{$break-point-name}-pull-none {
+				@extend %#{$break-point-name}-pull-none;
+			}
+			
+			> .#{$break-point-name}-up-push-#{$count} {
+				@extend %#{$break-point-name}-up-push-#{$count};
+			}
+			
+			> .#{$break-point-name}-up-pull-#{$count} {
+				@extend %#{$break-point-name}-up-pull-#{$count};
+			}
+
+			> .#{$break-point-name}-up-push-none {
+				@extend %#{$break-point-name}-up-push-none;
+			}
+			
+			> .#{$break-point-name}-up-pull-none {
+				@extend %#{$break-point-name}-up-pull-none;
+			}
+			
+			> .#{$break-point-name}-down-push-#{$count} {
+				@extend %#{$break-point-name}-down-push-#{$count};
+			}
+			
+			> .#{$break-point-name}-down-pull-#{$count} {
+				@extend %#{$break-point-name}-down-pull-#{$count};
+			}
+
+			> .#{$break-point-name}-down-push-none {
+				@extend %#{$break-point-name}-down-push-none;
+			}
+			
+			> .#{$break-point-name}-down-pull-none {
+				@extend %#{$break-point-name}-down-pull-none;
+			}
+			
+			.#{$break-point-name}-hide {
+				@extend %#{$break-point-name}-hide;
+			}
+			
+			.#{$break-point-name}-up-hide {
+				@extend %#{$break-point-name}-up-hide;
+			}
+			
+			.#{$break-point-name}-down-hide {
+				@extend %#{$break-point-name}-down-hide;
+			}
+		
 		}
 	}
 }
