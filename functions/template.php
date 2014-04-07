@@ -9,6 +9,10 @@
  */
 
 
+// As a precaution, trigger a filter to put Gravity Forms code in footer below the jQuery include.
+add_filter('gform_init_scripts_footer', '__return_true');
+
+
 /**
  * Setup of basic theme support
  *

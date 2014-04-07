@@ -207,13 +207,22 @@ function initOfflineSupport() {
  * @since	1.0
  */
 function initAjax() {
-	var body = $(document.body);
+	var body = $(document.body),
+		ignoreLastClick = false;
 	
 	function handlePopState(e) {
 		if(history.ready) {
+			// For some reason, anchor jumps are triggering popStates.
+			// This helps make that not happen.
+			if(ignoreLastClick) {
+				ignoreLastClick = false;
+				return;
+			}
+			
 			if(window.dev) {
 				console.log('Handling popState.');
 			}
+			
 			e.preventDefault();
 			handleLinkClick.call(
 					$('<a href="' + location.href + '"></a>').get(0),
@@ -229,10 +238,22 @@ function initAjax() {
 	
 	function handleLinkClick(e) {
 		var me = $(this),
-			href = me.attr('href');
-		if(href.indexOf('wp-admin') !== -1) {
+			href = me.attr('href'),
+			href_split = href.split('/');
+		
+		// For some reason, anchor jumps are triggering popStates.
+		// This helps make that not happen.
+		if(href.indexOf('#') === 0) {
+			ignoreLastClick = true;
+			e.preventDefault();
+			location.href = href;
 			return;
 		}
+		
+		if(href.indexOf('wp-admin') !== -1 || href.indexOf('wp-login') !== -1) {
+			return;
+		}
+		
 		if(
 			(href.substr(0, 1) === '/' || location.href.split('/')[2] === href.split('/')[2]) &&
 			!href.match(/\.(jpg|jpeg|gif|png|pdf|doc|docx)$/)
