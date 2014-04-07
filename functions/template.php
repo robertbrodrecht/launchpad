@@ -105,19 +105,28 @@ function launchpad_title($echo = false) {
  *
  * @param		$max_words int The number of words to use if we generate from content based on space characters
  * @param		$echo bool Whether or not to echo the excerpt
+ * @param		$id int The Post to use.  Default is the current post.
  * @since		1.0
  */
-function launchpad_excerpt($max_words = 60, $echo = false) {
+function launchpad_excerpt($max_words = 60, $echo = false, $id = false) {
 	global $post;
+	
+	if($id) {
+		$tmp_post = get_post($id);
+	}
+	if(!$tmp_post) {
+		$tmp_post = $post;
+	}
+	
 	$max_words = (int) $max_words;
-	if($post->post_excerpt) {
-		$excerpt = $post->post_excerpt;
-	} else if(stristr($post->post_content, '<!--more-->') !== false) {
-		$excerpt = explode('<!--more-->', $post->post_content);
+	if($tmp_post->post_excerpt) {
+		$excerpt = $tmp_post->post_excerpt;
+	} else if(stristr($tmp_post->post_content, '<!--more-->') !== false) {
+		$excerpt = explode('<!--more-->', $tmp_post->post_content);
 		$excerpt = array_shift($excerpt);
 		$excerpt = strip_tags(apply_filters('the_content', $excerpt));
 	} else {
-		$content = $post->post_content;
+		$content = $tmp_post->post_content;
 		$content = trim(preg_replace('/\s+/', ' ', strip_tags(apply_filters('the_content', $content))));
 		$excerpt = explode(' ', $content);
 		$excerpt = array_slice($excerpt, 0, $max_words);

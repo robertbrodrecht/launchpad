@@ -86,16 +86,17 @@ $count: 5 !global;
 	}
 }
 
-$count: 5 !global;
-@while $count <= 100 {
-	
-	@each $break-point-name, $break-point-size in $break-points {
+@each $break-point-name, $break-point-size in $break-points {
 		
-		// Get the next breakpoint size so we can figure out how to break things down.
-		$break-point-next-name: "";
-		@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
-			$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
-		}
+	// Get the next breakpoint size so we can figure out how to break things down.
+	$break-point-next-name: "";
+	@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
+		$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
+	}
+	
+	$count: 5 !global;
+	
+	@while $count <= 100 {
 		
 		@include private-media-guess($break-point-name, $break-point-next-name) {
 					
@@ -140,17 +141,6 @@ $count: 5 !global;
 				} @else {
 					right: $count*1%;
 				}
-			}
-
-			%row > %#{$break-point-name}-push-none,			
-			%row > %#{$break-point-name}-pull-none {
-				position: inherit;
-				left: auto;
-				right: auto;
-			}
-			
-			%#{$break-point-name}-hide {
-				display: none;
 			}
 		}
 		
@@ -197,17 +187,6 @@ $count: 5 !global;
 					right: $count*1%;
 				}
 			}
-	
-			%row > %#{$break-point-name}-up-push-none,			
-			%row > %#{$break-point-name}-up-pull-none {
-				position: inherit;
-				left: auto;
-				right: auto;
-			}
-			
-			%#{$break-point-name}-up-hide {
-				display: none;
-			}
 		}
 		
 		@include media-max($break-point-name) {
@@ -252,32 +231,62 @@ $count: 5 !global;
 					right: $count*1%;
 				}
 			}
-
-			%row > %#{$break-point-name}-down-push-none,			
-			%row > %#{$break-point-name}-down-pull-none {
-				position: inherit;
-				left: auto;
-				right: auto;
-			}
-			%#{$break-point-name}-down-hide {
-				display: none;
-			}
 		}
-	}	
-	@if $count == 30 {
-		$count: $count + 3 !global;
+
+		@if $count == 30 {
+			$count: $count + 3 !global;
+		}
+		@else if $count == 33 {
+			$count: $count + 2 !global;
+		}
+		@else if $count == 65 {
+			$count: $count + 1 !global;
+		}
+		@else if $count == 66 {
+			$count: $count + 4 !global;
+		}
+		@else {
+			$count: $count + 5 !global;
+		}
 	}
-	@else if $count == 33 {
-		$count: $count + 2 !global;
+	
+	@include private-media-guess($break-point-name, $break-point-next-name) {	
+		%row > %#{$break-point-name}-push-none,			
+		%row > %#{$break-point-name}-pull-none {
+			position: inherit;
+			left: auto;
+			right: auto;
+		}
+		
+		%#{$break-point-name}-hide {
+			display: none;
+		}
 	}
-	@else if $count == 65 {
-		$count: $count + 1 !global;
+	
+	@include media-min($break-point-name) {
+		%row > %#{$break-point-name}-up-push-none,			
+		%row > %#{$break-point-name}-up-pull-none {
+			position: inherit;
+			left: auto;
+			right: auto;
+		}
+		
+		%#{$break-point-name}-up-hide {
+			display: none;
+		}
 	}
-	@else if $count == 66 {
-		$count: $count + 4 !global;
-	}
-	@else {
-		$count: $count + 5 !global;
+	
+	@include media-max($break-point-name) {
+		%row > %#{$break-point-name}-down-push-none,			
+		%row > %#{$break-point-name}-down-pull-none {
+			position: inherit;
+			left: auto;
+			right: auto;
+		}
+		%#{$break-point-name}-down-hide {
+			/* %#{$break-point-name}-down-hide */
+			display: none;
+		}
 	}
 }
 
@@ -312,8 +321,6 @@ $count: 5 !global;
 			@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
 				$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
 			}
-			
-			// TODO: You're adding intro logic to do ranges and large-up-to-100, large-down-to-100, etc
 						
 			.#{$break-point-name}-to-#{$count} {
 				@extend %#{$break-point-name}-to-#{$count};

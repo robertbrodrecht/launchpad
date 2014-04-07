@@ -238,8 +238,7 @@ function initAjax() {
 	
 	function handleLinkClick(e) {
 		var me = $(this),
-			href = me.attr('href'),
-			href_split = href.split('/');
+			href = me.attr('href');
 		
 		// For some reason, anchor jumps are triggering popStates.
 		// This helps make that not happen.
