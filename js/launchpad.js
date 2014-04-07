@@ -244,8 +244,6 @@ function initAjax() {
 		// This helps make that not happen.
 		if(href.indexOf('#') === 0) {
 			ignoreLastClick = true;
-			e.preventDefault();
-			location.href = href;
 			return;
 		}
 		
