@@ -29,7 +29,7 @@ I'll be building out the feature list as I get the time.
 * Calculated percentage root font size based on SASS variable.  You enter '10px' and that gets converted to 62.5%.
 * REM mixin based on root font size variable (see previous bullet) to make it dead easy to use REMs with a fallback.  E.g. <code>@include rem('padding', 5px 20px);</code>
 * Vertical rhythm based on SASS variables.
-* Grid system using SASS variables to convert a gutter width as a percent at a particular container width, and simultanious gutter-less classes via <code>.no-gutter</code>.
+* Grid system using SASS variables to convert a gutter width as a percent at a particular container width, and simultanious gutter-less classes via <code>@extend %row-no-gutter</code>.  You can also set a variable to generate column classes for use in HTML.
 * Conditional comments for IE8/9 that don't make your HTML look like a janky mess.  Use <code>.msie-8 ~ *</code> as your a prefix to a selector to change styles for IE8.
 * Unsupported browser "[Universal Stylesheet](https://code.google.com/p/universal-ie6-css/)."
 
@@ -109,8 +109,10 @@ To Do For 1.0
 
 * Add filters/actions in WP code for modifying things that people may want to modify. Partially implemented.
 * Easy way to add custom fields to post types.  Implemented but only lightly tested.  NEEDS SERIOUS TESTING.
-* Image and upload support in custom fields.
+* Image upload support in custom fields.
+* Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
+* Namespace or put closures on JavaScript.
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme and a child theme.
