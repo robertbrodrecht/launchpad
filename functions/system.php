@@ -366,3 +366,17 @@ function launchpad_save_post_data($post_id) {
 	}
 }
 add_action('save_post', 'launchpad_save_post_data');
+
+
+
+/**
+ * Allow SVG Uploads
+ *
+ * @param		array $mimes Existing mime-types.
+ * @since		1.0
+ */
+function launchpad_mime_types($mimes) {
+	$mimes['svg'] = 'image/svg+xml';
+	return $mimes;
+}
+add_filter('upload_mimes', 'launchpad_mime_types');
