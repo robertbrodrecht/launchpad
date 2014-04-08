@@ -468,7 +468,7 @@ function launchpad_render_settings_field($args, $subfield = false, $field_prefix
 				$val = '';
 			}
 			
-			echo '<input type="hidden" name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" value="' . $val . '" class="regular-text">&nbsp;<button type="button" class="button insert-media add_media" data-for="' . $args['name'] . '" class="file-button">Upload File</button>';
+			echo '<input type="hidden" name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button button insert-media add_media" data-for="' . $args['name'] . '" class="file-button">Upload File</button>';
 			if($existing) {
 				echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $args['name'] . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
 			}
