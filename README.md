@@ -109,7 +109,6 @@ To Do For 1.0
 
 * Add filters/actions in WP code for modifying things that people may want to modify. Partially implemented.
 * Easy way to add custom fields to post types.  Implemented but only lightly tested.  NEEDS SERIOUS TESTING.
-* Image upload support in custom fields.
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * Namespace or put closures on JavaScript.
