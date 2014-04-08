@@ -129,6 +129,12 @@ small.launchpad-inline {
 	width: 1.5em;
 }
 
+.launchpad-delete-file > * {
+	height: auto;
+	max-width: 150px;
+	width: auto;
+}
+
 .launchpad-full-button {
 	display: block;
 	width: 100%;

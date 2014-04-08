@@ -32,7 +32,7 @@ jQuery(document).ready(
 							if(update.length) {
 								update.attr('value', attachment.id);
 								update.parent().append(
-									'<br><a href="#" class="button insert-media add_media launchpad-delete-file" onclick="document.getElementById(this.attribute(\'data-for\')).value=\'\'; this.parentNode.removeChild(this); return false;"><img src="' + attachment.sizes.thumbnail.url + '"></a>'
+									'<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(this.attribute(\'data-for\')).value=\'\'; this.parentNode.removeChild(this); return false;"><img src="' + (attachment.sizes && attachment.sizes.thumbnail ?  attachment.sizes.thumbnail.url :  attachment.url) + '"></a>'
 								);
 							} else {
 								alert('There was a problem attaching the media.  Please contact your developer.');
