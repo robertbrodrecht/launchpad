@@ -102,3 +102,29 @@ small.launchpad-inline {
 	float: left;
 	width: 4em;
 }
+
+.launchpad-delete-file {
+	background: #EFEFEF;
+	border: 1px solid silver;
+	display: block;
+	margin-top: .5em;
+	padding: 1em;
+	position: relative;
+	text-align: center;
+}
+
+.launchpad-delete-file:before {
+	background: #FFF;
+	border: 4px solid #000;
+	border-radius: 1em;
+	color: #000;
+	content: '×';
+	display: block;
+	font-size: 20px;
+	line-height: 1.5em;
+	position: absolute;
+	right: -1em;	
+	text-align: center;
+	top: -1em;
+	width: 1.5em;
+}

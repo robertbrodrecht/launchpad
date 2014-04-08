@@ -10,6 +10,42 @@
  */
 
 
+/**
+ * Enable file uploads.
+ *
+ * @since		1.0
+ */
+function launchpad_enable_media_upload() {
+	wp_enqueue_script(
+		array(
+			'jquery',
+			'jquery-ui-core',
+			'jquery-ui-tabs',
+			'jquery-ui-sortable',
+			'wp-color-picker',
+			'thickbox',
+			'media-upload',
+			'acf-input',
+			'acf-datepicker',	
+		)
+	);
+	
+	wp_enqueue_style(
+		array(
+			'thickbox',
+			'wp-color-picker',
+			'acf-global',
+			'acf-input',
+			'acf-datepicker',	
+		)
+	);
+	
+	if(function_exists('wp_enqueue_media') && !did_action('wp_enqueue_media')){
+		wp_enqueue_media();
+	}
+}
+add_action('admin_init', 'launchpad_enable_media_upload');
+
 
 /**
  * Activate the Style Selector
@@ -316,10 +352,9 @@ function launchpad_get_setting_fields() {
 							)
 						),
 						'logo' => array(
-							'name' => 'Logo File URL',
+							'name' => 'Logo Upload',
 							'args' => array(
-								'type' => 'text',
-								'default' => THEME_PATH . '/images/logo.png'
+								'type' => 'file'
 							)
 						)
 					)
@@ -421,6 +456,25 @@ function launchpad_render_settings_field($args, $subfield = false, $field_prefix
 			echo '<input type="checkbox" name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" ' . ($val ? ' checked="checked"' : '') . '>';
 			if($subfield) {
 				echo ' ' . $subfield . '</label>';
+			}
+		break;
+		case 'file':
+			if($subfield) {
+				echo '<label class="' . $class . '">' . $subfield . ' ';
+			}
+			
+			$existing = wp_get_attachment_image($val);
+			if(!$existing) {
+				$val = '';
+			}
+			
+			echo '<input type="hidden" name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" value="' . $val . '" class="regular-text">&nbsp;<button type="button" class="button insert-media add_media" data-for="' . $args['name'] . '" class="file-button">Upload File</button>';
+			if($existing) {
+				echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $args['name'] . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
+			}
+			
+			if($subfield) {
+				echo '</label>';
 			}
 		break;
 		case 'text':
@@ -690,17 +744,26 @@ function launchpad_custom_login() {
 		}
 		<?php 
 		
-		if($site_options['logo'] && file_exists($site_options['logo'])) { 
-			$size = getimagesize($site_options['logo']);
+		if($site_options['logo']) { 
+			$logo = wp_get_attachment_image_src($site_options['logo'], 'full');
+			if($logo) {
+				$logo = $logo[0];
+				$size = getimagesize($logo);
+
 			
 		?>
 		body.login div#login h1 a {
-			background-image: url(<?php echo $site_options['logo'] ?>);
+			background-image: url(<?php echo $logo ?>);
 			background-size: contain;
 			height: <?php echo ((!$size || $size[0] > $size[1]) ? '80px' : '400px'); ?>;
 			width: 100%;
 		}
-		<?php } ?>
+		<?php
+		 
+			}
+		} 
+		
+		?>
 		.login #nav a:hover, 
 		.login #backtoblog a:hover,
 		.login #nav a:focus,
