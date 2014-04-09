@@ -28,12 +28,18 @@ jQuery(document).ready(
 						function() {
 							var attachment = custom_uploader.state().get('selection').first().toJSON(),
 								update = jQuery('#' + me.data('for')),
-								ret = '';
+								delete_link = update.parent().find('.launchpad-delete-file'),
+								ret = '', remove_link;
 							if(update.length) {
 								update.attr('value', attachment.id);
-								update.parent().append(
-									'<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(this.attribute(\'data-for\')).value=\'\'; this.parentNode.removeChild(this); return false;"><img src="' + (attachment.sizes && attachment.sizes.thumbnail ?  attachment.sizes.thumbnail.url :  attachment.url) + '"></a>'
-								);
+								
+								remove_link = jQuery('<a href="#" class="launchpad-delete-file" data-for="' + me.data('for') + '" onclick="document.getElementById(this.getAttribute(\'data-for\')).value=\'\'; this.parentNode.removeChild(this); return false;"><img src="' + (attachment.sizes && attachment.sizes.thumbnail ?  attachment.sizes.thumbnail.url :  attachment.url) + '"></a>');
+								
+								if(delete_link.length) {
+									delete_link.replaceWith(remove_link);
+								} else {
+									update.parent().append(remove_link);
+								}
 							} else {
 								alert('There was a problem attaching the media.  Please contact your developer.');
 							}
