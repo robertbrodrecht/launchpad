@@ -12,20 +12,20 @@
 	}
 
 	@if type-of($px) == "number" {
-		@if unit($px) == "rem" {
-			@return $px;
-		} @else {
+		@if unit($px) == "px" {
 			@return $px / $baseline-rem;
+		} @else {
+			@return $px;
 		}
 	} @else {
 		$rems: ();
 
 		@each $value in $px {
 			@if type-of($px) == "number" {
-				@if $value == 0 {
-					$rems: append($rems, $value);
-				} @else {
+				@if unit($px) == "px" {
 					$rems: append($rems, ($value / $baseline-rem));
+				} @else {
+					$rems: append($rems, $value);
 				}
 			} @else {
 				$rems: append($rems, $value);
@@ -45,7 +45,7 @@
 	
 	@if type-of($rem) == "number" and unit($rem) == "rem" {
 		$rem: ($rem / ($rem * 0 + 1)) * ($root_font_fix / ($root_font_fix * 0 + 1));
-		@return $rem + "em";
+		@return $rem * 1em;
 	} @else {
 		@return $rem;
 	}
@@ -73,12 +73,16 @@
 // Max-width media query.
 @mixin media-max($size) {
 	@if type-of($size) == "number" {
-		$size: toRems($size);
+		@if unit($size) != "rem" {
+			$size: toRems($size);
+		}
 	} @else {
 		$size: toRems(map-get($break-points, $size));
 	}
 	
-	$size: mqRemToEm($size);
+	@if unit($size) == "rem" {
+		$size: mqRemToEm($size);
+	}
 	
 	@media (max-width: $size) {
 		@content;
@@ -88,12 +92,16 @@
 // Min-width media query.
 @mixin media-min($size) {
 	@if type-of($size) == "number" {
-		$size: toRems($size);
+		@if unit($size) != "rem" {
+			$size: toRems($size);
+		}
 	} @else {
 		$size: toRems(map-get($break-points, $size));
 	}
 	
-	$size: mqRemToEm($size);
+	@if unit($size) == "rem" {
+		$size: mqRemToEm($size);
+	}
 	
 	@media (min-width: $size) {
 		@content;
@@ -103,23 +111,32 @@
 // Create a media query that matches the inner range of two values.
 @mixin media-range($small, $large) {
 	@if type-of($small) == "number" {
-		$small: toRems($small);
+		@if unit($small) != "rem" {
+			$small: toRems($small);
+		}
 	} @else {
 		$small: toRems(map-get($break-points, $small));
 	}
 	@if type-of($large) == "number" {
-		$large: toRems($large);
+		@if unit($large) != "rem" {
+			$large: toRems($large);
+		}
 	} @else {
 		$large: toRems(map-get($break-points, $large));
 	}
+	
 	@if $small > $large {
 		$tmp_small: $small;
 		$small: $large;
 		$large: $tmp_small;
 	}
 	
-	$small: mqRemToEm($small);
-	$large: mqRemToEm($large);
+	@if unit($small) == "rem" {
+		$small: mqRemToEm($small);
+	}
+	@if unit($large) == "rem" {
+		$large: mqRemToEm($large);
+	}
 	
 	@media (min-width: $small) and (max-width: $large) {
 		@content;
@@ -129,24 +146,33 @@
 // Create a media query that matches the outer range of two values.
 @mixin media-range-outer($small, $large) {
 	@if type-of($small) == "number" {
-		$small: toRems($small);
+		@if unit($small) != "rem" {
+			$small: toRems($small);
+		}
 	} @else {
 		$small: toRems(map-get($break-points, $small));
 	}
 	@if type-of($large) == "number" {
-		$large: toRems($large);
+		@if unit($large) != "rem" {
+			$large: toRems($large);
+		}
 	} @else {
 		$large: toRems(map-get($break-points, $large));
 	}
-	
-	$small: mqRemToEm($small);
-	$large: mqRemToEm($large);
 	
 	@if $small > $large {
 		$tmp_small: $small;
 		$small: $large;
 		$large: $tmp_small;
 	}
+	
+	@if unit($small) == "rem" {
+		$small: mqRemToEm($small);
+	}
+	@if unit($large) == "rem" {
+		$large: mqRemToEm($large);
+	}	
+	
 	@media (max-width: $small), (min-width: $large) {
 		@content;
 	}
@@ -155,7 +181,7 @@
 // DO NOT USE THIS MIXIN.  INTERNAL USE ONLY!
 @mixin private-media-guess($small, $large) {
 	@if $small != "" and $large != "" {
-		@if map-get($break-points, $small) > map-get($break-points, $large) {
+		@if $small > $large {
 			$tmp_small: $small;
 			$small: $large;
 			$large: $tmp_small;

@@ -90,15 +90,27 @@ $count: 5 !global;
 		
 	// Get the next breakpoint size so we can figure out how to break things down.
 	$break-point-next-name: "";
+	$break-point-next-size: "";
 	@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
 		$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
+		$break-point-next-size: nth($break-point-size-widths, index($break-point-size-names, $break-point-name)+1);
+	}
+	
+	// This is prep-work to "cache" the media query ems to hopefully speed things up.
+	// But the grid FREAKS OUT when you send it anything other than a string.
+	@if type-of($break-point-size) == "number" and unit($break-point-size) == "px" {
+		$break-point-size: mqRemToEm(toRems($break-point-size));
+	}
+	
+	@if type-of($break-point-next-size) == "number" and unit($break-point-next-size) == "px" {
+		$break-point-next-size: mqRemToEm(toRems($break-point-next-size));
 	}
 	
 	$count: 5 !global;
 	
 	@while $count <= 100 {
 		
-		@include private-media-guess($break-point-name, $break-point-next-name) {
+		@include private-media-guess($break-point-size, $break-point-next-size) {
 					
 			%row > %#{$break-point-name}-to-#{$count} {
 
@@ -144,7 +156,7 @@ $count: 5 !global;
 			}
 		}
 		
-		@include media-min($break-point-name) {
+		@include media-min($break-point-size) {
 			%row > %#{$break-point-name}-up-to-#{$count} {
 				@if ($count == 33) or ($count == 66) {
 					width: $count*1%-$gutter+.3333;
@@ -189,7 +201,7 @@ $count: 5 !global;
 			}
 		}
 		
-		@include media-max($break-point-name) {
+		@include media-max($break-point-size) {
 			%row > %#{$break-point-name}-down-to-#{$count} {
 				@if ($count == 33) or ($count == 66) {
 					width: $count*1%-$gutter+.3333;
@@ -250,7 +262,7 @@ $count: 5 !global;
 		}
 	}
 	
-	@include private-media-guess($break-point-name, $break-point-next-name) {	
+	@include private-media-guess($break-point-size, $break-point-next-size) {	
 		%row > %#{$break-point-name}-push-none,			
 		%row > %#{$break-point-name}-pull-none {
 			position: inherit;
@@ -263,7 +275,7 @@ $count: 5 !global;
 		}
 	}
 	
-	@include media-min($break-point-name) {
+	@include media-min($break-point-size) {
 		%row > %#{$break-point-name}-up-push-none,			
 		%row > %#{$break-point-name}-up-pull-none {
 			position: inherit;
@@ -276,7 +288,7 @@ $count: 5 !global;
 		}
 	}
 	
-	@include media-max($break-point-name) {
+	@include media-max($break-point-size) {
 		%row > %#{$break-point-name}-down-push-none,			
 		%row > %#{$break-point-name}-down-pull-none {
 			position: inherit;
