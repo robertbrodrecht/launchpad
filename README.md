@@ -118,6 +118,7 @@ To Do For 1.0
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
 * Updates through WP Admin.
+* Add filter to change settings sidebar nav item name and location.
 
 
 To Do For 2.0
