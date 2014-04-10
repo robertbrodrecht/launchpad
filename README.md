@@ -107,6 +107,7 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
+* Optimize SASS for faster compile time.  Grid seems fast as a stand-alone thing, but compiling this site is way too slow.
 * Add filters/actions in WP code for modifying things that people may want to modify. Partially implemented.
 * Easy way to add custom fields to post types.  Implemented but only lightly tested.  NEEDS SERIOUS TESTING.
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
