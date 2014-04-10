@@ -109,7 +109,7 @@ function initHeightMatch() {
 		}
 	);
 	
-	heightMatch();
+	setTimeout(heightMatch, 1);
 	
 	$(window).on(
 			'resizeEnd',
@@ -117,8 +117,10 @@ function initHeightMatch() {
 		);
 		
 	$(document.body).on(
-			'ajaxRequestEnd',
-			heightMatch
+			'ajaxRequestEnd load',
+			function() {
+				setTimeout(heightMatch, 1);
+			}
 		);
 }
 
