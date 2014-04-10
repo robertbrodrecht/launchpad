@@ -112,6 +112,11 @@ function initHeightMatch() {
 		);
 }
 
+/**
+ * Create Height Match Data from Children Data
+ *
+ * @since	1.0
+ */
 function reinitHeightMatch() {
 	$('[data-height-match-children]').each(
 		function() {
