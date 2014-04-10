@@ -95,6 +95,24 @@ function initHeightMatch() {
 			);
 	}
 	
+	reinitHeightMatch();
+	
+	setTimeout(heightMatch, 1);
+	
+	$(window).on(
+			'resizeEnd',
+			heightMatch
+		);
+		
+	$(document.body).on(
+			'ajaxRequestEnd load',
+			function() {
+				setTimeout(heightMatch, 100);
+			}
+		);
+}
+
+function reinitHeightMatch() {
 	$('[data-height-match-children]').each(
 		function() {
 			var me = $(this),
@@ -108,20 +126,6 @@ function initHeightMatch() {
 			);
 		}
 	);
-	
-	setTimeout(heightMatch, 1);
-	
-	$(window).on(
-			'resizeEnd',
-			heightMatch
-		);
-		
-	$(document.body).on(
-			'ajaxRequestEnd load',
-			function() {
-				setTimeout(heightMatch, 1);
-			}
-		);
 }
 
 
@@ -478,6 +482,7 @@ function reinit() {
 	detectPositionSticky();
 	detectTransitions();
 	detectTouchCapable();
+	reinitHeightMatch();
 	$(document.body).trigger('launchpadReinit');
 }
 
