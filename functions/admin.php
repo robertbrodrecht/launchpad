@@ -16,6 +16,8 @@
  * @since		1.0
  */
 function launchpad_enable_media_upload() {
+	global $post; 
+	
 	wp_enqueue_script(
 		array(
 			'jquery',
@@ -40,11 +42,12 @@ function launchpad_enable_media_upload() {
 		)
 	);
 	
+	
 	if(function_exists('wp_enqueue_media') && !did_action('wp_enqueue_media')){
 		wp_enqueue_media();
 	}
 }
-add_action('admin_init', 'launchpad_enable_media_upload');
+add_action('admin_enqueue_scripts', 'launchpad_enable_media_upload');
 
 
 /**
