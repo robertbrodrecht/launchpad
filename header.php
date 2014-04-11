@@ -26,6 +26,12 @@ $excerpt = launchpad_excerpt();
 		<link rel="stylesheet" type="text/css" id="screen-css" media="screen, projection, handheld, tv" href="/css/screen.css">
 		<link rel="stylesheet" type="text/css" media="print" href="/css/print.css">
 		
+		
+		<?php if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/design-tweaks.css')) { ?>
+		
+		<link rel="stylesheet" type="text/css" id="screen-css" media="screen, projection, handheld, tv" href="/design-tweaks.css">
+		<?php } ?>
+		
 		<link rel="icon" href="/images/icons/favicon.png">
 		<link rel="icon" href="/images/icons/favicon_2x.png" media="(-webkit-min-device-pixel-ratio: 2)">
 		
