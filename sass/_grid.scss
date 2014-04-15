@@ -69,21 +69,8 @@ $count: 5 !global;
 			right: $count*1%;
 		}
 	}
-	@if $count == 30 {
-		$count: $count + 3 !global;
-	}
-	@else if $count == 33 {
-		$count: $count + 2 !global;
-	}
-	@else if $count == 65 {
-		$count: $count + 1 !global;
-	}
-	@else if $count == 66 {
-		$count: $count + 4 !global;
-	}
-	@else {
-		$count: $count + 5 !global;
-	}
+	
+	$count: $count + 1 !global;
 }
 
 @each $break-point-name, $break-point-size in $break-points {
@@ -296,7 +283,6 @@ $count: 5 !global;
 			right: auto;
 		}
 		%#{$break-point-name}-down-hide {
-			/* %#{$break-point-name}-down-hide */
 			display: none;
 		}
 	}
@@ -304,108 +290,5 @@ $count: 5 !global;
 
 
 @if length($column-create-classes) > 0 {
-
-	.row {
-		@extend %row;
-	}
-	
-	.row.no-gutter {
-		@extend %row-no-gutter;
-	}
-	
-	@each $count in $column-create-classes {
-		.column-#{$count} {
-			@extend %column-#{$count};
-		}
-		
-		.push-#{$count} {
-			@extend %push-#{$count};
-		}
-		
-		.pull-#{$count} {
-			@extend %pull-#{$count};
-		}
-		
-		@each $break-point-name, $break-point-size in $break-points {
-			
-			// Get the next breakpoint size so we can figure out how to break thhings down.
-			$break-point-next-name: "";
-			@if length($break-point-size-names) > index($break-point-size-names, $break-point-name) {
-				$break-point-next-name: nth($break-point-size-names, index($break-point-size-names, $break-point-name)+1);
-			}
-						
-			.#{$break-point-name}-to-#{$count} {
-				@extend %#{$break-point-name}-to-#{$count};
-			}
-			
-			.#{$break-point-name}-up-to-#{$count} {
-				@extend %#{$break-point-name}-up-to-#{$count};
-			}
-			
-			.#{$break-point-name}-down-to-#{$count} {
-				@extend %#{$break-point-name}-down-to-#{$count};
-			}
-			
-			.#{$break-point-name}-push-#{$count} {
-				@extend %#{$break-point-name}-push-#{$count};
-			}
-			
-			.#{$break-point-name}-pull-#{$count} {
-				@extend %#{$break-point-name}-pull-#{$count};
-			}
-
-			.#{$break-point-name}-push-none {
-				@extend %#{$break-point-name}-push-none;
-			}
-			
-			.#{$break-point-name}-pull-none {
-				@extend %#{$break-point-name}-pull-none;
-			}
-			
-			.#{$break-point-name}-up-push-#{$count} {
-				@extend %#{$break-point-name}-up-push-#{$count};
-			}
-			
-			.#{$break-point-name}-up-pull-#{$count} {
-				@extend %#{$break-point-name}-up-pull-#{$count};
-			}
-			
-			.#{$break-point-name}-up-push-none {
-				@extend %#{$break-point-name}-up-push-none;
-			}
-			
-			.#{$break-point-name}-up-pull-none {
-				@extend %#{$break-point-name}-up-pull-none;
-			}
-			
-			.#{$break-point-name}-down-push-#{$count} {
-				@extend %#{$break-point-name}-down-push-#{$count};
-			}
-			
-			.#{$break-point-name}-down-pull-#{$count} {
-				@extend %#{$break-point-name}-down-pull-#{$count};
-			}
-			
-			.#{$break-point-name}-down-push-none {
-				@extend %#{$break-point-name}-down-push-none;
-			}
-			
-			.#{$break-point-name}-down-pull-none {
-				@extend %#{$break-point-name}-down-pull-none;
-			}
-			
-			.#{$break-point-name}-hide {
-				@extend %#{$break-point-name}-hide;
-			}
-			
-			.#{$break-point-name}-up-hide {
-				@extend %#{$break-point-name}-up-hide;
-			}
-			
-			.#{$break-point-name}-down-hide {
-				@extend %#{$break-point-name}-down-hide;
-			}
-		
-		}
-	}
+	@include grid-classes;
 }
