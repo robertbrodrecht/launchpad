@@ -107,19 +107,16 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Optimize SASS for faster compile time.  Grid seems fast as a stand-alone thing, but compiling this site is way too slow.
 * Add filters/actions in WP code for modifying things that people may want to modify. Partially implemented.
 * Easy way to add custom fields to post types.  Implemented but only lightly tested.  NEEDS SERIOUS TESTING.
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
-* Namespace or put closures on JavaScript.
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme and a child theme.
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
 * Updates through WP Admin.
-* Add filter to change settings sidebar nav item name and location.
 
 
 To Do For 2.0
