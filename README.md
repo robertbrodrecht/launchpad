@@ -69,6 +69,7 @@ I'll be building out the feature list as I get the time.
 * Settings for HTML5 Boilerplate's .htaccess.
 * Support for saving custom post fields and examples of how to set them up.
 * Easy creation of custom post types.
+* Easy creation of custom fields on those custom post types.
 * A ton of filters for modifying stuff.  See the functions-custom.php file for details.  More details eventually and more coming.
 
 
@@ -107,8 +108,6 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Add filters/actions in WP code for modifying things that people may want to modify. Partially implemented.
-* Easy way to add custom fields to post types.  Implemented but only lightly tested.  NEEDS SERIOUS TESTING.
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * Add more custom events to JavaScript to aid in development.

@@ -55,6 +55,17 @@ function launchpad_register_post_types() {
 			$post_type_slug = $post_type_details['slug'];
 			$post_type_menu_options = $post_type_details['menu_position'];
 			
+			if($post_type_details['supports']) {
+				$supports = $post_type_details['supports'];
+			} else {
+				$supports = array(
+						'title',
+						'editor',
+						'thumbnail'
+					);
+			}
+			
+			
 			$args = array(
 				'labels' => array(
 						'name' => $post_type_plural,
@@ -81,17 +92,11 @@ function launchpad_register_post_types() {
 						'with_front' => false
 					),
 				'capability_type' => 'page',
-				'has_archive' => true, 
-				'hierarchical' => false,
+				'has_archive' => true,
+				'hierarchical' => (bool) $post_type_details['hierarchical'],
 				'menu_position' => $post_type_menu_options,
-				'supports' => array(
-						'title', 
-						'editor', 
-						'author', 
-						'thumbnail', 
-						'comments'
-					)
-				); 
+				'supports' => $supports
+			);
 		}
 	
 		register_post_type($post_type, $args);

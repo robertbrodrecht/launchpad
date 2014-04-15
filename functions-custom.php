@@ -132,6 +132,16 @@ function custom_launchpad_custom_post_types($post_types) {
 				'single' => 'Sample',
 				'slug' => 'samples',
 				'menu_position' => null,
+				// hierarchical is not required.  default: false.
+				'hierarchical' => true,
+				// supports is not required.  default: title, editor, thumbnail.
+				'supports' => array(
+						'title',
+						'editor',
+						'thumbnail',
+						'page-attributes'
+					),
+				// taxonomies is not required.
 				'taxonomies' => array(
 						'launchpad_sample_tax' => array(
 								'plural' => 'Sample Taxonomies',
@@ -139,6 +149,7 @@ function custom_launchpad_custom_post_types($post_types) {
 								'slug' => 'sample_taxonomy'
 							)
 					),
+				// metaboxes is not required.
 				'metaboxes' => array(
 						'launchpad_sample_side_metabox' => array(
 							'name' => 'Sample Side Metabox',
