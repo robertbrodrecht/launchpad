@@ -115,7 +115,7 @@ To Do For 1.0
   * Probably have the core theme and a child theme.
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
-* Updates through WP Admin.
+* Add help description to meta fields, post types, taxonomies to provide built-in documentation.
 
 
 To Do For 2.0
@@ -134,3 +134,5 @@ To Do For 2.0
   * Single Image
   * Ads
 * Something about widgets.
+* Updates through WP Admin.
+* "Search Everything" type of functionality.
