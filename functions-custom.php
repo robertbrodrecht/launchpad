@@ -63,6 +63,27 @@ if($use_img) {
 
 
 /**
+ * Custom Launchpad Options Page
+ * 
+ * By default, the options are under Settings > Launchpad.  Change anything below to customize it.
+ * 
+ * @param		array $opts Settings to get the menu top-level.
+ * @since		1.0
+ * @link		http://codex.wordpress.org/Function_Reference/add_submenu_page
+ * @link		http://codex.wordpress.org/Function_Reference/add_menu_page
+ */
+function custom_launchpad_theme_options_page($opts) {
+	$opts['parent_page'] = false;			// The slug for the parent page, if any.  See first URL @link above.
+	$opts['page_name'] = 'Theme Options';	// Name at the top of the page.
+	$opts['menu_name'] = 'Special';			// Name on the nav sidebar menu.
+	$opts['menu_icon'] = 'dashicons-yes';	// The menu icon.  See second URL @link above.
+	$opts['menu_position'] = 999;			// The menu position.
+	return $opts;
+}
+add_filter('launchpad_theme_options_page', 'custom_launchpad_theme_options_page');
+
+
+/**
  * Set Upload Path to /assets/ 
  * 
  * @param		array $rewrites Rewrites to replace.
