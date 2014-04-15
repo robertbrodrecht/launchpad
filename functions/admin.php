@@ -606,14 +606,49 @@ add_action('admin_init', 'launchpad_site_options_init');
  * @since		1.0
  */
 function launchpad_theme_options_add_page() {
-	$theme_page = add_submenu_page(
-		'options-general.php',
-		'Launchpad Management',
-		'Launchpad',
-		'edit_theme_options',
-		'launchpad_settings',
-		'launchpad_theme_options_render_page'
-	);
+	$opts = array(
+			'parent_page' => false,
+			'page_name' => 'Theme Options',
+			'menu_name' => 'Special',
+			'menu_icon' => 'dashicons-yes',
+			'menu_position' => 999
+		);
+		
+	$opts_orig = $opts;
+	
+	$opts = apply_filters('launchpad_theme_options_page', $opts);
+	
+	if($opts != $opts_orig) {
+		if($opts['parent_page'] === false) {
+			add_menu_page(
+				$opts['page_name'],
+				$opts['menu_name'],
+				'edit_theme_options',
+				'launchpad_settings',
+				'launchpad_theme_options_render_page',
+				$opts['menu_icon'],
+				$opts['menu_position']
+			);
+		} else {
+			add_submenu_page(
+				$opts['parent_page'],
+				$opts['page_name'],
+				$opts['menu_name'],
+				'edit_theme_options',
+				'launchpad_settings',
+				'launchpad_theme_options_render_page'
+			);
+		}
+	} else {
+		add_submenu_page(
+			'options-general.php',
+			'Launchpad Management',
+			'Launchpad',
+			'edit_theme_options',
+			'launchpad_settings',
+			'launchpad_theme_options_render_page'
+		);
+	}
 }
 add_action('admin_menu', 'launchpad_theme_options_add_page');
  
