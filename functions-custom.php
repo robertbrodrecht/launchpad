@@ -201,4 +201,24 @@ function custom_launchpad_mce_style_formats($formats) {
 	);
 	return $formats;
 }
-add_filter('launchpad_mce_style_formats', 'custom_launchpad_mce_style_formats');
+//add_filter('launchpad_mce_style_formats', 'custom_launchpad_mce_style_formats');
+
+
+/**
+ * Custom Editor Buttons
+ * 
+ * You can add more buttons such as 'sup' and 'fontselect.'
+ * 
+ * @param		array $buttons The existing buttons.
+ * @since		1.0
+ * @link		List of Buttons http://www.tinymce.com/wiki.php/TinyMCE3x:Buttons/controls
+ */
+function enable_more_buttons($buttons) {
+	$buttons[] = 'hr';
+	$buttons[] = 'copy';
+	$buttons[] = 'paste';
+	$buttons[] = 'fontsizeselect';
+	
+	return $buttons;
+}
+//add_filter("mce_buttons", "enable_more_buttons");
