@@ -315,6 +315,9 @@
 								if(bodyclass && bodyclass.length > 1) {
 									document.body.className = bodyclass[1];
 								}
+								
+								window.scrollTo(0, 0);
+								
 								body.html(content.html());
 								
 								window._gaq.push(['_trackPageview', href]);
