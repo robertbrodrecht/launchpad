@@ -35,7 +35,7 @@ $break-point-size-widths: map-values($break-points);
 }
 
 %row-table {
-	@extend %row;
+	@extend %row-no-gutter;
 	
 	display: table;
 	
