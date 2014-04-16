@@ -215,9 +215,6 @@ function custom_launchpad_mce_style_formats($formats) {
  */
 function enable_more_buttons($buttons) {
 	$buttons[] = 'hr';
-	$buttons[] = 'copy';
-	$buttons[] = 'paste';
-	$buttons[] = 'fontsizeselect';
 	
 	return $buttons;
 }
