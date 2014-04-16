@@ -85,7 +85,6 @@ function launchpad_add_custom_mcs_styles( $init_array ) {
 	);
 	
 	$launchpad_mce_style_formats = apply_filters('launchpad_mce_style_formats', $launchpad_mce_style_formats);
-	$launchpad_mce_style_formats = array_unique($launchpad_mce_style_formats);
 	
 	$init_array['style_formats'] = json_encode($launchpad_mce_style_formats);  
 	return $init_array;  
