@@ -34,6 +34,17 @@ $break-point-size-widths: map-values($break-points);
 	}
 }
 
+%row-table {
+	@extend %row;
+	
+	display: table;
+	
+	> * {
+		display: table-cell;
+		float: none;
+	}
+}
+
 $count: 5 !global;
 
 @while $count <= 100 {
