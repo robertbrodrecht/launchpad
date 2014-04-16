@@ -95,3 +95,86 @@ function file_get_contents_cache($url, $cachetime = 60) {
 	}
 	return file_get_contents($cache_file);
 }
+
+
+/**
+ * Pagination Helper
+ *
+ * @param		string $url Path to remote API.
+ * @param		int $cachetime Time to cache.
+ * @since		1.0
+ */
+function launchpad_paginate($url_base = '/', $current_page = 1, $total_pages = 1, $options = array(), $echo = true) {
+	$ret = '';
+	
+	$defaults = array(
+		'total_page_links' => 10, 
+		'next' => 'Next',
+		'previous' => 'Previous',
+	);
+	
+	$settings = array_merge($defaults, $options);
+	
+	$next = $settings['next'];
+	$previous = $settings['previous'];
+	$total_page_links = $settings['total_page_links'];
+	
+	$half_total_page_links = round($total_page_links/2);
+	
+	if($current_page-5 < $half_total_page_links) {
+		$start_page = 1;
+	} else {
+		$start_page = $current_page-$half_total_page_links;
+	}
+	
+	if($current_page+$half_total_page_links > $total_pages) {
+		$end_page = $total_pages;
+	} else {
+		$end_page = $current_page+$half_total_page_links;
+	}
+	if($end_page-$start_page < $total_page_links) {
+		if($current_page-$half_total_page_links < 1) {
+			if($end_page + ($total_page_links - ($end_page-$start_page)) < $total_pages) {
+				$end_page += ($total_page_links - ($end_page-$start_page));
+			}
+		} else if($current_page+$half_total_page_links > $total_pages) {
+			if($start_page - ($total_page_links - ($end_page-$start_page)) > 0) {
+				$start_page -= ($total_page_links - ($end_page-$start_page));
+			}
+		}
+	}
+
+	$ret .= '<ul class="page-navigate">';
+	if($current_page-1 > 0) {
+		if($current_page-1 === 1) {
+			$ret .= '<li class="page-previous"><a href="' . $url_base . '">' . $previous . '</a></li>';
+		} else {
+			$ret .= '<li class="page-previous"><a href="' . $url_base . 'page/' . ($current_page-1) . '/">' . $previous . '</a></li>';
+		}
+	} else {
+		$ret .= '<li class="page-previous"></li>';
+	}
+	for(; $start_page <= $end_page; $start_page++) {
+		if($start_page == $current_page) {
+			$ret .= '<li class="page-number page-number-current"><span>' . $start_page . '</span></li>';							
+		} else {
+			if($start_page === 1) {
+				$ret .= '<li class="page-number"><a href="' . $url_base . '">' . $start_page . '</a></li>';							
+			} else {
+				$ret .= '<li class="page-number"><a href="' . $url_base . 'page/' . $start_page . '/">' . $start_page . '</a></li>';
+			}
+		}
+	}
+	if($current_page+1 <= $total_pages) {
+		$ret .= '<li class="page-next"><a href="' . $url_base . 'page/' . ($current_page+1) . '/">' . $next . '</a></li>';
+	} else {
+		$ret .= '<li class="page-next"></li>';
+	}
+	$ret .= '</ul>';	
+	
+	if($echo) {
+		echo $ret;
+	}
+	
+	return $ret;
+}
