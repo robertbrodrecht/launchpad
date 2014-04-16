@@ -197,23 +197,8 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 	> li > a,
 	> li > span {
 		display: block;
-		font-weight: 300;
-		text-decoration: none;
 	}
-	
-	> li > a {
-		color: $color-text;
 		
-		&:hover,
-		&:focus {
-			color: $color-link;
-		}
-	}
-	
-	> li > span {
-		color: $color-link;
-	}
-	
 	> li.page-previous > a {
 		text-align: left;
 	}
