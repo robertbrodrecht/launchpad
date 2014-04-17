@@ -12,6 +12,11 @@
 // As a precaution, trigger a filter to put Gravity Forms code in footer below the jQuery include.
 add_filter('gform_init_scripts_footer', '__return_true');
 
+// Remove capital_P_dangit.
+remove_filter('the_title', 'capital_P_dangit', 11);
+remove_filter('the_content', 'capital_P_dangit', 11);
+remove_filter('comment_text', 'capital_P_dangit', 31);
+
 
 /**
  * Setup of basic theme support
