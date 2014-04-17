@@ -21,8 +21,8 @@
 		$rems: ();
 
 		@each $value in $px {
-			@if type-of($px) == "number" {
-				@if unit($px) == "px" {
+			@if type-of($value) == "number" {
+				@if unit($value) == "px" {
 					$rems: append($rems, ($value / $baseline-rem));
 				} @else {
 					$rems: append($rems, $value);

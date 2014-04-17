@@ -109,6 +109,8 @@ To Do For 1.0
 =============
 
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
+  * add_filter('gform_field_content', 'launchpad_fix_gravity_forms_output', 10, 5);
+  * http://www.gravityhelp.com/documentation/page/Gform_field_content
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.

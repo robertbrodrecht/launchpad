@@ -11,6 +11,8 @@
 
 // As a precaution, trigger a filter to put Gravity Forms code in footer below the jQuery include.
 add_filter('gform_init_scripts_footer', '__return_true');
+// Gravity forms tabindex is often harmful.  Turn it off.
+add_filter('gform_tabindex', create_function('', 'return false;'));
 
 // Remove capital_P_dangit.
 remove_filter('the_title', 'capital_P_dangit', 11);
