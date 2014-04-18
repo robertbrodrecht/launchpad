@@ -45,7 +45,7 @@ I'll be building out the feature list as I get the time.
 * [60FPS scrolling](http://www.thecssninja.com/javascript/follow-up-60fps-scroll) option.
 * Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit, ajaxRequestStart, ajaxRequestEnd.  More will be available eventually.
 * jQuery Custom Events for scrollStart, scrollStop, resizeStart, and resizeStop so that you don't have to shoot yourself in the foot by using resize and scroll events when you don't have to.
-* JavaScript Height Match via <code>@data-height-match-group</code> with children containing <code>@data-height-match</code> or <code>@data-height-match-children</code> to height match all children.
+* jQuery-based Height Match via <code>@data-height-match-group</code> with children containing <code>@data-height-match</code> or <code>@data-height-match-children</code> to height match all children.
 
 
 ## SEO-Related Features
