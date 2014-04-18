@@ -1,7 +1,11 @@
 Launchpad
 =========
 
-Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly.  I use CodkeKit 2 to compile SASS and handle JavaScript includes and minification.  Child-theme support is on the list for possible features, but it is probably a long way off.
+Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly.  
+
+I am currently developing the first production site based on Launchpad and the second is in development by @iamdangavin.  Feedback from this process is being integrated back into Launchpad as issues arise.
+
+I use CodkeKit 2 to compile SASS and handle JavaScript includes and minification.  Child-theme support is on the list for possible features, but it is probably a long way off.
 
 
 Features
