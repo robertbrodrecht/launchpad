@@ -118,10 +118,17 @@ To Do For 1.0
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
 * Add help description to meta fields, post types, taxonomies to provide built-in documentation.
+* Review concepts from Roots.  Some core WP functions seem to do similar things without all the hard work.
+* Get paginate function more in line with twentyfourteen's.
 
 
 To Do For 2.0
 =============
+* Ad Designer.
+  * Create ads as post type.
+  * Design ads in the browser.  Fonts in theme and positioning.
+  * Developer-approved CSS / JS handles how they work.
+  * Skate Integrated (Once Skate is 2.0)
 * Flexible content modules (Assuming this isn't on the fast track to WordPress Core).
   * Build your own modules, all in code.
   * Image rotator / carousel.
@@ -130,11 +137,9 @@ To Do For 2.0
   * Ad Space
   * Link Panel
   * Accordion
-* Search includes flexible content modules / custom fields.
-* Ad Designer.
 * Custom Headers
   * Single Image
   * Ads
 * Something about widgets.
 * Updates through WP Admin.
-* "Search Everything" type of functionality.
+* "Search Everything" type of functionality so that search includes flexible content modules / custom fields
