@@ -80,6 +80,29 @@
 		login_interval = setInterval(checkLogin, 60000);
 	}
 	
+	
+	/**
+	 * Create Height Match Data from Children Data
+	 *
+	 * @since	1.0
+	 */
+	function reinitHeightMatch() {
+		$('[data-height-match-children]').each(
+			function() {
+				var me = $(this),
+					cur_height_match = me.attr('data-height-match-children');
+				me.removeAttr('data-height-match-children')
+				.attr('data-height-match-group', cur_height_match)
+				.children().each(
+					function() {
+						$(this).attr('data-height-match', '');
+					}
+				);
+			}
+		);
+	}
+	
+	
 	/**
 	 * Manage Height Matching
 	 *
@@ -123,27 +146,6 @@
 					setTimeout(heightMatch, 100);
 				}
 			);
-	}
-	
-	/**
-	 * Create Height Match Data from Children Data
-	 *
-	 * @since	1.0
-	 */
-	function reinitHeightMatch() {
-		$('[data-height-match-children]').each(
-			function() {
-				var me = $(this),
-					cur_height_match = me.attr('data-height-match-children');
-				me.removeAttr('data-height-match-children')
-				.attr('data-height-match-group', cur_height_match)
-				.children().each(
-					function() {
-						$(this).attr('data-height-match', '');
-					}
-				);
-			}
-		);
 	}
 	
 	
@@ -307,7 +309,7 @@
 									console.log('Swapping ajax results.');
 								}
 								if(title && title.length > 1) {
-									document.title = $('<span>' + title[1] + '</span>').html();
+									document.title = $('<span>' + title[1] + '</span>').text();
 								}
 								if(htmlclass && htmlclass.length > 1) {
 									document.documentRoot.className = htmlclass[1];
