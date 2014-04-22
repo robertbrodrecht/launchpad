@@ -546,7 +546,7 @@
 		
 		initHeightMatch();
 		
-		if($('[data-ajax="true"]').length) {
+		if($('[data-ajax="true"]').length && !!history.pushState) {
 			window.supports.ajax = true;
 			initAjax();
 		} else {

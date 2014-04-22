@@ -26,19 +26,14 @@ function launchpad_enable_media_upload() {
 			'jquery-ui-sortable',
 			'wp-color-picker',
 			'thickbox',
-			'media-upload',
-			'acf-input',
-			'acf-datepicker',	
+			'media-upload'	
 		)
 	);
 	
 	wp_enqueue_style(
 		array(
 			'thickbox',
-			'wp-color-picker',
-			'acf-global',
-			'acf-input',
-			'acf-datepicker',	
+			'wp-color-picker'
 		)
 	);
 	
@@ -85,6 +80,7 @@ function launchpad_add_custom_mcs_styles( $init_array ) {
 	);
 	
 	$launchpad_mce_style_formats = apply_filters('launchpad_mce_style_formats', $launchpad_mce_style_formats);
+	$launchpad_mce_style_formats = array_unique($launchpad_mce_style_formats);
 	
 	$init_array['style_formats'] = json_encode($launchpad_mce_style_formats);  
 	return $init_array;  
