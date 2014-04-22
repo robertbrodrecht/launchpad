@@ -448,6 +448,7 @@ function launchpad_render_settings_field($args, $subfield = false, $field_prefix
 	
 	switch($args['type']) {
 		case 'checkbox':
+			echo '<input type="hidden" name="' . $field_prefix . '[' . $args['name'] . ']" value="">';
 			if($subfield) {
 				echo '<label class="' . $class . '">';
 			}
