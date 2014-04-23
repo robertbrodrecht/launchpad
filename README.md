@@ -124,6 +124,7 @@ To Do For 1.0
 * Add help description to meta fields, post types, taxonomies to provide built-in documentation.
 * Review concepts from Roots.  Some core WP functions seem to do similar things without all the hard work.
 * Get paginate function more in line with twentyfourteen's.
+* Make heightmatch use a media query.
 
 
 To Do For 2.0

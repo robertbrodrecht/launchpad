@@ -711,7 +711,7 @@ add_action('admin_menu', 'launchpad_remove_menu_pages');
 function launchpad_admin_script_includes() {
 	wp_register_style('launchpad_wp_admin_css', get_template_directory_uri() . '/css/admin-style.css', false, '1.0.0' );
 	wp_enqueue_style('launchpad_wp_admin_css');
-	wp_enqueue_script('my_custom_script', get_template_directory_uri() . '/js/admin.js');
+	wp_enqueue_script('launchpad_wp_admin_js', get_template_directory_uri() . '/js/admin.js');
 }
 add_action('admin_enqueue_scripts', 'launchpad_admin_script_includes');
 
