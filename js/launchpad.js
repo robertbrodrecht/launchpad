@@ -517,7 +517,7 @@
 	 */
 	function init() {
 		var body = $(document.body),
-			scrollingIsJanky = false,
+			scrollingIsJanky = body.data('scroll-helper'),
 			doNotSupport = [/MSIE [1234567]\.(?!.*IEMobile)/],
 			l, i, startupImage = false;
 		
