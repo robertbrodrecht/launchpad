@@ -889,3 +889,45 @@
 		init();
 	}
 }());
+
+
+
+/**
+ * mediaMatch Polyfill
+ * 
+ * Required until we drop IE9.  IE8 and lower does not support media queries. Maybe respond.js supports that insanity?
+ *
+ * Test with This: window.testMediaMatch('(max-width: 90000px)');
+ * @since	1.0
+ */
+(function () {
+	if(!window.matchMedia) {
+		window.matchMedia = function() {
+			var ie_precheck = /MSIE [2345678]/,
+				testel_width = 4,
+				el_id_base = 'media-match-polyfill-check-' + new Date().getTime(),
+				syle_base = el_id_base + '-style',
+				style = document.createElement('style'),
+				style_cont = '#' + el_id_base + '{width: ' + testel_width + 'px; position: absolute;}',
+				testel = document.createElement('div');
+			
+			if(navigator.userAgent.match(ie_precheck)) {
+				return false;
+			}
+			
+			testel.id = el_id_base;
+			style.id = syle_base;
+			
+			if(style.styleSheet) {
+				style.styleSheet.cssText = style_cont;
+			} else {
+				style.appendChild(document.createTextNode(style_cont));
+			}
+			
+			(document.head || document.getElementsByName('head')[0]).appendChild(style);
+			document.body.appendChild(testel);
+			
+			return testel.offsetWidth === testel_width;
+		};
+	}
+}());
