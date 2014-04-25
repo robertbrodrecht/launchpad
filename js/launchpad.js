@@ -602,6 +602,7 @@
 					if(i.is('a.hamburger')) {
 						e.preventDefault();
 						nav.toggleClass('target');
+						body.trigger(nav.hasClass('target') ? 'launchpadMenuOpen' : 'launchpadMenuClose');
 						if(location.hash === '#navigation' && !nav.hasClass('target')) {
 							location.hash = '';
 						}
@@ -612,6 +613,7 @@
 						}
 					} else {
 						nav.removeClass('target');
+						body.trigger('launchpadMenuClose');
 						if(location.hash === '#navigation') {
 							location.hash = '';
 						}
