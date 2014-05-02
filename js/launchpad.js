@@ -114,8 +114,21 @@
 					function() {
 						var me = $(this),
 							height = 0,
-							lowest_width = +me.attr('data-height-match-group');
-						if(lowest_width < $(document.body).width()) {
+							lowest_width = me.attr('data-height-match-group'),
+							is_match = false;
+						
+						if(isNaN(+lowest_width)) {
+							is_match = window.matchMedia(lowest_width);
+							if(is_match !== false) {
+								is_match = is_match.matches;
+							} else {
+								is_match = true;
+							}
+						} else {
+							is_match = (+lowest_width < $(document.body).width());
+						}
+						
+						if(is_match) {
 							me.children('[data-height-match]').css('height', 'auto').each(
 									function() {
 										var h = $(this).outerHeight();
@@ -905,7 +918,7 @@
  */
 (function () {
 	window.pollyfillMediaMatch = function(mq) {
-		var ie_precheck = /MSIE [2345678]/,
+		var ie_precheck = /MSIE [2345678]\./,
 			testel_width = 4,
 			el_id_base = 'media-match-polyfill-check-' + new Date().getTime(),
 			syle_base = el_id_base + '-style',
@@ -920,7 +933,7 @@
 		testel.id = el_id_base;
 		style.id = syle_base;
 		
-		style.setAttribute('media', '@media ' + mq);
+		style_cont = '@media ' + mq + ' { ' + style_cont + ' }';
 		
 		if(style.styleSheet) {
 			style.styleSheet.cssText = style_cont;
@@ -931,7 +944,15 @@
 		(document.head || document.getElementsByName('head')[0]).appendChild(style);
 		document.body.appendChild(testel);
 		
-		return testel.offsetWidth === testel_width;
+		testel_width = (testel.offsetWidth === testel_width);
+		
+		style.parentNode.removeChild(style);
+		testel.parentNode.removeChild(testel);
+		
+		return {
+				'matches': testel_width,
+				'media': mq
+			};
 	};
 	if(!window.matchMedia) {
 		window.matchMedia = window.pollyfillMediaMatch;
