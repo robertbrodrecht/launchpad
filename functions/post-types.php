@@ -190,6 +190,18 @@ function launchpad_meta_box_handler($post, $args) {
 	foreach($args['args']['fields'] as $k => $v) {
 		?>
 		<div class="launchpad-metabox-field">
+			<?php
+			
+			if($v['help']) {
+				?>
+				<div class="launchpad-inline-help">
+					<span>?</span>
+					<div><?php echo $v['help']; ?></div>
+				</div>
+				<?php
+			}
+			
+			?>
 			<label>
 				<?php 
 					
@@ -209,3 +221,74 @@ function launchpad_meta_box_handler($post, $args) {
 	}
 }
 
+
+/**
+ * Add Help Tab for Post Types
+ *
+ * Uses various "help" indexes on custom post types to create help tabs for documentation purposes.
+ * 
+ * @since		1.0
+ */
+function launchpad_help_tab() {
+	$post_types = launchpad_get_post_types();
+	
+	if(!$post_types) {
+		return;
+	}
+	
+	$screen = get_current_screen();
+	
+	if(isset($_GET['post_type'])) {
+		$post_type = $_GET['post_type'];
+	} else {
+		$post_type = get_post_type( $post_ID );
+	}
+		
+	if($post_types[$post_type]) {
+		if($post_types[$post_type]['help']) {
+			$screen->add_help_tab(
+				array(
+					'id' => $post_type . '-luanchpad_help',
+					'title' => $post_types[$post_type]['single'] . ' Overview',
+					'content' => $post_types[$post_type]['help']
+				)
+			);
+		}
+		if($post_types[$post_type]['metaboxes']) {
+			foreach($post_types[$post_type]['metaboxes'] as $metabox_key => $metabox) {
+				$content = '';
+				
+				if($metabox['help']) {
+					$content .= $metabox['help'];
+				}
+				
+				$field_content = array();
+				
+				foreach($metabox['fields'] as $field) {
+					if($field['help']) {
+						$field_content[$field['name']] = $field['help'];
+					}
+				}
+				
+				if($field_content) {
+					$content .= '<dl>';
+					foreach($field_content as $field_name => $field_help) {
+						$content .= '<dt>' . $field_name . '</dt><dd>' . $field_help . '</dd>';
+					}
+					$content .= '</dl>';
+				}
+				
+				if($content) {
+					$screen->add_help_tab(
+						array(
+							'id' => $post_type . '-' . $metabox_key . '-luanchpad_help',
+							'title' => $metabox['name'] . ' Overview',
+							'content' => '<div class="launchpad-help-container">' . $content . '</div>'
+						)
+					);
+				}
+			}
+		}
+	}
+}
+add_action('admin_head', 'launchpad_help_tab');

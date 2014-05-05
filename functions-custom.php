@@ -131,6 +131,7 @@ function custom_launchpad_custom_post_types($post_types) {
 				'plural' => 'Samples',
 				'single' => 'Sample',
 				'slug' => 'samples',
+				'help' => '<p>This is a sample post type designed to help you see how things work.</p>',
 				'menu_position' => null,
 				// hierarchical is not required.  default: false.
 				'hierarchical' => true,
@@ -155,9 +156,11 @@ function custom_launchpad_custom_post_types($post_types) {
 							'name' => 'Sample Side Metabox',
 							'location' => 'side',
 							'position' => 'default',
+							'help' => '<p>The sample metabox is designed to help you build your own metaboxes.</p>',
 							'fields' => array(
 								'sample_side_metabox_value_1' => array(
 									'name' => 'Some Value',
+									'help' => '<p>This field contains sample text.</p>',
 									'args' => array(
 										'type' => 'text',
 										'default' => 'Hello'
@@ -165,6 +168,7 @@ function custom_launchpad_custom_post_types($post_types) {
 								),
 								'sample_side_metabox_value_2' => array(
 									'name' => 'Some Other Value',
+									'help' => '<p>This field allows you to select one of three options.</p>',
 									'args' => array(
 										'type' => 'select',
 										'options' => array(
