@@ -427,7 +427,7 @@ function launchpad_create_select_options($options, $values) {
  * @see			launchpad_get_setting_fields
  * @since		1.0
  */
-function launchpad_render_settings_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
+function launchpad_render_form_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
 	if($field_prefix === 'launchpad_site_options') {
 		$vals = get_option('launchpad_site_options', '');
 		if(isset($vals[$args['name']]))  {
@@ -446,13 +446,25 @@ function launchpad_render_settings_field($args, $subfield = false, $field_prefix
 		$class = 'launchpad-subfield ' . sanitize_title($subfield);
 	}
 	
+	if($field_prefix !== 'launchpad_flexible') {
+		$field_output_name = $field_prefix . '[' . $args['name'] . ']';
+	} else {
+		$field_output_name = $args['name'];
+	}
+	
+	if($args['id']) {
+		$field_output_id = $args['id'];
+	} else {
+		$field_output_id = $args['name'];
+	}
+	
 	switch($args['type']) {
 		case 'checkbox':
-			echo '<input type="hidden" name="' . $field_prefix . '[' . $args['name'] . ']" value="">';
+			echo '<input type="hidden" name="' . $field_output_name . '" value="">';
 			if($subfield) {
 				echo '<label class="' . $class . '">';
 			}
-			echo '<input type="checkbox" name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" ' . ($val ? ' checked="checked"' : '') . '>';
+			echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . '>';
 			if($subfield) {
 				echo ' ' . $subfield . '</label>';
 			}
@@ -467,9 +479,9 @@ function launchpad_render_settings_field($args, $subfield = false, $field_prefix
 				$val = '';
 			}
 			
-			echo '<input type="hidden" name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $args['name'] . '" class="file-button">Upload File</button>';
+			echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" class="file-button">Upload File</button>';
 			if($existing) {
-				echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $args['name'] . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
+				echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $field_output_id . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
 			}
 			
 			if($subfield) {
@@ -480,19 +492,33 @@ function launchpad_render_settings_field($args, $subfield = false, $field_prefix
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
-			echo '<input type="text" name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" value="' . $val . '" class="regular-text">';
+			echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text">';
 			if($subfield) {
 				echo '</label>';
 			}
 		break;
 		case 'textarea':
-			echo '<textarea name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
+			echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
+		break;
+		case 'wysiwyg':
+			wp_editor(
+					$val, 
+					$field_output_id,
+					array(
+						'wpautop' => true,
+						'media_buttons' => true,
+						'textarea_name' => $field_output_name,
+						'textarea_rows' => 10,
+						'tinymce' => true,
+						'drag_drop_upload' => true
+					)
+				);
 		break;
 		case 'select':
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
-			echo '<select name="' . $field_prefix . '[' . $args['name'] . ']" id="' . $args['name'] . '">';
+			echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
 			echo '<option value="">Select One</option>';
 			echo launchpad_create_select_options($args['options'], $val);
 			echo '</select>';
@@ -504,7 +530,7 @@ function launchpad_render_settings_field($args, $subfield = false, $field_prefix
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
-			echo '<select name="' . $field_prefix . '[' . $args['name'] . '][]" size="10" multiple="multiple" id="' . $args['name'] . '">';
+			echo '<select name="' . $field_output_name . '" size="10" multiple="multiple" id="' . $field_output_id . '">';
 			echo launchpad_create_select_options($args['options'], $val);
 			echo '</select>';
 			if($subfield) {
@@ -513,7 +539,7 @@ function launchpad_render_settings_field($args, $subfield = false, $field_prefix
 		break;
 		case 'subfield':
 			foreach($args['subfields'] as $field) {
-				launchpad_render_settings_field($field['args'], $field['name']);
+				launchpad_render_form_field($field['args'], $field['name']);
 			}
 		break;
 	}
@@ -542,7 +568,7 @@ function launchpad_site_options_validate($input) {
 	
 	foreach($settings as $key => $setting) {
 		if($setting['args']['type'] === 'checkbox') {
-			if(!isset($input[$key])) {
+			if(!isset($input[$key]) || $input[$key] === '') {
 				$input[$key] = false;
 			} else {
 				$input[$key] = true;
@@ -586,7 +612,7 @@ function launchpad_site_options_init() {
 		add_settings_field(
 				$launchpad_option_id,
 				$launchpad_option_details['name'],
-				'launchpad_render_settings_field',
+				'launchpad_render_form_field',
 				'launchpad_settings',
 				'launchpad_settings',
 				$launchpad_option_details['args']

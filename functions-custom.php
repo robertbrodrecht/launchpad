@@ -180,9 +180,70 @@ function custom_launchpad_custom_post_types($post_types) {
 								)
 							)
 						)
+					),
+				'flexible' => array(
+						'simple_content' => array(
+							'name' => 'Simple Content',
+							'help' => '<p>Allows for adding additional simple content editors with a heading.</p>',
+							'fields' => array(
+								'title' => array(
+									'name' => 'Title',
+									'help' => '<p>A title to the content section.</p>',
+									'args' => array(
+										'type' => 'text'
+									)
+								),
+								'editor' => array(
+									'name' => 'Editor',
+									'help' => '<p>A WYSIWYG editor to control the content.</p>',
+									'args' => array(
+										'type' => 'wysiwyg'
+									)
+								)
+							)
+						),
+						'repeater_content' => array(
+							'name' => 'Repeater',
+							'help' => '<p>Sample title with repeater.</p>',
+							'fields' => array(
+								'title' => array(
+									'name' => 'Title',
+									'help' => '<p>A title to the content section.</p>',
+									'args' => array(
+										'type' => 'text'
+									)
+								),
+								'editor' => array(
+									'name' => 'Items',
+									'help' => '<p>Items going into repeater.</p>',
+									'args' => array(
+										'type' => 'repeater',
+										'fields' => array(
+											'repeater_item' => array(
+												'name' => 'List Item',
+												'help' => 'A repeating list item.',
+												'args' => array(
+													'type' => 'text'
+												)
+											)
+										)
+									)
+								)
+							)
+						),
 					)
 			)
 	);
+	
+/*
+  * Build your own modules, all in code.
+  * Image rotator / carousel.
+  * Grid of content.
+  * WYSIWYG Editor.
+  * Ad Space
+  * Link Panel
+  * Accordion
+*/
 	
 	return array_merge($post_types, $custom_post_types);
 }

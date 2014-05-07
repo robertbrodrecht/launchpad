@@ -321,3 +321,110 @@ function launchpad_cache_manifest_obsolete() {
 }
 add_action('wp_ajax_cache_manifest_obsolete', 'launchpad_cache_manifest_obsolete');
 add_action('wp_ajax_nopriv_cache_manifest_obsolete', 'launchpad_cache_manifest_obsolete');
+
+
+/**
+ * Get Flexible Content Layout
+ *
+ * @since		1.0
+ */
+function launchpad_get_flexible_field($field_name = false, $post_id = false) {
+	$is_ajax = false;
+	
+	if(!$field_name) {
+		header('Content-type: text/html');
+		
+		$is_ajax = true;
+		$name = $_GET['name'];
+		$post_id = $_GET['id'];
+		$field_name = $_GET['name'];
+	}
+	
+	$post_types = launchpad_get_post_types();
+	$post = get_post($post_id);
+	
+	if(
+		!$post_types || 
+		!$post || 
+		!$post_types[$post->post_type] || 
+		!$post_types[$post->post_type]['flexible'] ||
+		!$post_types[$post->post_type]['flexible'][$field_name]
+	) {
+		$ret = '';
+	}
+	
+	
+	$details = $post_types[$post->post_type]['flexible'][$field_name];
+	
+	ob_start();
+	
+	echo '<div class="launchpad-flexible-metabox-container"><a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
+	if($details['help']) {
+		?>
+		<div class="launchpad-inline-help">
+			<span>?</span>
+			<div><?php echo $details['help']; ?></div>
+		</div>
+		<?php
+	}
+	echo '<h3>' . $details['name'] . '</h3>';
+	
+	$flex_uid = preg_replace('/[^A-Za-z0-9\-\_]/', '', $field_name . '-' . uniqid());
+	
+	foreach($details['fields'] as $sub_field_name => $field) {
+		$use_label = true;
+		
+		switch($field['args']['type']) {
+			case 'wysiwyg':
+			case 'repeater':
+				$use_label = false;
+			break;
+		}
+		
+		$id = preg_replace('/[^A-Za-z0-9]/', '', $field_name . '' . $sub_field_name . '' . uniqid());
+		
+		echo '<div class="launchpad-metabox-field">';
+		
+		if($field['help']) {
+			?>
+			<div class="launchpad-inline-help">
+				<span>?</span>
+				<div><?php echo $field['help']; ?></div>
+			</div>
+			<?php
+		}
+		
+		if($use_label) {
+			echo '<label for="' . $id . '">' . $field['name'] . '</label>';
+		}
+		
+		launchpad_render_form_field(
+				array_merge(
+					$field['args'], 
+					array(
+						'name' => 'launchpad_meta[launchpad_flexible][' . $flex_uid . '][' . $field_name . '][' . $sub_field_name . ']',
+						'id' => $id
+					)
+				), 
+				false, 
+				'launchpad_flexible'
+			);
+		
+		echo '</div>';
+		
+	}
+	
+	echo '</div>';
+		
+	$ret = ob_get_contents();
+	ob_clean();
+	
+	if($is_ajax) {
+		echo $ret;
+		exit;
+	} else {
+		return $ret;
+	}
+}
+add_action('wp_ajax_get_flexible_field', 'launchpad_get_flexible_field');
+add_action('wp_ajax_nopriv_get_flexible_field', 'launchpad_get_flexible_field');

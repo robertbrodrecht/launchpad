@@ -361,6 +361,7 @@ function launchpad_save_post_data($post_id) {
 			return;
 		}
 	}
+	
 	foreach($_POST['launchpad_meta'] as $meta_key => $meta_value) {
 		update_post_meta($post_id, $meta_key, $meta_value);
 	}

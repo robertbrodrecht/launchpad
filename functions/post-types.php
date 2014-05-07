@@ -33,6 +33,7 @@ function launchpad_get_post_types() {
  */
 function launchpad_register_post_types() {
 	
+	$registered_post_types = get_post_types();
 	$post_types = launchpad_get_post_types();
 	
 	if(!$post_types) {
@@ -98,8 +99,10 @@ function launchpad_register_post_types() {
 				'supports' => $supports
 			);
 		}
-	
-		register_post_type($post_type, $args);
+		
+		if(!in_array($post_type, $registered_post_types)) {
+			register_post_type($post_type, $args);
+		}
 		
 		if($taxonomies) {
 			foreach($taxonomies as $taxonomy => $taxonomy_details) {
@@ -160,7 +163,6 @@ function launchpad_add_meta_boxs() {
 	foreach($post_types as $post_type => $post_type_details) {
 		if(isset($post_type_details['metaboxes'])) {
 			foreach($post_type_details['metaboxes'] as $metabox_id => $metabox_details) {
-				// A sample metabox registration
 				add_meta_box(
 					$metabox_id,
 					$metabox_details['name'],
@@ -172,14 +174,24 @@ function launchpad_add_meta_boxs() {
 				);
 			}
 		}
+		if(isset($post_type_details['flexible']) && $post_type_details['flexible']) {
+			add_meta_box(
+				$post_type . '-flexible-content',
+				'Flexible Content',
+				'launchpad_flexible_handler',
+				$post_type,
+				'normal',
+				'core',
+				$post_type_details['flexible']
+			);
+		}
 	}
-	
 }
 add_action('add_meta_boxes', 'launchpad_add_meta_boxs', 10, 1);
 
 
 /**
- * Add Sample Meta Boxes
+ * Meta Box Handler
  *
  * @param		object $post The current post
  * @param		array $args Arguments passed from the metabox
@@ -213,12 +225,50 @@ function launchpad_meta_box_handler($post, $args) {
 					}
 					
 				?>
-				<?php launchpad_render_settings_field($v['args'], false, 'launchpad_meta'); ?>
+				<?php launchpad_render_form_field($v['args'], false, 'launchpad_meta'); ?>
 			</label>
 		</div>
 	
 		<?php
 	}
+}
+
+
+/**
+ * Flexible Content Handler
+ *
+ * @param		object $post The current post
+ * @param		array $args Arguments passed from the metabox
+ * @since		1.0
+ */
+function launchpad_flexible_handler($post, $args) {
+/*
+	echo '<pre>';
+	var_dump($args);
+	echo '</pre>';
+*/
+
+	echo '<pre>'; var_dump(get_post_meta($post->ID, 'launchpad_flexible', true)); echo '</pre>';
+
+	?>
+		<div id="launchpad-flexible-container">
+			<input type="hidden" name="launchpad_meta[launchpad_flexible]">
+		</div>
+		<div class="launchpad-flexible-add">
+			<div>
+				<span class="button">Add Content Module</span>
+				<ul>
+					<?php
+					
+					foreach($args['args'] as $k => $v) {
+						echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '">' . $v['name'] . '</a></li>';
+					}
+					
+					?>
+				</ul>
+			</div>
+		</div>
+	<?php
 }
 
 

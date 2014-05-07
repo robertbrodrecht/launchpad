@@ -100,9 +100,13 @@ function file_get_contents_cache($url, $cachetime = 60) {
 /**
  * Pagination Helper
  *
- * @param		string $url Path to remote API.
- * @param		int $cachetime Time to cache.
+ * @param		string $url_base The base URL to add pagination links to.
+ * @param		int $current_page The page the user is currently on.
+ * @param		int $total_pages Total number of pages for the query.
+ * @param		array $options An array with keys for total_page_links (number of direct page links), and next/previous for text.
+ * @param		bool $echo Whether or not to print the nav to the page.
  * @since		1.0
+ * @todo		Needs a lot more testing.
  */
 function launchpad_paginate($url_base = '/', $current_page = 1, $total_pages = 1, $options = array(), $echo = true) {
 	$ret = '';

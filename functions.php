@@ -6,9 +6,6 @@
  * 
  * @package 	Launchpad
  * @since		1.0
- * @todo		Determine where to trigger custom actions.  http://archive.extralogical.net/2007/06/wphooks/
- * @todo		Add custom fields array to post types in custom.
- * @todo		TEST THIS: Add a function for: file_get_contents_cache($url, $cache_timeout);
  */
 
 global $site_options;
