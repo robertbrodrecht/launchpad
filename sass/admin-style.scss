@@ -42,6 +42,10 @@ table.launchpad-metabox-table td {
 	margin-bottom: 14px;
 	width: 25em;
 	
+	&.launchpad-field-launchpad_flexible {
+		width: auto;
+	}
+	
 	input, select, textarea {
 		display: block;
 		width: 100%;
@@ -143,10 +147,17 @@ small.launchpad-inline {
 	
 	dt {
 		font-weight: bold;
+		margin-bottom: .5em;
 	}
 	
 	dd {
+		border-left: 5px solid rgba(0, 0, 0, .05);
 		margin-left: 0;
+		padding-left: 1em;
+		
+		dl {
+
+		}
 		
 		p {
 			margin-top: 0;
@@ -157,8 +168,12 @@ small.launchpad-inline {
 }
 
 .launchpad-inline-help {
-	font-size: 10px;
+	font-size: 11px;
 	position: relative;
+	
+	* {
+		font-size: 11px;
+	}
 
 	span {
 		background: #EFEFEF;
@@ -222,6 +237,19 @@ small.launchpad-inline {
 		
 		:last-child {
 			margin-bottom: 0;
+		}
+		
+		dt {
+			display: run-in;
+			font-weight: bold;
+			
+			&:after {
+				content: ': ';
+			}
+		}
+		
+		dd {
+			margin-left: 0;
 		}
 	}
 	
@@ -343,19 +371,26 @@ small.launchpad-inline {
 		margin-bottom: 3em;
 	}
 	
-/*
-	.wp-editor-tabs {
-		display: none;
-	}
-*/
-	
 	.launchpad-metabox-field {
 		padding: .5em 2em;
 	}
 }
 
-/*
-	border-top: 1px solid #CCC;
-	margin-top: 4em;
-	padding-top: 4em;
-*/
+.launchpad-repeater-container {
+	margin: .5em -2em;
+	
+	.launchpad-repeater-metabox-container {
+		margin: 0;
+		margin-bottom: -1px;
+	}
+}
+
+.launchpad-repeater-container div:first-child .launchpad-flexible-metabox-close {
+	display: none;
+}
+
+
+.launchpad-repeater-container.launchpad-metabox-field + .launchpad-repeater-container.launchpad-metabox-field {
+	border-top: 1px solid #DDD;
+	padding-top: 1em;
+}

@@ -328,13 +328,14 @@ add_action('wp_ajax_nopriv_cache_manifest_obsolete', 'launchpad_cache_manifest_o
  *
  * @since		1.0
  */
-function launchpad_get_flexible_field($field_name = false, $post_id = false) {
+function launchpad_get_flexible_field($type = false, $field_name = false, $post_id = false, $values = array()) {
 	$is_ajax = false;
 	
-	if(!$field_name) {
+	if(!$type) {
 		header('Content-type: text/html');
 		
 		$is_ajax = true;
+		$type = $_GET['type'];
 		$name = $_GET['name'];
 		$post_id = $_GET['id'];
 		$field_name = $_GET['name'];
@@ -348,13 +349,15 @@ function launchpad_get_flexible_field($field_name = false, $post_id = false) {
 		!$post || 
 		!$post_types[$post->post_type] || 
 		!$post_types[$post->post_type]['flexible'] ||
-		!$post_types[$post->post_type]['flexible'][$field_name]
+		!$post_types[$post->post_type]['flexible'][$type] || 
+		!$post_types[$post->post_type]['flexible'][$type]['modules'] || 
+		!$post_types[$post->post_type]['flexible'][$type]['modules'][$field_name]
 	) {
 		$ret = '';
 	}
 	
 	
-	$details = $post_types[$post->post_type]['flexible'][$field_name];
+	$details = $post_types[$post->post_type]['flexible'][$type]['modules'][$field_name];
 	
 	ob_start();
 	
@@ -385,11 +388,27 @@ function launchpad_get_flexible_field($field_name = false, $post_id = false) {
 		
 		echo '<div class="launchpad-metabox-field">';
 		
-		if($field['help']) {
+		$help = $field['help'];
+		
+		if($field['args']['type'] === 'repeater') {
+			$help .= '<p>Available fields:</p><dl>';
+			
+			foreach($field['args']['subfields'] as $subfield_detail) {
+				$help .= '<dt>' . $subfield_detail['name'] . '</dt>';
+				if($subfield_detail['help']) {
+					$help .= '<dd>' . $subfield_detail['help'] . '</dd>';
+				} else {
+					$help .= '<dd><p>No information provided.</p></dd>';					
+				}
+			}
+			$help .= '</dl>';
+		}
+		
+		if($help) {
 			?>
 			<div class="launchpad-inline-help">
 				<span>?</span>
-				<div><?php echo $field['help']; ?></div>
+				<div><?php echo $help; ?></div>
 			</div>
 			<?php
 		}
@@ -398,12 +417,17 @@ function launchpad_get_flexible_field($field_name = false, $post_id = false) {
 			echo '<label for="' . $id . '">' . $field['name'] . '</label>';
 		}
 		
+		if($values) {
+			$field['args']['value'] = $values[$sub_field_name];
+		}
+		
 		launchpad_render_form_field(
 				array_merge(
 					$field['args'], 
 					array(
-						'name' => 'launchpad_meta[launchpad_flexible][' . $flex_uid . '][' . $field_name . '][' . $sub_field_name . ']',
-						'id' => $id
+						'name' => 'launchpad_meta[' . $type . '][' . $flex_uid . '][' . $field_name . '][' . $sub_field_name . ']',
+						'id' => $id,
+						'label' => $field['name']
 					)
 				), 
 				false, 

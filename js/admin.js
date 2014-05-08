@@ -7,8 +7,27 @@
  * @since		1.0
  */
 
+function makeSortable() {
+	//jQuery('.launchpad-flexible-container, .launchpad-repeater-container').sortable('destroy');
+	jQuery('.launchpad-flexible-container, .launchpad-repeater-container').sortable(
+		{
+			handle: 'h3',
+			opacity: .5,
+			placeholder: 'launchpad-flexible-container-placeholder',
+			forcePlaceholderSize: true,
+			revert: true,
+			containment: 'parent',
+			axis: 'y',
+			items: '> div'
+		}
+	);
+}
+
 jQuery(document).ready(
 	function($) {
+		
+		makeSortable();
+	
 		// Do admin stuff.
 		$(document.body).on(
 			'click',
@@ -50,13 +69,32 @@ jQuery(document).ready(
 			}
 		);
 		
-		$('#launchpad-flexible-container').sortable(
-			{
-				handle: 'h3',
-				opacity: .5,
-				placeholder: 'launchpad-flexible-container-placeholder',
-				forcePlaceholderSize: true,
-				revert: true
+
+		
+		$(document.body).on(
+			'click',
+			'button.launchpad-repeater-add',
+			function() {
+				var me = $(this),
+					container_id = me.data('for'),
+					container = $('#' + container_id),
+					master = container.children().first().clone(),
+					master_replace_with = 'launchpad-' + new Date().getTime() + '-repeater';
+				
+				master.find('[name]').each(
+					function() {
+						var me = $(this);
+						me.attr('name', me.attr('name').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
+						if(me.is('input:not(checkbox)')) {
+							me.val('');
+						}
+						if(me.is('select')) {
+							me.val('');
+						}
+					}
+				);
+				
+				container.append(master);
 			}
 		);
 		
@@ -67,14 +105,14 @@ jQuery(document).ready(
 				var me = $(this);
 				e.preventDefault();
 				$.get(
-					'/api/?action=get_flexible_field&name=' + me.data('launchpad-flexible-name') + '&id=' + me.data('launchpad-flexible-post-id'),
+					'/api/?action=get_flexible_field&type=' + me.data('launchpad-flexible-type') + '&name=' + me.data('launchpad-flexible-name') + '&id=' + me.data('launchpad-flexible-post-id'),
 					function(data) {
 						var visualeditors;
 						data = $(data);
 						
 						visualeditors = data.find('textarea.wp-editor-area');
 						
-						$('#launchpad-flexible-container').append(data);
+						$('#launchpad-flexible-container-' + me.data('launchpad-flexible-type')).append(data);
 
 						if(visualeditors.length) {
 							visualeditors.each(
@@ -119,6 +157,8 @@ jQuery(document).ready(
 								}
 							});
 						}
+						
+						makeSortable();
 					}
 				);
 			}

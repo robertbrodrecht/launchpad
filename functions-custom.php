@@ -4,6 +4,7 @@
  *
  * Custom filters:
  * 
+ * * launchpad_modify_default_flexible_modules: Allows changing default flexible content modules.
  * * launchpad_image_sizes: array of image sizes.  See example.
  * * launchpad_post_types: array of post types.  See example.
  * * launchpad_mce_style_formats: array of MCE formats.  See example.
@@ -182,55 +183,15 @@ function custom_launchpad_custom_post_types($post_types) {
 						)
 					),
 				'flexible' => array(
-						'simple_content' => array(
-							'name' => 'Simple Content',
-							'help' => '<p>Allows for adding additional simple content editors with a heading.</p>',
-							'fields' => array(
-								'title' => array(
-									'name' => 'Title',
-									'help' => '<p>A title to the content section.</p>',
-									'args' => array(
-										'type' => 'text'
-									)
-								),
-								'editor' => array(
-									'name' => 'Editor',
-									'help' => '<p>A WYSIWYG editor to control the content.</p>',
-									'args' => array(
-										'type' => 'wysiwyg'
-									)
-								)
-							)
-						),
-						'repeater_content' => array(
-							'name' => 'Repeater',
-							'help' => '<p>Sample title with repeater.</p>',
-							'fields' => array(
-								'title' => array(
-									'name' => 'Title',
-									'help' => '<p>A title to the content section.</p>',
-									'args' => array(
-										'type' => 'text'
-									)
-								),
-								'editor' => array(
-									'name' => 'Items',
-									'help' => '<p>Items going into repeater.</p>',
-									'args' => array(
-										'type' => 'repeater',
-										'fields' => array(
-											'repeater_item' => array(
-												'name' => 'List Item',
-												'help' => 'A repeating list item.',
-												'args' => array(
-													'type' => 'text'
-												)
-											)
-										)
-									)
-								)
-							)
-						),
+						'page_flexible' => array(
+							'name' => 'Page Flexible Content',
+							'location' => 'normal',
+							'position' => 'default',
+							'help' => '<p>The sample flexible content is designed to help you build your own flexible content.</p>',
+							// Use array_merge to add on to defaults or make your own.  
+							// Use launchpad_modify_default_flexible_modules filter to modify the defaults.
+							'modules' => launchpad_get_default_flexible_modules()
+						)
 					)
 			)
 	);

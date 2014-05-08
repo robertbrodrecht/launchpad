@@ -112,9 +112,12 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
-  * add_filter('gform_field_content', 'launchpad_fix_gravity_forms_output', 10, 5);
-  * http://www.gravityhelp.com/documentation/page/Gform_field_content
+* Flexible content modules.
+  * Build your own modules, all in code.
+  * Fields to Support:
+  	* All metabox fields: text, textarea, checkbox, select, selectmulti, wysiwyg, file.
+  	* Repeaters
+  	* Relationship (Select One or More Post Types)
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
@@ -126,19 +129,16 @@ To Do For 1.0
 
 To Do For 2.0
 =============
+
+* Continue improving flexible content if more needs have arisen.
+* Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
+  * add_filter('gform_field_content', 'launchpad_fix_gravity_forms_output', 10, 5);
+  * http://www.gravityhelp.com/documentation/page/Gform_field_content
 * Ad Designer.
   * Create ads as post type.
   * Design ads in the browser.  Fonts in theme and positioning.
   * Developer-approved CSS / JS handles how they work.
   * Skate Integrated (Once Skate is 2.0)
-* Flexible content modules (Assuming this isn't on the fast track to WordPress Core).
-  * Build your own modules, all in code.
-  * Image rotator / carousel.
-  * Grid of content.
-  * WYSIWYG Editor.
-  * Ad Space
-  * Link Panel
-  * Accordion
 * Custom Headers
   * Single Image
   * Ads

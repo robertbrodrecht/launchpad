@@ -161,7 +161,7 @@ function launchpad_add_meta_boxs() {
 	}
 	
 	foreach($post_types as $post_type => $post_type_details) {
-		if(isset($post_type_details['metaboxes'])) {
+		if(isset($post_type_details['metaboxes']) && $post_type_details['metaboxes']) {
 			foreach($post_type_details['metaboxes'] as $metabox_id => $metabox_details) {
 				add_meta_box(
 					$metabox_id,
@@ -175,15 +175,17 @@ function launchpad_add_meta_boxs() {
 			}
 		}
 		if(isset($post_type_details['flexible']) && $post_type_details['flexible']) {
-			add_meta_box(
-				$post_type . '-flexible-content',
-				'Flexible Content',
-				'launchpad_flexible_handler',
-				$post_type,
-				'normal',
-				'core',
-				$post_type_details['flexible']
-			);
+			foreach($post_type_details['flexible'] as $flex_id => $flex_details) {
+				add_meta_box(
+					$flex_id,
+					$flex_details['name'],
+					'launchpad_flexible_handler',
+					$post_type,
+					$flex_details['location'],
+					$flex_details['position'],
+					$flex_details
+				);
+			}
 		}
 	}
 }
@@ -242,26 +244,34 @@ function launchpad_meta_box_handler($post, $args) {
  * @since		1.0
  */
 function launchpad_flexible_handler($post, $args) {
-/*
-	echo '<pre>';
-	var_dump($args);
-	echo '</pre>';
-*/
-
-	echo '<pre>'; var_dump(get_post_meta($post->ID, 'launchpad_flexible', true)); echo '</pre>';
+	$current_meta = get_post_meta($post->ID, $args['id'], true);
 
 	?>
-		<div id="launchpad-flexible-container">
-			<input type="hidden" name="launchpad_meta[launchpad_flexible]">
+		<div id="launchpad-flexible-container-<?php echo $args['id'] ?>" class="launchpad-flexible-container">
+			<input type="hidden" name="launchpad_meta[<?php echo $args['id'] ?>]">
+			<?php
+			
+			foreach($current_meta as $meta_k => $meta_v) {
+				foreach($meta_v as $k => $v) {
+					echo launchpad_get_flexible_field(
+						$args['id'],
+						$k,
+						$post->ID,
+						$v
+					);
+				}
+			}
+			
+			?>
 		</div>
 		<div class="launchpad-flexible-add">
 			<div>
-				<span class="button">Add Content Module</span>
+				<button type="button" class="button">Add Content Module</button>
 				<ul>
 					<?php
 					
-					foreach($args['args'] as $k => $v) {
-						echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '">' . $v['name'] . '</a></li>';
+					foreach($args['args']['modules'] as $k => $v) {
+						echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '" title="' . sanitize_text_field($v['help']) . '">' . $v['name'] . '</a></li>';
 					}
 					
 					?>
@@ -279,7 +289,7 @@ function launchpad_flexible_handler($post, $args) {
  * 
  * @since		1.0
  */
-function launchpad_help_tab() {
+function launchpad_auto_help_tab() {
 	$post_types = launchpad_get_post_types();
 	
 	if(!$post_types) {
@@ -321,7 +331,7 @@ function launchpad_help_tab() {
 				}
 				
 				if($field_content) {
-					$content .= '<dl>';
+					$content .= '<p>The following fields are available:</p><dl>';
 					foreach($field_content as $field_name => $field_help) {
 						$content .= '<dt>' . $field_name . '</dt><dd>' . $field_help . '</dd>';
 					}
@@ -339,6 +349,92 @@ function launchpad_help_tab() {
 				}
 			}
 		}
+		
+		if($post_types[$post_type]['flexible']) {
+			foreach($post_types[$post_type]['flexible'] as $flex_key => $flex_details) {
+				$content = '';
+				
+				if($flex_details['help']) {
+					$content .= $flex_details['help'];
+				}
+				
+				$module_content = array();
+				
+				foreach($flex_details['modules'] as $module) {
+					$module_content[$module['name']] = array('help' => ($module['help'] ? $module['help'] : ''), 'fields' => array());
+					
+					foreach($module['fields'] as $field) {
+						if($field['help']) {
+							$module_content[$module['name']]['fields'][$field['name']] = $field['help'];
+						}
+					}
+				}
+				
+				if($module_content) {
+					$content .= '<dl>';
+					foreach($module_content as $module_name => $module_help) {
+						$content .= '<dt>' . $module_name . '</dt>';
+						$content .= '<dd>';
+						$content .= $module_help['help'];
+						if($module_help['fields']) {
+							$content .= '<p>The following fields are available:</p><dl>';
+							foreach($module_help['fields'] as $field_name => $field_help) {
+								$content .= '<dt>' . $field_name . '</dt><dd>' . $field_help . '</dd>';
+							}
+							$content .= '</dl>';
+						}
+						$content .= '</dd>';
+					}
+					$content .= '</dl>';
+				}
+				
+				if($content) {
+					$screen->add_help_tab(
+						array(
+							'id' => $post_type . '-' . $flex_key . '-luanchpad_help',
+							'title' => $flex_details['name'] . ' Overview',
+							'content' => '<div class="launchpad-help-container">' . $content . '</div>'
+						)
+					);
+				}
+			}
+		}
 	}
 }
-add_action('admin_head', 'launchpad_help_tab');
+add_action('admin_head', 'launchpad_auto_help_tab');
+
+
+
+/**
+ * Default Flexible Modules
+ * 
+ * @since		1.0
+ */
+function launchpad_get_default_flexible_modules() {
+	$return = array(
+		'simple_content' => array(
+			'name' => 'Simple Content',
+			'help' => '<p>Allows for adding additional simple content editors with a heading.</p>',
+			'fields' => array(
+				'title' => array(
+					'name' => 'Title',
+					'help' => '<p>A title to the content section.</p>',
+					'args' => array(
+						'type' => 'text'
+					)
+				),
+				'editor' => array(
+					'name' => 'Editor',
+					'help' => '<p>A WYSIWYG editor to control the content.</p>',
+					'args' => array(
+						'type' => 'wysiwyg'
+					)
+				)
+			)
+		)
+	);
+	
+	$return = apply_filters('launchpad_modify_default_flexible_modules', $return);
+	
+	return $return;
+}

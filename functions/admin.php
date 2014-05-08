@@ -442,9 +442,12 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 		}
 	}
 	
+	$class = 'launchpad-field-' . $field_prefix;
+	
 	if($subfield) {
-		$class = 'launchpad-subfield ' . sanitize_title($subfield);
+		$class .= ' launchpad-subfield ' . sanitize_title($subfield);
 	}
+	
 	
 	if($field_prefix !== 'launchpad_flexible') {
 		$field_output_name = $field_prefix . '[' . $args['name'] . ']';
@@ -456,6 +459,10 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 		$field_output_id = $args['id'];
 	} else {
 		$field_output_id = $args['name'];
+	}
+	
+	if($subfield) {
+		$field_output_id = '';
 	}
 	
 	switch($args['type']) {
@@ -536,6 +543,56 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			if($subfield) {
 				echo '</label>';
 			}
+		break;
+		case 'relationship':
+		break;
+		case 'taxonomy':
+		break;
+		case 'repeater':
+			$repeater_tmp_id = uniqid();
+			
+			if($val) {
+				$orig_subfield = $args['subfields'];
+				$args['subfields'] = array();
+				while($val) {
+					$tmp_subfield = $orig_subfield;
+					$tmp_vals = array_shift($val);
+					foreach($tmp_vals as $tmp_key => $tmp_val) {
+						if(isset($tmp_subfield[$tmp_key])) {
+							$tmp_subfield[$tmp_key]['args']['value'] = $tmp_val;
+						}
+					}
+					array_push($args['subfields'], $tmp_subfield);
+				}
+			} else {
+				$args['subfields'] = array($args['subfields']);
+			}
+			
+			
+			echo '<div id="launchpad-' . $repeater_tmp_id . '-repeater" class="launchpad-repeater-container launchpad-metabox-field">';
+			
+			foreach($args['subfields'] as $counter => $sub_fields) {
+				echo '<div class="launchpad-flexible-metabox-container launchpad-repeater-metabox-container">'; 
+				echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
+				echo '<h3>' . $args['label'] . '</h3>';
+					
+				foreach($sub_fields as $field_key => $field) {
+				
+					echo '<div class="launchpad-metabox-field">';
+					
+					launchpad_render_form_field(
+							array_merge($field['args'], array('name' => $field_output_name . '[launchpad-' . $repeater_tmp_id . $counter . '-repeater][' . $field_key . ']')), 
+							$field['name'], $field_prefix
+						);
+					echo '</div>';
+				}
+	
+				echo '</div>';
+			}
+			
+			echo '</div>';
+			
+			echo '<button type="button" class="button launchpad-repeater-add" data-for="launchpad-' . $repeater_tmp_id . '-repeater">Add Additional ' . $args['label'] . '</button>';
 		break;
 		case 'subfield':
 			foreach($args['subfields'] as $field) {
