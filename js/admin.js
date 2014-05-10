@@ -102,7 +102,6 @@ jQuery(document).ready(
 			}
 		);
 		
-
 		
 		$(document.body).on(
 			'click',
