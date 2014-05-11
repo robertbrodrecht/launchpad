@@ -15,7 +15,7 @@ jQuery(document).ready(
 			$('.launchpad-flexible-container, .launchpad-repeater-container').sortable(
 				{
 					handle: 'h3',
-					opacity: .5,
+					opacity: 0.5,
 					placeholder: 'launchpad-flexible-container-placeholder',
 					forcePlaceholderSize: true,
 					revert: true,
@@ -49,7 +49,7 @@ jQuery(document).ready(
 				$(tinymceconfig.selector)
 				.closest('.wp-editor-wrap')
 				.find(
-						'.wp-switch-editor.switch-' + 
+						'.wp-switch-editor.switch-' +
 						(getUserSetting('editor') === 'html' ? 'html' : 'tmce')
 					).get(0)
 			);
