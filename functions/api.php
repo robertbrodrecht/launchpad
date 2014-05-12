@@ -50,7 +50,7 @@ function launchpad_cache_manifest() {
 	$total_cache_size = 0;
 	
 	$file_list = array();
-	$latest = filemtime(__FILE__);
+	$latest = filemtime(launchpad_get_cache_file());
 	
 	// Locations for images and CSS.
 	$paths = array(

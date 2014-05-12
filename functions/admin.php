@@ -649,7 +649,7 @@ function launchpad_site_options_validate($input) {
 	
 	// Touch the API file to reset the appcache.
 	// This helps avoid confusing issues with time zones.
-	touch(str_replace('admin.php', 'api.php', __FILE__), time(), time());
+	touch($cache_folder, time(), time());
 	
 	return $input;
 }

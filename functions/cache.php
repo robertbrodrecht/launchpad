@@ -59,6 +59,10 @@ function launchpad_get_cache_file($post_id = false, $type = false) {
 	
 	$site_unique_string = launchpad_site_unique_string();
 	
+	if(!file_exists(sys_get_temp_dir() . '/' . $site_unique_string  . '/')) {
+		mkdir(sys_get_temp_dir() . '/' . $site_unique_string  . '/', 0777, true);
+	}
+	
 	if($post_id && !$type) {
 		$cache = sys_get_temp_dir() . '/' . $site_unique_string . '/launchpad_post_cache-' . $post_id . '-file.html';		
 	} else if($post_id && $type) {
