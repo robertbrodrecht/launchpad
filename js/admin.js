@@ -7,24 +7,57 @@
  * @since		1.0
  */
 
-function makeSortable() {
-	//jQuery('.launchpad-flexible-container, .launchpad-repeater-container').sortable('destroy');
-	jQuery('.launchpad-flexible-container, .launchpad-repeater-container').sortable(
-		{
-			handle: 'h3',
-			opacity: .5,
-			placeholder: 'launchpad-flexible-container-placeholder',
-			forcePlaceholderSize: true,
-			revert: true,
-			containment: 'parent',
-			axis: 'y',
-			items: '> div'
-		}
-	);
-}
-
 jQuery(document).ready(
 	function($) {
+	
+		function makeSortable() {
+			//jQuery('.launchpad-flexible-container, .launchpad-repeater-container').sortable('destroy');
+			$('.launchpad-flexible-container, .launchpad-repeater-container').sortable(
+				{
+					handle: 'h3',
+					opacity: .5,
+					placeholder: 'launchpad-flexible-container-placeholder',
+					forcePlaceholderSize: true,
+					revert: true,
+					containment: 'parent',
+					axis: 'y',
+					items: '> div'
+				}
+			);
+		}
+		
+		function handleUpdatingFlexibleModules() {
+			var tinymceconfig = $.extend(true, {}, tinyMCEPreInit.mceInit.content),
+				qtconfig = $.extend(true, {}, tinyMCEPreInit.qtInit.content),
+				edId = this.id;
+			
+			tinymceconfig.selector = '#' + edId;
+			qtconfig.id = edId;
+			
+			tinyMCEPreInit.mceInit[edId] = tinymceconfig;
+			tinyMCEPreInit.qtInit[edId] = qtconfig;
+			
+			tinyMCE.init(tinymceconfig);
+			
+			try {
+				//quicktags(qtconfig);
+				QTags(qtconfig);
+				QTags._buttonsInit();
+			} catch(e){};
+			
+			switchEditors.switchto(
+				$(tinymceconfig.selector)
+				.closest('.wp-editor-wrap')
+				.find(
+						'.wp-switch-editor.switch-' + 
+						(getUserSetting('editor') === 'html' ? 'html' : 'tmce')
+					).get(0)
+			);
+			
+			if (!window.wpActiveEditor) {
+				window.wpActiveEditor = edId;
+			}
+		}
 		
 		makeSortable();
 	
@@ -69,7 +102,6 @@ jQuery(document).ready(
 			}
 		);
 		
-
 		
 		$(document.body).on(
 			'click',
@@ -79,7 +111,8 @@ jQuery(document).ready(
 					container_id = me.data('for'),
 					container = $('#' + container_id),
 					master = container.children().first().clone(),
-					master_replace_with = 'launchpad-' + new Date().getTime() + '-repeater';
+					master_replace_with = 'launchpad-' + new Date().getTime() + '-repeater',
+					visualeditors;
 				
 				master.find('[name]').each(
 					function() {
@@ -95,6 +128,20 @@ jQuery(document).ready(
 				);
 				
 				container.append(master);
+				
+				visualeditors = master.find('textarea.wp-editor-area');
+
+				if(visualeditors.length) {
+					visualeditors.each(handleUpdatingFlexibleModules);
+					
+					$('.wp-editor-wrap').off('click.wp-editor').on('click.wp-editor', function() {
+						if(this.id) {
+							window.wpActiveEditor = this.id.slice(3, -5);
+						}
+					});
+				}
+				
+				makeSortable();
 			}
 		);
 		
@@ -115,41 +162,7 @@ jQuery(document).ready(
 						$('#launchpad-flexible-container-' + me.data('launchpad-flexible-type')).append(data);
 
 						if(visualeditors.length) {
-							visualeditors.each(
-								function() {
-
-									var tinymceconfig = $.extend(true, {}, tinyMCEPreInit.mceInit.content),
-										qtconfig = $.extend(true, {}, tinyMCEPreInit.qtInit.content),
-										edId = this.id;
-									
-									tinymceconfig.selector = '#' + edId;
-									qtconfig.id = edId;
-									
-									tinyMCEPreInit.mceInit[edId] = tinymceconfig;
-									tinyMCEPreInit.qtInit[edId] = qtconfig;
-									
-									tinyMCE.init(tinymceconfig);
-									
-									try {
-										//quicktags(qtconfig);
-										QTags(qtconfig);
-										QTags._buttonsInit();
-									} catch(e){};
-									
-									switchEditors.switchto(
-										$(tinymceconfig.selector)
-										.closest('.wp-editor-wrap')
-										.find(
-												'.wp-switch-editor.switch-' + 
-												(getUserSetting('editor') === 'html' ? 'html' : 'tmce')
-											).get(0)
-									);
-									
-									if (!window.wpActiveEditor) {
-										window.wpActiveEditor = edId;
-									}
-								}
-							);
+							visualeditors.each(handleUpdatingFlexibleModules);
 							
 							$('.wp-editor-wrap').off('click.wp-editor').on('click.wp-editor', function() {
 								if(this.id) {

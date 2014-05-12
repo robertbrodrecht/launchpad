@@ -431,6 +431,49 @@ function launchpad_get_default_flexible_modules() {
 					)
 				)
 			)
+		),
+		'accordion' => array(
+			'name' => 'Accordion List',
+			'help' => '<p>Creates an accordion list.  This allows for a title the user can click on to view associated content.</p>',
+			'fields' => array(
+				'title' => array(
+					'name' => 'Title',
+					'help' => '<p>A title to the accordion section.</p>',
+					'args' => array(
+						'type' => 'text'
+					)
+				),
+				'description' => array(
+					'name' => 'Accordion Description',
+					'help' => '<p>A WYSIWYG editor to control the content that appears above the accordion list.</p>',
+					'args' => array(
+						'type' => 'wysiwyg'
+					)
+				),
+				'accordion' => array(
+					'name' => 'Accordion Item',
+					'help' => '<p>A single accordion item with a title and content.</p>',
+					'args' => array(
+						'type' => 'repeater',
+						'subfields' => array(
+							'title' => array(
+								'name' => 'Title',
+								'help' => '<p>Title of the accordion item.  The title is displayed as part of a list.  Clicking the title will show the description.</p>',
+								'args' => array(
+									'type' => 'text'
+								)
+							),
+							'description' => array(
+								'name' => 'Title',
+								'help' => '<p>Title of the accordion item.  The title is displayed as part of a list.  Clicking the title will show the description.</p>',
+								'args' => array(
+									'type' => 'wysiwyg'
+								)
+							)
+						)
+					)
+				)
+			)
 		)
 	);
 	
