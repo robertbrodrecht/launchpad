@@ -50,7 +50,7 @@ function launchpad_theme_activation_action() {
 	$home_page_name = 'Home';
 	$articles_page_name = 'Articles';
 	$articles_path = '/articles/%postname%/';
-	$uploads_path = 'uploads';
+	$uploads_path = 'assets';
 	
 	$home_page_name = apply_filters('launchpad_activate_home_name', $home_page_name);
 	$articles_page_name = apply_filters('launchpad_activate_articles_name', $articles_page_name);
@@ -346,7 +346,7 @@ add_filter('wp_get_attachment_image_attributes', 'launchpad_wp_get_attachment_im
 function launchpad_save_post_data($post_id) {
 	// Touch the API file to reset the appcache.
 	// This helps avoid confusing issues with time zones.
-	touch(str_replace('system.php', 'api.php', __FILE__), time(), time());
+	touch(launchpad_get_cache_file(), time(), time());
 	
 	// If there is no LaunchPad fields, don't affect anything.
 	if(empty($_POST) || !isset($_POST['launchpad_meta'])) {

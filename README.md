@@ -124,7 +124,7 @@ To Do For 1.0
   * Probably have the core theme and a child theme.
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
-* Review concepts from Roots.  Some core WP functions seem to do similar things without all the hard work.
+* Do a COMPLETE feature review to make sure everything still works.
 
 
 To Do For 2.0

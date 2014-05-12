@@ -114,8 +114,12 @@ function launchpad_get_setting_fields() {
 	global $site_options;
 	
 	$lockouts = '';
-	$lockout_time = $site_options['lockout_time'];
-	if(!$lockout_time) {
+	if(isset($site_options['lockout_time'])) {
+		$lockout_time = $site_options['lockout_time'];
+		if(!$lockout_time) {
+			$lockout_time = 1;
+		}
+	} else {
 		$lockout_time = 1;
 	}
 	

@@ -251,14 +251,16 @@ function launchpad_flexible_handler($post, $args) {
 			<input type="hidden" name="launchpad_meta[<?php echo $args['id'] ?>]">
 			<?php
 			
-			foreach($current_meta as $meta_k => $meta_v) {
-				foreach($meta_v as $k => $v) {
-					echo launchpad_get_flexible_field(
-						$args['id'],
-						$k,
-						$post->ID,
-						$v
-					);
+			if($current_meta) {
+				foreach($current_meta as $meta_k => $meta_v) {
+					foreach($meta_v as $k => $v) {
+						echo launchpad_get_flexible_field(
+							$args['id'],
+							$k,
+							$post->ID,
+							$v
+						);
+					}
 				}
 			}
 			

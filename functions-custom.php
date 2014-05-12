@@ -29,7 +29,7 @@
 // Change to true to use /img/ instead of /images/
 $use_img = false;
 // Change to true to use /assets/ instead of /uploads/
-$use_assets = false;
+$use_uploads = false;
 
 /**
  * Manifest for /img/
@@ -85,16 +85,16 @@ add_filter('launchpad_theme_options_page', 'custom_launchpad_theme_options_page'
 
 
 /**
- * Set Upload Path to /assets/ 
+ * Set Upload Path to /uploads/ 
  * 
  * @param		array $rewrites Rewrites to replace.
  * @since		1.0
  */
 function custom_launchpad_activate_upload_path($str) {
-	// This should really be 'assets' but the code will fix the additional slashes.
-	return '/assets/';
+	// This should really be 'uploads' but the code will fix the additional slashes.
+	return '/uploads/';
 }
-if($use_assets) {
+if($use_uploads) {
 	add_filter('launchpad_activate_upload_path', 'custom_launchpad_activate_upload_path');
 }
 

@@ -48,7 +48,7 @@ global $site_options;
 		</footer>
 		<?php
 		
-		if(stristr($_SERVER['HTTP_HOST'], 'dev') !== false) {
+		if(stristr($_SERVER['HTTP_HOST'], '.dev') !== false || stristr($_SERVER['HTTP_HOST'], '.git') !== false) {
 			echo "		<script>window.dev = true;</script>\n";
 		}
 		

@@ -40,7 +40,7 @@
 				if(window.dev) {
 					console.log('Forcing AppCache to update because user is logged in.');
 				}
-				applicationCache.update();
+				window.applicationCache.update();
 			}
 		}
 		
