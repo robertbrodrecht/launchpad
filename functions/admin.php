@@ -465,9 +465,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 		$field_output_id = $args['name'];
 	}
 	
-	if($subfield) {
-		$field_output_id = '';
-	}
+	$field_output_id = sanitize_title($field_output_id);
 	
 	switch($args['type']) {
 		case 'checkbox':
@@ -572,11 +570,11 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 				$args['subfields'] = array($args['subfields']);
 			}
 			
-			
 			echo '<div id="launchpad-' . $repeater_tmp_id . '-repeater" class="launchpad-repeater-container launchpad-metabox-field">';
 			
 			foreach($args['subfields'] as $counter => $sub_fields) {
 				echo '<div class="launchpad-flexible-metabox-container launchpad-repeater-metabox-container">'; 
+				echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><br></div>';
 				echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
 				echo '<h3>' . $args['label'] . '</h3>';
 					

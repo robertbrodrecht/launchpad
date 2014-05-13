@@ -673,6 +673,15 @@
 				);
 		}
 		
+		body.on(
+			'click',
+			'.flexible-accordion-list dt a',
+			function(e) {
+				e.preventDefault();
+				$(this).closest('dt').next('dd').toggleClass('target');
+			}
+		);
+		
 		if(window.dev === true) {
 			$(document).on('keyup', 'body', handleGrid);
 		}

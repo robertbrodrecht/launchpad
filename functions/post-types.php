@@ -466,8 +466,8 @@ function launchpad_get_default_flexible_modules() {
 								)
 							),
 							'description' => array(
-								'name' => 'Title',
-								'help' => '<p>Title of the accordion item.  The title is displayed as part of a list.  Clicking the title will show the description.</p>',
+								'name' => 'Description',
+								'help' => '<p>The description associated with the title.</p>',
 								'args' => array(
 									'type' => 'wysiwyg'
 								)

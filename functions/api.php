@@ -370,6 +370,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 		</div>
 		<?php
 	}
+	echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><br></div>';
 	echo '<h3>' . $details['name'] . '</h3>';
 	
 	$flex_uid = preg_replace('/[^A-Za-z0-9\-\_]/', '', $field_name . '-' . uniqid());
@@ -452,3 +453,23 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 }
 add_action('wp_ajax_get_flexible_field', 'launchpad_get_flexible_field');
 add_action('wp_ajax_nopriv_get_flexible_field', 'launchpad_get_flexible_field');
+
+
+
+function launchpad_get_editor() {
+	wp_editor(
+			'', 
+			$_GET['id'],
+			array(
+				'wpautop' => true,
+				'media_buttons' => true,
+				'textarea_name' => $_GET['name'],
+				'textarea_rows' => 10,
+				'tinymce' => true,
+				'drag_drop_upload' => true
+			)
+		);
+	exit;
+}
+add_action('wp_ajax_get_editor', 'launchpad_get_editor');
+add_action('wp_ajax_nopriv_get_editor', 'launchpad_get_editor');

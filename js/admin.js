@@ -117,6 +117,7 @@ jQuery(document).ready(
 				master.find('[name]').each(
 					function() {
 						var me = $(this);
+						
 						me.attr('name', me.attr('name').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
 						if(me.is('input:not(checkbox)')) {
 							me.val('');
@@ -132,13 +133,41 @@ jQuery(document).ready(
 				visualeditors = master.find('textarea.wp-editor-area');
 
 				if(visualeditors.length) {
-					visualeditors.each(handleUpdatingFlexibleModules);
-					
-					$('.wp-editor-wrap').off('click.wp-editor').on('click.wp-editor', function() {
-						if(this.id) {
-							window.wpActiveEditor = this.id.slice(3, -5);
+					// Attempting to fix visual editor on repeaters.
+					visualeditors.each(
+						function() {
+							var me = $(this),
+								editor = me.closest('.wp-editor-wrap'),
+								editor_current_id = editor.attr('id').slice(3, -5),
+								cnt = 1;
+							
+							while($('#wp-' + editor_current_id + cnt + '-wrap').length) {
+								cnt++;
+							}
+							editor_current_id = editor_current_id + cnt;
+							
+							editor.addClass('launchpad-editor-loading');
+							
+							$.get(
+								'/api/?action=get_editor&id=' + editor_current_id + '&name=' + me.attr('name'),
+								function(data) {
+									data = $(data);
+									editor.replaceWith(data);
+									
+									data.find('textarea.wp-editor-area').each(handleUpdatingFlexibleModules);
+									
+									$('.wp-editor-wrap').off('click.wp-editor').on('click.wp-editor', function() {
+										if(this.id) {
+											window.wpActiveEditor = this.id.slice(3, -5);
+										}
+									});
+									
+								}
+							);
 						}
-					});
+					);
+					
+
 				}
 				
 				makeSortable();
@@ -154,6 +183,7 @@ jQuery(document).ready(
 				$.get(
 					'/api/?action=get_flexible_field&type=' + me.data('launchpad-flexible-type') + '&name=' + me.data('launchpad-flexible-name') + '&id=' + me.data('launchpad-flexible-post-id'),
 					function(data) {
+						console.log();
 						var visualeditors;
 						data = $(data);
 						

@@ -224,3 +224,15 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 		}
 	}
 }
+
+.flexible-accordion-list dd {
+	display: none;
+}
+
+.flexible-accordion-list dd.target {
+	display: block;
+}
+
+.flexible-accordion-list dt:target + dd {
+	display: block;
+}

@@ -336,11 +336,20 @@ small.launchpad-inline {
 	margin: 2em 1em;
 	padding-bottom: 1em;
 	
+	&.closed {
+		height: 22px;
+		overflow: hidden;
+		
+		.handlediv::before {
+			content: '\f140' !important;
+		}
+	}
+	
 	> .launchpad-inline-help {
 		display: inline-block;
 		float: left;
 		margin-right: 1em;
-		margin-top: 1em;
+		margin-top: .75em;
 		
 		div {
 			left: 0px;
@@ -379,6 +388,10 @@ small.launchpad-inline {
 .launchpad-repeater-container {
 	margin: .5em -2em;
 	
+	.launchpad-inline-help + & {
+		clear: both;
+	}
+	
 	.launchpad-repeater-metabox-container {
 		margin: 0;
 		margin-bottom: -1px;
@@ -393,4 +406,13 @@ small.launchpad-inline {
 .launchpad-repeater-container.launchpad-metabox-field + .launchpad-repeater-container.launchpad-metabox-field {
 	border-top: 1px solid #DDD;
 	padding-top: 1em;
+}
+
+.launchpad-editor-loading {
+	background: #EFEFEF url(/images/admin_loading.gif) no-repeat center;
+	height: 300px;
+	
+	* {
+		display: none;
+	}
 }

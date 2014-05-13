@@ -34,6 +34,35 @@ while(have_posts()) {
 					
 				?>
 				<?php edit_post_link('Edit', '<p>', '</p>'); ?> 
+				<?php
+				
+				$post_types = launchpad_get_post_types();
+				
+				if(isset($post_types) && isset($post_types[$post->post_type]['flexible'])) {
+					foreach($post_types[$post->post_type]['flexible'] as $flexible_type => $flexible_details) {
+						if($flexible_details['location'] !== 'sidebar') {
+							$flexible = get_post_meta($post->ID, $flexible_type, true);
+							
+							foreach($flexible as $flex) {
+								list($flex_type, $flex_values) = each($flex);
+								$flexible_prototype = $flexible_details['modules'][$flex_type];
+								
+								
+								
+								switch($flex_type) {
+									case 'simple_content':
+										include locate_template('flexible/simple_content.php');
+									break;
+									case 'accordion':
+										include locate_template('flexible/accordion.php');
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				?>
 			</section>
 
 <?php } ?>
