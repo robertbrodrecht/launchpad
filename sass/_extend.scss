@@ -20,17 +20,7 @@
 
 // The ugly way to clearfix.  The pretty was is overflow: hidden;
 %ugly-clearfix {
-	
-	&:before {
-		content: ' ';
-		display: table;
-	}
-	
-	&:after {
-		clear: both;
-		content: ' ';
-		display: table;
-	}
+	@include ugly-clearfix;
 }
 
 // Make a list not look like a list.

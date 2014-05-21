@@ -57,6 +57,29 @@
 	#{$property}: toRems($values);
 }
 
+// Make a REM'd propert with pixel fallback.
+@mixin rems($convert) {
+	$property: map_keys($convert);
+	$value: map_values($convert);
+	
+	#{nth($property, 1)}: #{nth($value, 1)};
+	#{nth($property, 1)}: toRems(nth($value, 1));
+}
+
+// The ugly way to clearfix.
+@mixin ugly-clearfix {
+	&:before {
+		content: ' ';
+		display: table;
+	}
+	
+	&:after {
+		clear: both;
+		content: ' ';
+		display: table;
+	}
+}
+
 // Retina media query.
 @mixin media-2x {
 	@media
@@ -175,27 +198,5 @@
 	
 	@media (max-width: $small), (min-width: $large) {
 		@content;
-	}
-}
-
-// DO NOT USE THIS MIXIN.  INTERNAL USE ONLY!
-@mixin private-media-guess($small, $large) {
-	@if $small != "" and $large != "" {
-		@if $small > $large {
-			$tmp_small: $small;
-			$small: $large;
-			$large: $tmp_small;
-		}
-		@include media-range($small, $large) {
-			@content;
-		}
-	} @else if $large == "" {
-		@include media-max($small) {
-			@content;
-		}
-	} @else if $small == "" {
-		@include media-min($large) {
-			@content;
-		}
 	}
 }
