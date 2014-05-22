@@ -64,22 +64,20 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 		float: left;
 		margin-left: $gutter;
 	}
+				
+	img {
+		display: block;
+		height: auto;
+		width: 100%;
+	}
 	
-	$i: 1 !global;
-	@while $i < 10 {
+	@for $i from 1 to 11 {
 		
 		&.gallery-columns-#{$i} {
 			> * {
 				width: (100/$i)*1%-$gutter;
 			}
-			
-			img {
-				display: block;
-				height: auto;
-				width: 100%;
-			}
 		}
-		$i: $i + 1 !global;
 	}
 }
 

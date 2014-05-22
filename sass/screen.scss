@@ -22,10 +22,6 @@
 // * extend %frontload for easy browser hiding.
 // * extend %image-replace for easy text-replacement
 // * div.system-notification is a good element to create and put user notifications in.
-// * .row is a container of columns.
-// * .column-X is a column of width X where X is a percent in increments of 5 
-//   from 10 - 100, and the special widths 33 and 66.
-// * Use .push-X, .pull-X, and .offset-X where X behaves as it does in .column-X.
 // * @include rem(attribute, pixel_val) and @include toRems(pixel_val) creates rem 
 //   units from pixels. Rems are created from settings in _variables.scss.
 // * Use variables $root-font-px to set the html's font-size as a percent of the 
