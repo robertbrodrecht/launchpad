@@ -50,11 +50,14 @@ while(have_posts()) {
 								
 								
 								switch($flex_type) {
-									case 'simple_content':
-										include locate_template('flexible/simple_content.php');
-									break;
 									case 'accordion':
 										include locate_template('flexible/accordion.php');
+									break;
+									case 'link_list':
+										include locate_template('flexible/link_list.php');
+									break;
+									case 'simple_content':
+										include locate_template('flexible/simple_content.php');
 									break;
 								}
 							}

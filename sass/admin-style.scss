@@ -373,7 +373,9 @@ small.launchpad-inline {
 		font-size: 14px;
 		line-height: 36px;
 		margin-right: 1em;
+		text-align: center;
 		text-decoration: none;
+		width: 2em;
 	}
 	
 	h3 {
@@ -414,5 +416,102 @@ small.launchpad-inline {
 	
 	* {
 		display: none;
+	}
+}
+
+.launchpad-relationship-container {
+	background: #FFF;
+	border: 1px solid #DDDDDD;
+	margin-top: .5em;
+	overflow: hidden;
+	
+	> * {
+		box-sizing: border-box;
+		float: left;
+		padding: 1em;
+		width: 50%;
+		
+		&:last-child {
+			margin-right: 0;
+		}
+		
+		#side-sortables & {
+			float: none;
+			margin-right: auto !important;
+			width: auto;
+		}
+	}
+	
+	input[type=search] {
+		border-radius: 2em;
+		display: block;
+		margin: 0;
+		padding-left: 1em;
+		width: 100%;
+	}
+	
+	.launchpad-relationship-search {
+		background: #EFEFEF;
+		border-right: 1px solid #DDDDDD;
+		
+		> label {
+			display: block;
+			height: 2.25em;
+			margin: 0;
+			margin-bottom: .5em;
+		}
+		
+		a:before {
+			content: '\f502';
+			display: inline-block;
+			font-family: dashicons;
+			font-size: .75em;
+			margin-right: 1em;
+		}
+
+	}
+	
+	.launchpad-relationship-items-container {
+		box-shadow: inset 3px 3px 3px rgba(0, 0, 0, .05);
+		
+		> strong {
+			display: block;
+			line-height: 2.25em;
+			margin: 0;
+			margin-bottom: .5em;
+		}
+		
+	}
+	
+	ul {
+		height: 150px;
+		margin: 0em -1em;
+		overflow: auto;
+		position: relative;
+		
+		li {
+			background: rgba(0, 0, 0, 0);
+			margin: 0;
+			-webkit-transition: background .5s ease;
+			-moz-transition: background .5s ease;
+			-ms-transition: background .5s ease;
+			transition: background .5s ease;
+		}
+		
+		li a {
+			display: block;
+			line-height: 2em;
+			padding: 0 1em;
+			text-decoration: none;
+		}
+		
+		li:nth-child(even) {
+			background: rgba(0, 0, 0, .05);
+		}
+	}
+	
+	small {
+		float: right;
+		color: rgba(0, 0, 0, .25);
 	}
 }

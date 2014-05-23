@@ -546,7 +546,64 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 				echo '</label>';
 			}
 		break;
-		case 'relationship':
+		case 'relationship':		
+			echo '<div class="launchpad-relationship-container" data-post-type="' . $args['post_type'] . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $args['limit'] . '">';
+			echo '<div class="launchpad-relationship-search"><label><input type="search" class="launchpad-relationship-search-field" placeholder="Search"></label><ul class="launchpad-relationship-list">';
+			
+			$preload = new WP_Query(
+					array(
+						'post_type' => $args['post_type'],
+						'posts_per_page' => 25,
+					)
+				);
+			
+			foreach($preload->posts as $p) {
+				$ancestors = get_post_ancestors($p);
+				
+				$small = '';
+				
+				if($ancestors) {
+					$ancestors = array_reverse($ancestors);
+					foreach($ancestors as $key => $ancestor) {
+						$ancestor = get_post($ancestor);
+						$small .= ($key > 0 ? ' » ' : '') . $ancestor->post_title;
+					}
+				}
+				
+				echo '<li><a href="#" data-id="' . $p->ID . '">' . $p->post_title . ' <small>' . $small . '</small></a></li>';
+			}
+			
+			echo '</ul></div>';
+			echo '<div class="launchpad-relationship-items-container"><strong> Saved Items (';
+			if($args['limit'] > -1) {
+				echo 'Maximum of ' . $args['limit'] . ' item' . ($args['limit'] == 1 ? '' : 's');
+			} else {
+				echo 'Add as many as you like';
+			}
+			echo ')</strong><ul class="launchpad-relationship-items">';
+			
+			if($val) {
+				foreach($val as $post_id) {
+					$post_id = get_post($post_id);
+					
+					$ancestors = get_post_ancestors($post_id);
+					
+					$small = '';
+					
+					if($ancestors) {
+						$ancestors = array_reverse($ancestors);
+						foreach($ancestors as $key => $ancestor) {
+							$ancestor = get_post($ancestor);
+							$small .= ($key > 0 ? ' » ' : '') . $ancestor->post_title;
+						}
+					}
+					
+					echo '<li><a href="#" data-id="' . $post_id->ID . '"><input type="hidden" name="' . $field_output_name . '[]" value="' . $post_id->ID . '">' . $post_id->post_title . ' <small>' . $small . '</small></a></li>';
+				}
+			}
+			
+			echo '</ul></div>';
+			echo '</div>';
 		break;
 		case 'taxonomy':
 		break;
@@ -611,7 +668,33 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 		echo '<small class="' . $class . '">' . $args['small'] . '</small>';
 	}
 }
- 
+
+
+/**
+ * Get Help Text for A Field Type
+ *
+ * @param		string $type The type of field to get help text for.
+ * @since		1.0
+ */
+function launchpad_get_field_help($type) {
+	$ret = '';
+	switch($type) {
+		case 'file':
+			$ret = '<p>To use this field, click the "Upload File" button, then either browse through your Media Library or drag-and-drop a new file to upload.  Once you have found the file, make sure it is selected with a check mark at the top right of the file icon, then click the "Add File" button.</p>';
+		break;
+		case 'selectmulti':
+			$ret = '<p>This field allows you to select one or more items.  On a Mac, use the command key to select multiple items.  On a PC, use the control key to select multiple items.</p>';
+		break;
+		case 'repeater':
+			$ret = '<p>This field allows you to add multiple repeating items.  Click the button below the first item that reads something similar to "Add Additional Item" to add an additional set of fields.</p>';
+		break;
+		case 'relationship':
+			$ret = '<p>This field allows you to attach one or more posts as a list (limitations of this specific field are listed in parenthesis on the right panel next to the text "Saved Items").</p><p>If you don\'t see the post you need, type in the search box to help narrow down the results.  Once you have found the post you need, click it to add it to the "Saved Items" list.</p><p>You can sort the saved items with drag-and-drop.  To remove a saved item, click it in the list of saved items.</p>';
+		break;
+	}
+	return $ret;
+}
+
 
 /**
  * Validate the inputs

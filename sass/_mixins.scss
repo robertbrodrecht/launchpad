@@ -57,7 +57,7 @@
 	#{$property}: toRems($values);
 }
 
-// Make a REM'd propert with pixel fallback.
+// Make a REM'd propert with pixel fallback for each list item.
 @mixin rems($convert) {
 	@each $property, $values in $convert {
 		@include rem($property, $values);
@@ -76,6 +76,26 @@
 		content: ' ';
 		display: table;
 	}
+}
+
+// Hide for visual browsers.
+@mixin frontload {
+	border: 0px !important;
+	box-shadow: none !important;
+	clip: auto !important;
+	height: 0px  !important;
+	overflow: hidden !important;
+	position: absolute !important;
+	width: 0px !important;
+}
+
+// Set up for an image replacement.
+@mixin image-replace {
+	clip: auto;
+	overflow: hidden;
+	position: relative;
+	text-indent: 110%;
+	white-space: nowrap;
 }
 
 // Retina media query.

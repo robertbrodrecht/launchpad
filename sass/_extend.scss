@@ -1,24 +1,14 @@
 // Hide from the browser.
 %frontload {
-	border: 0px !important;
-	box-shadow: none !important;
-	clip: auto !important;
-	height: 0px  !important;
-	overflow: hidden !important;
-	position: absolute !important;
-	width: 0px !important;
+	@include frontload;
 }
 
 // Prep an element for image replacement.
 %image-replace {
-	clip: auto;
-	overflow: hidden;
-	position: relative;
-	text-indent: 110%;
-	white-space: nowrap;
+	@include image-replace;
 }
 
-// The ugly way to clearfix.  The pretty was is overflow: hidden;
+// The ugly way to clearfix.  The pretty one is overflow: hidden;
 %ugly-clearfix {
 	@include ugly-clearfix;
 }

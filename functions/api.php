@@ -362,6 +362,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	ob_start();
 	
 	echo '<div class="launchpad-flexible-metabox-container"><a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
+	
 	if($details['help']) {
 		?>
 		<div class="launchpad-inline-help">
@@ -388,6 +389,14 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 		$id = preg_replace('/[^A-Za-z0-9]/', '', $field_name . '' . $sub_field_name . '' . uniqid());
 		
 		echo '<div class="launchpad-metabox-field">';
+		
+		$generic_help = launchpad_get_field_help($field['args']['type']);
+		
+		if(!isset($field['help'])) {
+			$field['help'] = '';
+		}
+		
+		$field['help'] .= $generic_help;
 		
 		$help = $field['help'];
 		
@@ -455,7 +464,11 @@ add_action('wp_ajax_get_flexible_field', 'launchpad_get_flexible_field');
 add_action('wp_ajax_nopriv_get_flexible_field', 'launchpad_get_flexible_field');
 
 
-
+/**
+ * Get Visual Editor Code
+ *
+ * @since		1.0
+ */
 function launchpad_get_editor() {
 	wp_editor(
 			'', 
@@ -473,3 +486,55 @@ function launchpad_get_editor() {
 }
 add_action('wp_ajax_get_editor', 'launchpad_get_editor');
 add_action('wp_ajax_nopriv_get_editor', 'launchpad_get_editor');
+
+
+/**
+ * AJAX Post Filter
+ *
+ * @since		1.0
+ */
+function launchpad_get_post_list() {
+	header('Content-type: application/json');
+	
+	$_GET['terms'] = trim($_GET['terms']);
+	
+	if($_GET['terms']) {
+		$res = new WP_Query(
+				array(
+					'post_type' => $_GET['post_type'],
+					's' => $_GET['terms']
+				)
+			);
+	} else {
+		$res = new WP_Query(
+				array(
+					'post_type' => $_GET['post_type'],
+					'posts_per_page' => 25
+				)
+			);
+	}
+
+	$ret = array();
+	
+	foreach($res->posts as $p) {
+		$ancestors = get_post_ancestors($p);
+		
+		$small = '';
+		
+		if($ancestors) {
+			$ancestors = array_reverse($ancestors);
+			foreach($ancestors as $key => $ancestor) {
+				$ancestor = get_post($ancestor);
+				$small .= ($key > 0 ? ' » ' : '') . $ancestor->post_title;
+			}
+		}
+		
+		$p->ancestor_chain = $small;
+		$ret[] = $p;
+	}
+		
+	echo json_encode($ret);
+	exit;
+}
+add_action('wp_ajax_search_posts', 'launchpad_get_post_list');
+add_action('wp_ajax_nopriv_search_posts', 'launchpad_get_post_list');

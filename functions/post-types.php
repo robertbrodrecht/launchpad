@@ -206,11 +206,25 @@ function launchpad_meta_box_handler($post, $args) {
 		<div class="launchpad-metabox-field">
 			<?php
 			
+			$generic_help = launchpad_get_field_help($v['args']['type']);
+			
+			if(!isset($v['help'])) {
+				$v['help'] = '';
+			}
+			
+			$v['help'] .= $generic_help;
+			
 			if($v['help']) {
 				?>
 				<div class="launchpad-inline-help">
 					<span>?</span>
-					<div><?php echo $v['help']; ?></div>
+					<div>
+					<?php 
+						
+						echo $v['help']; 
+						
+					?>
+					</div>
 				</div>
 				<?php
 			}
@@ -310,12 +324,13 @@ function launchpad_auto_help_tab() {
 		if($post_types[$post_type]['help']) {
 			$screen->add_help_tab(
 				array(
-					'id' => $post_type . '-luanchpad_help',
+					'id' => $post_type . '-launchpad_help',
 					'title' => $post_types[$post_type]['single'] . ' Overview',
 					'content' => $post_types[$post_type]['help']
 				)
 			);
 		}
+		
 		if($post_types[$post_type]['metaboxes']) {
 			foreach($post_types[$post_type]['metaboxes'] as $metabox_key => $metabox) {
 				$content = '';
@@ -330,6 +345,12 @@ function launchpad_auto_help_tab() {
 					if($field['help']) {
 						$field_content[$field['name']] = $field['help'];
 					}
+					
+					$generic_help = launchpad_get_field_help($field['args']['type']);
+					
+					if($generic_help) {
+						$field_content[$field['name']] .= $generic_help;
+					}
 				}
 				
 				if($field_content) {
@@ -343,7 +364,7 @@ function launchpad_auto_help_tab() {
 				if($content) {
 					$screen->add_help_tab(
 						array(
-							'id' => $post_type . '-' . $metabox_key . '-luanchpad_help',
+							'id' => $post_type . '-' . $metabox_key . '-launchpad_help',
 							'title' => $metabox['name'] . ' Overview',
 							'content' => '<div class="launchpad-help-container">' . $content . '</div>'
 						)
@@ -369,6 +390,12 @@ function launchpad_auto_help_tab() {
 						if($field['help']) {
 							$module_content[$module['name']]['fields'][$field['name']] = $field['help'];
 						}
+						
+						$generic_help = launchpad_get_field_help($field['args']['type']);
+						
+						if($generic_help) {
+							$module_content[$module['name']]['fields'][$field['name']] .= $generic_help;
+						}
 					}
 				}
 				
@@ -393,7 +420,7 @@ function launchpad_auto_help_tab() {
 				if($content) {
 					$screen->add_help_tab(
 						array(
-							'id' => $post_type . '-' . $flex_key . '-luanchpad_help',
+							'id' => $post_type . '-' . $flex_key . '-launchpad_help',
 							'title' => $flex_details['name'] . ' Overview',
 							'content' => '<div class="launchpad-help-container">' . $content . '</div>'
 						)
@@ -473,6 +500,35 @@ function launchpad_get_default_flexible_modules() {
 								)
 							)
 						)
+					)
+				)
+			)
+		),
+		'link_list' => array(
+			'name' => 'Link List',
+			'help' => '<p>Used to create a list of links to internal pages.</p>',
+			'fields' => array(
+				'title' => array(
+					'name' => 'Title',
+					'help' => '<p>A title to the link list section.</p>',
+					'args' => array(
+						'type' => 'text'
+					)
+				),
+				'description' => array(
+					'name' => 'Link List Description',
+					'help' => '<p>A WYSIWYG editor to control the content that appears above the link list.</p>',
+					'args' => array(
+						'type' => 'wysiwyg'
+					)
+				),
+				'links' => array(
+					'name' => 'Link List Items',
+					'help' => '<p>The items to link to.</p>',
+					'args' => array(
+						'type' => 'relationship',
+						'post_type' => 'any',
+						'limit' => 25
 					)
 				)
 			)

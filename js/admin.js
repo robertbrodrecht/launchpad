@@ -1,3 +1,5 @@
+/*jslint browser: true, devel: true, sloppy: true, todo: true, white: true */
+
 /**
  * Admin JavaScript
  *
@@ -24,6 +26,20 @@ jQuery(document).ready(
 					items: '> div'
 				}
 			);
+			
+			$('.launchpad-relationship-items').sortable(
+				{
+					handle: 'a',
+					opacity: 0.5,
+					placeholder: 'launchpad-flexible-container-placeholder',
+					forcePlaceholderSize: true,
+					revert: true,
+					containment: 'parent',
+					axis: 'y',
+					items: '> li'
+				}
+			);
+			
 		}
 		
 		function handleUpdatingFlexibleModules() {
@@ -43,7 +59,7 @@ jQuery(document).ready(
 				//quicktags(qtconfig);
 				QTags(qtconfig);
 				QTags._buttonsInit();
-			} catch(e){};
+			} catch(e){}
 			
 			switchEditors.switchto(
 				$(tinymceconfig.selector)
@@ -81,7 +97,7 @@ jQuery(document).ready(
 							var attachment = custom_uploader.state().get('selection').first().toJSON(),
 								update = $('#' + me.data('for')),
 								delete_link = update.parent().find('.launchpad-delete-file'),
-								ret = '', remove_link;
+								remove_link;
 							if(update.length) {
 								update.attr('value', attachment.id);
 								
@@ -205,6 +221,73 @@ jQuery(document).ready(
 					}
 				);
 			}
+		);
+		
+		$(document.body).on(
+			'keyup input',
+			'.launchpad-relationship-search-field',
+			function(e) {
+				var me = $(this),
+					container = me.closest('.launchpad-relationship-container'),
+					listing = container.find('.launchpad-relationship-list');
+				if(e.type === 'input' && this.value.replace(/\s/, '') !== '') {
+					return;
+				}
+				
+				$.get(
+					'/api/?action=search_posts&post_type=' + container.data('post-type') + '&terms=' + me.val(),
+					function(data) {
+						listing.html('');
+						$.each(
+							data,
+							function() {
+								listing.append(
+									$('<li><a href="#" data-id="' + this.ID + '">' + this.post_title + ' <small>' + this.ancestor_chain + '</small></a></li>')
+								);
+							}
+						);
+					}
+				);
+			}
+		).on(
+			'click',
+			'.launchpad-relationship-list a',
+			function(e) {
+				var me = $(this),
+					cp = me.clone(),
+					container = me.closest('.launchpad-relationship-container'),
+					addto = container.find('.launchpad-relationship-items'),
+					fname = container.data('field-name'),
+					limit = container.data('limit');
+				
+				console.log(e, this);
+				
+				e.preventDefault();
+				
+				cp.append($('<input type="hidden" name="' + fname + '" value="' + me.data('id') + '">'));
+				
+				if(!$('[value="' + me.data('id') + '"]', addto).length && (limit === '-1' || $('[value]', addto).length < +limit)) {
+					me = $('<li>');
+					me.css('height', 0);
+					me.append(cp);
+					addto.append(me);
+					me.animate({height: cp.outerHeight()});
+				}
+			}
+		).on(
+			'click',
+			'.launchpad-relationship-items a',
+			function(e) {
+				var me = $(this);
+				
+				e.preventDefault();
+				me.parent().animate(
+					{height: 0},
+					function() {
+						me.parent().remove();
+					}
+				);
+			}		
 		);
 	}
 );
