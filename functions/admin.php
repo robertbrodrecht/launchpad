@@ -606,6 +606,33 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			echo '</div>';
 		break;
 		case 'taxonomy':
+			echo '</label><input type="hidden" name="' . $field_output_name . '">';
+			if(!is_array($args['taxonomy'])) {
+				$args['taxonomy'] = explode(',', preg_replace('/\s?,\s?/', ',', $args['taxonomy']));
+			}
+			
+			if(!$val) {
+				$val = array();
+			}
+			
+			foreach($args['taxonomy'] as $tax) {
+				if(taxonomy_exists($tax)) {
+					$terms = get_terms($tax, array('hide_empty' => false));
+					$tax = get_taxonomy($tax);
+					echo '<fieldset class="launchpad-metabox-fieldset"><legend>' . $tax->labels->name . '</legend>';
+					foreach($terms as $term) {
+						echo '<div class="launchpad-metabox-field"><label>';
+						if($args['multiple']) {
+							echo '<input type="checkbox" name="' . $field_output_name . '[]" value="' . $term->term_id . '"' . (in_array($term->term_id, $val) ? ' checked="checked"' : '') . '>';
+						} else {
+							echo '<input type="radio" name="' . $field_output_name . '[]" value="' . $term->term_id . '"' . (in_array($term->term_id, $val) ? ' checked="checked"' : '') . '>';		
+						}
+						echo $term->name;
+						echo '</label></div>';
+					}
+					echo '</fieldset>';
+				}
+			}
 		break;
 		case 'repeater':
 			$repeater_tmp_id = uniqid();
@@ -690,6 +717,9 @@ function launchpad_get_field_help($type) {
 		break;
 		case 'relationship':
 			$ret = '<p>This field allows you to attach one or more posts as a list (limitations of this specific field are listed in parenthesis on the right panel next to the text "Saved Items").</p><p>If you don\'t see the post you need, type in the search box to help narrow down the results.  Once you have found the post you need, click it to add it to the "Saved Items" list.</p><p>You can sort the saved items with drag-and-drop.  To remove a saved item, click it in the list of saved items.</p>';
+		break;
+		case 'taxonomy':
+			$ret = '<p>This field allows you to select one or more taxonomy by checking the appropriate checkbox.</p>';
 		break;
 	}
 	return $ret;

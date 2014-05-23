@@ -73,7 +73,19 @@ I'll be building out the feature list as I get the time.
 * Settings for HTML5 Boilerplate's .htaccess.
 * Support for saving custom post fields and examples of how to set them up.
 * Easy creation of custom post types.
-* Easy creation of custom fields on those custom post types.
+* Easy creation of custom fields on those custom post types, and easily add metaboxes to existing post types.
+* Flexible content.  Build modules in code as PHP arrays attached to post types.
+* Metabox and Flexible Content Fields:
+  * Basic HTML inputs:
+    * Checkbox
+    * Multiple Select
+    * Select
+    * Text
+    * Textarea
+  * Visual Editor
+  * Repeaters (Fields of Fields)
+  * Relationships (Attach one or more posts in one or more post types)
+  * Taxonomy (Select one or more taxonomies)
 * A ton of filters for modifying stuff.  See the functions-custom.php file for details.  More details eventually and more coming.
 
 

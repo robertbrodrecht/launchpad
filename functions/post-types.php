@@ -237,7 +237,7 @@ function launchpad_meta_box_handler($post, $args) {
 					$v['args']['name'] = $k;
 					
 					if($post->$k && get_post_meta($post->ID, $k)) {
-						$v['args']['value'] = $post->$k;
+						$v['args']['value'] = get_post_meta($post->ID, $k, true);
 					}
 					
 				?>
@@ -287,7 +287,7 @@ function launchpad_flexible_handler($post, $args) {
 					<?php
 					
 					foreach($args['args']['modules'] as $k => $v) {
-						echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '" title="' . sanitize_text_field($v['help']) . '">' . $v['name'] . '</a></li>';
+						echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '" title="' . sanitize_text_field($v['help']) . '"><span class="' . ($v['icon'] ? $v['icon'] : 'dashicons dashicons-plus-alt') . '"></span> ' . $v['name'] . '</a></li>';
 					}
 					
 					?>
@@ -441,28 +441,9 @@ add_action('admin_head', 'launchpad_auto_help_tab');
  */
 function launchpad_get_default_flexible_modules() {
 	$return = array(
-		'simple_content' => array(
-			'name' => 'Simple Content',
-			'help' => '<p>Allows for adding additional simple content editors with a heading.</p>',
-			'fields' => array(
-				'title' => array(
-					'name' => 'Title',
-					'help' => '<p>A title to the content section.</p>',
-					'args' => array(
-						'type' => 'text'
-					)
-				),
-				'editor' => array(
-					'name' => 'Editor',
-					'help' => '<p>A WYSIWYG editor to control the content.</p>',
-					'args' => array(
-						'type' => 'wysiwyg'
-					)
-				)
-			)
-		),
 		'accordion' => array(
 			'name' => 'Accordion List',
+			'icon' => 'dashicons dashicons-list-view',
 			'help' => '<p>Creates an accordion list.  This allows for a title the user can click on to view associated content.</p>',
 			'fields' => array(
 				'title' => array(
@@ -506,6 +487,7 @@ function launchpad_get_default_flexible_modules() {
 		),
 		'link_list' => array(
 			'name' => 'Link List',
+			'icon' => 'dashicons dashicons-admin-links',
 			'help' => '<p>Used to create a list of links to internal pages.</p>',
 			'fields' => array(
 				'title' => array(
@@ -524,7 +506,7 @@ function launchpad_get_default_flexible_modules() {
 				),
 				'links' => array(
 					'name' => 'Link List Items',
-					'help' => '<p>The items to link to.</p>',
+					'help' => '<p>The items to display in the actual link list.</p>',
 					'args' => array(
 						'type' => 'relationship',
 						'post_type' => 'any',
@@ -532,7 +514,28 @@ function launchpad_get_default_flexible_modules() {
 					)
 				)
 			)
-		)
+		),
+		'simple_content' => array(
+			'name' => 'Simple Content',
+			'icon' => 'dashicons dashicons-text',
+			'help' => '<p>Allows for adding additional simple content editors with a heading.</p>',
+			'fields' => array(
+				'title' => array(
+					'name' => 'Title',
+					'help' => '<p>A title to the content section.</p>',
+					'args' => array(
+						'type' => 'text'
+					)
+				),
+				'editor' => array(
+					'name' => 'Editor',
+					'help' => '<p>A WYSIWYG editor to control the content.</p>',
+					'args' => array(
+						'type' => 'wysiwyg'
+					)
+				)
+			)
+		),
 	);
 	
 	$return = apply_filters('launchpad_modify_default_flexible_modules', $return);

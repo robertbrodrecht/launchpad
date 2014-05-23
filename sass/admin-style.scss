@@ -12,6 +12,16 @@
 	}
 }
 
+.launchpad-metabox-fieldset {
+	border: 1px solid #DDD;
+	margin-bottom: 1em;
+	padding: 5% 5% 0% 5%;
+	
+	legend {
+		padding: 0 1em;
+	}
+}
+
 table.launchpad-metabox-table {
 	border-collapse: collapse;
 	margin-bottom: 1em;
@@ -277,20 +287,24 @@ small.launchpad-inline {
 		}
 	}
 	
+	button {
+		min-width: 200px;
+	}
+	
 	ul {
-		background: #EFEFEF;
-		border: 1px solid silver;
+		background: #222;
+		border: 1px solid #000;
 		box-shadow: 0px 5px 8px rgba(0, 0, 0, .1);
 		display: none;
-		padding: 10px 0;
+		padding: 0;
 		position: absolute;
 		right: 0;
 		bottom: 1.75em;
-		min-width: 300px;
+		min-width: 200px;
 		z-index: 10;
 		
 		&:before {
-			border-color: silver transparent transparent transparent;
+			border-color: #000 transparent transparent transparent;
 			border-style: solid;
 			border-width: 5px 5px 0 5px;
 			content: '';
@@ -302,7 +316,7 @@ small.launchpad-inline {
 		}
 		
 		&:after {
-			border-color: #EFEFEF transparent transparent transparent;
+			border-color: #222 transparent transparent transparent;
 			border-style: solid;
 			border-width: 4px 4px 0 4px;
 			content: '';
@@ -316,11 +330,34 @@ small.launchpad-inline {
 		li {
 			display: block;
 			margin: 0;
+			
+			&:hover {
+				background: #000;
+			}
 		}
 		
 		a {
+			color: #EEE;
 			display: block;
-			padding: 5px 10px;
+			padding: 10px 10px;
+			text-decoration: none;
+			
+			span {
+				color: #AAAAAA;
+				display: inline-block;
+				font-size: 1.25em;
+				line-height: 1;
+				margin-right: .4em;
+				
+				&:before {
+					vertical-align: bottom;
+				}
+			}
+			
+			&:hover,
+			&:hover span {
+				color: #2ea2cc;
+			}
 		}
 	}
 }
@@ -454,6 +491,11 @@ small.launchpad-inline {
 		background: #EFEFEF;
 		border-right: 1px solid #DDDDDD;
 		
+		#side-sortables & {
+			border-bottom: 1px solid #DDDDDD;
+			border-right: 0;
+		}
+		
 		> label {
 			display: block;
 			height: 2.25em;
@@ -473,6 +515,10 @@ small.launchpad-inline {
 	
 	.launchpad-relationship-items-container {
 		box-shadow: inset 3px 3px 3px rgba(0, 0, 0, .05);
+		
+		#side-sortables & {
+			box-shadow: none;
+		}
 		
 		> strong {
 			display: block;
