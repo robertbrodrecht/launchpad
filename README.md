@@ -74,7 +74,10 @@ I'll be building out the feature list as I get the time.
 * Support for saving custom post fields and examples of how to set them up.
 * Easy creation of custom post types.
 * Easy creation of custom fields on those custom post types, and easily add metaboxes to existing post types.
-* Flexible content.  Build modules in code as PHP arrays attached to post types.
+* Flexible content.  Build modules in code as PHP arrays attached to post types. Includes built-in modules for:
+  * Accordion: A title, WYSIWYG editor, and a repeater field with title and editor to create accordion lists.
+  * Link List: A title, WYSIWYG editor, and relationship field for creating lists that link to other pages.
+  * Simple Content: A title and WYSIWYG editor.
 * Metabox and Flexible Content Fields:
   * Basic HTML inputs:
     * Checkbox
@@ -125,11 +128,9 @@ To Do For 1.0
 =============
 
 * Flexible content modules.
-  * Build your own modules, all in code.
-  * Fields to Support:
-  	* All metabox fields: text, textarea, checkbox, select, selectmulti, wysiwyg, file.
-  	* Repeaters
-  	* Relationship (Select One or More Post Types)
+  * What other modules should be built-in?
+* Other field types?
+  * Menu selectors?
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
