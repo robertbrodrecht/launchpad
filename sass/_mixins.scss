@@ -59,11 +59,9 @@
 
 // Make a REM'd propert with pixel fallback.
 @mixin rems($convert) {
-	$property: map_keys($convert);
-	$value: map_values($convert);
-	
-	#{nth($property, 1)}: #{nth($value, 1)};
-	#{nth($property, 1)}: toRems(nth($value, 1));
+	@each $property, $values in $convert {
+		@include rem($property, $values);
+	}
 }
 
 // The ugly way to clearfix.
