@@ -83,6 +83,15 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
+	"\/flexible\/link_list.php": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/flexible\/link_list.php",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
 	"\/flexible\/simple_content.php": {
 		"fileType": 8192,
 		"ignore": 0,
@@ -460,6 +469,18 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
+	"\/README.md": {
+		"enableFootnoteSupport": 0,
+		"enableSmartyPants": 1,
+		"expandTabs": 0,
+		"fileType": 4096,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/README.md",
+		"outputAbbreviatedPath": "\/README.html",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
 	"\/sass\/_extend.scss": {
 		"createSourceMap": 1,
 		"debugStyle": 0,
@@ -734,7 +755,7 @@
 	"bowerAbbreviatedPath": "",
 	"displayValue": "Launchpad",
 	"displayValueWasSetByUser": 1,
-	"iconImageName": "globe_darkGray"
+	"iconImageName": "\/images\/icons\/apple-touch-icon-152x152.png"
 	},
 "projectSettings": {
 	"alwaysUseExternalServer": 1,
