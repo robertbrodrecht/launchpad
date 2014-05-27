@@ -266,6 +266,11 @@ small.launchpad-inline {
 	span:hover + div {
 		display: block;
 	}
+	
+	ul {
+		list-style-type: disc;
+		padding-left: 2em;
+	}
 }
 
 .launchpad-flexible-add {

@@ -51,7 +51,11 @@ I'll be building out the feature list as I get the time.
 ## SEO-Related Features
 
 * Rel Canonical built in for posts, pages, and single custom post types.
-* Meta Description generated from excerpts automatically.
+* SEO Title with fallback to page title for posts, pages, and single custom post types.
+* Meta Description 
+  * Custom meta descriptions.
+  * Generated from excerpts automatically if no custom value provided.
+* Keyword density and title checks based on various best practices.
 * OpenGraph tags generated automatically.
 * Google Analytics Support.
 * hCard example in footer.
@@ -77,6 +81,7 @@ I'll be building out the feature list as I get the time.
 * Flexible content.  Build modules in code as PHP arrays attached to post types. Includes built-in modules for:
   * Accordion: A title, WYSIWYG editor, and a repeater field with title and editor to create accordion lists.
   * Link List: A title, WYSIWYG editor, and relationship field for creating lists that link to other pages.
+  * Section Navigation: Select title, starting point, and depth to render a list of child pages.
   * Simple Content: A title and WYSIWYG editor.
 * Metabox and Flexible Content Fields:
   * Basic HTML inputs:
@@ -89,6 +94,7 @@ I'll be building out the feature list as I get the time.
   * Repeaters (Fields of Fields)
   * Relationships (Attach one or more posts in one or more post types)
   * Taxonomy (Select one or more taxonomies)
+  * Menu selector (Select a menu created in Appearance > Menus)
 * A ton of filters for modifying stuff.  See the functions-custom.php file for details.  More details eventually and more coming.
 
 
@@ -127,19 +133,29 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Flexible content modules.
+* Flexible content modules and field types.
   * What other modules should be built-in?
-  * Section Navigation
-* Other field types?
-  * Menu selector
+  * Other field types?
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme and a child theme.
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
-* SEO Stuff
+* SEO+Social Stuff
+  * Improve edit screen reporting:
+    * Detect keyword in heading, title, url, meta
+    * Limit it 1 keyword?
+    * Add meta and title length counts
+    * Do a preview snippet.
+  * Rel next/previous on pagination
+  * Sitemaps
+  * Noindex, follow on listing pages / Disable in robots.txt for date-based archives
+  * Twitter Cards
+  * Flipboard
+  * Per-page SEO checklist
 * Do a COMPLETE feature review to make sure everything still works.
+* Decide about re-organizing /lib/
 
 
 To Do For 2.0

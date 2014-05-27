@@ -19,7 +19,7 @@ if($site_options['offline_support'] === true) {
 	$offline = '/manifest.appcache';
 }
 
-$excerpt = launchpad_excerpt();
+$excerpt = launchpad_seo_excerpt();
 
 ?><!DOCTYPE html>
 <html lang="en"<?php echo $offline ? ' manifest="' . $offline . '"' : '' ?>>

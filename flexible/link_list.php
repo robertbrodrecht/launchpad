@@ -11,17 +11,23 @@ if($flex_values['description']) {
 ?>
 <?php if($flex_values['links']) { ?>
 	<ul class="flexible-links-list">
-		<?php 
+		<?php
 		
-		foreach($flex_values['links'] as $link) {
-			$link = get_post($link);
-			if($link) {
+		$links = new WP_Query(
+				array(
+					'post__in' => $flex_values['links'],
+					'post_type' => 'any',
+					'order' => 'ASC',
+					'orderby' => 'post__in'
+				)
+			);
+		
+		foreach($links->posts as $link) {
 				?>
 				
 				<li><a href="<?php echo get_permalink($link->ID) ?>"><?php echo $link->post_title ?></a></li>
 				
 				<?php
-			}
 		} 
 		
 		?>

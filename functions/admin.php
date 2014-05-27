@@ -546,6 +546,26 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 				echo '</label>';
 			}
 		break;
+		case 'menu':
+			if($subfield) {
+				echo '<label class="' . $class . '">' . $subfield . ' ';
+			}
+			
+			$all_menus = get_terms('nav_menu', array('hide_empty' => true));
+			
+			$menu_list = array();
+			foreach($all_menus as $menu) {
+				$menu_list[$menu->term_id] = $menu->name;
+			}
+			
+			echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
+			echo '<option value="">Select One</option>';
+			echo launchpad_create_select_options($menu_list, $val);
+			echo '</select>';
+			if($subfield) {
+				echo '</label>';
+			}
+		break;
 		case 'relationship':		
 			echo '<div class="launchpad-relationship-container" data-post-type="' . $args['post_type'] . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $args['limit'] . '">';
 			echo '<div class="launchpad-relationship-search"><label><input type="search" class="launchpad-relationship-search-field" placeholder="Search"></label><ul class="launchpad-relationship-list">';

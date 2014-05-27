@@ -42,23 +42,27 @@ while(have_posts()) {
 					foreach($post_types[$post->post_type]['flexible'] as $flexible_type => $flexible_details) {
 						if($flexible_details['location'] !== 'sidebar') {
 							$flexible = get_post_meta($post->ID, $flexible_type, true);
-							
-							foreach($flexible as $flex) {
-								list($flex_type, $flex_values) = each($flex);
-								$flexible_prototype = $flexible_details['modules'][$flex_type];
-								
-								
-								
-								switch($flex_type) {
-									case 'accordion':
-										include locate_template('flexible/accordion.php');
-									break;
-									case 'link_list':
-										include locate_template('flexible/link_list.php');
-									break;
-									case 'simple_content':
-										include locate_template('flexible/simple_content.php');
-									break;
+							if($flexible) {
+								foreach($flexible as $flex) {
+									list($flex_type, $flex_values) = each($flex);
+									$flexible_prototype = $flexible_details['modules'][$flex_type];
+									
+									
+									
+									switch($flex_type) {
+										case 'accordion':
+											include locate_template('flexible/accordion.php');
+										break;
+										case 'link_list':
+											include locate_template('flexible/link_list.php');
+										break;
+										case 'section_navigation':
+											include locate_template('flexible/section_navigation.php');
+										break;
+										case 'simple_content':
+											include locate_template('flexible/simple_content.php');
+										break;
+									}
 								}
 							}
 						}

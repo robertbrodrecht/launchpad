@@ -86,7 +86,19 @@ add_action('after_setup_theme', 'launchpad_image_setup');
  * @since		1.0
  */
 function launchpad_title($echo = false) {
-	global $post, $page, $paged;
+	global $post, $page, $paged, $wp_query;
+	
+	if($wp_query->is_single || $wp_query->is_singular) {
+		$seo = get_post_meta($post->ID, 'SEO', true);
+		if(trim($seo['title'])) {
+			$title = $seo['title'];
+			
+			if($echo) {
+				echo $title;
+			}
+			return $title;
+		}
+	}
 	
 	$vals = get_option('launchpad_site_options', '');
 	
@@ -115,7 +127,7 @@ function launchpad_title($echo = false) {
  * @param		$id int The Post to use.  Default is the current post.
  * @since		1.0
  */
-function launchpad_excerpt($max_words = 60, $echo = false, $id = false) {
+function launchpad_excerpt($max_words = 32, $echo = false, $id = false) {
 	global $post;
 	
 	if($id) {
@@ -149,6 +161,36 @@ function launchpad_excerpt($max_words = 60, $echo = false, $id = false) {
 		echo $excerpt;
 	}
 	return trim($excerpt);
+}
+
+
+/**
+ * Get SEO'd Excerpt if Available
+ *
+ * @param		$max_words int The number of words to use if we generate from content based on space characters
+ * @param		$echo bool Whether or not to echo the excerpt
+ * @param		$id int The Post to use.  Default is the current post.
+ * @since		1.0
+ */
+function launchpad_seo_excerpt($max_words = 32, $echo = false, $id = false) {
+	global $post;
+	
+	if($id) {
+		$tmp_post = get_post($id);
+	}
+	if(!$tmp_post) {
+		$tmp_post = $post;
+	}
+	
+	$seo = get_post_meta($tmp_post->ID, 'SEO', true);
+	if(trim($seo['meta_description'])) {
+		if($echo) {
+			echo $seo['meta_description'];
+		}
+		return trim($seo['meta_description']);
+	} else {
+		return launchpad_excerpt($max_words, $echo, $id);
+	}
 }
 
 

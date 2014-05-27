@@ -154,6 +154,27 @@ add_action('init', 'launchpad_register_post_types');
  * @since		1.0
  */
 function launchpad_add_meta_boxs() {
+	$post_types = get_post_types();
+	
+	foreach($post_types as $post_type) {
+		switch($post_type) {
+			case 'attachment':
+			case 'revision':
+			case 'nav_menu_item':
+			break;
+			default:
+				add_meta_box(
+					'launchpad-seo',
+					'SEO and Social Media Options',
+					'launchpad_seo_meta_box_handler',
+					$post_type,
+					'advanced',
+					'core'
+				);
+			break;
+		}
+	}
+	
 	$post_types = launchpad_get_post_types();
 	
 	if(!$post_types) {
@@ -246,6 +267,183 @@ function launchpad_meta_box_handler($post, $args) {
 		</div>
 	
 		<?php
+	}
+}
+
+
+/**
+ * SEO Meta Box Handler
+ *
+ * @param		object $post The current post
+ * @param		array $args Arguments passed from the metabox
+ * @since		1.0
+ */
+function launchpad_seo_meta_box_handler($post, $args) {
+	
+	$stopwords = explode(',', "a,about,above,after,again,against,all,am,an,and,any,are,aren't,as,at,be,because,been,before,being,below,between,both,but,by,can't,cannot,could,couldn't,did,didn't,do,does,doesn't,doing,don't,down,during,each,few,for,from,further,had,hadn't,has,hasn't,have,haven't,having,he,he'd,he'll,he's,her,here,here's,hers,herself,him,himself,his,how,how's,i,i'd,i'll,i'm,i've,if,in,into,is,isn't,it,it's,its,itself,let's,me,more,most,mustn't,my,myself,no,nor,not,of,off,on,once,only,or,other,ought,our,ours,ourselves,out,over,own,same,shan't,she,she'd,she'll,she's,should,shouldn't,so,some,such,than,that,that's,the,their,theirs,them,themselves,then,there,there's,these,they,they'd,they'll,they're,they've,this,those,through,to,too,under,until,up,very,was,wasn't,we,we'd,we'll,we're,we've,were,weren't,what,what's,when,when's,where,where's,which,while,who,who's,whom,why,why's,with,won't,would,wouldn't,you,you'd,you'll,you're,you've,your,yours,yourself,yourselves");
+
+	if($post->post_status === 'publish') {
+		$full_content = file_get_contents(get_permalink($post->ID));
+	
+		preg_match_all('|<title>(.*?)</title>|s', $full_content, $title);
+		
+		if(isset($title[1][0])) {
+			$title = strtolower($title[1][0]);
+		} else {
+			$title = false;
+		}
+		
+		$cont = strip_tags($full_content);
+		$cont = preg_replace('|<script.*?>.*?</script>|s', '', $cont);
+		$cont = preg_replace('|<style.*?>.*?</style>|s', '', $cont);
+		$cont = preg_replace("/(\r\n|\r|\n)/", ' ', $cont);
+		$cont = strtolower($cont);
+		$cont = html_entity_decode($cont);
+		
+		foreach($stopwords as $stopword) {
+			$cont = preg_replace('/\b' . $stopword . '\b/', '', $cont);
+		}
+		
+		$cont = preg_replace('/\s+/', ' ', $cont);
+		
+		$word_count = str_word_count($cont);
+	}
+
+	$meta = get_post_meta($post->ID, 'SEO', true);
+
+	?>
+		<div class="launchpad-metabox-field">
+			<div class="launchpad-inline-help">
+				<span>?</span>
+				<div>
+					<p>In order to run automated tests, you must enter keywords that you want to target in your copy.  List them here, separated by commas.</p>
+				</div>
+			</div>
+			<label>
+				Page Target Keywords
+				<input type="text" name="launchpad_meta[SEO][keywords]" value="<?php echo @$meta['keywords'] ?>">
+			</label>
+		</div>
+		<div class="launchpad-metabox-field">
+			<div class="launchpad-inline-help">
+				<span>?</span>
+				<div>
+					<p>In some cases, you may want your page's title tag to contain specific keywords without having those keywords in the title of your page inside of WordPress.  If you like, enter a more SEO-friendly title here.  If you don't enter one, the page name will be used.  Here are some tips:</p>
+					<ul>
+						<li>Keep the title less than 70 characters.</li>
+						<li>Put the primary keyword near the start of the title.</li>
+						<li>Craft your title so that people want to click them.</li>
+						<li>Try to make your title a call to action, a promise, or question that the page fulfills.</li>
+						<li>Vary page titles.  Don't use the same page title on other pages.</li>
+						<li>Don't use your page title in your SEO description.</li>
+					</ul>
+				</div>
+			</div>
+			<label>
+				SEO'd Title
+				<input type="text" name="launchpad_meta[SEO][title]" value="<?php echo @$meta['title'] ?>">
+			</label>
+		</div>
+		<div class="launchpad-metabox-field">
+			<div class="launchpad-inline-help">
+				<span>?</span>
+				<div>
+					<p>This field contains the meta description content.  Meta description is seen on SERPs (search engine results page) if the search query matches terms in the meta description.  A meta description should be a maximum of 160 characters as SERPs typically truncate the description to 160 characters.  As of 2009, Google does not use meta description in page rank algorithms.  If you do not enter a meta description, one will be automatically generated when the page loads based on either the first 32 words of the post, via the post excerpt, or via the text before the "more" tag.</p>
+				</div>
+			</div>
+			<label>
+				SEO Description
+				<textarea name="launchpad_meta[SEO][meta_description]" rows="10" cols="50" class="large-text code" maxlength="160"><?php echo @$meta['meta_description'] ?></textarea>
+			</label>
+		</div>
+		<?php 
+		
+		if($post->post_status === 'publish' && trim($meta['keywords'])) { 
+			$keywords = explode(',', $meta['keywords']);
+		?>
+		<table class="launchpad-metabox-table">
+			<thead>
+				<tr>
+					<th>Keyword</th>
+					<th>Keyword Count</th>
+					<th>Density</th>
+					<th>Content Suggestion</th>
+					<th>Title Suggestion</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				
+				foreach($keywords as $keyword) {
+					$keyword = trim($keyword);
+					$keyword_orig = $keyword;
+					
+					$keyword = preg_replace("/(\r\n|\r|\n)/", ' ', $keyword);
+					$keyword = preg_replace('/\s+/', ' ', $keyword);
+					$keyword = strtolower($keyword);
+					$keyword = html_entity_decode($keyword);
+					
+					$keyword_count = substr_count($cont, $keyword);
+					
+					$percent = round($keyword_count/$word_count*100, 2);
+
+					$title_opt = false;
+					
+					if($title) {
+						if(substr_count($title, $keyword)) {
+							$title_opt = true;
+						}
+					}
+					
+					?>
+					<tr>
+						<td><?php echo $keyword_orig; ?></td>
+						<td><?php echo $keyword_count ?></td>
+						<td><?php echo $percent; ?>%</td>
+						<td>
+							<?php
+							
+							if($percent < .5) {
+								echo 'Increase keyword usage to .5% to 2%.';
+							} else if($percent < 2) {
+								echo 'Acceptable keyword usage.';
+							} else {
+								echo 'Consider decreasing keyword usage to under 2%.';
+							}
+							
+							?>
+						</td>
+						<td>
+							<?php
+								if(!$title) {
+									echo 'Make sure you have a title on the page!!!';
+								} else {
+									if(strlen($title) > 70) {
+										echo 'Consider shortening your title.';
+									} else {
+										$keyword_pos = stripos($title, $keyword);
+										if($keyword_pos === 0) {
+											echo 'Consider placing a word before your keyword.';
+										} else if($keyword_pos === false) {
+											echo 'Consider using this keyword in your title.';
+										} else if($keyword_pos/strlen($title)*100 > 35) {
+											echo 'Consider placing your keyword closer to the start of the title.';
+										} else {
+											echo 'No suggestions.';
+										}
+									}
+								}
+								
+							?>
+						</td>
+					</tr>
+					<?php
+				}
+				
+				?>
+			</tbody>
+		</table>
+	<?php
 	}
 }
 
@@ -513,6 +711,43 @@ function launchpad_get_default_flexible_modules() {
 						'limit' => 25
 					)
 				)
+			)
+		),
+		'section_navigation' => array(
+			'name' => 'Section Navigation',
+			'icon' => 'dashicons dashicons-welcome-widgets-menus',
+			'help' => '<p>Allows for creating a section navigation of the top-level parent\'s children.</p>',
+			'fields' => array(
+				'title' => array(
+					'name' => 'Title',
+					'help' => '<p>A title for the navigation.</p>',
+					'args' => array(
+						'type' => 'text'
+					)
+				),
+				'start' => array(
+					'name' => 'Starting Point',
+					'help' => '<p>Pick where the menu should start.</p>',
+					'args' => array(
+						'type' => 'select',
+						'options' => array(
+							0 => 'Top-level ancestor',
+							1 => 'Parent of current page',
+						)
+					)
+				),
+				'depth' => array(
+					'name' => 'Depth',
+					'help' => '<p>How many levels deep should the menu go?</p>',
+					'args' => array(
+						'type' => 'select',
+						'options' => array(
+							0 => 'Only show direct children',
+							1 => 'Children and grand-children',
+							2 => 'Children, grand-children, and great-grand-children'
+						)
+					)
+				),
 			)
 		),
 		'simple_content' => array(
