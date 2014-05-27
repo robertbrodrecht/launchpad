@@ -129,14 +129,16 @@ To Do For 1.0
 
 * Flexible content modules.
   * What other modules should be built-in?
+  * Section Navigation
 * Other field types?
-  * Menu selectors?
+  * Menu selector
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme and a child theme.
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
+* SEO Stuff
 * Do a COMPLETE feature review to make sure everything still works.
 
 

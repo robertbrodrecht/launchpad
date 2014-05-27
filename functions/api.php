@@ -127,6 +127,9 @@ function launchpad_cache_manifest() {
 			preg_match_all('/src=[\'\"](.*?)[\'\"]/', $output, $matches);
 			if($matches[1]) {
 				foreach($matches[1] as $asset_path) {
+					if(substr($asset_path, 0, 2) === '//') {
+						$asset_path = 'http:' . $asset_path;
+					}
 					if(!in_array($asset_path, $file_list)) {
 						if(substr($asset_path, 0, 1) === '/') {
 							$file_cache_size = filesize($_SERVER['DOCUMENT_ROOT'] . $asset_path);
@@ -195,6 +198,9 @@ function launchpad_cache_manifest() {
 			preg_match_all('/src=[\'\"](.*?)[\'\"]/', $output, $matches);
 			if($matches[1]) {
 				foreach($matches[1] as $asset_path) {
+					if(substr($asset_path, 0, 2) === '//') {
+						$asset_path = 'http:' . $asset_path;
+					}				
 					if(!in_array($asset_path, $file_list)) {
 						if(substr($asset_path, 0, 1) === '/') {
 							$file_cache_size = filesize($_SERVER['DOCUMENT_ROOT'] . $asset_path);
@@ -252,7 +258,7 @@ function launchpad_cache_manifest() {
 		) {
 			$file_list[] = $posts_page;
 			$total_pages = ceil($q->found_posts/get_option('posts_per_page'));
-			for($i = 1; $i < $total_pages; $i++) {
+			for($i = 2; $i < $total_pages; $i++) {
 				$tmp_pl = $posts_page . 'page/' . $i . '/';
 				
 				$output = file_get_contents($tmp_pl);

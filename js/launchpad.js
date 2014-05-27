@@ -227,7 +227,7 @@
 			applicationCache.addEventListener(
 					'progress',
 					function(e) {
-						console.log('Appcache loading ' + (e.loaded+1) + ' of ' + e.total + '.');
+						console.log('Appcache loading ' + e.loaded + ' of ' + e.total + '.');
 					}
 				);
 			applicationCache.addEventListener(
@@ -558,6 +558,7 @@
 		
 		
 		initHeightMatch();
+		$(window).load(initHeightMatch);
 		
 		if($('[data-ajax="true"]').length && !!history.pushState) {
 			window.supports.ajax = true;
