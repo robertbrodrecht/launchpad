@@ -289,5 +289,32 @@ jQuery(document).ready(
 				);
 			}		
 		);
+		
+		$('textarea[maxlength]').keyup(
+			function() {
+				var me = $(this),
+					range;
+				me.val(me.val().substr(0, me.attr('maxlength')));
+				if (typeof this.selectionStart == "number") {
+					this.selectionStart = this.selectionEnd = this.value.length;
+				} else if (typeof this.createTextRange != "undefined") {
+					this.focus();
+					range = this.createTextRange();
+					range.collapse(false);
+					range.select();
+				}
+			}
+		).add('input[maxlength]').on(
+			function() {
+				var me = $(this);
+				me.parent().find('.launchpad-char-count').html(+me.attr('maxlength')-me.val().length);
+			}
+		).each(
+			function() {
+				var me = $(this),
+					ml = me.attr('maxlength');
+				me.parent().append('<small>Characters Left: <span class="launchpad-char-count">' + (+ml-me.val().length) + '</span> of ' + ml + '</small>');
+			}
+		);
 	}
 );

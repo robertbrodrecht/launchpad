@@ -6,9 +6,14 @@
 	}
 
 	input[type=text],
-	select {
+	select,
+	textarea {
 		display: block;
 		width: 100%;
+	}
+	
+	textarea.small-text {
+		height: 3em;
 	}
 }
 
@@ -564,5 +569,36 @@ small.launchpad-inline {
 	small {
 		float: right;
 		color: rgba(0, 0, 0, .25);
+	}
+}
+
+dl.launchpad-inline-listing {
+
+	text-align: left;
+	
+	dt {
+		display: run-in;
+		font-weight: 900;
+		
+		&:after {
+			content: ': ';
+		}
+	}
+	
+	dd {
+		margin-bottom: 1em;
+		margin-left: 0;
+	}
+}
+
+.launchpad-serp-preview {
+	background: #FFF;
+	border: 1px solid #DDD;
+	line-height: 1.2;
+	padding: 1em;
+
+	.launchpad-serp-heading {
+		color: #1a0dab;
+		font-size: 18px;
 	}
 }

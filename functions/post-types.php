@@ -288,7 +288,8 @@ function launchpad_seo_meta_box_handler($post, $args) {
 		preg_match_all('|<title>(.*?)</title>|s', $full_content, $title);
 		
 		if(isset($title[1][0])) {
-			$title = strtolower($title[1][0]);
+			$title_natural = $title[1][0];
+			$title = strtolower($title_natural);
 		} else {
 			$title = false;
 		}
@@ -310,18 +311,21 @@ function launchpad_seo_meta_box_handler($post, $args) {
 	}
 
 	$meta = get_post_meta($post->ID, 'SEO', true);
+	
+	$post_word_count = str_word_count(strip_tags($post->post_content));
+	$seo_exerpt = launchpad_seo_excerpt(64, false, $post->ID);
 
 	?>
 		<div class="launchpad-metabox-field">
 			<div class="launchpad-inline-help">
 				<span>?</span>
 				<div>
-					<p>In order to run automated tests, you must enter keywords that you want to target in your copy.  List them here, separated by commas.</p>
+					<p>In order to run automated tests, you must enter your primary keyword / keyphrase that you want to target in your copy.</p>
 				</div>
 			</div>
 			<label>
-				Page Target Keywords
-				<input type="text" name="launchpad_meta[SEO][keywords]" value="<?php echo @$meta['keywords'] ?>">
+				Page Target Keyword / Keyphrase
+				<input type="text" name="launchpad_meta[SEO][keyword]" value="<?php echo @$meta['keyword'] ?>">
 			</label>
 		</div>
 		<div class="launchpad-metabox-field">
@@ -341,7 +345,7 @@ function launchpad_seo_meta_box_handler($post, $args) {
 			</div>
 			<label>
 				SEO'd Title
-				<input type="text" name="launchpad_meta[SEO][title]" value="<?php echo @$meta['title'] ?>">
+				<input type="text" name="launchpad_meta[SEO][title]" value="<?php echo @$meta['title'] ?>" maxlength="70">
 			</label>
 		</div>
 		<div class="launchpad-metabox-field">
@@ -351,98 +355,108 @@ function launchpad_seo_meta_box_handler($post, $args) {
 					<p>This field contains the meta description content.  Meta description is seen on SERPs (search engine results page) if the search query matches terms in the meta description.  A meta description should be a maximum of 160 characters as SERPs typically truncate the description to 160 characters.  As of 2009, Google does not use meta description in page rank algorithms.  If you do not enter a meta description, one will be automatically generated when the page loads based on either the first 32 words of the post, via the post excerpt, or via the text before the "more" tag.</p>
 				</div>
 			</div>
+			<div>
 			<label>
 				SEO Description
-				<textarea name="launchpad_meta[SEO][meta_description]" rows="10" cols="50" class="large-text code" maxlength="160"><?php echo @$meta['meta_description'] ?></textarea>
+				<textarea name="launchpad_meta[SEO][meta_description]" rows="10" cols="50" class="small-text" maxlength="160"><?php echo @substr($meta['meta_description'], 0 , 160) ?></textarea>
 			</label>
+			</div>
+		</div>
+		<div class="launchpad-serp-preview">
+			<div class="launchpad-serp-heading"><?php echo substr($title_natural, 0 , 70) . (strlen($title_natural) > 70 ? '...' : ''); ?></div>
+			<div class="launchpad-serp-url"><?php echo preg_replace('|^https?://|i','', get_permalink($post->ID)) ?></div>
+			<div class="launchpad-serp-meta"><?php echo substr($seo_exerpt, 0 , 160) . (strlen($seo_exerpt) > 160 ? '...' : ''); ?></div>
 		</div>
 		<?php 
 		
-		if($post->post_status === 'publish' && trim($meta['keywords'])) { 
-			$keywords = explode(',', $meta['keywords']);
-		?>
-		<table class="launchpad-metabox-table">
-			<thead>
-				<tr>
-					<th>Keyword</th>
-					<th>Keyword Count</th>
-					<th>Density</th>
-					<th>Content Suggestion</th>
-					<th>Title Suggestion</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				
-				foreach($keywords as $keyword) {
-					$keyword = trim($keyword);
-					$keyword_orig = $keyword;
-					
-					$keyword = preg_replace("/(\r\n|\r|\n)/", ' ', $keyword);
-					$keyword = preg_replace('/\s+/', ' ', $keyword);
-					$keyword = strtolower($keyword);
-					$keyword = html_entity_decode($keyword);
-					
-					$keyword_count = substr_count($cont, $keyword);
-					
-					$percent = round($keyword_count/$word_count*100, 2);
+		if($post->post_status === 'publish' && trim($meta['keyword'])) {
+			
+			$keyword = trim($meta['keyword']);
+			$keyword_orig = $keyword;
+			
+			$keyword = preg_replace("/(\r\n|\r|\n)/", ' ', $keyword);
+			$keyword = preg_replace('/\s+/', ' ', $keyword);
+			$keyword = strtolower($keyword);
+			$keyword = html_entity_decode($keyword);
+			
+			$keyword_count = substr_count($cont, $keyword);
+			
+			$percent = round($keyword_count/$word_count*100, 2);
 
-					$title_opt = false;
+			$title_opt = false;
+			
+			if($title) {
+				if(substr_count($title, $keyword)) {
+					$title_opt = true;
+				}
+			}
 					
-					if($title) {
-						if(substr_count($title, $keyword)) {
-							$title_opt = true;
+		?>
+		<dl class="launchpad-inline-listing">
+			<dt>Keyword Count (Exact Matches)</dt>
+			<dd>
+				<?php echo $keyword_count; ?>
+			</dd>
+			<dt>Keyword Density (Exact Matches)</dt>
+			<dd>
+				<?php echo $percent ?>%
+			</dd>
+			<dt>Title</dt>
+			<dd>
+				<?php
+					
+					if(!$title) {
+						echo 'Make sure you have a title on the page!!!';
+					} else {
+						if(strlen($title) > 70) {
+							echo 'Consider shortening your title.';
+						} else {
+							$keyword_pos = stripos($title, $keyword);
+							if($keyword_pos === 0) {
+								echo 'Consider placing a word before your keyword.';
+							} else if($keyword_pos === false) {
+								echo 'Consider using this keyword in your title.';
+							} else if($keyword_pos/strlen($title)*100 > 35) {
+								echo 'Consider placing your keyword closer to the start of the title.';
+							} else {
+								echo 'No suggestions.';
+							}
 						}
 					}
 					
-					?>
-					<tr>
-						<td><?php echo $keyword_orig; ?></td>
-						<td><?php echo $keyword_count ?></td>
-						<td><?php echo $percent; ?>%</td>
-						<td>
-							<?php
-							
-							if($percent < .5) {
-								echo 'Increase keyword usage to .5% to 2%.';
-							} else if($percent < 2) {
-								echo 'Acceptable keyword usage.';
-							} else {
-								echo 'Consider decreasing keyword usage to under 2%.';
-							}
-							
-							?>
-						</td>
-						<td>
-							<?php
-								if(!$title) {
-									echo 'Make sure you have a title on the page!!!';
-								} else {
-									if(strlen($title) > 70) {
-										echo 'Consider shortening your title.';
-									} else {
-										$keyword_pos = stripos($title, $keyword);
-										if($keyword_pos === 0) {
-											echo 'Consider placing a word before your keyword.';
-										} else if($keyword_pos === false) {
-											echo 'Consider using this keyword in your title.';
-										} else if($keyword_pos/strlen($title)*100 > 35) {
-											echo 'Consider placing your keyword closer to the start of the title.';
-										} else {
-											echo 'No suggestions.';
-										}
-									}
-								}
-								
-							?>
-						</td>
-					</tr>
-					<?php
-				}
+				?>
+			</dd>
+			<dt>Description</dt>
+			<dd>
+				<?php
+				
+					if(substr_count(strtolower($meta['meta_description']), strtolower($keyword))) {
+						echo 'No suggestions.';
+					} else {
+						echo 'Consider using your keyword in the SEO description.';
+					}
 				
 				?>
-			</tbody>
-		</table>
+			</dd>
+			<dt>Content</dt>
+			<dd>
+				<?php
+				
+					if($percent < .5) {
+						echo 'Increase keyword usage to .5% to 2%.';
+					} else if($percent < 2) {
+						echo 'Acceptable keyword usage.';
+					} else {
+						echo 'Consider decreasing keyword usage to under 2%.';
+					}
+					
+					if($post_word_count < 300) {
+						echo ' Consider increasing your content length to 300+ words.  You currently have ' . $post_word_count . ' word' . ($post_word_count === 1 ? '' : 's') . ' in your main content (not accounting for flexible content modules).';
+					}
+				
+				?>
+			</dd>
+		</dl>
 	<?php
 	}
 }
