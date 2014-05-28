@@ -594,11 +594,62 @@ dl.launchpad-inline-listing {
 .launchpad-serp-preview {
 	background: #FFF;
 	border: 1px solid #DDD;
-	line-height: 1.2;
+	color: #545454;
+	font-family: arial, sans-serif;
+	font-size: 13px;
+	line-height: 18px;
 	padding: 1em;
+	
+	* {
+		max-width: 531px;
+	}
 
 	.launchpad-serp-heading {
 		color: #1a0dab;
 		font-size: 18px;
+		line-height: 21px;
+		overflow: hidden;
+		position: relative;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	
+	.launchpad-serp-url {
+		color: #006621;
+		line-height: 16px;
+	}
+}
+
+.launchpad-hr {
+	margin-bottom: 2em;
+	margin-top: 2em;
+}
+
+.launchpad-table-columns {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	
+	> * {
+		display: table-cell;
+	}
+}
+
+#poststuff h3.launchpad-sub-section-heading,
+h3.launchpad-sub-section-heading {
+	margin-bottom: 1em;
+	margin-top: 1em;
+	padding-left: 0;
+}
+
+.launchpad-statistics-list {
+	.dashicons-yes {
+		color: green;
+	}
+	.dashicons-no {
+		color: red;
+	}
+	.dashicons-visibility {
+		color: #ffa300;
 	}
 }

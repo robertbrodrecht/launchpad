@@ -30,8 +30,6 @@ $excerpt = launchpad_seo_excerpt();
 		<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 		<link rel="stylesheet" type="text/css" id="screen-css" media="screen, projection, handheld, tv" href="/css/screen.css">
 		<link rel="stylesheet" type="text/css" media="print" href="/css/print.css">
-		
-		
 		<?php if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/design-tweaks.css')) { ?>
 		
 		<link rel="stylesheet" type="text/css" id="screen-css" media="screen, projection, handheld, tv" href="/design-tweaks.css">
@@ -67,6 +65,15 @@ $excerpt = launchpad_seo_excerpt();
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		
 		<meta name="description" content="<?php echo $excerpt; ?>">
+		
+		<?php
+		
+		if(!$wp_query->is_single && !$wp_query->is_singular) {
+			echo '<meta name="robots" content="noindex, follow">';	
+		}
+		
+		?>
+		
 		
 		<meta property="og:title" content="<?php launchpad_title(true); ?>">
 		<meta property="og:description" content="<?php echo $excerpt; ?>">

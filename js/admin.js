@@ -291,9 +291,13 @@ jQuery(document).ready(
 		);
 		
 		$('textarea[maxlength]').keyup(
-			function() {
+			function(e) {
 				var me = $(this),
 					range;
+				if(e.ctrlKey || e.altKey || e.metaKey || e.which === 91) {
+					return;
+				}
+				console.log(e, e.which);
 				me.val(me.val().substr(0, me.attr('maxlength')));
 				if (typeof this.selectionStart == "number") {
 					this.selectionStart = this.selectionEnd = this.value.length;
@@ -305,6 +309,7 @@ jQuery(document).ready(
 				}
 			}
 		).add('input[maxlength]').on(
+			'keyup',
 			function() {
 				var me = $(this);
 				me.parent().find('.launchpad-char-count').html(+me.attr('maxlength')-me.val().length);
@@ -314,6 +319,54 @@ jQuery(document).ready(
 				var me = $(this),
 					ml = me.attr('maxlength');
 				me.parent().append('<small>Characters Left: <span class="launchpad-char-count">' + (+ml-me.val().length) + '</span> of ' + ml + '</small>');
+			}
+		);
+		
+		$('[name="launchpad_meta[SEO][title]"], [name="launchpad_meta[SEO][keyword]"]').keyup(
+			function() {
+				var serp_head = $('#serp-heading'),
+					parsed_val = $('[name="launchpad_meta[SEO][title]"]').val();
+				
+				parsed_val = parsed_val.replace(/^\s+/, '').replace(/\s+$/, '');
+				
+				if(parsed_val === '') {
+					parsed_val = serp_head.data('post-title');
+				}
+				if(parsed_val) {
+					serp_head.html(
+							parsed_val.substr(0, 70).replace(
+								new RegExp(
+									'(' + $('[name="launchpad_meta[SEO][keyword]"]').val().replace(/\s+/g, '|') + ')', 
+									'ig'
+								), 
+								'<strong>$1</strong>'
+								) + (parsed_val.length > 70 ? ' ...' : '')
+							);
+				}
+			}
+		);
+		
+		$('[name="launchpad_meta[SEO][meta_description]"], [name="launchpad_meta[SEO][keyword]"]').keyup(
+			function() {
+				var serp_head = $('#serp-meta'),
+					parsed_val = $('[name="launchpad_meta[SEO][meta_description]"]').val();
+				
+				parsed_val = parsed_val.replace(/^\s+/, '').replace(/\s+$/, '');
+				
+				if(parsed_val === '') {
+					parsed_val = serp_head.data('post-excerpt');
+				}
+				if(parsed_val) {
+					serp_head.html(
+							parsed_val.substr(0, 160).replace(
+								new RegExp(
+									'(' + $('[name="launchpad_meta[SEO][keyword]"]').val().replace(/\s+/g, '|') + ')', 
+									'ig'
+								), 
+								'<strong>$1</strong>'
+								) + (parsed_val.length > 160 ? ' ...' : '')
+							);
+				}
 			}
 		);
 	}

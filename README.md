@@ -55,10 +55,12 @@ I'll be building out the feature list as I get the time.
 * Meta Description 
   * Custom meta descriptions.
   * Generated from excerpts automatically if no custom value provided.
-* Keyword density and title checks based on various best practices.
+* Keyword density and title checks based on various best practices with suggestions.
+* SERP Preview Snippet
 * OpenGraph tags generated automatically.
 * Google Analytics Support.
 * hCard example in footer.
+* Noindex, follow on listing pages.
 
 
 ## Back-end Features
@@ -144,17 +146,9 @@ To Do For 1.0
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
 * SEO+Social Stuff
-  * Improve edit screen reporting:
-    * Detect keyword in heading, title, url, meta
-    * Limit it 1 keyword?
-    * Add meta and title length counts
-    * Do a preview snippet.
-  * Rel next/previous on pagination
   * Sitemaps
-  * Noindex, follow on listing pages / Disable in robots.txt for date-based archives
   * Twitter Cards
   * Flipboard
-  * Per-page SEO checklist
 * Do a COMPLETE feature review to make sure everything still works.
 * More code documentation.
 * Decide about re-organizing /lib/

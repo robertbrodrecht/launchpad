@@ -279,6 +279,7 @@ function launchpad_meta_box_handler($post, $args) {
  * @since		1.0
  */
 function launchpad_seo_meta_box_handler($post, $args) {
+	locate_template('functions/third-party/TextStatistics.php', true, true);
 	
 	$stopwords = explode(',', "a,about,above,after,again,against,all,am,an,and,any,are,aren't,as,at,be,because,been,before,being,below,between,both,but,by,can't,cannot,could,couldn't,did,didn't,do,does,doesn't,doing,don't,down,during,each,few,for,from,further,had,hadn't,has,hasn't,have,haven't,having,he,he'd,he'll,he's,her,here,here's,hers,herself,him,himself,his,how,how's,i,i'd,i'll,i'm,i've,if,in,into,is,isn't,it,it's,its,itself,let's,me,more,most,mustn't,my,myself,no,nor,not,of,off,on,once,only,or,other,ought,our,ours,ourselves,out,over,own,same,shan't,she,she'd,she'll,she's,should,shouldn't,so,some,such,than,that,that's,the,their,theirs,them,themselves,then,there,there's,these,they,they'd,they'll,they're,they've,this,those,through,to,too,under,until,up,very,was,wasn't,we,we'd,we'll,we're,we've,were,weren't,what,what's,when,when's,where,where's,which,while,who,who's,whom,why,why's,with,won't,would,wouldn't,you,you'd,you'll,you're,you've,your,yours,yourself,yourselves");
 
@@ -308,6 +309,30 @@ function launchpad_seo_meta_box_handler($post, $args) {
 		$cont = preg_replace('/\s+/', ' ', $cont);
 		
 		$word_count = str_word_count($cont);
+		
+		$txt_stat = new TextStatistics();
+		$txt_flesch = $txt_stat->flesch_kincaid_reading_ease($post->post_content);
+		$txt_gunning_fog = $txt_stat->gunning_fog_score($post->post_content);
+		
+/*
+		$words_per_sentence = 0;
+		$syllable_per_word = 0;
+		$cont_sentences = preg_split('/[\.\!\?\r\n]\s+?/', strip_tags($post->post_content));
+		
+		foreach($cont_sentences as $cont_sentence) {
+			$cont_sentence = trim($cont_sentence);
+			if($cont_sentence) {
+				$words_per_sentence += str_word_count($cont_sentence);
+				$cont_sentence_words = explode(' ', $cont_sentence);
+				foreach($cont_sentence_words as $cont_sentence_word) {
+					$syllable_per_word += preg_match_all('/[\w\b]([aeiouy]{1,4})[\w\b]/i', $cont_sentence_word);
+				}
+			}
+		}
+		$words_per_sentence = $words_per_sentence/count($cont_sentences);
+		$syllable_per_word = $syllable_per_word/$word_count;
+		var_dump($words_per_sentence,$syllable_per_word, 206.835  - (1.015 * $words_per_sentence) - (84.6 * $syllable_per_word));
+*/
 	}
 
 	$meta = get_post_meta($post->ID, 'SEO', true);
@@ -325,7 +350,7 @@ function launchpad_seo_meta_box_handler($post, $args) {
 			</div>
 			<label>
 				Page Target Keyword / Keyphrase
-				<input type="text" name="launchpad_meta[SEO][keyword]" value="<?php echo @$meta['keyword'] ?>">
+				<input type="text" name="launchpad_meta[SEO][keyword]" value="<?php echo esc_textarea(@$meta['keyword']) ?>">
 			</label>
 		</div>
 		<div class="launchpad-metabox-field">
@@ -345,7 +370,7 @@ function launchpad_seo_meta_box_handler($post, $args) {
 			</div>
 			<label>
 				SEO'd Title
-				<input type="text" name="launchpad_meta[SEO][title]" value="<?php echo @$meta['title'] ?>" maxlength="70">
+				<input type="text" name="launchpad_meta[SEO][title]" value="<?php echo esc_textarea(@$meta['title']) ?>" maxlength="70">
 			</label>
 		</div>
 		<div class="launchpad-metabox-field">
@@ -358,18 +383,15 @@ function launchpad_seo_meta_box_handler($post, $args) {
 			<div>
 			<label>
 				SEO Description
-				<textarea name="launchpad_meta[SEO][meta_description]" rows="10" cols="50" class="small-text" maxlength="160"><?php echo @substr($meta['meta_description'], 0 , 160) ?></textarea>
+				<textarea name="launchpad_meta[SEO][meta_description]" rows="10" cols="50" class="small-text" maxlength="160"><?php echo esc_textarea(@substr($meta['meta_description'], 0 , 160)) ?></textarea>
 			</label>
 			</div>
 		</div>
-		<div class="launchpad-serp-preview">
-			<div class="launchpad-serp-heading"><?php echo substr($title_natural, 0 , 70) . (strlen($title_natural) > 70 ? '...' : ''); ?></div>
-			<div class="launchpad-serp-url"><?php echo preg_replace('|^https?://|i','', get_permalink($post->ID)) ?></div>
-			<div class="launchpad-serp-meta"><?php echo substr($seo_exerpt, 0 , 160) . (strlen($seo_exerpt) > 160 ? '...' : ''); ?></div>
-		</div>
 		<?php 
 		
-		if($post->post_status === 'publish' && trim($meta['keyword'])) {
+		if($post->post_status === 'publish' && trim(@$meta['keyword'])) {
+			
+			$permalink = get_permalink($post->ID);
 			
 			$keyword = trim($meta['keyword']);
 			$keyword_orig = $keyword;
@@ -379,9 +401,13 @@ function launchpad_seo_meta_box_handler($post, $args) {
 			$keyword = strtolower($keyword);
 			$keyword = html_entity_decode($keyword);
 			
+			$keyword_bold_preg = '/(' . str_replace(' ', '|', $keyword) . ')/i';
+			
 			$keyword_count = substr_count($cont, $keyword);
+			$keyword_count_each = preg_match_all($keyword_bold_preg, $cont);
 			
 			$percent = round($keyword_count/$word_count*100, 2);
+			$percent_each = round($keyword_count_each/$word_count*100, 2);
 
 			$title_opt = false;
 			
@@ -392,72 +418,192 @@ function launchpad_seo_meta_box_handler($post, $args) {
 			}
 					
 		?>
-		<dl class="launchpad-inline-listing">
-			<dt>Keyword Count (Exact Matches)</dt>
-			<dd>
-				<?php echo $keyword_count; ?>
-			</dd>
-			<dt>Keyword Density (Exact Matches)</dt>
-			<dd>
-				<?php echo $percent ?>%
-			</dd>
-			<dt>Title</dt>
-			<dd>
-				<?php
-					
-					if(!$title) {
-						echo 'Make sure you have a title on the page!!!';
-					} else {
-						if(strlen($title) > 70) {
-							echo 'Consider shortening your title.';
+		<hr class="launchpad-hr">
+		<h3 class="launchpad-sub-section-heading">SERP Preview: Would you click through to read your content?</h3>
+		<div class="launchpad-serp-preview">
+			<div id="serp-heading" data-post-title="<?php echo esc_html($post->post_title); ?>" class="launchpad-serp-heading"><?php echo preg_replace($keyword_bold_preg, '<strong>$1</strong>', substr($title_natural, 0 , 70)) . (strlen($title_natural) > 70 ? '...' : ''); ?></div>
+			<div class="launchpad-serp-url"><?php echo preg_replace($keyword_bold_preg, '<strong>$1</strong>', preg_replace('|^http://|i','', $permalink)) ?></div>
+			<div id="serp-meta" data-post-excerpt="<?php echo esc_html(launchpad_excerpt(100, false, $post->ID)); ?>" class="launchpad-serp-meta"><?php echo preg_replace($keyword_bold_preg, '<strong>$1</strong>', substr($seo_exerpt, 0 , 155)) . (strlen($seo_exerpt) > 155 ? ' ...' : ''); ?></div>
+		</div>
+		<div class="launchpad-table-columns">
+			<div>
+				<h3 class="launchpad-sub-section-heading">Statistics (Save to Update)</h3>
+				<dl class="launchpad-inline-listing launchpad-statistics-list">
+					<dt><span class="dashicons <?php echo $word_count >= 300 ? 'dashicons-yes' : 'dashicons-no' ?>"></span> Total Words On Page</dt>
+					<dd>
+						<?php echo $word_count; ?>
+					</dd>
+					<dt><span class="dashicons <?php echo $keyword_count >= 1 ? 'dashicons-yes' : 'dashicons-no' ?>"></span> Exact Keyphrase Count</dt>
+					<dd>
+						<?php echo $keyword_count; ?>
+					</dd>
+					<dt><span class="dashicons <?php echo $percent >= .5 && $percent <= 2 ? 'dashicons-yes' : 'dashicons-no' ?>"></span> Exact Keyphrase Density</dt>
+					<dd>
+						<?php echo $percent ?>%
+						<?php
+						
+						if($percent > 10) {
+							echo ' (Your Copy May Sound Spammy)';
+						} else if($percent > 2) {
+							echo ' (High, but <a href="https://www.youtube.com/watch?v=Rk4qgQdp2UA" target="_blank">Don\'t Stress Over It</a>)';
+						} else if($percent < .5) {
+							echo ' (Low, but <a href="https://www.youtube.com/watch?v=Rk4qgQdp2UA" target="_blank">Don\'t Stress Over It</a>)';
+						}
+						
+						?>
+					</dd>
+					<dt><span class="dashicons <?php echo $keyword_count_each > count(explode(' ', $keyword)) ? 'dashicons-yes' : 'dashicons-no' ?>"></span> Keywords Count</dt>
+					<dd>
+						<?php echo $keyword_count_each; ?>
+					</dd>
+					<dt><span class="dashicons <?php echo $percent >= .5*count(explode(' ', $keyword)) && $percent <= 2*count(explode(' ', $keyword)) ? 'dashicons-yes' : 'dashicons-no' ?>"></span> Keywords Density</dt>
+					<dd>
+						<?php echo $percent_each ?>%
+						<?php
+						
+						if($percent > 2*count(explode(' ', $keyword))) {
+							echo ' (High, but <a href="https://www.youtube.com/watch?v=Rk4qgQdp2UA" target="_blank">Don\'t Stress Over It</a>)';
+						} else if($percent < .5*count(explode(' ', $keyword))) {
+							echo ' (Low, but <a href="https://www.youtube.com/watch?v=Rk4qgQdp2UA" target="_blank">Don\'t Stress Over It</a>)';
+						}
+						
+						?>
+					</dd>
+					<dt><span class="dashicons <?php echo $txt_flesch > 60 ? 'dashicons-yes' : 'dashicons-no' ?>"></span> Flesch Reading Ease</dt>
+					<dd>
+						<?php 
+						
+						echo $txt_flesch;
+						
+						if($txt_flesch < 30) {
+							echo ' (Very Confusing)';
+						} else if($txt_flesch < 50) {
+							echo ' (Difficult)';
+						} else if($txt_flesch < 60) {
+							echo ' (Fairly Difficult)';
+						} else if($txt_flesch < 70) {
+							echo ' (Standard)';
+						} else if($txt_flesch < 80) {
+							echo ' (Fairly Easy)';
+						} else if($txt_flesch < 90) {
+							echo ' (Easy)';
 						} else {
-							$keyword_pos = stripos($title, $keyword);
-							if($keyword_pos === 0) {
-								echo 'Consider placing a word before your keyword.';
-							} else if($keyword_pos === false) {
-								echo 'Consider using this keyword in your title.';
-							} else if($keyword_pos/strlen($title)*100 > 35) {
-								echo 'Consider placing your keyword closer to the start of the title.';
+							echo ' (Very Easy)';
+						}
+							
+						?>
+					</dd>
+					<dt><span class="dashicons <?php echo $txt_gunning_fog < 11 ? 'dashicons-yes' : 'dashicons-no' ?>"></span> Gunning Fog</dt>
+					<dd>
+						<?php 
+						
+						echo $txt_gunning_fog;
+						
+						if($txt_gunning_fog < 6) {
+							echo ' (Very Easy)';
+						} else if($txt_gunning_fog < 10) {
+							echo ' (Standard)';
+						} else {
+							echo ' (Difficult)';
+						}
+						
+						?>
+					</dd>
+				</dl>
+			</div>
+			<div>
+				<h3 class="launchpad-sub-section-heading">Suggestions (Save to Update)</h3>
+				<dl class="launchpad-inline-listing launchpad-statistics-list">
+					<?php
+					
+						if(preg_match_all($keyword_bold_preg, $permalink) >= count(explode(' ', trim($keyword)))) {
+							$test_results = 'No suggestions.';
+							$pass = true;
+						} else {
+							$test_results = 'Consider using your keywords in the slug.';
+							$pass = false;
+						}
+					
+					?>
+					<dt><span class="dashicons <?php echo $pass ? 'dashicons-yes' : 'dashicons-visibility' ?>"></span> URL</dt>
+					<dd><?php echo $test_results ?></dd>
+					<?php
+						
+						$pass = false;
+						if(!$title) {
+							$test_results = 'Make sure you have a title on the page!!!';
+						} else {
+							if(strlen($title) > 70) {
+								$test_results = 'Consider shortening your title.';
 							} else {
-								echo 'No suggestions.';
+								$keyword_pos = stripos($title, $keyword);
+								if($keyword_pos === false) {
+									$test_results = 'Consider using this keyword in your title.';
+								} else if($keyword_pos/strlen($title)*100 > 35) {
+									$test_results = 'Consider placing your keyword closer to the start of the title.';
+								} else {
+									$test_results = 'No suggestions.';
+									$pass = true;
+								}
 							}
 						}
-					}
+						
+					?>
+					<dt><span class="dashicons <?php echo $pass ? 'dashicons-yes' : 'dashicons-visibility' ?>"></span> Title</dt>
+					<dd><?php echo $test_results ?></dd>
+					<?php
 					
-				?>
-			</dd>
-			<dt>Description</dt>
-			<dd>
-				<?php
-				
-					if(substr_count(strtolower($meta['meta_description']), strtolower($keyword))) {
-						echo 'No suggestions.';
-					} else {
-						echo 'Consider using your keyword in the SEO description.';
-					}
-				
-				?>
-			</dd>
-			<dt>Content</dt>
-			<dd>
-				<?php
-				
-					if($percent < .5) {
-						echo 'Increase keyword usage to .5% to 2%.';
-					} else if($percent < 2) {
-						echo 'Acceptable keyword usage.';
-					} else {
-						echo 'Consider decreasing keyword usage to under 2%.';
-					}
+						if(substr_count(strtolower(@$meta['meta_description']), strtolower($keyword))) {
+							$test_results = 'No suggestions.';
+							$pass = true;
+						} else {
+							$test_results = 'Consider using your keyword in the SEO description.';
+							$pass = false;							
+						}
 					
-					if($post_word_count < 300) {
-						echo ' Consider increasing your content length to 300+ words.  You currently have ' . $post_word_count . ' word' . ($post_word_count === 1 ? '' : 's') . ' in your main content (not accounting for flexible content modules).';
-					}
-				
-				?>
-			</dd>
-		</dl>
+					?>
+					<dt><span class="dashicons <?php echo $pass ? 'dashicons-yes' : 'dashicons-visibility' ?>"></span> SEO Description</dt>
+					<dd><?php echo $test_results ?></dd>
+					<?php
+						$pass = true;
+						
+						if($percent < .5) {
+							$test_results = 'Increase keyword usage to .5% to 2%. <a href="https://www.youtube.com/watch?v=Rk4qgQdp2UA" target="_blank">Don\'t stress over it too much</a>.';
+							$pass = false;
+						} else if($percent < 2) {
+							$test_results = 'Acceptable keyword usage.';
+						} else if($percent > 10) {
+							$test_results = 'Your copy may be in danger of being viewed as "keyword stuffing."  You should consider fine tuning your copy if you have over-used your keyphrase to the point where the copy is difficult to read.  Use your best judgement.';
+							$pass = false;
+						} else {
+							$test_results = 'Consider decreasing keyword density to under 2%. <a href="https://www.youtube.com/watch?v=Rk4qgQdp2UA" target="_blank">Don\'t stress over it too much</a>.';
+							$pass = false;
+						}
+						
+						if(!preg_match('/\<h[123456]\>.*?(' . trim($keyword) . ').*?\<\/h[123456]>/i', $full_content)) {
+							$test_results .= ' Consider placing your keyword in a heading tag (H1-H6).';
+							$pass = false;
+						}
+						
+						if($post_word_count < 300) {
+							$test_results .= ' Consider increasing your content length to 300+ words.  You currently have ' . $post_word_count . ' word' . ($post_word_count === 1 ? '' : 's') . ' in your main content (not accounting for flexible content modules).';
+							$pass = false;
+						}
+						
+						if($txt_flesch < 60 || $txt_gunning_fog > 10) {
+							$test_results .= ' Consider whether the reading difficulty is too high.';
+							$pass = false;
+						}
+					
+					?>
+					<dt><span class="dashicons <?php echo $pass ? 'dashicons-yes' : 'dashicons-visibility' ?>"></span> Content</dt>
+					<dd><?php echo $test_results ?></dd>
+				</dl>
+			</div>
+		</div>
 	<?php
+	} else {
+		echo '<p><strong>Save the post with the published status and specify a Page Target Keyword / Keyphrase to get an SEO report.</strong></p>';
 	}
 }
 

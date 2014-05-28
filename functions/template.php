@@ -90,7 +90,7 @@ function launchpad_title($echo = false) {
 	
 	if($wp_query->is_single || $wp_query->is_singular) {
 		$seo = get_post_meta($post->ID, 'SEO', true);
-		if(trim($seo['title'])) {
+		if(isset($seo['title']) && trim($seo['title'])) {
 			$title = $seo['title'];
 			
 			if($echo) {
@@ -183,7 +183,7 @@ function launchpad_seo_excerpt($max_words = 32, $echo = false, $id = false) {
 	}
 	
 	$seo = get_post_meta($tmp_post->ID, 'SEO', true);
-	if(trim($seo['meta_description'])) {
+	if(isset($seo['meta_description']) && trim($seo['meta_description'])) {
 		if($echo) {
 			echo $seo['meta_description'];
 		}
