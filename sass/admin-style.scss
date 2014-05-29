@@ -1,3 +1,5 @@
+// This needs serious clean up.
+
 .launchpad-metabox-field {
 	margin-bottom: 1em;
 	
@@ -651,5 +653,136 @@ h3.launchpad-sub-section-heading {
 	}
 	.dashicons-visibility {
 		color: #ffa300;
+	}
+}
+
+#wp-auth-check-wrap .wp-auth-check-close {
+	top: 3px;
+}
+
+
+
+body.login {
+	background: #333;
+	overflow: auto;
+
+	&:after,		
+	&:before {
+		content: ' ';
+		display: block;
+		height: 80px;
+	}
+	
+	#nav a:hover, 
+	#backtoblog a:hover,
+	#nav a:focus,
+	#backtoblog a:focus,
+	a:active {
+		color: #333;
+	}
+	
+	.wp-core-ui .button-primary,
+	.wp-core-ui .button-primary:hover,
+	.wp-core-ui .button-primary:focus,
+	.wp-core-ui .button-primary:active {
+		background: #333;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
+	}
+	.wp-core-ui .button-primary:hover,
+	.wp-core-ui .button-primary:focus,
+	.wp-core-ui .button-primary:active {
+		opacity: .75;
+	}
+	
+	#login {
+		background: #F6F6F6;
+		border: 15px solid rgba(0, 0, 0, .85);
+		border-radius: 20px;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-ms-box-sizing: border-box;
+		box-sizing: border-box;
+		padding: 20px;
+		width: auto;
+		max-width: 480px;
+	}
+	
+	div#login h1 a {
+		margin-bottom: 0;
+	}
+	
+	form {
+		border-radius: 10px;
+		box-shadow: none;
+		margin-bottom: 12px;
+		padding-bottom: 26px;
+	}
+	
+	#nav {
+		float: right;
+		margin: 0;
+		padding: 0;
+	}
+	#backtoblog {
+		margin: 0;
+		padding: 0;
+	}
+	
+	.message,
+	#login_error {
+		background: #EFEFEF;
+		box-shadow: none;
+		border: 1px solid gray;
+		margin-left: 24px;
+		margin-right: 24px;
+		text-align: center;
+	}
+	
+	&.interim-login #login {
+		margin: auto;
+	}
+	
+	@media (max-width: 480px) {
+		html, body {
+			height: 100%;
+		}
+		
+		&:after,		
+		&:before {
+			display: none;
+		}
+		
+		#login {
+			border: 0;
+			border-radius: 0;
+			min-height: 100%;
+		}
+		
+		.login form {
+			border-radius: 0;
+		}
+		
+		.login #nav {
+			margin-right: 10px;
+		}
+		
+		.login #backtoblog {
+			margin-left: 10px;
+		}
+		
+		&.interim-login {
+			height: 100%;
+		}
+		
+		.interim-login #login {
+			margin: auto;
+			padding: .5em 2em;
+		}
+		
+		.interim-login h1 a {
+			margin-bottom: 0;
+		}
 	}
 }

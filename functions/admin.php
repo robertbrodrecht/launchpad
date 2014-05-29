@@ -180,33 +180,40 @@ function launchpad_get_setting_fields() {
 					)
 				)
 			),
-			'google_analytics_id' => array(
-				'name' => 'Google Analytics ID',
+			'seo_social' => array(
+				'name' => 'SEO and Social <small class="launchpad-block">Don\'t mess with this unless you know what you are doing.',
 				'args' => array(
-					'small' => 'A code like "UA-XXXXXX-X" provided in the <a href="http://google.com/analytics/" target="_blank">Google Analytics</a> Admin area.',
-					'type' => 'text'
-				)
-			),
-			'fb_app_id' => array(
-				'name' => 'Facebook App ID',
-				'args' => array(
-					'small' => 'Don\'t set this unless you know what you\'re doing.',
-					'type' => 'text'
-				)
-			),
-			'fb_admin_id' => array(
-				'name' => 'Facebook Admin IDs',
-				'args' => array(
-					'small' => 'Don\'t set this unless you know what you\'re doing. Separate each ID by a comma without any spaces.',
-					'type' => 'text'
-				)
-			),
-			'twitter_card_username' => array(
-				'name' => 'Twitter Card Username',
-				'args' => array(
-					'small' => 'Don\'t set this unless you know what you\'re doing. DO NOT include the @.',
-					'type' => 'text'
-				)
+					'type' => 'subfield',
+					'subfields' => array(
+						'google_analytics_id' => array(
+							'name' => 'Google Analytics ID',
+							'args' => array(
+								'small' => 'A code like "UA-XXXXXX-X" provided in the <a href="http://google.com/analytics/" target="_blank">Google Analytics</a> Admin area.',
+								'type' => 'text'
+							)
+						),
+						'fb_app_id' => array(
+							'name' => 'Facebook App ID',
+							'args' => array(
+								'type' => 'text'
+							)
+						),
+						'fb_admin_id' => array(
+							'name' => 'Facebook Admin IDs',
+							'args' => array(
+								'small' => 'Separate each ID by a comma without any spaces.',
+								'type' => 'text'
+							)
+						),
+						'twitter_card_username' => array(
+							'name' => 'Twitter Card Username',
+							'args' => array(
+								'small' => 'DO NOT include the @.',
+								'type' => 'text'
+							)
+						)
+					)
+				),
 			),
 			'cache_options' => array(
 				'name' => 'Caching <small class="launchpad-block">Save settings to clear all caches. Save page to clear related caches.</small>',
@@ -998,22 +1005,11 @@ function launchpad_custom_login() {
 	
 ?>
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" href="/css/admin-style.css">
 	<style type="text/css">
 		html,
 		body.login {
 			overflow: auto;
-		}
-		
-		body.login {
-			background: #333;
-			/* background-image: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(0,0,0,.05) 1px, rgba(0,0,0,.05) 7px); */
-		}
-
-		body.login:after,		
-		body.login:before {
-			content: ' ';
-			display: block;
-			height: 80px;
 		}
 		<?php 
 		
@@ -1037,99 +1033,30 @@ function launchpad_custom_login() {
 		} 
 		
 		?>
-		.login #nav a:hover, 
-		.login #backtoblog a:hover,
-		.login #nav a:focus,
-		.login #backtoblog a:focus,
+		
+		<?php if($site_options['primary_color']) { ?>
+		body.login #nav a:hover, 
+		body.login #backtoblog a:hover,
+		body.login #nav a:focus,
+		body.login #backtoblog a:focus,
 		a:active {
-			color: <?php echo $site_options['primary_color'] ? $site_options['primary_color'] : '#333' ?>;
+			color: <?php echo $site_options['primary_color'] ?>;
 		}
 		
 		.wp-core-ui .button-primary,
 		.wp-core-ui .button-primary:hover,
 		.wp-core-ui .button-primary:focus,
 		.wp-core-ui .button-primary:active {
-			background: <?php echo $site_options['primary_color'] ? $site_options['primary_color'] : '#333' ?>;
-			border: 0;
-			border-radius: 0;
+			background: <?php echo $site_options['primary_color'] ?>;
+			border: 1px solid rgba(0, 0, 0, .1);
 			box-shadow: none;
 		}
-		.wp-core-ui .button-primary:hover,
-		.wp-core-ui .button-primary:focus,
-		.wp-core-ui .button-primary:active {
-			opacity: .75;
+		<?php } ?>
+		<?php if($site_options['secondary_color']) { ?>
+		body.login form {
+			border: 1px solid <?php echo $site_options['secondary_color']; ?>
 		}
-		#login {
-			background: #F6F6F6;
-			/* background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(0,0,0,.02) 1px, rgba(0,0,0,.02) 7px); */
-			border: 15px solid rgba(0, 0, 0, .85);
-			border-radius: 20px;
-			-webkit-box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			-ms-box-sizing: border-box;
-			box-sizing: border-box;
-			padding: 20px;
-			width: auto;
-			max-width: 480px;
-		}
-		.login form {
-			border-radius: 10px;
-			box-shadow: none;
-			margin-bottom: 12px;
-			<?php if($site_options['secondary_color']) { ?>
-				border: 1px solid <?php echo $site_options['secondary_color']; ?>
-			<?php } ?>
-		}
-		
-		.login #nav {
-			float: right;
-			margin: 0;
-			padding: 0;
-		}
-		.login #backtoblog {
-			margin: 0;
-			padding: 0;
-		}
-		
-		.login .message,
-		.login #login_error {
-			background: #EFEFEF;
-			box-shadow: none;
-			border: 1px solid gray;
-			margin-left: 24px;
-			margin-right: 24px;
-			text-align: center;
-		}
-		
-		@media (max-width: 480px) {
-			html, body {
-				height: 100%;
-			}
-			
-			body.login:after,		
-			body.login:before {
-				display: none;
-			}
-			
-			#login {
-				border: 0;
-				border-radius: 0;
-				min-height: 100%;
-			}
-			
-			.login form {
-				border-radius: 0;
-			}
-			
-			.login #nav {
-				margin-right: 10px;
-			}
-			
-			.login #backtoblog {
-				margin-left: 10px;
-			}
-		}
-		
+		<?php } ?>
 	</style>
 	
 <?php 
