@@ -155,7 +155,9 @@ function launchpad_rewrite_rules($content) {
 		'api/(.*)' => 'wp-admin/admin-ajax.php',
 		'manifest.appcache' => 'wp-admin/admin-ajax.php?action=cache_manifest',
 		'manifest.obsolete.appcache' => 'wp-admin/admin-ajax.php?action=cache_manifest_obsolete',
-		'favicon.ico' => THEME_PATH . '/favicon.ico'
+		'favicon.ico' => THEME_PATH . '/favicon.ico',
+		'sitemap\.xml/(.*)/?' => 'wp-admin/admin-ajax.php?action=sitemap&sitemap=$1',
+		'sitemap\.xml/?' => 'wp-admin/admin-ajax.php?action=sitemap',
 	);
 	
 	$add_rewrite = apply_filters('launchpad_rewrite_rules', $add_rewrite);
@@ -381,3 +383,17 @@ function launchpad_mime_types($mimes) {
 	return $mimes;
 }
 add_filter('upload_mimes', 'launchpad_mime_types');
+
+
+
+/**
+ * Add to Robots
+ *
+ * @param		str $txt The existing robots.txt content.
+ * @since		1.0
+ */
+function launchpad_robots_txt($txt) {
+	$url = get_bloginfo('url');
+	return "Sitemap: $url/sitemap.xml\n\n" . $txt;	
+}
+add_filter('robots_txt', 'launchpad_robots_txt');

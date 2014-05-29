@@ -48,7 +48,7 @@ I'll be building out the feature list as I get the time.
 * jQuery-based Height Match via <code>@data-height-match-group</code> with children containing <code>@data-height-match</code> or <code>@data-height-match-children</code> to height match all children.  Use either a min-width as a number or media query for when heightmatch should work.
 
 
-## SEO-Related Features
+## SEO and Social Media Related Features
 
 * Rel Canonical built in for posts, pages, and single custom post types.
 * SEO Title with fallback to page title for posts, pages, and single custom post types.
@@ -58,9 +58,11 @@ I'll be building out the feature list as I get the time.
 * Keyword density and title checks based on various best practices with suggestions.
 * SERP Preview Snippet
 * OpenGraph tags generated automatically.
+* Twitter Card tags generated automatically.
 * Google Analytics Support.
 * hCard example in footer.
 * Noindex, follow on listing pages.
+* XML Sitemaps
 
 
 ## Back-end Features
@@ -146,12 +148,10 @@ To Do For 1.0
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
 * SEO+Social Stuff
-  * Sitemaps
-  * Twitter Cards
   * Flipboard
 * Do a COMPLETE feature review to make sure everything still works.
 * More code documentation.
-* Decide about re-organizing /lib/
+* Decide about re-organizing /functions/
 
 
 To Do For 2.0

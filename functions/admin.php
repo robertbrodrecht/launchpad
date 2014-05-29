@@ -187,6 +187,27 @@ function launchpad_get_setting_fields() {
 					'type' => 'text'
 				)
 			),
+			'fb_app_id' => array(
+				'name' => 'Facebook App ID',
+				'args' => array(
+					'small' => 'Don\'t set this unless you know what you\'re doing.',
+					'type' => 'text'
+				)
+			),
+			'fb_admin_id' => array(
+				'name' => 'Facebook Admin IDs',
+				'args' => array(
+					'small' => 'Don\'t set this unless you know what you\'re doing. Separate each ID by a comma without any spaces.',
+					'type' => 'text'
+				)
+			),
+			'twitter_card_username' => array(
+				'name' => 'Twitter Card Username',
+				'args' => array(
+					'small' => 'Don\'t set this unless you know what you\'re doing. DO NOT include the @.',
+					'type' => 'text'
+				)
+			),
 			'cache_options' => array(
 				'name' => 'Caching <small class="launchpad-block">Save settings to clear all caches. Save page to clear related caches.</small>',
 				'args' => array(
@@ -976,7 +997,7 @@ function launchpad_custom_login() {
 	global $site_options;
 	
 ?>
-
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
 	<style type="text/css">
 		html,
 		body.login {
@@ -1043,6 +1064,10 @@ function launchpad_custom_login() {
 			/* background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(0,0,0,.02) 1px, rgba(0,0,0,.02) 7px); */
 			border: 15px solid rgba(0, 0, 0, .85);
 			border-radius: 20px;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			-ms-box-sizing: border-box;
+			box-sizing: border-box;
 			padding: 20px;
 			width: auto;
 			max-width: 480px;
@@ -1074,6 +1099,35 @@ function launchpad_custom_login() {
 			margin-left: 24px;
 			margin-right: 24px;
 			text-align: center;
+		}
+		
+		@media (max-width: 480px) {
+			html, body {
+				height: 100%;
+			}
+			
+			body.login:after,		
+			body.login:before {
+				display: none;
+			}
+			
+			#login {
+				border: 0;
+				border-radius: 0;
+				min-height: 100%;
+			}
+			
+			.login form {
+				border-radius: 0;
+			}
+			
+			.login #nav {
+				margin-right: 10px;
+			}
+			
+			.login #backtoblog {
+				margin-left: 10px;
+			}
 		}
 		
 	</style>

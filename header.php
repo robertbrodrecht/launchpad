@@ -73,14 +73,23 @@ $excerpt = launchpad_seo_excerpt();
 		}
 		
 		?>
+		<?php if($site_options['fb_app_id']) { ?>
 		
+		<meta property="fb:app_id" content="<?php echo $site_options['fb_app_id'] ?>">
+		<?php } ?>
+		<?php if($site_options['fb_admin_id']) { ?>
+		<?php foreach(explode(',', $site_options['fb_admin_id']) as $fb_admin_id) { ?>
+		
+		<meta property="fb:admins" content="<?php echo trim($fb_admin_id) ?>">
+		<?php } ?>
+		<?php } ?>
 		
 		<meta property="og:title" content="<?php launchpad_title(true); ?>">
 		<meta property="og:description" content="<?php echo $excerpt; ?>">
 		<meta property="og:type" content="website">
 		<meta property="og:url" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
 		<meta property="og:site_name" content="<?php bloginfo('name') ?>">
-<?php
+		<?php
 		
 		if(has_post_thumbnail()) {
 			$thumbnail = get_post_thumbnail_id();
@@ -95,7 +104,33 @@ $excerpt = launchpad_seo_excerpt();
 			}
 		}
 		
-?>
+		?>
+
+		<meta property="twitter:card" content="summary">
+		<meta property="twitter:url" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
+		<meta property="twitter:title" content="<?php launchpad_title(true); ?>">
+		<meta property="twitter:description" content="<?php echo $excerpt; ?>">
+		<?php
+		
+		if(has_post_thumbnail()) {
+			$thumbnail = get_post_thumbnail_id();
+			$thumbnail = wp_get_attachment_image_src($thumbnail, 'opengraph');
+			if($thumbnail) {
+				?>
+				<meta property="twitter:image" content="<?php echo $thumbnail[0] ?>">
+				<meta property="twitter:image:width" content="<?php echo $thumbnail[1] ?>">
+				<meta property="twitter:image:height" content="<?php echo $thumbnail[2] ?>">
+				
+				<?php
+			}
+		}
+		
+		?>
+		<?php if($site_options['twitter_card_username']) { ?>
+		
+		<meta property="twitter:site" content="@<?php echo $site_options['twitter_card_username'] ?>">
+		<?php } ?>
+
 		<?php if(defined('GA_ID') && GA_ID != '') { ?>
 
 		<script>
