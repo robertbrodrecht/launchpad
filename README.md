@@ -137,7 +137,6 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Fix mobile login screen.
 * Flexible content modules and field types.
   * What other modules should be built-in?
   * Other field types?
