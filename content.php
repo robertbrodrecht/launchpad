@@ -48,7 +48,7 @@ while(have_posts()) {
 									$flexible_prototype = $flexible_details['modules'][$flex_type];
 									
 									
-									
+									// Use "include locate_template" so that variables are still in scope.
 									switch($flex_type) {
 										case 'accordion':
 											include locate_template('flexible/accordion.php');

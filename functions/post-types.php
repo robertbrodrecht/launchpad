@@ -313,26 +313,6 @@ function launchpad_seo_meta_box_handler($post, $args) {
 		$txt_stat = new TextStatistics();
 		$txt_flesch = $txt_stat->flesch_kincaid_reading_ease($post->post_content);
 		$txt_gunning_fog = $txt_stat->gunning_fog_score($post->post_content);
-		
-/*
-		$words_per_sentence = 0;
-		$syllable_per_word = 0;
-		$cont_sentences = preg_split('/[\.\!\?\r\n]\s+?/', strip_tags($post->post_content));
-		
-		foreach($cont_sentences as $cont_sentence) {
-			$cont_sentence = trim($cont_sentence);
-			if($cont_sentence) {
-				$words_per_sentence += str_word_count($cont_sentence);
-				$cont_sentence_words = explode(' ', $cont_sentence);
-				foreach($cont_sentence_words as $cont_sentence_word) {
-					$syllable_per_word += preg_match_all('/[\w\b]([aeiouy]{1,4})[\w\b]/i', $cont_sentence_word);
-				}
-			}
-		}
-		$words_per_sentence = $words_per_sentence/count($cont_sentences);
-		$syllable_per_word = $syllable_per_word/$word_count;
-		var_dump($words_per_sentence,$syllable_per_word, 206.835  - (1.015 * $words_per_sentence) - (84.6 * $syllable_per_word));
-*/
 	}
 
 	$meta = get_post_meta($post->ID, 'SEO', true);

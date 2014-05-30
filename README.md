@@ -138,25 +138,38 @@ To Do For 1.0
 =============
 
 * Decide about re-organizing /functions/
+  * Should it be /lib/ so there can be /lib/launchpad, /lib/dev, and /lib/third-party? Is that child-theme oppropriate?
+  * system.php: Modifications to how wordpress works.
+  * rewrites: Modrewrite stuff.  Or should this be "htaccess.php" instead for all htaccess mods?
+  * admin: Modifications to wp-admin (e.g. howdy to hello, dahsboard stuff, options pages, auto-generated help).
+  * metabox: Handlers for metaboxes, flexible content, etc.  Move some of this stuff out of api.php?
+  * security: Security-related features.
+  * cache: Cache related features.  Maybe include appCache api.php stuff?
+  * template: additional template tags except cache-related tags.
+  * post-types: Anything related to registering and manipulating post types.
+  * api: Will we even need it?
+  * utilities: Extra functions.
+  * seo? Are there enough SEO things that aren't better put in another file?
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
-  * Probably have the core theme and a child theme.
-  * CSS and JS may be part of the second theme.
+  * Probably have the core theme (Launcpad) and a child theme (Liftoff).
+  * CSS and JS may be part of Liftoff.
   * Probably need to use locate_template instead of include.
   * Attempt to implement a child theme to figure all this out.
 * Do a COMPLETE feature / code review.
-  * More code documentation
+  * More in-code documentation
+  * Refactor
   * Make sure everything still works.
 
 
 To Do For 1.1
 =============
 
+* Implementation Documentation: Make a "Codex."  Note: https://help.github.com/articles/relative-links-in-readmes
 * Flexible content modules and field types.
   * What other modules should be built-in?
   * Other field types?
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
-* Make a "Codex."  Note: https://help.github.com/articles/relative-links-in-readmes
 * SEO+Social Stuff
   * Flipboard
 * "Search Everything" type of functionality so that search includes flexible content modules / custom fields
