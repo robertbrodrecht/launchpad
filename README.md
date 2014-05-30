@@ -137,24 +137,33 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Flexible content modules and field types.
-  * What other modules should be built-in?
-  * Other field types?
-* Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
+* Decide about re-organizing /functions/
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme and a child theme.
   * CSS and JS may be part of the second theme.
   * Probably need to use locate_template instead of include.
+  * Attempt to implement a child theme to figure all this out.
+* Do a COMPLETE feature / code review.
+  * More code documentation
+  * Make sure everything still works.
+
+
+To Do For 1.1
+=============
+
+* Flexible content modules and field types.
+  * What other modules should be built-in?
+  * Other field types?
+* Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
+* Make a "Codex."  Note: https://help.github.com/articles/relative-links-in-readmes
 * SEO+Social Stuff
   * Flipboard
-* Do a COMPLETE feature review to make sure everything still works.
-* More code documentation.
-* Decide about re-organizing /functions/
+* "Search Everything" type of functionality so that search includes flexible content modules / custom fields
 
 
-To Do For 2.0
-=============
+To Do For 2.0-ish
+=================
 
 * Continue improving flexible content if more needs have arisen.
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
@@ -170,4 +179,3 @@ To Do For 2.0
   * Ads
 * Something about widgets.
 * Updates through WP Admin.
-* "Search Everything" type of functionality so that search includes flexible content modules / custom fields
