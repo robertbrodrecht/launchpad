@@ -143,7 +143,7 @@ To Do For 1.0
     * lib/third-party/
     * lib/custom/ (I guess?)
   * system.php: Modifications to how wordpress works.
-  * rewrites: Modrewrite stuff.  Or should this be "htaccess.php" instead for all htaccess mods?
+  * htaccess: Modrewrite stuff, etc.
   * admin: Modifications to wp-admin (e.g. howdy to hello, dahsboard stuff, options pages, auto-generated help).
   * metabox: Handlers for metaboxes, flexible content, etc.  Move some of this stuff out of api.php?
   * security: Security-related features.
