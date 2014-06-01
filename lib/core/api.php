@@ -331,43 +331,6 @@ add_action('wp_ajax_nopriv_cache_manifest_obsolete', 'launchpad_cache_manifest_o
 
 
 /**
- * Handle XML Sitemaps
- *
- * @since		1.0
- */
-function launchpad_sitemap() {
-	global $wpdb;
-	$wpp = $wpdb->posts;
-	$ignore = "'nav_menu_item', 'attachment', 'revision'";
-	$posts_per_page = 10000;
-	$offset = $posts_per_page * (int) $_GET['sitemap'];
-	$url = get_bloginfo('url');
-	
-	header('Content-type: application/xml');
-	
-	echo '<?xml version="1.0" encoding="UTF-8"?>';
-	if(!isset($_GET['sitemap']) || !$_GET['sitemap']) {
-		echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-		$results = $wpdb->get_results("SELECT CEIL(COUNT(ID)/$posts_per_page) as total FROM $wpp WHERE post_type NOT IN ($ignore) AND post_status='publish'");
-		for($i = 0; $i < $results[0]->total; $i++) {
-			echo '<sitemap><loc>' . $url . '/sitemap.xml/' . $i . '/</loc></sitemap>';
-		}
-		echo '</sitemapindex>';
-	} else {
-		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-		$results = $wpdb->get_results("SELECT ID FROM $wpp WHERE post_type NOT IN ($ignore) AND post_status='publish' LIMIT $offset, $posts_per_page");
-		foreach($results as $row) {
-			echo '<url><loc>' . get_permalink($row->ID) . '</loc></url>';
-		}
-		echo '</urlset>';
-	}
-	exit;
-}
-add_action('wp_ajax_sitemap', 'launchpad_sitemap');
-add_action('wp_ajax_nopriv_sitemap', 'launchpad_sitemap');
-
-
-/**
  * Get Flexible Content Layout
  *
  * @since		1.0
