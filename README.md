@@ -137,8 +137,11 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Decide about re-organizing /functions/
-  * Should it be /lib/ so there can be /lib/launchpad, /lib/dev, and /lib/third-party? Is that child-theme oppropriate?
+* Re-organize:
+  * Folders:
+    * lib/core/
+    * lib/third-party/
+    * lib/custom/ (I guess?)
   * system.php: Modifications to how wordpress works.
   * rewrites: Modrewrite stuff.  Or should this be "htaccess.php" instead for all htaccess mods?
   * admin: Modifications to wp-admin (e.g. howdy to hello, dahsboard stuff, options pages, auto-generated help).

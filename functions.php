@@ -13,7 +13,7 @@ global $site_options;
 $site_options = get_option('launchpad_site_options', '');
 
 /** YOUR FUNCTIONS GO HERE.  */
-locate_template('functions-custom.php', true, true);
+locate_template('lib/custom/custom.php', true, true);
 
 
 
