@@ -28,6 +28,7 @@ add_filter('robots_txt', 'launchpad_robots_txt');
  * Depending on whether this is a request for the index or a single sitemap, display the sitemap.
  *
  * @since		1.0
+ * @todo		This needs to cache.
  */
 function launchpad_sitemap() {
 	global $wpdb;

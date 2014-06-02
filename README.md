@@ -162,6 +162,7 @@ To Do For 1.0
 * Do a COMPLETE feature / code review.
   * More in-code documentation
   * Refactor
+    * Do a greater number of hooks / filters into WordPress have a significant performance cost? Is it better to consolidate?
   * Make sure everything still works.
 
 
