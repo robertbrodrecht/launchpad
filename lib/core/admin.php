@@ -10,43 +10,9 @@
  */
 
 
-/**
- * Enable file uploads.
- *
- * @since		1.0
- */
-function launchpad_enable_media_upload() {
-	global $post; 
-	
-	wp_enqueue_script(
-		array(
-			'jquery',
-			'jquery-ui-core',
-			'jquery-ui-tabs',
-			'jquery-ui-sortable',
-			'wp-color-picker',
-			'thickbox',
-			'media-upload'	
-		)
-	);
-	
-	wp_enqueue_style(
-		array(
-			'thickbox',
-			'wp-color-picker'
-		)
-	);
-	
-	
-	if(function_exists('wp_enqueue_media') && !did_action('wp_enqueue_media')){
-		wp_enqueue_media();
-	}
-}
-add_action('admin_enqueue_scripts', 'launchpad_enable_media_upload');
-
 
 /**
- * Activate the Style Selector
+ * Activate the Style Selector in MCE
  *
  * @since		1.0
  */
@@ -58,7 +24,7 @@ add_filter('mce_buttons_2', 'launchpad_activate_style_select');
 
 
 /**
- * Add Common Styles.
+ * Add Common Styles to MCE
  *
  * @since		1.0
  */
@@ -90,7 +56,7 @@ add_filter('tiny_mce_before_init', 'launchpad_add_custom_mcs_styles');
 
 
 /**
- * Add Custom Image Sizes to Admin Selector
+ * Add Custom Image Sizes to Admin Media Selector
  *
  * @since		1.0
  */
@@ -427,351 +393,7 @@ function launchpad_get_setting_fields() {
 	}
 	return $opts;
 }
- 
 
-/**
- * Generate OPTIONs based on an array
- *
- * @param		array $options The array of options to build
- * @param		array $values The array of values to pick selected options
- * @since		1.0
- */
-function launchpad_create_select_options($options, $values) {
-	$ret = '';
-	foreach($options as $option_value => $option_text) {
-		if(is_array($option_text)) {
-			$ret .= '<optgroup label="' . ucwords($option_value) . '">';
-			foreach($option_text as $sub_option_value => $sub_option_text) {
-				$ret .= '<option value="' . $sub_option_value . '"' . (is_array($values) ? (in_array($sub_option_value, $values) ? ' selected="selected"' : '') : ($values == $sub_option_value ? ' selected="selected"' : '')) . '>' . $sub_option_text . '</option>';
-			}
-			$ret .= '</optgroup>';
-		} else {
-			$ret .= '<option value="' . $option_value . '"' . (is_array($values) ? (in_array($option_value, $values) ? ' selected="selected"' : '') : ($values == $option_value ? ' selected="selected"' : '')) . '>' . $option_text . '</option>';
-		}
-	}
-	return $ret;
-}
-
-/**
- * Render fields
- *
- * @param		array $args The array of settings
- * @see			launchpad_get_setting_fields
- * @since		1.0
- */
-function launchpad_render_form_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
-	if($field_prefix === 'launchpad_site_options') {
-		$vals = get_option('launchpad_site_options', '');
-		if(isset($vals[$args['name']]))  {
-			$val = $vals[$args['name']];
-		} else {
-			$val = isset($args['default']) ? $args['default'] : '';
-		}
-	} else {
-		$val = $args['value'];
-		if(!$val && $val !== '' && isset($args['default'])) {
-			$val = $args['default'];
-		}
-	}
-	
-	$class = 'launchpad-field-' . $field_prefix;
-	
-	if($subfield) {
-		$class .= ' launchpad-subfield ' . sanitize_title($subfield);
-	}
-	
-	
-	if($field_prefix !== 'launchpad_flexible') {
-		$field_output_name = $field_prefix . '[' . $args['name'] . ']';
-	} else {
-		$field_output_name = $args['name'];
-	}
-	
-	if($args['id']) {
-		$field_output_id = $args['id'];
-	} else {
-		$field_output_id = $args['name'];
-	}
-	
-	$field_output_id = sanitize_title($field_output_id);
-	
-	switch($args['type']) {
-		case 'checkbox':
-			echo '<input type="hidden" name="' . $field_output_name . '" value="">';
-			if($subfield) {
-				echo '<label class="' . $class . '">';
-			}
-			echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . '>';
-			if($subfield) {
-				echo ' ' . $subfield . '</label>';
-			}
-		break;
-		case 'file':
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			
-			$existing = wp_get_attachment_image($val);
-			if(!$existing) {
-				$val = '';
-			}
-			
-			echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" class="file-button">Upload File</button>';
-			if($existing) {
-				echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $field_output_id . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
-			}
-			
-			if($subfield) {
-				echo '</label>';
-			}
-		break;
-		case 'text':
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text">';
-			if($subfield) {
-				echo '</label>';
-			}
-		break;
-		case 'textarea':
-			echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
-		break;
-		case 'wysiwyg':
-			wp_editor(
-					$val, 
-					$field_output_id,
-					array(
-						'wpautop' => true,
-						'media_buttons' => true,
-						'textarea_name' => $field_output_name,
-						'textarea_rows' => 10,
-						'tinymce' => true,
-						'drag_drop_upload' => true
-					)
-				);
-		break;
-		case 'select':
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
-			echo '<option value="">Select One</option>';
-			echo launchpad_create_select_options($args['options'], $val);
-			echo '</select>';
-			if($subfield) {
-				echo '</label>';
-			}
-		break;
-		case 'selectmulti':
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			echo '<select name="' . $field_output_name . '" size="10" multiple="multiple" id="' . $field_output_id . '">';
-			echo launchpad_create_select_options($args['options'], $val);
-			echo '</select>';
-			if($subfield) {
-				echo '</label>';
-			}
-		break;
-		case 'menu':
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			
-			$all_menus = get_terms('nav_menu', array('hide_empty' => true));
-			
-			$menu_list = array();
-			foreach($all_menus as $menu) {
-				$menu_list[$menu->term_id] = $menu->name;
-			}
-			
-			echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
-			echo '<option value="">Select One</option>';
-			echo launchpad_create_select_options($menu_list, $val);
-			echo '</select>';
-			if($subfield) {
-				echo '</label>';
-			}
-		break;
-		case 'relationship':		
-			echo '<div class="launchpad-relationship-container" data-post-type="' . $args['post_type'] . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $args['limit'] . '">';
-			echo '<div class="launchpad-relationship-search"><label><input type="search" class="launchpad-relationship-search-field" placeholder="Search"></label><ul class="launchpad-relationship-list">';
-			
-			$preload = new WP_Query(
-					array(
-						'post_type' => $args['post_type'],
-						'posts_per_page' => 25,
-					)
-				);
-			
-			foreach($preload->posts as $p) {
-				$ancestors = get_post_ancestors($p);
-				
-				$small = '';
-				
-				if($ancestors) {
-					$ancestors = array_reverse($ancestors);
-					foreach($ancestors as $key => $ancestor) {
-						$ancestor = get_post($ancestor);
-						$small .= ($key > 0 ? ' » ' : '') . $ancestor->post_title;
-					}
-				}
-				
-				echo '<li><a href="#" data-id="' . $p->ID . '">' . $p->post_title . ' <small>' . $small . '</small></a></li>';
-			}
-			
-			echo '</ul></div>';
-			echo '<div class="launchpad-relationship-items-container"><strong> Saved Items (';
-			if($args['limit'] > -1) {
-				echo 'Maximum of ' . $args['limit'] . ' item' . ($args['limit'] == 1 ? '' : 's');
-			} else {
-				echo 'Add as many as you like';
-			}
-			echo ')</strong><ul class="launchpad-relationship-items">';
-			
-			if($val) {
-				foreach($val as $post_id) {
-					$post_id = get_post($post_id);
-					
-					$ancestors = get_post_ancestors($post_id);
-					
-					$small = '';
-					
-					if($ancestors) {
-						$ancestors = array_reverse($ancestors);
-						foreach($ancestors as $key => $ancestor) {
-							$ancestor = get_post($ancestor);
-							$small .= ($key > 0 ? ' » ' : '') . $ancestor->post_title;
-						}
-					}
-					
-					echo '<li><a href="#" data-id="' . $post_id->ID . '"><input type="hidden" name="' . $field_output_name . '[]" value="' . $post_id->ID . '">' . $post_id->post_title . ' <small>' . $small . '</small></a></li>';
-				}
-			}
-			
-			echo '</ul></div>';
-			echo '</div>';
-		break;
-		case 'taxonomy':
-			echo '</label><input type="hidden" name="' . $field_output_name . '">';
-			if(!is_array($args['taxonomy'])) {
-				$args['taxonomy'] = explode(',', preg_replace('/\s?,\s?/', ',', $args['taxonomy']));
-			}
-			
-			if(!$val) {
-				$val = array();
-			}
-			
-			foreach($args['taxonomy'] as $tax) {
-				if(taxonomy_exists($tax)) {
-					$terms = get_terms($tax, array('hide_empty' => false));
-					$tax = get_taxonomy($tax);
-					echo '<fieldset class="launchpad-metabox-fieldset"><legend>' . $tax->labels->name . '</legend>';
-					foreach($terms as $term) {
-						echo '<div class="launchpad-metabox-field"><label>';
-						if($args['multiple']) {
-							echo '<input type="checkbox" name="' . $field_output_name . '[]" value="' . $term->term_id . '"' . (in_array($term->term_id, $val) ? ' checked="checked"' : '') . '>';
-						} else {
-							echo '<input type="radio" name="' . $field_output_name . '[]" value="' . $term->term_id . '"' . (in_array($term->term_id, $val) ? ' checked="checked"' : '') . '>';		
-						}
-						echo $term->name;
-						echo '</label></div>';
-					}
-					echo '</fieldset>';
-				}
-			}
-		break;
-		case 'repeater':
-			$repeater_tmp_id = uniqid();
-			
-			if($val) {
-				$orig_subfield = $args['subfields'];
-				$args['subfields'] = array();
-				while($val) {
-					$tmp_subfield = $orig_subfield;
-					$tmp_vals = array_shift($val);
-					foreach($tmp_vals as $tmp_key => $tmp_val) {
-						if(isset($tmp_subfield[$tmp_key])) {
-							$tmp_subfield[$tmp_key]['args']['value'] = $tmp_val;
-						}
-					}
-					array_push($args['subfields'], $tmp_subfield);
-				}
-			} else {
-				$args['subfields'] = array($args['subfields']);
-			}
-			
-			echo '<div id="launchpad-' . $repeater_tmp_id . '-repeater" class="launchpad-repeater-container launchpad-metabox-field">';
-			
-			foreach($args['subfields'] as $counter => $sub_fields) {
-				echo '<div class="launchpad-flexible-metabox-container launchpad-repeater-metabox-container">'; 
-				echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><br></div>';
-				echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
-				echo '<h3>' . $args['label'] . '</h3>';
-					
-				foreach($sub_fields as $field_key => $field) {
-				
-					echo '<div class="launchpad-metabox-field">';
-					
-					launchpad_render_form_field(
-							array_merge($field['args'], array('name' => $field_output_name . '[launchpad-' . $repeater_tmp_id . $counter . '-repeater][' . $field_key . ']')), 
-							$field['name'], $field_prefix
-						);
-					echo '</div>';
-				}
-	
-				echo '</div>';
-			}
-			
-			echo '</div>';
-			
-			echo '<button type="button" class="button launchpad-repeater-add" data-for="launchpad-' . $repeater_tmp_id . '-repeater">Add Additional ' . $args['label'] . '</button>';
-		break;
-		case 'subfield':
-			foreach($args['subfields'] as $field) {
-				launchpad_render_form_field($field['args'], $field['name']);
-			}
-		break;
-	}
-	if(isset($args['small'])) {
-		if($args['type'] !== 'checkbox' || $subfield !== false) {
-			$class = 'launchpad-block';
-		} else {
-			$class = 'launchpad-inline';
-		}
-		echo '<small class="' . $class . '">' . $args['small'] . '</small>';
-	}
-}
-
-
-/**
- * Get Help Text for A Field Type
- *
- * @param		string $type The type of field to get help text for.
- * @since		1.0
- */
-function launchpad_get_field_help($type) {
-	$ret = '';
-	switch($type) {
-		case 'file':
-			$ret = '<p>To use this field, click the "Upload File" button, then either browse through your Media Library or drag-and-drop a new file to upload.  Once you have found the file, make sure it is selected with a check mark at the top right of the file icon, then click the "Add File" button.</p>';
-		break;
-		case 'selectmulti':
-			$ret = '<p>This field allows you to select one or more items.  On a Mac, use the command key to select multiple items.  On a PC, use the control key to select multiple items.</p>';
-		break;
-		case 'repeater':
-			$ret = '<p>This field allows you to add multiple repeating items.  Click the button below the first item that reads something similar to "Add Additional Item" to add an additional set of fields.</p>';
-		break;
-		case 'relationship':
-			$ret = '<p>This field allows you to attach one or more posts as a list (limitations of this specific field are listed in parenthesis on the right panel next to the text "Saved Items").</p><p>If you don\'t see the post you need, type in the search box to help narrow down the results.  Once you have found the post you need, click it to add it to the "Saved Items" list.</p><p>You can sort the saved items with drag-and-drop.  To remove a saved item, click it in the list of saved items.</p>';
-		break;
-		case 'taxonomy':
-			$ret = '<p>This field allows you to select one or more taxonomy by checking the appropriate checkbox.</p>';
-		break;
-	}
-	return $ret;
-}
 
 
 /**
@@ -938,6 +560,7 @@ function launchpad_theme_options_render_page() {
  * Remove access to certain pages for non-admins
  *
  * @since		1.0
+ * @todo		Consider adding a filter here.
  */
 function launchpad_remove_menu_pages() {
 	$user = wp_get_current_user();
@@ -1063,3 +686,168 @@ function launchpad_custom_login() {
 
 }
 add_action('login_enqueue_scripts', 'launchpad_custom_login');
+
+
+/**
+ * Add Help Tab for Post Types
+ *
+ * Uses various "help" indexes on custom post types to create help tabs for documentation purposes.
+ * 
+ * @since		1.0
+ */
+function launchpad_auto_help_tab() {
+	$post_types = launchpad_get_post_types();
+	
+	if(!$post_types) {
+		return;
+	}
+	
+	$screen = get_current_screen();
+	
+	if(isset($_GET['post_type'])) {
+		$post_type = $_GET['post_type'];
+	} else {
+		$post_type = get_post_type( $post_ID );
+	}
+		
+	if($post_types[$post_type]) {
+		if($post_types[$post_type]['help']) {
+			$screen->add_help_tab(
+				array(
+					'id' => $post_type . '-launchpad_help',
+					'title' => $post_types[$post_type]['single'] . ' Overview',
+					'content' => $post_types[$post_type]['help']
+				)
+			);
+		}
+		
+		if($post_types[$post_type]['metaboxes']) {
+			foreach($post_types[$post_type]['metaboxes'] as $metabox_key => $metabox) {
+				$content = '';
+				
+				if($metabox['help']) {
+					$content .= $metabox['help'];
+				}
+				
+				$field_content = array();
+				
+				foreach($metabox['fields'] as $field) {
+					if($field['help']) {
+						$field_content[$field['name']] = $field['help'];
+					}
+					
+					$generic_help = launchpad_get_field_help($field['args']['type']);
+					
+					if($generic_help) {
+						$field_content[$field['name']] .= $generic_help;
+					}
+				}
+				
+				if($field_content) {
+					$content .= '<p>The following fields are available:</p><dl>';
+					foreach($field_content as $field_name => $field_help) {
+						$content .= '<dt>' . $field_name . '</dt><dd>' . $field_help . '</dd>';
+					}
+					$content .= '</dl>';
+				}
+				
+				if($content) {
+					$screen->add_help_tab(
+						array(
+							'id' => $post_type . '-' . $metabox_key . '-launchpad_help',
+							'title' => $metabox['name'] . ' Overview',
+							'content' => '<div class="launchpad-help-container">' . $content . '</div>'
+						)
+					);
+				}
+			}
+		}
+		
+		if($post_types[$post_type]['flexible']) {
+			foreach($post_types[$post_type]['flexible'] as $flex_key => $flex_details) {
+				$content = '';
+				
+				if($flex_details['help']) {
+					$content .= $flex_details['help'];
+				}
+				
+				$module_content = array();
+				
+				foreach($flex_details['modules'] as $module) {
+					$module_content[$module['name']] = array('help' => ($module['help'] ? $module['help'] : ''), 'fields' => array());
+					
+					foreach($module['fields'] as $field) {
+						if($field['help']) {
+							$module_content[$module['name']]['fields'][$field['name']] = $field['help'];
+						}
+						
+						$generic_help = launchpad_get_field_help($field['args']['type']);
+						
+						if($generic_help) {
+							$module_content[$module['name']]['fields'][$field['name']] .= $generic_help;
+						}
+					}
+				}
+				
+				if($module_content) {
+					$content .= '<dl>';
+					foreach($module_content as $module_name => $module_help) {
+						$content .= '<dt>' . $module_name . '</dt>';
+						$content .= '<dd>';
+						$content .= $module_help['help'];
+						if($module_help['fields']) {
+							$content .= '<p>The following fields are available:</p><dl>';
+							foreach($module_help['fields'] as $field_name => $field_help) {
+								$content .= '<dt>' . $field_name . '</dt><dd>' . $field_help . '</dd>';
+							}
+							$content .= '</dl>';
+						}
+						$content .= '</dd>';
+					}
+					$content .= '</dl>';
+				}
+				
+				if($content) {
+					$screen->add_help_tab(
+						array(
+							'id' => $post_type . '-' . $flex_key . '-launchpad_help',
+							'title' => $flex_details['name'] . ' Overview',
+							'content' => '<div class="launchpad-help-container">' . $content . '</div>'
+						)
+					);
+				}
+			}
+		}
+	}
+}
+add_action('admin_head', 'launchpad_auto_help_tab');
+
+
+
+/**
+ * Get Help Text for A Field Type
+ *
+ * @param		string $type The type of field to get help text for.
+ * @since		1.0
+ */
+function launchpad_get_field_help($type) {
+	$ret = '';
+	switch($type) {
+		case 'file':
+			$ret = '<p>To use this field, click the "Upload File" button, then either browse through your Media Library or drag-and-drop a new file to upload.  Once you have found the file, make sure it is selected with a check mark at the top right of the file icon, then click the "Add File" button.</p>';
+		break;
+		case 'selectmulti':
+			$ret = '<p>This field allows you to select one or more items.  On a Mac, use the command key to select multiple items.  On a PC, use the control key to select multiple items.</p>';
+		break;
+		case 'repeater':
+			$ret = '<p>This field allows you to add multiple repeating items.  Click the button below the first item that reads something similar to "Add Additional Item" to add an additional set of fields.</p>';
+		break;
+		case 'relationship':
+			$ret = '<p>This field allows you to attach one or more posts as a list (limitations of this specific field are listed in parenthesis on the right panel next to the text "Saved Items").</p><p>If you don\'t see the post you need, type in the search box to help narrow down the results.  Once you have found the post you need, click it to add it to the "Saved Items" list.</p><p>You can sort the saved items with drag-and-drop.  To remove a saved item, click it in the list of saved items.</p>';
+		break;
+		case 'taxonomy':
+			$ret = '<p>This field allows you to select one or more taxonomy by checking the appropriate checkbox.</p>';
+		break;
+	}
+	return $ret;
+}
