@@ -53,15 +53,16 @@ function launchpad_theme_activation_action() {
 	$articles_path = '/articles/%postname%/';
 	$uploads_path = 'assets';
 	
+	// Apply filters so the developer can change the locations.
 	$home_page_name = apply_filters('launchpad_activate_home_name', $home_page_name);
 	$articles_page_name = apply_filters('launchpad_activate_articles_name', $articles_page_name);
 	$articles_path = apply_filters('launchpad_activate_articles_path', $articles_path);
 	$uploads_path = apply_filters('launchpad_activate_upload_path', $uploads_path);
 	
+	// If the developer didn't include the postname, add it for them.
 	if(stristr($articles_path, '%postname%') === false) {
 		$articles_path .= '/%postname%/';
 	}
-	
 	
 	// Fix some common issues.
 	$uploads_path = preg_replace('|^/|', '', $uploads_path);
@@ -118,6 +119,8 @@ function launchpad_theme_activation_action() {
 	update_option('permalink_structure', $articles_path);
 	update_option('upload_path', $uploads_path);
 	
+	// Flush rewrite rules when settings are saved.
+	flush_rewrite_rules(true);
 }
 add_action('after_switch_theme', 'launchpad_theme_activation_action');
 

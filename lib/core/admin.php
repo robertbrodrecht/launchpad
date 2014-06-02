@@ -12,11 +12,26 @@
 
 
 /**
+ * Simple Test for User Logged In
+ *
+ * @since	1.0
+ */
+function launchpad_user_logged_in() {
+	header('Content-type: application/json');
+	echo json_encode(is_user_logged_in());
+	exit;
+}
+add_action('wp_ajax_user_logged_in', 'launchpad_user_logged_in');
+add_action('wp_ajax_nopriv_user_logged_in', 'launchpad_user_logged_in');
+
+
+/**
  * Activate the Style Selector in MCE
  *
  * @since		1.0
  */
-function launchpad_activate_style_select( $buttons ) {
+function launchpad_activate_style_select($buttons) {
+	// Add support to MCE for style selection and return.
 	array_unshift($buttons, 'styleselect');
 	return $buttons;
 }
@@ -28,31 +43,35 @@ add_filter('mce_buttons_2', 'launchpad_activate_style_select');
  *
  * @since		1.0
  */
-function launchpad_add_custom_mcs_styles( $init_array ) {  
+function launchpad_add_custom_mcs_styles($init_array) {
+	// Create the inital array of styles supported by Launchpad.
 	$launchpad_mce_style_formats = array(  
-		array(  
+		array(
 			'title' => 'Button',
 			'classes' => 'button',
 			'wrapper' => false,
 			'selector' => 'a'
 		),
-		array(  
-			'title' => 'Crossfade Rotator',  
-			'block' => 'div',  
+		array(
+			'title' => 'Crossfade Rotator',
+			'block' => 'div',
 			'classes' => 'skate',
 			'wrapper' => true,
 			'attributes' => (object) array('data-skate' => 'crossfade')
 		)
 	);
 	
+	// Apply filters to allow the developer to change it.
 	$launchpad_mce_style_formats = apply_filters('launchpad_mce_style_formats', $launchpad_mce_style_formats);
+	
+	// Only keep the unique values.
 	$launchpad_mce_style_formats = array_unique($launchpad_mce_style_formats);
 	
-	$init_array['style_formats'] = json_encode($launchpad_mce_style_formats);  
-	return $init_array;  
-  
-} 
-add_filter('tiny_mce_before_init', 'launchpad_add_custom_mcs_styles');  
+	// Apply the styles and return them.
+	$init_array['style_formats'] = json_encode($launchpad_mce_style_formats);
+	return $init_array;
+}
+add_filter('tiny_mce_before_init', 'launchpad_add_custom_mcs_styles');
 
 
 /**
@@ -61,11 +80,18 @@ add_filter('tiny_mce_before_init', 'launchpad_add_custom_mcs_styles');
  * @since		1.0
  */
 function launchpad_image_sizes_options($sizes) {
+	// Get the global listing of all registered image sizes.
 	global $_wp_additional_image_sizes;
+	
+	// Create an empty array to add to.
 	$tmp = array();
+	
+	// Add each size to the temporary array.
 	foreach($_wp_additional_image_sizes as $image_name => $image_size) {
 		$tmp[$image_name] = $image_name;
 	}
+	
+	// Merge the existing sizes and the sizes set by the user.
     return array_merge($sizes, $tmp);
 }
 add_filter('image_size_names_choose', 'launchpad_image_sizes_options');
@@ -79,6 +105,7 @@ add_filter('image_size_names_choose', 'launchpad_image_sizes_options');
 function launchpad_get_setting_fields() {
 	global $site_options;
 	
+	// Set a default lockout time.
 	$lockouts = '';
 	if(isset($site_options['lockout_time'])) {
 		$lockout_time = $site_options['lockout_time'];
@@ -89,12 +116,16 @@ function launchpad_get_setting_fields() {
 		$lockout_time = 1;
 	}
 	
+	// Check for cache files.
 	$cache_dir = launchpad_get_cache_file();
 	$cache_files = scandir($cache_dir);
 	
+	// Loop the cached files.
 	foreach($cache_files as $cache_file) {
 		$cache_path = $cache_dir . $cache_file;
 		$cache_file_split = explode('-', $cache_file);
+		
+		// Create a list of lockouts based on file information.
 		if($cache_file_split[0] === 'launchpad_limit_logins') {
 			if(time()-filemtime($cache_path) <= $lockout_time*60*60) {
 				$lockouts .= $cache_file_split[1] . ' @ ' . str_replace('.txt', '', $cache_file_split[2]) . '<br>';
@@ -102,10 +133,12 @@ function launchpad_get_setting_fields() {
 		}
 	}
 	
+	// If there were no lockouts
 	if(!$lockouts) {
 		$lockouts = 'No current lockouts.';
 	}
 	
+	// Default Launchpad site options.
 	$opts = array(
 			'security' => array(
 				'name' => 'Security Settings <small class="launchpad-block">Save settings to clear all lockouts.<br><br><strong>Current Lockouts:</strong><br>' . $lockouts . '</small>',
@@ -374,9 +407,11 @@ function launchpad_get_setting_fields() {
 		);
 		
 
+	// Apply filters so the developer can change it.
 	$opts = apply_filters('launchpad_setting_fields', $opts);
 	
-	// Add the ID as the name for each item
+	// Add the ID as the name for each item.
+	// This is to save the developer some typing and duplication of key/values.
 	foreach($opts as $k => $v) {
 		$v['args']['name'] = $k;
 		if($v['args']['type'] === 'subfield') {
@@ -404,10 +439,14 @@ function launchpad_get_setting_fields() {
  */
 function launchpad_site_options_validate($input) {
 	global $site_options;
-
+	
+	// Clear all cached files when the settings are saved.
 	launchpad_clear_all_cache();
+	
+	// Get all settings fields.
 	$settings = launchpad_get_setting_fields();
 	
+	// Loop them, applying any needed validation to the POST'd values.
 	foreach($settings as $key => $setting) {
 		if($setting['args']['type'] === 'checkbox') {
 			if(!isset($input[$key]) || $input[$key] === '') {
@@ -415,15 +454,15 @@ function launchpad_site_options_validate($input) {
 			} else {
 				$input[$key] = true;
 			}
-		} else if($setting['args']['type'] === 'file') {
-
 		}
 		
 		$site_options[$key] = $input[$key];
 	}
 	
+	// Flush rewrite rules when settings are saved.
 	flush_rewrite_rules(true);
 	
+	// Clear all lockouts when settings are saved.
 	$cache_folder = launchpad_get_cache_file();
 	$all_files = scandir($cache_folder);
 	foreach($all_files as $current_file) {
@@ -432,7 +471,7 @@ function launchpad_site_options_validate($input) {
 		}
 	}
 	
-	// Touch the API file to reset the appcache.
+	// Touch the cache folder to reset the appcache.
 	// This helps avoid confusing issues with time zones.
 	touch($cache_folder, time(), time());
 	
@@ -446,10 +485,14 @@ function launchpad_site_options_validate($input) {
  * @since		1.0
  */
 function launchpad_site_options_init() {
+	// Add support for an options page.
 	register_setting('launchpad_options', 'launchpad_site_options', 'launchpad_site_options_validate');
 	add_settings_section('launchpad_settings', 'General Options', '__return_false', 'launchpad_settings');
 	
+	// Get the settings fields.
 	$launchpad_options = launchpad_get_setting_fields();
+	
+	// Loop all the settings and add support for them.
 	foreach($launchpad_options as $launchpad_option_id => $launchpad_option_details) {
 		add_settings_field(
 				$launchpad_option_id,
@@ -470,6 +513,7 @@ add_action('admin_init', 'launchpad_site_options_init');
  * @since		1.0
  */
 function launchpad_theme_options_add_page() {
+	// Set some defaults.  This is an example and not actually used unless modified.
 	$opts = array(
 			'parent_page' => false,
 			'page_name' => 'Theme Options',
@@ -480,9 +524,13 @@ function launchpad_theme_options_add_page() {
 		
 	$opts_orig = $opts;
 	
+	// Apply filters so the developer can change them.
 	$opts = apply_filters('launchpad_theme_options_page', $opts);
 	
+	// If the options have changed, use the values the developer set.
 	if($opts != $opts_orig) {
+		// If there is no parent page, the registration method is different.
+		// So, handle it accordingly.
 		if($opts['parent_page'] === false) {
 			add_menu_page(
 				$opts['page_name'],
@@ -503,6 +551,8 @@ function launchpad_theme_options_add_page() {
 				'launchpad_theme_options_render_page'
 			);
 		}
+		
+	// If the options have not changed, use the defaults.
 	} else {
 		add_submenu_page(
 			'options-general.php',
@@ -535,16 +585,19 @@ add_filter('option_page_capability_launchpad_options', 'launchpad_option_page_ca
  * @since		1.0
  */
 function launchpad_theme_options_render_page() {
+	// If the current user lacks privileges, block them.
 	if(!current_user_can('manage_options')) {
 		wp_die('You do not have sufficient permissions to access this page.');
 	}
+	
+	// Otherwise, render the options page wrapper.
 	?>
 	<div class="wrap">
 		<?php screen_icon(); ?>
 		<h2><?php echo function_exists( 'wp_get_theme' ) ? wp_get_theme() : get_current_theme() ?> Settings</h2> 
 		<form method="post" action="options.php">
 			<?php
-			
+				
 				settings_fields('launchpad_options');
 				do_settings_sections('launchpad_settings');
 				submit_button();
@@ -578,8 +631,11 @@ add_action('admin_menu', 'launchpad_remove_menu_pages');
  * @since		1.0
  */
 function launchpad_admin_script_includes() {
+	// Add admin-style.css.
 	wp_register_style('launchpad_wp_admin_css', get_template_directory_uri() . '/css/admin-style.css', false, '1.0.0' );
 	wp_enqueue_style('launchpad_wp_admin_css');
+	
+	// Add admin.js.
 	wp_enqueue_script('launchpad_wp_admin_js', get_template_directory_uri() . '/js/admin.js');
 }
 add_action('admin_enqueue_scripts', 'launchpad_admin_script_includes');
@@ -620,7 +676,10 @@ add_filter('gettext', 'launchpad_change_howdy', 10, 3);
 
 /**
  * Customize the Login Screen
- *
+ * 
+ * Most of the customizations are handled in admin-style.scss, but these particular ones 
+ * require PHP to render user-defined values.
+ * 
  * @since		1.0
  */
 function launchpad_custom_login() {
@@ -694,6 +753,7 @@ add_action('login_enqueue_scripts', 'launchpad_custom_login');
  * Uses various "help" indexes on custom post types to create help tabs for documentation purposes.
  * 
  * @since		1.0
+ * @todo		This needs inline documentation.
  */
 function launchpad_auto_help_tab() {
 	$post_types = launchpad_get_post_types();
@@ -828,6 +888,7 @@ add_action('admin_head', 'launchpad_auto_help_tab');
  *
  * @param		string $type The type of field to get help text for.
  * @since		1.0
+ * @todo		This needs inline documentation.
  */
 function launchpad_get_field_help($type) {
 	$ret = '';

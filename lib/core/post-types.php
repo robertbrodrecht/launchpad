@@ -16,8 +16,13 @@
  * @since		1.0
  */
 function launchpad_get_post_types() {
+	// By default, there are no custom post types.
 	$post_types = array();
+	
+	// Apply filters to allow the developer to add post types.
 	$post_types = apply_filters('launchpad_custom_post_types', $post_types);
+	
+	// Return the post types.
 	return $post_types;
 }
 
@@ -33,32 +38,50 @@ function launchpad_get_post_types() {
  * @since		1.0
  */
 function launchpad_register_post_types() {
-	
+	// Get the available post types provided by WordPress.
 	$registered_post_types = get_post_types();
+	
+	// Get post types and modifications created by the developer.
 	$post_types = launchpad_get_post_types();
 	
+	// If the developer didn't make any, return here.
 	if(!$post_types) {
 		return;
 	}
-			
+	
+	// Loop the developer-related post types and modifications.
 	foreach($post_types as $post_type => $post_type_details) {
+		
+		// If the current post type has custom taxonomies, put them in an array.
 		if($post_type_details['taxonomies'] && is_array($post_type_details['taxonomies'])) {
 			$taxonomies = $post_type_details['taxonomies'];
+			
+		// Otherwise, set the list to false.
 		} else {
 			$taxonomies = false;
 		}
+		
+		// Remove the taxonomies in case they are applied directly to register_post_type.
 		unset($post_type_details['taxonomies']);
 		
+		// If the developer sets a 'labels' key, it means the developer wants full control of the registration array.
 		if($post_type_details['labels']) {
 			$args = $post_type_details;
+		
+		// Otherwise, we need to create an array to send to register_post_type.
 		} else {
+		
+			// Grab the values set by the developer.
 			$post_type_plural = $post_type_details['plural'];
 			$post_type_single = $post_type_details['single'];
 			$post_type_slug = $post_type_details['slug'];
 			$post_type_menu_options = $post_type_details['menu_position'];
 			
+			// If the developer set 'supports' values, use those.
 			if($post_type_details['supports']) {
 				$supports = $post_type_details['supports'];
+			
+			// If not, use the defaults.
 			} else {
 				$supports = array(
 						'title',
@@ -67,7 +90,7 @@ function launchpad_register_post_types() {
 					);
 			}
 			
-			
+			// Apply the default values to the array.
 			$args = array(
 				'labels' => array(
 						'name' => $post_type_plural,
@@ -101,19 +124,28 @@ function launchpad_register_post_types() {
 			);
 		}
 		
+		// If the post type is not a built-in post type, register it.
 		if(!in_array($post_type, $registered_post_types)) {
 			register_post_type($post_type, $args);
 		}
 		
+		// If the developer included taxonomies, deal with them.
 		if($taxonomies) {
+			
+			// Loop the taxonomies.
 			foreach($taxonomies as $taxonomy => $taxonomy_details) {
+				// If the developer included 'labels', they want full control.
 				if($taxonomy_details['labels']) {
 					register_taxonomy($taxonomy_details);
+				
+				// Otherwise, we have to build an array for the developer.
 				} else {
+					// Set the defaults.
 					$taxonomy_plural = $taxonomy_details['plural'];
 					$taxonomy_single = $taxonomy_details['single'];
 					$taxonomy_slug = $taxonomy_details['slug'];
 					
+					// Register the taxonomy for the current post type.
 					register_taxonomy(
 							$taxonomy, 
 							array($post_type), 
