@@ -426,6 +426,38 @@ add_action('add_meta_boxes', 'launchpad_add_meta_boxs', 10, 1);
 
 
 /**
+ * Save launchpad_meta fields
+ *
+ * @param		number $post_id The post ID that the meta applies to
+ * @since		1.0
+ */
+function launchpad_save_post_data($post_id) {
+	// Touch the API file to reset the appcache.
+	// This helps avoid confusing issues with time zones.
+	touch(launchpad_get_cache_file(), time(), time());
+	
+	// If there is no LaunchPad fields, don't affect anything.
+	if(empty($_POST) || !isset($_POST['launchpad_meta'])) {
+		return;
+	}
+	if($_POST['post_type'] === 'page') {
+		if(!current_user_can('edit_page', $post_id)) {
+			return;
+		}
+	} else {
+		if(!current_user_can('edit_post', $post_id)) {
+			return;
+		}
+	}
+	
+	foreach($_POST['launchpad_meta'] as $meta_key => $meta_value) {
+		update_post_meta($post_id, $meta_key, $meta_value);
+	}
+}
+add_action('save_post', 'launchpad_save_post_data');
+
+
+/**
  * Meta Box Handler
  *
  * @param		object $post The current post

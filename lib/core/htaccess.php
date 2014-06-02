@@ -39,3 +39,49 @@ function launchpad_rewrite_rules($content) {
 	return $content;
 }
 add_action('generate_rewrite_rules', 'launchpad_rewrite_rules');
+
+
+/**
+ * Include HTML5 Boilerplate in HTACCESS
+ * 
+ * This is modified from the Roots theme.
+ *
+ * @param		string $content
+ * @since		1.0
+ */
+function launchpad_add_h5bp_htaccess($content) {
+	global $wp_rewrite, $site_options;
+	
+	$home_path = function_exists('get_home_path') ? get_home_path() : ABSPATH;
+	$htaccess_file = $home_path . '.htaccess';
+	$mod_rewrite_enabled = function_exists('got_mod_rewrite') ? got_mod_rewrite() : false;
+
+	if(
+		(
+			!file_exists($htaccess_file) && 
+			is_writable($home_path) && 
+			$wp_rewrite->using_mod_rewrite_permalinks()
+		) || 
+		is_writable($htaccess_file)
+	) {
+		if($mod_rewrite_enabled) {
+			$h5bp_rules = extract_from_markers($htaccess_file, 'HTML5 Boilerplate');
+			
+			// If there are no Boilerplate Rules and the user wants them, add them.
+			if ($h5bp_rules === array() && $site_options['html5_bp'] === true) {
+				$filename = dirname(__FILE__) . '/../support/H5BPv4.3_htaccess';
+				$boilerplate_rules = extract_from_markers($filename, 'HTML5 Boilerplate');
+			
+			// If there are Boilerplate rules and the user doesn't want them, remove them.
+			} else if($h5bp_rules !== array() && $site_options['html5_bp'] !== true) {
+				$boilerplate_rules = '';
+			}
+			
+			// Update the HTACCESS file.
+			insert_with_markers($htaccess_file, 'HTML5 Boilerplate', $boilerplate_rules);
+		}
+	}
+	
+	return $content;
+}
+add_action('generate_rewrite_rules', 'launchpad_add_h5bp_htaccess');

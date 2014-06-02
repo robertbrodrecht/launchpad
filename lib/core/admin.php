@@ -823,7 +823,6 @@ function launchpad_auto_help_tab() {
 add_action('admin_head', 'launchpad_auto_help_tab');
 
 
-
 /**
  * Get Help Text for A Field Type
  *

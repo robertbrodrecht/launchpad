@@ -48,6 +48,7 @@ function launchpad_get_cache_id() {
 	return $cache_id;
 }
 
+
 /**
  * Get the Cache File for A Post
  *
@@ -76,6 +77,7 @@ function launchpad_get_cache_file($post_id = false, $type = false) {
 	
 	return $cache;
 }
+
 
 /**
  * Check If A Cache Is Valid

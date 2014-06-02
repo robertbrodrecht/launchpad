@@ -19,6 +19,7 @@ define('RELATIVE_CONTENT_PATH', str_replace(site_url() . '/', '', content_url())
 /** Root-relative theme path. */
 define('THEME_PATH', RELATIVE_CONTENT_PATH . '/themes/' . THEME_NAME);
 
+
 /**
  * Get Base URL for WP Subdir
  * 
@@ -34,6 +35,7 @@ function wp_base_dir() {
 		return '';
 	}
 }
+
 
 /**
  * Set up the pages and posts required for this theme
@@ -148,51 +150,6 @@ function launchpad_http_headers() {
 }
 add_action('send_headers', 'launchpad_http_headers');
 
-/**
- * Include HTML5 Boilerplate in HTACCESS
- * 
- * This is modified from the Roots theme.
- *
- * @param		string $content
- * @since		1.0
- */
-function launchpad_add_h5bp_htaccess($content) {
-	global $wp_rewrite, $site_options;
-	
-	$home_path = function_exists('get_home_path') ? get_home_path() : ABSPATH;
-	$htaccess_file = $home_path . '.htaccess';
-	$mod_rewrite_enabled = function_exists('got_mod_rewrite') ? got_mod_rewrite() : false;
-
-	if(
-		(
-			!file_exists($htaccess_file) && 
-			is_writable($home_path) && 
-			$wp_rewrite->using_mod_rewrite_permalinks()
-		) || 
-		is_writable($htaccess_file)
-	) {
-		if($mod_rewrite_enabled) {
-			$h5bp_rules = extract_from_markers($htaccess_file, 'HTML5 Boilerplate');
-			
-			// If there are no Boilerplate Rules and the user wants them, add them.
-			if ($h5bp_rules === array() && $site_options['html5_bp'] === true) {
-				$filename = dirname(__FILE__) . '/../support/H5BPv4.3_htaccess';
-				$boilerplate_rules = extract_from_markers($filename, 'HTML5 Boilerplate');
-			
-			// If there are Boilerplate rules and the user doesn't want them, remove them.
-			} else if($h5bp_rules !== array() && $site_options['html5_bp'] !== true) {
-				$boilerplate_rules = '';
-			}
-			
-			// Update the HTACCESS file.
-			insert_with_markers($htaccess_file, 'HTML5 Boilerplate', $boilerplate_rules);
-		}
-	}
-	
-	return $content;
-}
-add_action('generate_rewrite_rules', 'launchpad_add_h5bp_htaccess');
-
 
 /**
  * The Preg Callback for Root Relative URLS
@@ -281,7 +238,7 @@ foreach($launchpad_rel_filters as $launchpad_rel_filter) {
  * @since		1.0
  */
 function launchpad_remove_self_closing_tags($input) {
-	return str_replace(' />', '>', $input);
+	return str_replace(' ?/>', '>', $input);
 }
 add_filter('get_avatar', 'launchpad_remove_self_closing_tags');
 add_filter('comment_id_fields', 'launchpad_remove_self_closing_tags');
@@ -297,45 +254,14 @@ add_filter('post_thumbnail_html', 'launchpad_remove_self_closing_tags');
  *
  * @param		array $attr The image attributes to modify
  * @since		1.0
+ * @todo		Why is this not doing what I think it should?
  */
-function launchpad_wp_get_attachment_image_attributes( $attr ) {
+function launchpad_wp_get_attachment_image_attributes($attr) {
 	unset($attr['title']);
 	$attr['alt'] = '';
 	return $attr;
 }
 add_filter('wp_get_attachment_image_attributes', 'launchpad_wp_get_attachment_image_attributes');
-
-
-/**
- * Save launchpad_meta fields
- *
- * @param		number $post_id The post ID that the meta applies to
- * @since		1.0
- */
-function launchpad_save_post_data($post_id) {
-	// Touch the API file to reset the appcache.
-	// This helps avoid confusing issues with time zones.
-	touch(launchpad_get_cache_file(), time(), time());
-	
-	// If there is no LaunchPad fields, don't affect anything.
-	if(empty($_POST) || !isset($_POST['launchpad_meta'])) {
-		return;
-	}
-	if($_POST['post_type'] === 'page') {
-		if(!current_user_can('edit_page', $post_id)) {
-			return;
-		}
-	} else {
-		if(!current_user_can('edit_post', $post_id)) {
-			return;
-		}
-	}
-	
-	foreach($_POST['launchpad_meta'] as $meta_key => $meta_value) {
-		update_post_meta($post_id, $meta_key, $meta_value);
-	}
-}
-add_action('save_post', 'launchpad_save_post_data');
 
 
 
