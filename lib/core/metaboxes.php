@@ -17,6 +17,7 @@
 function launchpad_enable_media_upload() {
 	global $post; 
 	
+	// These scripts must be included to handle media uploading.
 	wp_enqueue_script(
 		array(
 			'jquery',
@@ -29,6 +30,7 @@ function launchpad_enable_media_upload() {
 		)
 	);
 	
+	// These styles must be included to handle media uploading.
 	wp_enqueue_style(
 		array(
 			'thickbox',
@@ -36,7 +38,7 @@ function launchpad_enable_media_upload() {
 		)
 	);
 	
-	
+	// Equeue media if it hasn't already been done.
 	if(function_exists('wp_enqueue_media') && !did_action('wp_enqueue_media')){
 		wp_enqueue_media();
 	}
@@ -53,13 +55,17 @@ add_action('admin_enqueue_scripts', 'launchpad_enable_media_upload');
  */
 function launchpad_create_select_options($options, $values) {
 	$ret = '';
+	
+	// Loop the options.
 	foreach($options as $option_value => $option_text) {
+		// If the option is an array, we'll create an optgroup.
+		// We'll just call the function recursively to get those options.
 		if(is_array($option_text)) {
 			$ret .= '<optgroup label="' . ucwords($option_value) . '">';
-			foreach($option_text as $sub_option_value => $sub_option_text) {
-				$ret .= '<option value="' . $sub_option_value . '"' . (is_array($values) ? (in_array($sub_option_value, $values) ? ' selected="selected"' : '') : ($values == $sub_option_value ? ' selected="selected"' : '')) . '>' . $sub_option_text . '</option>';
-			}
+			$ret .= launchpad_create_select_options($option_text, $values);
 			$ret .= '</optgroup>';
+		
+		// Otherwise, create the individual options.
 		} else {
 			$ret .= '<option value="' . $option_value . '"' . (is_array($values) ? (in_array($option_value, $values) ? ' selected="selected"' : '') : ($values == $option_value ? ' selected="selected"' : '')) . '>' . $option_text . '</option>';
 		}
@@ -69,48 +75,72 @@ function launchpad_create_select_options($options, $values) {
 
 /**
  * Render fields
+ * 
+ * This gets a bit convoluted because it is used to render both launchpad site options fields
+ * and launchpad metabox fields.  Site options were developed first, so a lot of the weird 
+ * logic at the top is to make this function work for both, which requires some monkeying around.
  *
  * @param		array $args The array of settings
+ * @param		string|bool $subfield Whether this is a subfield.  If it is a string, it is the field's label.
+ * @param		string $field_prefix What prefix to add: launchpad_site_options, launchpad_meta, or launchpad_flexible.
  * @see			launchpad_get_setting_fields
  * @since		1.0
  * @todo		Break each field type into a function.  This is getting crazy.
  */
 function launchpad_render_form_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
+	
+	// If we're dealing with site options, handle the set up.
 	if($field_prefix === 'launchpad_site_options') {
+		// Get the site options.
 		$vals = get_option('launchpad_site_options', '');
+		// If an option value exists for the current field, set it as $val.
 		if(isset($vals[$args['name']]))  {
 			$val = $vals[$args['name']];
+		// Otherwise, see if there is a default value to set as $val.
 		} else {
 			$val = isset($args['default']) ? $args['default'] : '';
 		}
+	// Otherwise, we're dealing with post meta.
 	} else {
+		// Set the value to the the args value.
 		$val = $args['value'];
+		// If there is no value and there is a default, set the default as the value.
 		if(!$val && $val !== '' && isset($args['default'])) {
 			$val = $args['default'];
 		}
 	}
 	
+	// Set a class to use based on the field prefix to style against.
 	$class = 'launchpad-field-' . $field_prefix;
 	
+	// If the field is a sub-field, add a class that specifies that it is a subfield
+	// and what kind of subfield.
 	if($subfield) {
 		$class .= ' launchpad-subfield ' . sanitize_title($subfield);
 	}
 	
-	
+	// If we're dealing with flexible content, the field's @name needs to be sandboxed into an array.
 	if($field_prefix !== 'launchpad_flexible') {
 		$field_output_name = $field_prefix . '[' . $args['name'] . ']';
+		
+	// Otherwise, it can be whatever the developer wanted it to be.
 	} else {
 		$field_output_name = $args['name'];
 	}
 	
+	// If there is an ID specified for a field, set it as the @id for the field.
 	if($args['id']) {
 		$field_output_id = $args['id'];
+	
+	// Otherwise, fallback to using the @name as the @id.
 	} else {
 		$field_output_id = $args['name'];
 	}
 	
+	// Sanitize it just in case.
 	$field_output_id = sanitize_title($field_output_id);
 	
+	// Determine how to handle each field based on the type of field it is.
 	switch($args['type']) {
 		case 'checkbox':
 			echo '<input type="hidden" name="' . $field_output_name . '" value="">';
@@ -350,7 +380,10 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			}
 		break;
 	}
+	
+	// Finally, if there is any "small" text associated with the field, handle the ouptput.
 	if(isset($args['small'])) {
+		// Decide if it should be block or inline based on the field type.
 		if($args['type'] !== 'checkbox' || $subfield !== false) {
 			$class = 'launchpad-block';
 		} else {
@@ -366,35 +399,20 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
  *
  * @since		1.0
  */
-function launchpad_add_meta_boxs() {
-	$post_types = get_post_types();
+function launchpad_add_meta_boxes() {
 	
-	foreach($post_types as $post_type) {
-		switch($post_type) {
-			case 'attachment':
-			case 'revision':
-			case 'nav_menu_item':
-			break;
-			default:
-				add_meta_box(
-					'launchpad-seo',
-					'SEO and Social Media Options',
-					'launchpad_seo_meta_box_handler',
-					$post_type,
-					'advanced',
-					'core'
-				);
-			break;
-		}
-	}
-	
+	// Get all developer-manipulated post types.
 	$post_types = launchpad_get_post_types();
 	
+	// If there aren't any, 
 	if(!$post_types) {
 		return;
 	}
 	
+	// Loop the post types.
 	foreach($post_types as $post_type => $post_type_details) {
+		
+		// If there are metabox keys, loop the metaboxes and add them.
 		if(isset($post_type_details['metaboxes']) && $post_type_details['metaboxes']) {
 			foreach($post_type_details['metaboxes'] as $metabox_id => $metabox_details) {
 				add_meta_box(
@@ -408,6 +426,8 @@ function launchpad_add_meta_boxs() {
 				);
 			}
 		}
+		
+		// If there are flexible content keys, loop the flexible content types and add metaboxes.
 		if(isset($post_type_details['flexible']) && $post_type_details['flexible']) {
 			foreach($post_type_details['flexible'] as $flex_id => $flex_details) {
 				add_meta_box(
@@ -423,7 +443,7 @@ function launchpad_add_meta_boxs() {
 		}
 	}
 }
-add_action('add_meta_boxes', 'launchpad_add_meta_boxs', 10, 1);
+add_action('add_meta_boxes', 'launchpad_add_meta_boxes', 10, 1);
 
 
 /**
@@ -437,10 +457,12 @@ function launchpad_save_post_data($post_id) {
 	// This helps avoid confusing issues with time zones.
 	touch(launchpad_get_cache_file(), time(), time());
 	
-	// If there is no LaunchPad fields, don't affect anything.
+	// If there is no Launchpad fields, don't affect anything.
 	if(empty($_POST) || !isset($_POST['launchpad_meta'])) {
 		return;
 	}
+	
+	// If the user can't edit, return.
 	if($_POST['post_type'] === 'page') {
 		if(!current_user_can('edit_page', $post_id)) {
 			return;
@@ -451,6 +473,7 @@ function launchpad_save_post_data($post_id) {
 		}
 	}
 	
+	// Save each meta value.
 	foreach($_POST['launchpad_meta'] as $meta_key => $meta_value) {
 		update_post_meta($post_id, $meta_key, $meta_value);
 	}
@@ -463,23 +486,29 @@ add_action('save_post', 'launchpad_save_post_data');
  *
  * @param		object $post The current post
  * @param		array $args Arguments passed from the metabox
+ * @uses		launchpad_render_form_field()
  * @since		1.0
  */
 function launchpad_meta_box_handler($post, $args) {
 	
+	// Loop the fields that go into the metabox.
 	foreach($args['args']['fields'] as $k => $v) {
 		?>
 		<div class="launchpad-metabox-field">
 			<?php
 			
+			// Get the generic help for the type.
 			$generic_help = launchpad_get_field_help($v['args']['type']);
 			
+			// If there is no specific field help, set it to empty.
 			if(!isset($v['help'])) {
 				$v['help'] = '';
 			}
 			
+			// Add the generic help.
 			$v['help'] .= $generic_help;
 			
+			// If there is any help related to the field, add the help hover tooltip.
 			if($v['help']) {
 				?>
 				<div class="launchpad-inline-help">
@@ -495,19 +524,24 @@ function launchpad_meta_box_handler($post, $args) {
 				<?php
 			}
 			
+			// Render the field.
 			?>
 			<label>
 				<?php 
 					
-					echo $v['name']; 
-					$v['args']['name'] = $k;
-					
-					if($post->$k && get_post_meta($post->ID, $k)) {
-						$v['args']['value'] = get_post_meta($post->ID, $k, true);
-					}
-					
+				echo $v['name']; 
+				$v['args']['name'] = $k;
+				
+				// If there is a set value, override the developer specified value (if any).
+				// This is used in the render form field output.
+				if($post->$k && get_post_meta($post->ID, $k)) {
+					$v['args']['value'] = get_post_meta($post->ID, $k, true);
+				}
+				
+				// Render the form field.	
+				launchpad_render_form_field($v['args'], false, 'launchpad_meta'); 
+				
 				?>
-				<?php launchpad_render_form_field($v['args'], false, 'launchpad_meta'); ?>
 			</label>
 		</div>
 	
@@ -524,16 +558,23 @@ function launchpad_meta_box_handler($post, $args) {
  * @since		1.0
  */
 function launchpad_flexible_handler($post, $args) {
+	
+	// Get the current post's post meta for the current field.
 	$current_meta = get_post_meta($post->ID, $args['id'], true);
-
+	
+	// Render the flexible container.
 	?>
 		<div id="launchpad-flexible-container-<?php echo $args['id'] ?>" class="launchpad-flexible-container">
 			<input type="hidden" name="launchpad_meta[<?php echo $args['id'] ?>]">
 			<?php
 			
+			// If there are saved values in the current meta, send them to be rendered.
 			if($current_meta) {
+				// Loop the current meta.
 				foreach($current_meta as $meta_k => $meta_v) {
+					// Loop the fields in the meta.
 					foreach($meta_v as $k => $v) {
+						// Call the API for the flexible field
 						echo launchpad_get_flexible_field(
 							$args['id'],
 							$k,
@@ -552,6 +593,7 @@ function launchpad_flexible_handler($post, $args) {
 				<ul>
 					<?php
 					
+					// Loop all flexible modules so the user can pick them from a hover list.
 					foreach($args['args']['modules'] as $k => $v) {
 						echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '" title="' . sanitize_text_field($v['help']) . '"><span class="' . ($v['icon'] ? $v['icon'] : 'dashicons dashicons-plus-alt') . '"></span> ' . $v['name'] . '</a></li>';
 					}
@@ -716,24 +758,40 @@ function launchpad_get_default_flexible_modules() {
 /**
  * Get Flexible Content Layout
  *
+ * @param		string|bool $type The flexible module key.
+ * @param		string|bool $field_name The field name to use.
+ * @param		int|bool $post_id The ID of the post to get existing values from.
+ * @param		array $values The values to pre-populate.
+ * @uses		launchpad_render_form_field()
  * @since		1.0
  */
 function launchpad_get_flexible_field($type = false, $field_name = false, $post_id = false, $values = array()) {
+	// The default assumption is that we are not on AJAX.
 	$is_ajax = false;
 	
+	// If type is not set, assume this function was called via AJAX.
 	if(!$type) {
+		// Set the content type.
 		header('Content-type: text/html');
 		
+		// Set AJAX to true to handle how the output works.
 		$is_ajax = true;
+		
+		// Assign all parameters based off the GET parameters.
 		$type = $_GET['type'];
 		$name = $_GET['name'];
 		$post_id = $_GET['id'];
 		$field_name = $_GET['name'];
 	}
 	
+	// Get all the launchpad post types.
 	$post_types = launchpad_get_post_types();
+	
+	// Get the current post.
 	$post = get_post($post_id);
 	
+	// If there are not post types, a post, or any fields in a flexible module, quit here.
+	// This should not happen.
 	if(
 		!$post_types || 
 		!$post || 
@@ -743,16 +801,20 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 		!$post_types[$post->post_type]['flexible'][$type]['modules'] || 
 		!$post_types[$post->post_type]['flexible'][$type]['modules'][$field_name]
 	) {
-		$ret = '';
+		return '';
 	}
 	
-	
+	// Get the flexible field's details.
 	$details = $post_types[$post->post_type]['flexible'][$type]['modules'][$field_name];
 	
+	// Start output buffering so we can capture it later.
 	ob_start();
 	
-	echo '<div class="launchpad-flexible-metabox-container"><a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
+	// Print the container and the close link.
+	echo '<div class="launchpad-flexible-metabox-container">';
+	echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
 	
+	// If there are help details for the module, include them here.
 	if($details['help']) {
 		?>
 		<div class="launchpad-inline-help">
@@ -761,14 +823,20 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 		</div>
 		<?php
 	}
+	
+	// Output the sort handle and field name.
 	echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><br></div>';
 	echo '<h3>' . $details['name'] . '</h3>';
 	
+	// Generate a unique ID for this flexible module to prevent collision.
 	$flex_uid = preg_replace('/[^A-Za-z0-9\-\_]/', '', $field_name . '-' . uniqid());
 	
+	// Loop the field details.
 	foreach($details['fields'] as $sub_field_name => $field) {
+		// Assume we want a label.
 		$use_label = true;
 		
+		// We don't want a label for these complex fields.
 		switch($field['args']['type']) {
 			case 'wysiwyg':
 			case 'repeater':
@@ -776,23 +844,31 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 			break;
 		}
 		
+		// Generate a unique ID for this field.
 		$id = preg_replace('/[^A-Za-z0-9]/', '', $field_name . '' . $sub_field_name . '' . uniqid());
 		
+		// Print the field container.
 		echo '<div class="launchpad-metabox-field">';
 		
+		// Get the help information for this field type.
 		$generic_help = launchpad_get_field_help($field['args']['type']);
 		
+		// If the field doesn't have a help key, create it.
 		if(!isset($field['help'])) {
 			$field['help'] = '';
 		}
 		
+		// Append generic help.
 		$field['help'] .= $generic_help;
 		
+		// Set a temporary variable for help content.
 		$help = $field['help'];
 		
+		// If the field is a repeater, we have to get the help info out of the sub-fields.
 		if($field['args']['type'] === 'repeater') {
 			$help .= '<p>Available fields:</p><dl>';
 			
+			// Loop the sub fields and build the help.
 			foreach($field['args']['subfields'] as $subfield_detail) {
 				$help .= '<dt>' . $subfield_detail['name'] . '</dt>';
 				if($subfield_detail['help']) {
@@ -804,6 +880,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 			$help .= '</dl>';
 		}
 		
+		// If we managed to create any help, create a help tooltip.
 		if($help) {
 			?>
 			<div class="launchpad-inline-help">
@@ -813,14 +890,17 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 			<?php
 		}
 		
+		// If we need a label, print it for the field.
 		if($use_label) {
 			echo '<label for="' . $id . '">' . $field['name'] . '</label>';
 		}
 		
+		// If any values were passed, set them as an argument so they will be populated.
 		if($values) {
 			$field['args']['value'] = $values[$sub_field_name];
 		}
 		
+		// Render the form field.
 		launchpad_render_form_field(
 				array_merge(
 					$field['args'], 
@@ -834,18 +914,24 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 				'launchpad_flexible'
 			);
 		
+		// Close the field container.
 		echo '</div>';
 		
 	}
 	
+	// Close the module container.
 	echo '</div>';
-		
+	
+	// Get the buffer contents and clean the buffer.	
 	$ret = ob_get_contents();
 	ob_clean();
 	
+	// If this is AJAX, echo the content.
 	if($is_ajax) {
 		echo $ret;
 		exit;
+	
+	// If not, return it because this was called as a function.
 	} else {
 		return $ret;
 	}
@@ -860,6 +946,7 @@ add_action('wp_ajax_nopriv_get_flexible_field', 'launchpad_get_flexible_field');
  * @since		1.0
  */
 function launchpad_get_editor() {
+	// Generate the editor skeleton code.
 	wp_editor(
 			'', 
 			$_GET['id'],
@@ -884,10 +971,13 @@ add_action('wp_ajax_nopriv_get_editor', 'launchpad_get_editor');
  * @since		1.0
  */
 function launchpad_get_post_list() {
+	// JSON output header.
 	header('Content-type: application/json');
 	
+	// Trim the requested search terms.
 	$_GET['terms'] = trim($_GET['terms']);
 	
+	// If there are search terms, search for the terms.
 	if($_GET['terms']) {
 		$res = new WP_Query(
 				array(
@@ -895,6 +985,8 @@ function launchpad_get_post_list() {
 					's' => $_GET['terms']
 				)
 			);
+	
+	// If there are no terms, get the most recent 25 of post_type.
 	} else {
 		$res = new WP_Query(
 				array(
@@ -903,14 +995,20 @@ function launchpad_get_post_list() {
 				)
 			);
 	}
-
+	
+	// Empty return array to populate.
 	$ret = array();
 	
+	// Loop the post.
 	foreach($res->posts as $p) {
+		// Get the ancestors.
 		$ancestors = get_post_ancestors($p);
 		
+		// If this is a child of something, we'll keep track in $small.
 		$small = '';
 		
+		// If there are ancestors, reverse the order and append each title to $small.
+		// This is used as a reference on the front end.
 		if($ancestors) {
 			$ancestors = array_reverse($ancestors);
 			foreach($ancestors as $key => $ancestor) {
@@ -919,10 +1017,13 @@ function launchpad_get_post_list() {
 			}
 		}
 		
+		// Assing small to the ancestor_chain.
 		$p->ancestor_chain = $small;
+		// Add the post to the return variable.
 		$ret[] = $p;
 	}
-		
+	
+	// Output the JSON.
 	echo json_encode($ret);
 	exit;
 }

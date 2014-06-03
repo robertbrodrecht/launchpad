@@ -9,6 +9,38 @@
 
 
 /**
+ * Add SEO Meta Boxes
+ *
+ * @since		1.0
+ */
+function launchpad_add_seo_metabox() {
+	// Get all registered post types.
+	$post_types = get_post_types();
+	
+	// For SEO-able post types, create metaboxes for SEO.
+	foreach($post_types as $post_type) {
+		switch($post_type) {
+			case 'attachment':
+			case 'revision':
+			case 'nav_menu_item':
+			break;
+			default:
+				add_meta_box(
+					'launchpad-seo',
+					'SEO and Social Media Options',
+					'launchpad_seo_meta_box_handler',
+					$post_type,
+					'advanced',
+					'core'
+				);
+			break;
+		}
+	}
+}
+add_action('add_meta_boxes', 'launchpad_add_seo_metabox', 10, 1);
+
+
+/**
  * Add to Robots
  * 
  * Hooks into robots.txt to add the XML Sitemap Index
@@ -33,44 +65,66 @@ add_filter('robots_txt', 'launchpad_robots_txt');
  */
 function launchpad_sitemap() {
 	global $wpdb;
+	
+	// Get the posts table name.
 	$wp_post_table = $wpdb->posts;
+	
+	// These types don't need to appear in a sitemap.
 	$ignore_types = "'nav_menu_item', 'attachment', 'revision'";
+	
+	// Include 10,000 posts per sitemap file.
+	// The max is 50,000 but we need to stay under 10MB uncompressed.
+	// So, we're just going to hope 10K is low enough to stay under the limit.
 	$posts_per_page = 10000;
+	
+	// Figure out the current offset.
 	$offset = $posts_per_page * ((int) $_GET['sitemap'] - 1);
+	
+	// The blog's root URL.
 	$url = get_bloginfo('url');
 	
+	// This is a common requirement for both sitemap indexes and sitemaps.
 	header('Content-type: application/xml');
 	echo '<?xml version="1.0" encoding="UTF-8"?>';
 	
 	// Render the sitemap index since no sitemap "page" ID is set.
 	if(!isset($_GET['sitemap']) || !$_GET['sitemap']) {
+		// This is the index container.
 		echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
+		// Figure out how many sitemap files are required to house every URL.
 		$results = $wpdb->get_results(
 				"SELECT CEIL(COUNT(ID)/$posts_per_page) as total FROM $wp_post_table " . 
 				" WHERE post_type NOT IN ($ignore_types) AND post_status='publish'"
 			);
-			
+		
+		// Create a sitemap link for each.
 		for($i = 0; $i < $results[0]->total; $i++) {
 			echo '<sitemap><loc>' . $url . '/sitemap-' . ($i+1) . '.xml</loc></sitemap>';
 		}
 		
+		// Close the container.
 		echo '</sitemapindex>';
 		
 	// Render a sitemap since a sitemap "page" ID is set.
 	} else {
+		
+		// This is the container for a single sitemap.
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
+		// Get the ID and last modified for every post within the offset.
 		$results = $wpdb->get_results(
 				"SELECT ID, DATE_FORMAT(post_modified, '%Y-%m-%d') as last_mod FROM $wp_post_table WHERE " .
 				" post_type NOT IN ($ignore_types) AND  post_status='publish' ORDER BY `post_modified` " . 
 				" DESC LIMIT $offset, $posts_per_page"
 			);
 		
+		// Loop them and create the url entry.
 		foreach($results as $row) {
 			echo '<url><loc>' . get_permalink($row->ID) . '</loc><lastmod>' . $row->last_mod . '</lastmod></url>';
 		}
 		
+		// Close the container.
 		echo '</urlset>';
 	}
 	exit;
@@ -89,15 +143,23 @@ add_action('wp_ajax_nopriv_sitemap', 'launchpad_sitemap');
  * @todo		Find some way to make me not hate this.
  */
 function launchpad_seo_meta_box_handler($post, $args) {
+	
+	// Load the TextStatistics library to handle calculating text complexity.
 	locate_template('lib/third-party/TextStatistics.php', true, true);
 	
+	// Stopwords to ignore when calculating statistics.
 	$stopwords = explode(',', "a,about,above,after,again,against,all,am,an,and,any,are,aren't,as,at,be,because,been,before,being,below,between,both,but,by,can't,cannot,could,couldn't,did,didn't,do,does,doesn't,doing,don't,down,during,each,few,for,from,further,had,hadn't,has,hasn't,have,haven't,having,he,he'd,he'll,he's,her,here,here's,hers,herself,him,himself,his,how,how's,i,i'd,i'll,i'm,i've,if,in,into,is,isn't,it,it's,its,itself,let's,me,more,most,mustn't,my,myself,no,nor,not,of,off,on,once,only,or,other,ought,our,ours,ourselves,out,over,own,same,shan't,she,she'd,she'll,she's,should,shouldn't,so,some,such,than,that,that's,the,their,theirs,them,themselves,then,there,there's,these,they,they'd,they'll,they're,they've,this,those,through,to,too,under,until,up,very,was,wasn't,we,we'd,we'll,we're,we've,were,weren't,what,what's,when,when's,where,where's,which,while,who,who's,whom,why,why's,with,won't,would,wouldn't,you,you'd,you'll,you're,you've,your,yours,yourself,yourselves");
-
-	if($post->post_status === 'publish') {
-		$full_content = file_get_contents(get_permalink($post->ID));
 	
+	// If the post is published, we can run some calculations.
+	if($post->post_status === 'publish') {
+		
+		// Grab the full page.
+		$full_content = file_get_contents(get_permalink($post->ID));
+		
+		// Grab the title title from the page.
 		preg_match_all('|<title>(.*?)</title>|s', $full_content, $title);
 		
+		// If there is a title, save it.
 		if(isset($title[1][0])) {
 			$title_natural = $title[1][0];
 			$title = strtolower($title_natural);
@@ -105,6 +167,7 @@ function launchpad_seo_meta_box_handler($post, $args) {
 			$title = false;
 		}
 		
+		// Remove all the HTML to try to get at the raw text of the page.
 		$cont = strip_tags($full_content);
 		$cont = preg_replace('|<script.*?>.*?</script>|s', '', $cont);
 		$cont = preg_replace('|<style.*?>.*?</style>|s', '', $cont);
@@ -112,24 +175,34 @@ function launchpad_seo_meta_box_handler($post, $args) {
 		$cont = strtolower($cont);
 		$cont = html_entity_decode($cont);
 		
+		// Remove the stopwords.
 		foreach($stopwords as $stopword) {
 			$cont = preg_replace('/\b' . $stopword . '\b/', '', $cont);
 		}
 		
+		// Clean up messy spaces.
 		$cont = preg_replace('/\s+/', ' ', $cont);
 		
+		// Perform a word count.
 		$word_count = str_word_count($cont);
 		
+		// Run TextStatistics.
 		$txt_stat = new TextStatistics();
 		$txt_flesch = $txt_stat->flesch_kincaid_reading_ease($post->post_content);
 		$txt_gunning_fog = $txt_stat->gunning_fog_score($post->post_content);
 	}
-
+	
+	// Get the saved SEO metadata for the page.
 	$meta = get_post_meta($post->ID, 'SEO', true);
 	
+	// Generate a word count.
 	$post_word_count = str_word_count(strip_tags($post->post_content));
+	
+	// Generate the "default" excerpt for the post.
 	$seo_exerpt = launchpad_seo_excerpt(64, false, $post->ID);
 
+	// Render the form fields for managing SEO.
+	
 	?>
 		<div class="launchpad-metabox-field">
 			<div class="launchpad-inline-help">
@@ -179,34 +252,36 @@ function launchpad_seo_meta_box_handler($post, $args) {
 		</div>
 		<?php 
 		
+		// If we have published and a keyword has been set, we can display some statistics.
 		if($post->post_status === 'publish' && trim(@$meta['keyword'])) {
 			
+			// Get the page permalink.
 			$permalink = get_permalink($post->ID);
 			
+			// Prep the keyword.
 			$keyword = trim($meta['keyword']);
 			$keyword_orig = $keyword;
 			
+			// Clean up the keyword.
 			$keyword = preg_replace("/(\r\n|\r|\n)/", ' ', $keyword);
 			$keyword = preg_replace('/\s+/', ' ', $keyword);
 			$keyword = strtolower($keyword);
 			$keyword = html_entity_decode($keyword);
 			
+			// Create a Regular Expression to use for bolding keywords in the snippet preview.
 			$keyword_bold_preg = '/(' . str_replace(' ', '|', $keyword) . ')/i';
 			
+			// Get a keyword count to show keyphrase vs keyword usage.
 			$keyword_count = substr_count($cont, $keyword);
+			
+			// Get the number of matches for each word in the keyphrase.
 			$keyword_count_each = preg_match_all($keyword_bold_preg, $cont);
 			
+			// Calculate the denstity for keyphrase and each keyword.
 			$percent = round($keyword_count/$word_count*100, 2);
 			$percent_each = round($keyword_count_each/$word_count*100, 2);
-
-			$title_opt = false;
 			
-			if($title) {
-				if(substr_count($title, $keyword)) {
-					$title_opt = true;
-				}
-			}
-					
+			// Show the text statistics.
 		?>
 		<hr class="launchpad-hr">
 		<h3 class="launchpad-sub-section-heading">SERP Preview: Would you click through to read your content?</h3>
@@ -392,6 +467,8 @@ function launchpad_seo_meta_box_handler($post, $args) {
 			</div>
 		</div>
 	<?php
+	
+	// If we haven't published, show a message saying to publish to get statistics.
 	} else {
 		echo '<p><strong>Save the post with the published status and specify a Page Target Keyword / Keyphrase to get an SEO report.</strong></p>';
 	}

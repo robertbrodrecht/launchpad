@@ -145,8 +145,7 @@ To Do For 1.0
   * Attempt to implement a child theme to figure all this out.
 * Do a COMPLETE feature / code review.
   * More in-code documentation. Still need to do:
-    * Metaboxes
-    * SEO
+    * Metaboxes (got half way through launchpad_render_form_field)
     * Then do a full review to make sure the comments are helpful.  Maybe call in some help.
   * Refactor
     * Do a greater number of hooks / filters into WordPress have a significant performance cost? Is it better to consolidate?  Seems like no, but do some more research.
