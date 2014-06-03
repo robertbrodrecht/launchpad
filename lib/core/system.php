@@ -267,7 +267,6 @@ function launchpad_wp_get_attachment_image_attributes($attr) {
 add_filter('wp_get_attachment_image_attributes', 'launchpad_wp_get_attachment_image_attributes');
 
 
-
 /**
  * Allow SVG Uploads
  *

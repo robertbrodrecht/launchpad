@@ -137,22 +137,6 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Re-organize:
-  * Folders:
-    * lib/core/
-    * lib/third-party/
-    * lib/custom/ (I guess?)
-  * system.php: Modifications to how wordpress works.
-  * htaccess: Modrewrite stuff, etc.
-  * admin: Modifications to wp-admin (e.g. howdy to hello, dahsboard stuff, options pages, auto-generated help).
-  * metabox: Handlers for metaboxes, flexible content, etc.  Move some of this stuff out of api.php?
-  * security: Security-related features.
-  * cache: Cache related features.  Maybe include appCache api.php stuff?
-  * template: additional template tags except cache-related tags.
-  * post-types: Anything related to registering and manipulating post types.
-  * api: Will we even need it?
-  * utilities: Extra functions.
-  * seo? Are there enough SEO things that aren't better put in another file?
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme (Launcpad) and a child theme (Liftoff).
@@ -160,10 +144,17 @@ To Do For 1.0
   * Probably need to use locate_template instead of include.
   * Attempt to implement a child theme to figure all this out.
 * Do a COMPLETE feature / code review.
-  * More in-code documentation
+  * More in-code documentation. Still need to do:
+    * Cache
+    * Metaboxes
+    * Security
+    * SEO
+    * Then do a full review to make sure the comments are helpful.  Maybe call in some help.
   * Refactor
-    * Do a greater number of hooks / filters into WordPress have a significant performance cost? Is it better to consolidate?
+    * Do a greater number of hooks / filters into WordPress have a significant performance cost? Is it better to consolidate?  Seems like no, but do some more research.
+    * Review outstanding @todo because many of those things are refactor related.
   * Make sure everything still works.
+    * Maybe call in some help.
 
 
 To Do For 1.1

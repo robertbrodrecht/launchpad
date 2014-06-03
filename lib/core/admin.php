@@ -101,6 +101,7 @@ add_filter('image_size_names_choose', 'launchpad_image_sizes_options');
  * Define basic theme settings fields
  *
  * @since		1.0
+ * @todo		Remove the textarea and selectmulti commented examples once they've been documented in 1.1.
  */
 function launchpad_get_setting_fields() {
 	global $site_options;
@@ -472,7 +473,9 @@ function launchpad_site_options_validate($input) {
 	}
 	
 	// Touch the cache folder to reset the appcache.
-	// This helps avoid confusing issues with time zones.
+	// Basically, causes appcache "resets" when you save the site settings
+	// because the "latest" time is set to the lastmod of the cache folder.
+	// Touching it helps avoid confusing issues with time zones (that's what she said).
 	touch($cache_folder, time(), time());
 	
 	return $input;
@@ -643,10 +646,11 @@ add_action('admin_enqueue_scripts', 'launchpad_admin_script_includes');
 
 /**
  * Remove unnecessary dashboard widgets
+ * 
  * This is modified from the Roots theme.
  *
  * @since		1.0
- * @link http://www.deluxeblogtips.com/2011/01/remove-dashboard-widgets-in-wordpress.html
+ * @link		http://www.deluxeblogtips.com/2011/01/remove-dashboard-widgets-in-wordpress.html
  */
 function launchpad_remove_dashboard_widgets() {
 	remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
@@ -754,63 +758,91 @@ add_action('login_enqueue_scripts', 'launchpad_custom_login');
  * 
  * @since		1.0
  * @todo		This needs inline documentation.
+ * @todo		In 1.1, don't forget to include the "NOTE:" stuff below.
  */
 function launchpad_auto_help_tab() {
+	// Get the developer created post types.
 	$post_types = launchpad_get_post_types();
 	
+	// If there are no post types, don't do anything.
 	if(!$post_types) {
 		return;
 	}
 	
+	// Get the current screen to add help to it.
 	$screen = get_current_screen();
 	
+	// Set the post type or get it from the post.
 	if(isset($_GET['post_type'])) {
 		$post_type = $_GET['post_type'];
 	} else {
-		$post_type = get_post_type( $post_ID );
+		$post_type = get_post_type();
 	}
-		
+	
+	// If there are custom fields associated with the post type, start checking them for help.	
 	if($post_types[$post_type]) {
+		
+		// If there is a help section, add a help tab.
+		// NOTE: This means you can have help in your fields WITHOUT a help tab showing up.
+		// NOTE: You should document your post type! At least give an overview of what it is.
 		if($post_types[$post_type]['help']) {
 			$screen->add_help_tab(
 				array(
 					'id' => $post_type . '-launchpad_help',
-					'title' => $post_types[$post_type]['single'] . ' Overview',
+					'title' => $post_types[$post_type]['single'],
 					'content' => $post_types[$post_type]['help']
 				)
 			);
 		}
 		
+		// Generate help data for each metabox type if metaboxes exist.
 		if($post_types[$post_type]['metaboxes']) {
+			
+			// Loop the metaboxes.
 			foreach($post_types[$post_type]['metaboxes'] as $metabox_key => $metabox) {
+				
+				// This string will carry the help text.
 				$content = '';
 				
+				// If the metbox itself has help, add it to the text.
 				if($metabox['help']) {
 					$content .= $metabox['help'];
 				}
 				
+				// This is used to hold each field's help text.
 				$field_content = array();
 				
+				// Loop the fields.
 				foreach($metabox['fields'] as $field) {
+					
+					// If the field has help, add it to the string.
+					// We're using the name to help with with the output loop (key = name, value = help text).
 					if($field['help']) {
 						$field_content[$field['name']] = $field['help'];
 					}
 					
+					// Try to get generic help about the field type.
+					// Some of the more complex fields need some generic documentation.
 					$generic_help = launchpad_get_field_help($field['args']['type']);
 					
+					// If there is generic help, add it to the field's help text.
 					if($generic_help) {
 						$field_content[$field['name']] .= $generic_help;
 					}
 				}
 				
+				// If we have created any field-based help, add it to the help text in a definition list.
 				if($field_content) {
 					$content .= '<p>The following fields are available:</p><dl>';
+					
+					// Loop with key = name, value = help text, as mentioned earlier.
 					foreach($field_content as $field_name => $field_help) {
 						$content .= '<dt>' . $field_name . '</dt><dd>' . $field_help . '</dd>';
 					}
 					$content .= '</dl>';
 				}
 				
+				// If the help text isn't empty, add a help tab.
 				if($content) {
 					$screen->add_help_tab(
 						array(
@@ -823,40 +855,64 @@ function launchpad_auto_help_tab() {
 			}
 		}
 		
+		// Generate help data for each flexible content, if any exist.
 		if($post_types[$post_type]['flexible']) {
+			// Loop the flexible content types.
 			foreach($post_types[$post_type]['flexible'] as $flex_key => $flex_details) {
+				
+				// This string will carry the help text.
 				$content = '';
 				
+				// If the flexible content itself has help, add it to the text.
 				if($flex_details['help']) {
 					$content .= $flex_details['help'];
 				}
 				
+				// This is used to hold each flexible content module's help text.
 				$module_content = array();
 				
+				// Loop each module to look for help text.
 				foreach($flex_details['modules'] as $module) {
+					
+					// If any exists, create a module-name key with the module help 
+					// text and an empty array for individual field help.
+					// The name / value stuff, again, is used for easier output in a loop.
 					$module_content[$module['name']] = array('help' => ($module['help'] ? $module['help'] : ''), 'fields' => array());
 					
+					// Loop the fields.
 					foreach($module['fields'] as $field) {
+						
+						// If the fiel has help, add it to the module's help text temporary holding place.
 						if($field['help']) {
 							$module_content[$module['name']]['fields'][$field['name']] = $field['help'];
 						}
 						
+						// Try to get generic help about the field type.
+						// Some of the more complex fields need some generic documentation.
 						$generic_help = launchpad_get_field_help($field['args']['type']);
 						
+						// If there is generic help, add it to the field's help.						
 						if($generic_help) {
 							$module_content[$module['name']]['fields'][$field['name']] .= $generic_help;
 						}
 					}
 				}
 				
+				// If there is module help content, add it to the module help content.
 				if($module_content) {
 					$content .= '<dl>';
+					
+					// Loop the main module, adding help.  See the key / value stuff I said above.
 					foreach($module_content as $module_name => $module_help) {
 						$content .= '<dt>' . $module_name . '</dt>';
 						$content .= '<dd>';
 						$content .= $module_help['help'];
+						
+						// If there is any help in the fields...
 						if($module_help['fields']) {
 							$content .= '<p>The following fields are available:</p><dl>';
+							
+							// Loop the fields and add each field's help.
 							foreach($module_help['fields'] as $field_name => $field_help) {
 								$content .= '<dt>' . $field_name . '</dt><dd>' . $field_help . '</dd>';
 							}
@@ -867,6 +923,7 @@ function launchpad_auto_help_tab() {
 					$content .= '</dl>';
 				}
 				
+				// If any help text was created, add a help tab.
 				if($content) {
 					$screen->add_help_tab(
 						array(
@@ -885,10 +942,13 @@ add_action('admin_head', 'launchpad_auto_help_tab');
 
 /**
  * Get Help Text for A Field Type
+ * 
+ * As you can see, we check the field type with a switch and return a pre-written
+ * string with help documentation that is used to show in help areas.
  *
  * @param		string $type The type of field to get help text for.
  * @since		1.0
- * @todo		This needs inline documentation.
+ * @see			launchpad_auto_help_tab()
  */
 function launchpad_get_field_help($type) {
 	$ret = '';

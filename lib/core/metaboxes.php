@@ -73,6 +73,7 @@ function launchpad_create_select_options($options, $values) {
  * @param		array $args The array of settings
  * @see			launchpad_get_setting_fields
  * @since		1.0
+ * @todo		Break each field type into a function.  This is getting crazy.
  */
 function launchpad_render_form_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
 	if($field_prefix === 'launchpad_site_options') {
@@ -878,7 +879,7 @@ add_action('wp_ajax_nopriv_get_editor', 'launchpad_get_editor');
 
 
 /**
- * AJAX Post Filter
+ * AJAX Post Filter for Relationship Field
  *
  * @since		1.0
  */

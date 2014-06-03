@@ -86,6 +86,7 @@ add_action('wp_ajax_nopriv_sitemap', 'launchpad_sitemap');
  * @param		object $post The current post
  * @param		array $args Arguments passed from the metabox
  * @since		1.0
+ * @todo		Find some way to make me not hate this.
  */
 function launchpad_seo_meta_box_handler($post, $args) {
 	locate_template('lib/third-party/TextStatistics.php', true, true);
