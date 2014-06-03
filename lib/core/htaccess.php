@@ -30,7 +30,6 @@ function launchpad_rewrite_rules($content) {
 	  	'support/(.*)' => THEME_PATH . '/support/$1',
 		'api/(.*)' => 'wp-admin/admin-ajax.php',
 		'manifest.appcache' => 'wp-admin/admin-ajax.php?action=cache_manifest',
-		'manifest.obsolete.appcache' => 'wp-admin/admin-ajax.php?action=cache_manifest_obsolete',
 		'sitemap-(\d*).xml/?' => 'wp-admin/admin-ajax.php?action=sitemap&sitemap=$1',
 		'sitemap-index\.xml/?' => 'wp-admin/admin-ajax.php?action=sitemap',
 	);

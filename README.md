@@ -145,9 +145,7 @@ To Do For 1.0
   * Attempt to implement a child theme to figure all this out.
 * Do a COMPLETE feature / code review.
   * More in-code documentation. Still need to do:
-    * Cache
     * Metaboxes
-    * Security
     * SEO
     * Then do a full review to make sure the comments are helpful.  Maybe call in some help.
   * Refactor

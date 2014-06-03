@@ -116,7 +116,7 @@ function launchpad_scandir_deep($dir, $initial_dir = false) {
 	
 	return $output;
 }
-file_get_contents_cache('http://vodkabuzz.dev/');
+
 
 /**
  * Get a File (API Call) and Cache the Results
