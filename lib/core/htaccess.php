@@ -55,6 +55,10 @@ add_action('generate_rewrite_rules', 'launchpad_rewrite_rules');
 function launchpad_add_h5bp_htaccess($content) {
 	global $wp_rewrite, $site_options;
 	
+	if(!function_exists('extract_from_markers')) {
+		return $content;
+	}
+	
 	// Get the path to the htaccess file.
 	$home_path = function_exists('get_home_path') ? get_home_path() : ABSPATH;
 	$htaccess_file = $home_path . '.htaccess';
@@ -69,7 +73,7 @@ function launchpad_add_h5bp_htaccess($content) {
 		
 		// If there are no Boilerplate Rules and the user wants them, add them.
 		if ($h5bp_rules === array() && $site_options['html5_bp'] === true) {
-			$filename = dirname(__FILE__) . '/../support/H5BPv4.3_htaccess';
+			$filename = '../' . THEME_PATH . '/support/H5BPv4.3_htaccess';
 			$boilerplate_rules = extract_from_markers($filename, 'HTML5 Boilerplate');
 		
 		// If there are Boilerplate rules and the user doesn't want them, remove them.

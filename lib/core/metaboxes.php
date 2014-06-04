@@ -168,7 +168,10 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 				$val = '';
 			}
 			
+			// The file ID is stored here.
 			echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" class="file-button">Upload File</button>';
+			
+			// If there is an existing image, add a "remove" button.
 			if($existing) {
 				echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $field_output_id . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
 			}
@@ -189,7 +192,13 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 		break;
 		case 'textarea':
 			// Textarea is pretty simple.  Just output the field.
+			if($subfield) {
+				echo '<label class="' . $class . '">' . $subfield . ' ';
+			}
 			echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
+			if($subfield) {
+				echo '</label>';
+			}
 		break;
 		case 'wysiwyg':
 			// Output a WYSIWYG editor.  Just the base code.
@@ -211,6 +220,8 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
+			
+			// Create the select.
 			echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
 			echo '<option value="">Select One</option>';
 			echo launchpad_create_select_options($args['options'], $val);
@@ -224,6 +235,8 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
+			
+			// Create the select.
 			echo '<select name="' . $field_output_name . '" size="10" multiple="multiple" id="' . $field_output_id . '">';
 			echo launchpad_create_select_options($args['options'], $val);
 			echo '</select>';
@@ -238,13 +251,16 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
 			
+			// Grab all nav menus.
 			$all_menus = get_terms('nav_menu', array('hide_empty' => true));
 			
+			// Put the nav menus in an array to convert into options.
 			$menu_list = array();
 			foreach($all_menus as $menu) {
 				$menu_list[$menu->term_id] = $menu->name;
 			}
 			
+			// Create the select.
 			echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
 			echo '<option value="">Select One</option>';
 			echo launchpad_create_select_options($menu_list, $val);
@@ -253,10 +269,17 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 				echo '</label>';
 			}
 		break;
-		case 'relationship':		
+		case 'relationship':
+			// This field is quite complex.  A lot of the functionality is handeled via JavaScript
+			// and the search_posts API that is driven by launchpad_get_post_list().
+			
+			// Field container.
 			echo '<div class="launchpad-relationship-container" data-post-type="' . $args['post_type'] . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $args['limit'] . '">';
+			
+			// Post list container.
 			echo '<div class="launchpad-relationship-search"><label><input type="search" class="launchpad-relationship-search-field" placeholder="Search"></label><ul class="launchpad-relationship-list">';
 			
+			// Select the most recent 25 items in the post type.
 			$preload = new WP_Query(
 					array(
 						'post_type' => $args['post_type'],
@@ -264,11 +287,15 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 					)
 				);
 			
+			// Loop each.
 			foreach($preload->posts as $p) {
+				// Get a list of acnestors.
 				$ancestors = get_post_ancestors($p);
 				
+				// This will keep the ancestor hierarchy.
 				$small = '';
 				
+				// If there are ancestors, loop them and add them to the small.
 				if($ancestors) {
 					$ancestors = array_reverse($ancestors);
 					foreach($ancestors as $key => $ancestor) {
@@ -277,26 +304,39 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 					}
 				}
 				
+				// Output the option.
 				echo '<li><a href="#" data-id="' . $p->ID . '">' . $p->post_title . ' <small>' . $small . '</small></a></li>';
 			}
 			
+			// Close post list container.
 			echo '</ul></div>';
-			echo '<div class="launchpad-relationship-items-container"><strong> Saved Items (';
-			if($args['limit'] > -1) {
-				echo 'Maximum of ' . $args['limit'] . ' item' . ($args['limit'] == 1 ? '' : 's');
-			} else {
-				echo 'Add as many as you like';
-			}
-			echo ')</strong><ul class="launchpad-relationship-items">';
 			
+			// Add a note about how many items can go in the list.
+			if($args['limit'] > -1) {
+				$tmp_item_count_note = 'Maximum of ' . $args['limit'] . ' item' . ($args['limit'] == 1 ? '' : 's');
+			} else {
+				$tmp_item_count_note = 'Add as many as you like';
+			}
+			
+			// "Selected" list container.
+			echo '<div class="launchpad-relationship-items-container">';
+			echo '<strong> Saved Items (' . $tmp_item_count_note . ')</strong>';
+			echo '<ul class="launchpad-relationship-items">';
+			
+			// If there are values, we need to populate them.
 			if($val) {
+				// Loop the values.
 				foreach($val as $post_id) {
+					// Get the post for the value.
 					$post_id = get_post($post_id);
 					
+					// Get the post acncestors for the value.
 					$ancestors = get_post_ancestors($post_id);
 					
+					// This will keep the ancestor hierarchy.
 					$small = '';
 					
+					// If there are ancestors, loop them and add them to the small.
 					if($ancestors) {
 						$ancestors = array_reverse($ancestors);
 						foreach($ancestors as $key => $ancestor) {
@@ -305,32 +345,56 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 						}
 					}
 					
+					// Output the option.
 					echo '<li><a href="#" data-id="' . $post_id->ID . '"><input type="hidden" name="' . $field_output_name . '[]" value="' . $post_id->ID . '">' . $post_id->post_title . ' <small>' . $small . '</small></a></li>';
 				}
 			}
 			
+			// Close the "selected" list container.
 			echo '</ul></div>';
+			
+			// Close the field container.
 			echo '</div>';
 		break;
 		case 'taxonomy':
+			// Closing the label is a bit of a hack, but we have to trick the script into working this way.
+			// The empty hidden field, much like with the checkbox field, is needed to allow
+			// for saving with no checked items.
 			echo '</label><input type="hidden" name="' . $field_output_name . '">';
+			
+			// If we weren't given an array of taxonomies, split on commas.
 			if(!is_array($args['taxonomy'])) {
 				$args['taxonomy'] = explode(',', preg_replace('/\s?,\s?/', ',', $args['taxonomy']));
 			}
 			
+			// If we have no values, create an empty array.
 			if(!$val) {
 				$val = array();
 			}
 			
+			// Loop the taxonomies.
 			foreach($args['taxonomy'] as $tax) {
+				// If there is a taxonomy for the slug, we can present it to the user.
 				if(taxonomy_exists($tax)) {
+					
+					// Get all the terms for the taxonomy.
 					$terms = get_terms($tax, array('hide_empty' => false));
+					
+					// Get the taxonomy itself.
 					$tax = get_taxonomy($tax);
+					
+					// Create a fieldset to house the checkboxes.
 					echo '<fieldset class="launchpad-metabox-fieldset"><legend>' . $tax->labels->name . '</legend>';
+					
+					// Loop the terms.
 					foreach($terms as $term) {
 						echo '<div class="launchpad-metabox-field"><label>';
+						
+						// If the user can select multiple items, output checkboxes.
 						if($args['multiple']) {
 							echo '<input type="checkbox" name="' . $field_output_name . '[]" value="' . $term->term_id . '"' . (in_array($term->term_id, $val) ? ' checked="checked"' : '') . '>';
+						
+						// If not, output radios.
 						} else {
 							echo '<input type="radio" name="' . $field_output_name . '[]" value="' . $term->term_id . '"' . (in_array($term->term_id, $val) ? ' checked="checked"' : '') . '>';		
 						}
@@ -342,49 +406,95 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			}
 		break;
 		case 'repeater':
+			// Repeaters are complex fields.  A lot of the functionality is handeled via JavaScript.
+			
+			// This temp ID is used on the button and div to sync up where the repeater
+			// JavaScript needs to go to add to the repeater.
 			$repeater_tmp_id = uniqid();
 			
+			// If there are values to populate, we need to do a bit of trickery.
+			// And by "trickery" I mean: This is an inelegant hack.
+			// Basically, since repeaters are defined with only one set of subfields,
+			// we need to convert all the values into duplicates of the subfield
+			// so that the script thinks there are multiple subfields with values.
 			if($val) {
+				// Get a copy of the original subfields for the repeater.
 				$orig_subfield = $args['subfields'];
+				
+				// Overwrite it with an empty array.
 				$args['subfields'] = array();
+				
+				// Loop the values.
 				while($val) {
+					// Create a temporary copy of the original subfields.
 					$tmp_subfield = $orig_subfield;
+					
+					// Shift the first value off of the values.
 					$tmp_vals = array_shift($val);
+					
+					// Loop the values and set the value as the field's value.
 					foreach($tmp_vals as $tmp_key => $tmp_val) {
 						if(isset($tmp_subfield[$tmp_key])) {
 							$tmp_subfield[$tmp_key]['args']['value'] = $tmp_val;
 						}
 					}
+					// Add the value to the subfield.
 					array_push($args['subfields'], $tmp_subfield);
 				}
+				
+			// Again, this is kind of a hack.  Since populating the values
+			// will "fake" multiple sets of sub fields, we need to normalize
+			// to an array of subfields so the developer doesn't have to deal
+			// with varying syntax to create repeaters versus other field types.
 			} else {
 				$args['subfields'] = array($args['subfields']);
 			}
 			
+			// Repeater container.  The JavaScript looks for this when handling button clicks.
 			echo '<div id="launchpad-' . $repeater_tmp_id . '-repeater" class="launchpad-repeater-container launchpad-metabox-field">';
 			
+			// Loop all the subfields.
 			foreach($args['subfields'] as $counter => $sub_fields) {
+				// The repeater fields container.
 				echo '<div class="launchpad-flexible-metabox-container launchpad-repeater-metabox-container">'; 
+				// The "collapse field" handler.
 				echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><br></div>';
+				// The remove button.
 				echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
+				// The name of the repeater.
 				echo '<h3>' . $args['label'] . '</h3>';
-					
-				foreach($sub_fields as $field_key => $field) {
 				
+				// Loop the subfield's fields to handle the output.
+				foreach($sub_fields as $field_key => $field) {
+					
+					// Create a metabox field container.
 					echo '<div class="launchpad-metabox-field">';
 					
+					// Recursively create the field.
 					launchpad_render_form_field(
-							array_merge($field['args'], array('name' => $field_output_name . '[launchpad-' . $repeater_tmp_id . $counter . '-repeater][' . $field_key . ']')), 
-							$field['name'], $field_prefix
+							array_merge(
+								$field['args'], 
+								array(
+									'name' => $field_output_name . '[launchpad-' . 
+										$repeater_tmp_id . $counter . '-repeater][' . $field_key . ']'
+								)
+							), 
+							$field['name'], 
+							$field_prefix
 						);
+					
+					// Close the metabox field container.
 					echo '</div>';
 				}
-	
+				
+				// Close the repeater fields container.
 				echo '</div>';
 			}
 			
+			// Close the repeater container.
 			echo '</div>';
 			
+			// Add a button that will be used to add repeater items.
 			echo '<button type="button" class="button launchpad-repeater-add" data-for="launchpad-' . $repeater_tmp_id . '-repeater">Add Additional ' . $args['label'] . '</button>';
 		break;
 		case 'subfield':
