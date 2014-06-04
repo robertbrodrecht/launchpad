@@ -172,6 +172,13 @@ function custom_launchpad_custom_post_types($post_types) {
 							'position' => 'default',
 							'help' => '<p>The sample metabox is designed to help you build your own metaboxes.</p>',
 							'fields' => array(
+								'sample_side_metabox_checkbox' => array(
+									'name' => 'I agree',
+									'help' => '<p>This is a checkbox.</p>',
+									'args' => array(
+										'type' => 'checkbox'
+									)
+								),
 								'sample_side_metabox_value_1' => array(
 									'name' => 'Some Value',
 									'help' => '<p>This field contains sample text.</p>',
