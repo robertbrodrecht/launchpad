@@ -55,6 +55,8 @@ add_action('generate_rewrite_rules', 'launchpad_rewrite_rules');
 function launchpad_add_h5bp_htaccess($content) {
 	global $wp_rewrite, $site_options;
 	
+	// Check to see if the function exists.
+	// For some reason it doesn't on theme activation.
 	if(!function_exists('extract_from_markers')) {
 		return $content;
 	}
