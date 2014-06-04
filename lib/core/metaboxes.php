@@ -143,6 +143,9 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	// Determine how to handle each field based on the type of field it is.
 	switch($args['type']) {
 		case 'checkbox':
+			// Checkboxes need an empty hidden field by default.
+			// This allows for unchecked checkboxes to have an empty value.
+			// Because PHP is good for the job, a checked checkbox overwrites the empty value.
 			echo '<input type="hidden" name="' . $field_output_name . '" value="">';
 			if($subfield) {
 				echo '<label class="' . $class . '">';
@@ -153,6 +156,9 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			}
 		break;
 		case 'file':
+			// For file, output a thubmnail if the image saved.
+			// Add a hidden field with the ID.
+			// JavaScript will handle updating the hidden field when a photo is selected.
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
@@ -172,6 +178,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			}
 		break;
 		case 'text':
+			// Text is pretty simple.  Just output the field.
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
@@ -181,9 +188,11 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			}
 		break;
 		case 'textarea':
+			// Textarea is pretty simple.  Just output the field.
 			echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
 		break;
 		case 'wysiwyg':
+			// Output a WYSIWYG editor.  Just the base code.
 			wp_editor(
 					$val, 
 					$field_output_id,
@@ -198,6 +207,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 				);
 		break;
 		case 'select':
+			// Output a select and pass options to launchpad_create_select_options()
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
@@ -210,6 +220,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			}
 		break;
 		case 'selectmulti':
+			// Selectmulti is exactly the same as select but with support for multiple values.
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
@@ -221,6 +232,8 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			}
 		break;
 		case 'menu':
+			// The menu field is essentially the same for select except we automagially pre-populate
+			// the select with the saved menus.
 			if($subfield) {
 				echo '<label class="' . $class . '">' . $subfield . ' ';
 			}
