@@ -75,6 +75,267 @@ function launchpad_create_select_options($options, $values) {
 
 
 /**
+ * Render A Checkbox
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		bool $val Whether the checkbox is checked.
+ * @param		string $class A class to use on the label if this is a subfield.
+ * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_checkbox($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+	$field_output_name = trim($field_output_name);
+	$field_output_id = trim($field_output_id);
+	if(!$field_output_name) {
+		return;
+	}
+	
+	if(!$field_output_id) {
+		$field_output_id = $field_output_name;
+	}
+	
+	// Checkboxes need an empty hidden field by default.
+	// This allows for unchecked checkboxes to have an empty value.
+	// Because PHP is good for the job, a checked checkbox overwrites 
+	// the empty value in the querystring array.
+	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
+	if($subfield) {
+		echo '<label class="' . $class . '">';
+	}
+	echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . '>';
+	if($subfield) {
+		echo ' ' . $subfield . '</label>';
+	}
+}
+
+
+/**
+ * Render A Input Text
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		bool $val Whether the checkbox is checked.
+ * @param		string $class A class to use on the label if this is a subfield.
+ * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_text($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+	$field_output_name = trim($field_output_name);
+	$field_output_id = trim($field_output_id);
+	if(!$field_output_name) {
+		return;
+	}
+	
+	if(!$field_output_id) {
+		$field_output_id = $field_output_name;
+	}
+	
+	// Text is pretty simple.  Just output the field.
+	if($subfield) {
+		echo '<label class="' . $class . '">' . $subfield . ' ';
+	}
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text">';
+	if($subfield) {
+		echo '</label>';
+	}
+}
+
+
+/**
+ * Render A Textarea
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		bool $val Whether the checkbox is checked.
+ * @param		string $class A class to use on the label if this is a subfield.
+ * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_textarea($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+	$field_output_name = trim($field_output_name);
+	$field_output_id = trim($field_output_id);
+	if(!$field_output_name) {
+		return;
+	}
+	
+	if(!$field_output_id) {
+		$field_output_id = $field_output_name;
+	}
+	
+	// Textarea is pretty simple.  Just output the field.
+	if($subfield) {
+		echo '<label class="' . $class . '">' . $subfield . ' ';
+	}
+	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
+	if($subfield) {
+		echo '</label>';
+	}
+}
+
+
+/**
+ * Render A Select Field
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		string $options The options to populate.
+ * @param		bool $val Whether the checkbox is checked.
+ * @param		string $class A class to use on the label if this is a subfield.
+ * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_select($field_output_name, $field_output_id = '', $options = array(), $val = false, $class = '', $subfield = false) {
+	$field_output_name = trim($field_output_name);
+	$field_output_id = trim($field_output_id);
+	if(!$field_output_name) {
+		return;
+	}
+	
+	if(!$field_output_id) {
+		$field_output_id = $field_output_name;
+	}
+	
+	// Output a select and pass options to launchpad_create_select_options()
+	if($subfield) {
+		echo '<label class="' . $class . '">' . $subfield . ' ';
+	}
+	
+	// Create the select.
+	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
+	echo '<option value="">Select One</option>';
+	echo launchpad_create_select_options($options, $val);
+	echo '</select>';
+	if($subfield) {
+		echo '</label>';
+	}
+}
+
+
+/**
+ * Render A Select Multiple Field
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		string $options The options to populate.
+ * @param		bool $val Whether the checkbox is checked.
+ * @param		string $class A class to use on the label if this is a subfield.
+ * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_selectmulti($field_output_name, $field_output_id = '', $options = array(), $val = false, $class = '', $subfield = false) {
+	$field_output_name = trim($field_output_name);
+	$field_output_id = trim($field_output_id);
+	if(!$field_output_name) {
+		return;
+	}
+	
+	if(!$field_output_id) {
+		$field_output_id = $field_output_name;
+	}
+	
+	// Output a select and pass options to launchpad_create_select_options()
+	if($subfield) {
+		echo '<label class="' . $class . '">' . $subfield . ' ';
+	}
+	
+	// The empty hidden field allows the user to actually select none.
+	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
+	
+	// Create the select.
+	echo '<select name="' . $field_output_name . '[]" size="10" multiple="multiple" id="' . $field_output_id . '">';
+	echo launchpad_create_select_options($options, $val);
+	echo '</select>';
+	if($subfield) {
+		echo '</label>';
+	}
+}
+
+
+/**
+ * Render A WordPress File Input
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		bool $val Whether the checkbox is checked.
+ * @param		string $class A class to use on the label if this is a subfield.
+ * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_file($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+	$field_output_name = trim($field_output_name);
+	$field_output_id = trim($field_output_id);
+	if(!$field_output_name) {
+		return;
+	}
+	
+	if(!$field_output_id) {
+		$field_output_id = $field_output_name;
+	}
+	
+	// For file, output a thubmnail if the image saved.
+	// Add a hidden field with the ID.
+	// JavaScript will handle updating the hidden field when a photo is selected.
+	if($subfield) {
+		echo '<label class="' . $class . '">' . $subfield . ' ';
+	}
+	
+	if((int) $val > 0) {
+		$existing = wp_get_attachment_image((int) $val);
+	} else {
+		$existing = false;
+	}
+	if(!$existing) {
+		$val = '';
+	}
+	
+	// The file ID is stored here.
+	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" class="file-button">Upload File</button>';
+	
+	// If there is an existing image, add a "remove" button.
+	if($existing) {
+		echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $field_output_id . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
+	}
+	
+	if($subfield) {
+		echo '</label>';
+	}
+}
+
+
+/**
+ * Render A WordPress WYSIWYG Editor
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		bool $val Whether the checkbox is checked.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '', $val = false) {
+	// Output a WYSIWYG editor.  Just the base code.
+	wp_editor(
+			$val, 
+			$field_output_id,
+			array(
+				'wpautop' => true,
+				'media_buttons' => true,
+				'textarea_name' => $field_output_name,
+				'textarea_rows' => 10,
+				'tinymce' => true,
+				'drag_drop_upload' => true
+			)
+		);
+}
+
+
+/**
  * Render fields
  * 
  * This gets a bit convoluted because it is used to render both launchpad site options fields
@@ -144,106 +405,25 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	// Determine how to handle each field based on the type of field it is.
 	switch($args['type']) {
 		case 'checkbox':
-			// Checkboxes need an empty hidden field by default.
-			// This allows for unchecked checkboxes to have an empty value.
-			// Because PHP is good for the job, a checked checkbox overwrites the empty value.
-			echo '<input type="hidden" name="' . $field_output_name . '" value="">';
-			if($subfield) {
-				echo '<label class="' . $class . '">';
-			}
-			echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . '>';
-			if($subfield) {
-				echo ' ' . $subfield . '</label>';
-			}
-		break;
-		case 'file':
-			// For file, output a thubmnail if the image saved.
-			// Add a hidden field with the ID.
-			// JavaScript will handle updating the hidden field when a photo is selected.
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			
-			$existing = wp_get_attachment_image($val);
-			if(!$existing) {
-				$val = '';
-			}
-			
-			// The file ID is stored here.
-			echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" class="file-button">Upload File</button>';
-			
-			// If there is an existing image, add a "remove" button.
-			if($existing) {
-				echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $field_output_id . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
-			}
-			
-			if($subfield) {
-				echo '</label>';
-			}
+			launchpad_render_field_checkbox($field_output_name, $field_output_id, $val, $class, $subfield);
 		break;
 		case 'text':
-			// Text is pretty simple.  Just output the field.
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text">';
-			if($subfield) {
-				echo '</label>';
-			}
+			launchpad_render_field_text($field_output_name, $field_output_id, $val, $class, $subfield);
 		break;
 		case 'textarea':
-			// Textarea is pretty simple.  Just output the field.
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
-			if($subfield) {
-				echo '</label>';
-			}
-		break;
-		case 'wysiwyg':
-			// Output a WYSIWYG editor.  Just the base code.
-			wp_editor(
-					$val, 
-					$field_output_id,
-					array(
-						'wpautop' => true,
-						'media_buttons' => true,
-						'textarea_name' => $field_output_name,
-						'textarea_rows' => 10,
-						'tinymce' => true,
-						'drag_drop_upload' => true
-					)
-				);
+			launchpad_render_field_textarea($field_output_name, $field_output_id, $val, $class, $subfield);
 		break;
 		case 'select':
-			// Output a select and pass options to launchpad_create_select_options()
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			
-			// Create the select.
-			echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
-			echo '<option value="">Select One</option>';
-			echo launchpad_create_select_options($args['options'], $val);
-			echo '</select>';
-			if($subfield) {
-				echo '</label>';
-			}
+			launchpad_render_field_select($field_output_name, $field_output_id, $args['options'], $val, $class, $subfield);
 		break;
 		case 'selectmulti':
-			// Selectmulti is exactly the same as select but with support for multiple values.
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			
-			// Create the select.
-			echo '<select name="' . $field_output_name . '" size="10" multiple="multiple" id="' . $field_output_id . '">';
-			echo launchpad_create_select_options($args['options'], $val);
-			echo '</select>';
-			if($subfield) {
-				echo '</label>';
-			}
+			launchpad_render_field_selectmulti($field_output_name, $field_output_id, $args['options'], $val, $class, $subfield);
+		break;
+		case 'file':
+			launchpad_render_field_file($field_output_name, $field_output_id, $val, $class, $subfield);
+		break;
+		case 'wysiwyg':
+			launchpad_render_field_wysiwyg($field_output_name, $field_output_id, $val);
 		break;
 		case 'menu':
 			// The menu field is essentially the same for select except we automagially pre-populate
@@ -499,6 +679,8 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			echo '<button type="button" class="button launchpad-repeater-add" data-for="launchpad-' . $repeater_tmp_id . '-repeater">Add Additional ' . $args['label'] . '</button>';
 		break;
 		case 'subfield':
+			// SUBFIELDS ARE FOR SETTINGS ONLY!!!
+			// DO NOT USE IN METABOXES!!!
 			foreach($args['subfields'] as $field) {
 				launchpad_render_form_field($field['args'], $field['name']);
 			}
@@ -653,7 +835,6 @@ function launchpad_meta_box_handler($post, $args) {
 			<label>
 				<?php 
 					
-				echo $v['name']; 
 				$v['args']['name'] = $k;
 				
 				// If there is a set value, override the developer specified value (if any).
@@ -662,8 +843,18 @@ function launchpad_meta_box_handler($post, $args) {
 					$v['args']['value'] = get_post_meta($post->ID, $k, true);
 				}
 				
+				// If this is not a checkbox, show the name before the field.
+				if($v['args']['type'] !== 'checkbox') {
+					echo $v['name']; 
+				}
+				
 				// Render the form field.	
 				launchpad_render_form_field($v['args'], false, 'launchpad_meta'); 
+				
+				// If this is a checkbox, show the name after the field.
+				if($v['args']['type'] === 'checkbox') {
+					echo $v['name']; 
+				}
 				
 				?>
 			</label>

@@ -168,27 +168,40 @@ function custom_launchpad_custom_post_types($post_types) {
 				'metaboxes' => array(
 						'launchpad_sample_side_metabox' => array(
 							'name' => 'Sample Side Metabox',
-							'location' => 'side',
+							'location' => 'normal',
 							'position' => 'default',
 							'help' => '<p>The sample metabox is designed to help you build your own metaboxes.</p>',
 							'fields' => array(
-								'sample_side_metabox_checkbox' => array(
+								'sample_side_metabox_checkbox_1' => array(
 									'name' => 'I agree',
 									'help' => '<p>This is a checkbox.</p>',
 									'args' => array(
 										'type' => 'checkbox'
 									)
 								),
-								'sample_side_metabox_value_1' => array(
-									'name' => 'Some Value',
-									'help' => '<p>This field contains sample text.</p>',
+								'sample_side_metabox_file' => array(
+									'name' => 'Upload a file',
+									'help' => '<p>This is a file input.</p>',
 									'args' => array(
-										'type' => 'text',
-										'default' => 'Hello'
+										'type' => 'file'
 									)
 								),
-								'sample_side_metabox_value_2' => array(
-									'name' => 'Some Other Value',
+								'sample_side_metabox_value_text' => array(
+									'name' => 'Text',
+									'help' => '<p>This field contains sample text.</p>',
+									'args' => array(
+										'type' => 'text'
+									)
+								),
+								'sample_side_metabox_value_textarea' => array(
+									'name' => 'Textarea',
+									'help' => '<p>This field contains sample textarea.</p>',
+									'args' => array(
+										'type' => 'textarea'
+									)
+								),
+								'sample_side_metabox_value_select' => array(
+									'name' => 'Select',
 									'help' => '<p>This field allows you to select one of three options.</p>',
 									'args' => array(
 										'type' => 'select',
@@ -198,7 +211,26 @@ function custom_launchpad_custom_post_types($post_types) {
 											'C' => 'C'
 										)
 									)
-								)
+								),
+								'sample_side_metabox_value_selectmulti' => array(
+									'name' => 'Select Multiple',
+									'help' => '<p>This field allows you to select any of three options.</p>',
+									'args' => array(
+										'type' => 'selectmulti',
+										'options' => array(
+											'A' => 'A',
+											'B' => 'B',
+											'C' => 'C'
+										)
+									)
+								),
+								'sample_side_metabox_wysiwyg' => array(
+									'name' => 'WYSIWYG',
+									'help' => '<p>This is a WYSIWYG input.</p>',
+									'args' => array(
+										'type' => 'wysiwyg'
+									)
+								),
 							)
 						)
 					),
