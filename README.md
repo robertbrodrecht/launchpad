@@ -152,6 +152,12 @@ To Do For 1.0
   * Make sure everything still works.
     * Maybe call in some help.
 
+Temporary Notes:
+launchpad_render_field_menu($field_output_name, $field_output_id, $val, $class, $subfield);
+launchpad_render_field_relationship($field_output_name, $post_type, $limit, $val);
+launchpad_render_field_taxonomy($field_output_name, $taxonomy, $multiple, $val);
+launchpad_render_field_repeater($field_output_name, $subfields, $label, $field_prefix, $val);
+
 
 To Do For 1.1
 =============
