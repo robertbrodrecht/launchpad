@@ -336,6 +336,54 @@ function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '
 
 
 /**
+ * Render A Menu Field
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		bool $val Whether the checkbox is checked.
+ * @param		string $class A class to use on the label if this is a subfield.
+ * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_menu($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+	$field_output_name = trim($field_output_name);
+	$field_output_id = trim($field_output_id);
+	if(!$field_output_name) {
+		return;
+	}
+	
+	if(!$field_output_id) {
+		$field_output_id = $field_output_name;
+	}
+	
+	// The menu field is essentially the same for select except we automagially pre-populate
+	// the select with the saved menus.
+	if($subfield) {
+		echo '<label class="' . $class . '">' . $subfield . ' ';
+	}
+	
+	// Grab all nav menus.
+	$all_menus = get_terms('nav_menu', array('hide_empty' => true));
+	
+	// Put the nav menus in an array to convert into options.
+	$menu_list = array();
+	foreach($all_menus as $menu) {
+		$menu_list[$menu->term_id] = $menu->name;
+	}
+	
+	// Create the select.
+	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
+	echo '<option value="">Select One</option>';
+	echo launchpad_create_select_options($menu_list, $val);
+	echo '</select>';
+	if($subfield) {
+		echo '</label>';
+	}
+}
+
+
+/**
  * Render fields
  * 
  * This gets a bit convoluted because it is used to render both launchpad site options fields
@@ -426,29 +474,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			launchpad_render_field_wysiwyg($field_output_name, $field_output_id, $val);
 		break;
 		case 'menu':
-			// The menu field is essentially the same for select except we automagially pre-populate
-			// the select with the saved menus.
-			if($subfield) {
-				echo '<label class="' . $class . '">' . $subfield . ' ';
-			}
-			
-			// Grab all nav menus.
-			$all_menus = get_terms('nav_menu', array('hide_empty' => true));
-			
-			// Put the nav menus in an array to convert into options.
-			$menu_list = array();
-			foreach($all_menus as $menu) {
-				$menu_list[$menu->term_id] = $menu->name;
-			}
-			
-			// Create the select.
-			echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
-			echo '<option value="">Select One</option>';
-			echo launchpad_create_select_options($menu_list, $val);
-			echo '</select>';
-			if($subfield) {
-				echo '</label>';
-			}
+			launchpad_render_field_menu($field_output_name, $field_output_id, $val, $class, $subfield);
 		break;
 		case 'relationship':
 			// This field is quite complex.  A lot of the functionality is handeled via JavaScript

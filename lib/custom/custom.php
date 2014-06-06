@@ -231,6 +231,13 @@ function custom_launchpad_custom_post_types($post_types) {
 										'type' => 'wysiwyg'
 									)
 								),
+								'sample_side_metabox_menu' => array(
+									'name' => 'Select a Menu',
+									'help' => '<p>This is a menu input.</p>',
+									'args' => array(
+										'type' => 'menu'
+									)
+								),
 							)
 						)
 					),
