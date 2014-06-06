@@ -238,6 +238,46 @@ function custom_launchpad_custom_post_types($post_types) {
 										'type' => 'menu'
 									)
 								),
+								'sample_side_metabox_relationship' => array(
+									'name' => 'Relationship',
+									'help' => '<p>This is a relationship.</p>',
+									'args' => array(
+										'type' => 'relationship',
+										'post_type' => 'page',
+										'limit' => 2
+									)
+								),
+								'sample_side_metabox_taxonomy' => array(
+									'name' => 'Taxonomy',
+									'help' => '<p>This is a taxonomy.</p>',
+									'args' => array(
+										'type' => 'taxonomy',
+										'taxonomy' => 'launchpad_sample_tax',
+										'multiple' => true
+									)
+								),
+								'sample_side_metabox_repeater' => array(
+									'name' => 'Repeater',
+									'help' => '<p>This is a repeater.</p>',
+									'args' => array(
+										'type' => 'repeater',
+										'label' => 'HUH',
+										'subfields' => array(
+											'sample_side_metabox_repeater_a' => array(
+												'name' => 'Test Repeater A',
+												'args' => array(
+													'type' => 'text'
+												)
+											),
+											'sample_side_metabox_repeater_b' => array(
+												'name' => 'Test Repeater B',
+												'args' => array(
+													'type' => 'textarea'
+												)
+											)
+										)
+									)
+								),
 							)
 						)
 					),

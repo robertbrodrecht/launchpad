@@ -146,16 +146,15 @@ To Do For 1.0
 * Do a COMPLETE feature / code review.
   * More in-code documentation. Still need to do:
     * Then do a full review to make sure the comments are helpful.  Maybe call in some help.
+    * Repeater function needs phpdoc comments.
   * Refactor
     * Do a greater number of hooks / filters into WordPress have a significant performance cost? Is it better to consolidate?  Seems like no, but do some more research.
     * Review outstanding @todo because many of those things are refactor related.
+    * Fieldsets in admin are messed up.
+    * Some field types are broken in non-flexible types.  Test and fix.
   * Make sure everything still works.
     * Maybe call in some help.
 
-Temporary Notes:
-launchpad_render_field_relationship($field_output_name, $post_type, $limit, $val);
-launchpad_render_field_taxonomy($field_output_name, $taxonomy, $multiple, $val);
-launchpad_render_field_repeater($field_output_name, $subfields, $label, $field_prefix, $val);
 
 
 To Do For 1.1
