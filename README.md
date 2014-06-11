@@ -137,6 +137,7 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
+* Add /download/ rewrite to allow file downloads.
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme (Launcpad) and a child theme (Liftoff).
