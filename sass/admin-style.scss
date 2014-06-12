@@ -22,7 +22,7 @@
 .launchpad-metabox-fieldset {
 	border: 1px solid #DDD;
 	margin-bottom: 1em;
-	padding: 5% 5% 0% 5%;
+	padding: 1em 1em 0% 1em;
 	
 	legend {
 		padding: 0 1em;
@@ -30,24 +30,26 @@
 }
 
 table.launchpad-metabox-table {
+	border-bottom: 1px solid #21759B;
 	border-collapse: collapse;
 	margin-bottom: 1em;
 	width: 100%;
-}
-
-table.launchpad-metabox-table caption {
-	font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif;
-	font-size: 15px;
-	padding: 1em;
-}
-table.launchpad-metabox-table th {
-	border-bottom: 1px solid #21759B;
-}
-
-table.launchpad-metabox-table th,
-table.launchpad-metabox-table td {
-	padding: 5px;
-	text-align: center;
+	
+	caption {
+		font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif;
+		font-size: 15px;
+		padding: 1em;
+	}
+	
+	th {
+		border-bottom: 1px solid #21759B;
+	}
+	
+	th,
+	td {
+		padding: 5px;
+		text-align: center;
+	}
 }
 
 .launchpad-align-right {
@@ -57,7 +59,11 @@ table.launchpad-metabox-table td {
 .launchpad-subfield {
 	display: block;
 	margin-bottom: 14px;
-	width: 25em;
+	
+	// Hopefully this only happens on options pages.
+	td > & {
+		width: 25em;
+	}
 	
 	&.launchpad-field-launchpad_flexible {
 		width: auto;
@@ -437,7 +443,9 @@ small.launchpad-inline {
 }
 
 .launchpad-repeater-container {
-	margin: .5em -2em;
+	.launchpad-flexible-container & {
+		margin: .5em -2em;
+	}
 	
 	.launchpad-inline-help + & {
 		clear: both;

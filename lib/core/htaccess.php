@@ -29,6 +29,7 @@ function launchpad_rewrite_rules($content) {
 	  	'images/(.*)' => THEME_PATH . '/images/$1',
 	  	'support/(.*)' => THEME_PATH . '/support/$1',
 		'api/(.*)' => 'wp-admin/admin-ajax.php',
+		'download/(.*)' => 'wp-admin/admin-ajax.php?action=download&file=$1',
 		'manifest.appcache' => 'wp-admin/admin-ajax.php?action=cache_manifest',
 		'sitemap-(\d*).xml/?' => 'wp-admin/admin-ajax.php?action=sitemap&sitemap=$1',
 		'sitemap-index\.xml/?' => 'wp-admin/admin-ajax.php?action=sitemap',

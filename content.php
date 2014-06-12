@@ -27,6 +27,13 @@ while(have_posts()) {
 
 ?>
 			<section>
+				<?php
+				
+				if(has_post_thumbnail()) {
+					the_post_thumbnail();
+				}
+				
+				?>
 				<h1><a href="<?php echo the_permalink() ?>"><?php the_title(); ?></a></h1>
 				<?php 
 					

@@ -122,7 +122,9 @@ function launchpad_theme_activation_action() {
 	// Flush rewrite rules when settings are saved.
 	flush_rewrite_rules(true);
 }
-add_action('after_switch_theme', 'launchpad_theme_activation_action');
+if(is_admin()) {
+	add_action('after_switch_theme', 'launchpad_theme_activation_action');
+}
 
 
 /**
@@ -137,7 +139,9 @@ function launchpad_settings_redirect() {
 		exit;
 	}
 }
-add_action('after_switch_theme', 'launchpad_settings_redirect', 9999);
+if(is_admin()) {
+	add_action('after_switch_theme', 'launchpad_settings_redirect', 9999);
+}
 
 
 /**
@@ -241,11 +245,14 @@ foreach($launchpad_rel_filters as $launchpad_rel_filter) {
  * @since		1.0
  */
 function launchpad_remove_self_closing_tags($input) {
-	return str_replace(' ?/>', '>', $input);
+	return preg_replace('| />|', '>', $input);
 }
 add_filter('get_avatar', 'launchpad_remove_self_closing_tags');
 add_filter('comment_id_fields', 'launchpad_remove_self_closing_tags');
 add_filter('post_thumbnail_html', 'launchpad_remove_self_closing_tags');
+if(is_admin()) {
+	add_filter('image_send_to_editor', 'launchpad_remove_self_closing_tags');
+}
 
 
 /**
@@ -257,7 +264,6 @@ add_filter('post_thumbnail_html', 'launchpad_remove_self_closing_tags');
  *
  * @param		array $attr The image attributes to modify
  * @since		1.0
- * @todo		Why is this not doing what I think it should?
  */
 function launchpad_wp_get_attachment_image_attributes($attr) {
 	unset($attr['title']);
@@ -277,4 +283,62 @@ function launchpad_mime_types($mimes) {
 	$mimes['svg'] = 'image/svg+xml';
 	return $mimes;
 }
-add_filter('upload_mimes', 'launchpad_mime_types');
+if(is_admin()) {
+	add_filter('upload_mimes', 'launchpad_mime_types');
+}
+
+
+/**
+ * Alert the admin if memory gets low.
+ *
+ * @since		1.0
+ */
+function launchpad_memory_warning() {
+	// The total memory currently allowed for PHP.
+	$memory = ini_get('memory_limit');
+	
+	// The current memory usage.
+	$mem_used = memory_get_usage();
+	
+	// The peak memory usage.
+	$mem_peak = memory_get_peak_usage();
+	
+	// Convert the memory limit to bytes.
+	$mem_limit = trim($memory);
+	$mem_suffix = strtolower($mem_limit[strlen($mem_limit)-1]);
+	switch($mem_suffix) {
+		case 'g':
+			$mem_limit *= 1024;
+		case 'm':
+			$mem_limit *= 1024;
+		case 'k':
+			$mem_limit *= 1024;
+	}
+	
+	// If the memory left is under 500KB, send an e-mail.
+	if($mem_limit-$mem_peak < 512000) {
+		
+		// Build the message.
+		$message = 'A page on your website is in danger of running out of memory or is running out of memory.  Please forward this e-mail to your web developer.  Diagnostic information is below.';
+		
+		$message .= "\n\n";
+		
+		$message .= 'URL: http' . ($_SERVER['SERVER_PORT'] != 80 ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . "\n";
+		$message .= 'PHP Memory Limit: ' . $mem_limit . " bytes\n";
+		$message .= 'Memory Usage: ' . $mem_used . " bytes\n";
+		$message .= 'Memory Peak Usage: ' . $mem_peak . " bytes\n";
+		$message .= 'Memory Left At Peak: ' . ($mem_limit-$mem_peak) . " bytes\n\n\n";
+
+		$message .= '$_SERVER = ';			
+		$message .= print_r($_SERVER, true) . "\n\n";
+		
+		// Send the mail.
+		wp_mail(
+			get_option('admin_email'), 
+			'Warning: ' . get_bloginfo('name') . ' Low Memory',  
+			 $message, 
+			'From: ' . get_bloginfo('name') . ' <no-reply@' . $_SERVER['HTTP_HOST'] . '>'
+		);
+	}
+}
+register_shutdown_function('launchpad_memory_warning');

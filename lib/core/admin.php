@@ -35,13 +35,16 @@ function launchpad_activate_style_select($buttons) {
 	array_unshift($buttons, 'styleselect');
 	return $buttons;
 }
-add_filter('mce_buttons_2', 'launchpad_activate_style_select');
+if(is_admin()) {
+	add_filter('mce_buttons_2', 'launchpad_activate_style_select');
+}
 
 
 /**
  * Add Common Styles to MCE
  *
  * @since		1.0
+ * @todo		Add back support for crossfade rotator once Skate is integrated.
  */
 function launchpad_add_custom_mcs_styles($init_array) {
 	// Create the inital array of styles supported by Launchpad.
@@ -52,14 +55,21 @@ function launchpad_add_custom_mcs_styles($init_array) {
 			'wrapper' => false,
 			'selector' => 'a'
 		),
-		array(
-			'title' => 'Crossfade Rotator',
-			'block' => 'div',
-			'classes' => 'skate',
-			'wrapper' => true,
-			'attributes' => (object) array('data-skate' => 'crossfade')
-		)
 	);
+	
+	/*
+	
+	For future reference, this is to add Skate support:
+	
+	array(
+		'title' => 'Crossfade Rotator',
+		'block' => 'div',
+		'classes' => 'skate',
+		'wrapper' => true,
+		'attributes' => (object) array('data-skate' => 'crossfade')
+	)
+	
+	*/
 	
 	// Apply filters to allow the developer to change it.
 	$launchpad_mce_style_formats = apply_filters('launchpad_mce_style_formats', $launchpad_mce_style_formats);
@@ -71,7 +81,9 @@ function launchpad_add_custom_mcs_styles($init_array) {
 	$init_array['style_formats'] = json_encode($launchpad_mce_style_formats);
 	return $init_array;
 }
-add_filter('tiny_mce_before_init', 'launchpad_add_custom_mcs_styles');
+if(is_admin()) {
+	add_filter('tiny_mce_before_init', 'launchpad_add_custom_mcs_styles');
+}
 
 
 /**
@@ -94,7 +106,9 @@ function launchpad_image_sizes_options($sizes) {
 	// Merge the existing sizes and the sizes set by the user.
     return array_merge($sizes, $tmp);
 }
-add_filter('image_size_names_choose', 'launchpad_image_sizes_options');
+if(is_admin()) {
+	add_filter('image_size_names_choose', 'launchpad_image_sizes_options');
+}
 
 
 /**
@@ -507,7 +521,9 @@ function launchpad_site_options_init() {
 			);
 	}
 }
-add_action('admin_init', 'launchpad_site_options_init');
+if(is_admin()) {
+	add_action('admin_init', 'launchpad_site_options_init');
+}
  
 
 /**
@@ -567,7 +583,9 @@ function launchpad_theme_options_add_page() {
 		);
 	}
 }
-add_action('admin_menu', 'launchpad_theme_options_add_page');
+if(is_admin()) {
+	add_action('admin_menu', 'launchpad_theme_options_add_page');
+}
  
 
 /**
@@ -579,7 +597,9 @@ add_action('admin_menu', 'launchpad_theme_options_add_page');
 function launchpad_option_page_capability($capability) {
 	return 'edit_theme_options';
 }
-add_filter('option_page_capability_launchpad_options', 'launchpad_option_page_capability');
+if(is_admin()) {
+	add_filter('option_page_capability_launchpad_options', 'launchpad_option_page_capability');
+}
  
 
 /**
@@ -613,22 +633,6 @@ function launchpad_theme_options_render_page() {
 
 
 /**
- * Remove access to certain pages for non-admins
- *
- * @since		1.0
- * @todo		Consider adding a filter here.
- */
-function launchpad_remove_menu_pages() {
-	$user = wp_get_current_user();
-	if(!in_array('administrator', $user->roles)) {
-		remove_menu_page('edit.php?post_type=acf');
-	}
-}
-add_action('admin_menu', 'launchpad_remove_menu_pages');
-
-
-
-/**
  * Provides a stylesheet and script hooks for the admin area
  *
  * @since		1.0
@@ -641,7 +645,9 @@ function launchpad_admin_script_includes() {
 	// Add admin.js.
 	wp_enqueue_script('launchpad_wp_admin_js', get_template_directory_uri() . '/js/admin.js');
 }
-add_action('admin_enqueue_scripts', 'launchpad_admin_script_includes');
+if(is_admin()) {
+	add_action('admin_enqueue_scripts', 'launchpad_admin_script_includes');
+}
 
 
 /**
@@ -658,7 +664,9 @@ function launchpad_remove_dashboard_widgets() {
 	remove_meta_box('dashboard_primary', 'dashboard', 'normal');
 	remove_meta_box('dashboard_secondary', 'dashboard', 'normal');
 }
-add_action('admin_init', 'launchpad_remove_dashboard_widgets');
+if(is_admin()) {
+	add_action('admin_init', 'launchpad_remove_dashboard_widgets');
+}
 
 
 /**
@@ -675,7 +683,9 @@ function launchpad_change_howdy($translated, $text, $domain) {
 	}
 	return $translated;
 }
-add_filter('gettext', 'launchpad_change_howdy', 10, 3);
+if(is_admin()) {
+	add_filter('gettext', 'launchpad_change_howdy', 10, 3);
+}
 
 
 /**
@@ -701,11 +711,11 @@ function launchpad_custom_login() {
 		
 		if($site_options['logo']) { 
 			$logo = wp_get_attachment_image_src($site_options['logo'], 'full');
+			
 			if($logo) {
 				$logo = $logo[0];
-				$size = getimagesize($logo);
-
-			
+				$size = getimagesize($_SERVER['DOCUMENT_ROOT'] . $logo);
+				
 		?>
 		body.login div#login h1 a {
 			background-image: url(<?php echo $logo ?>);
@@ -748,7 +758,9 @@ function launchpad_custom_login() {
 <?php 
 
 }
-add_action('login_enqueue_scripts', 'launchpad_custom_login');
+if($GLOBALS['pagenow'] === 'wp-login.php') {
+	add_action('login_enqueue_scripts', 'launchpad_custom_login');
+}
 
 
 /**
@@ -757,8 +769,7 @@ add_action('login_enqueue_scripts', 'launchpad_custom_login');
  * Uses various "help" indexes on custom post types to create help tabs for documentation purposes.
  * 
  * @since		1.0
- * @todo		This needs inline documentation.
- * @todo		In 1.1, don't forget to include the "NOTE:" stuff below.
+ * @todo		In 1.1 documentation, don't forget to include the "NOTE:" stuff below.
  */
 function launchpad_auto_help_tab() {
 	// Get the developer created post types.
@@ -937,7 +948,9 @@ function launchpad_auto_help_tab() {
 		}
 	}
 }
-add_action('admin_head', 'launchpad_auto_help_tab');
+if(is_admin()) {
+	add_action('admin_head', 'launchpad_auto_help_tab');
+}
 
 
 /**

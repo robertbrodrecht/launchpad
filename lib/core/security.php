@@ -122,7 +122,9 @@ function launchpad_login_failed($username) {
 		fclose($f);
 	}
 }
-add_action('wp_login_failed', 'launchpad_login_failed');
+if($GLOBALS['pagenow'] === 'wp-login.php') {
+	add_action('wp_login_failed', 'launchpad_login_failed');
+}
 
 
 /**
@@ -139,7 +141,9 @@ function launchpad_login_failure_shake($error_codes) {
 	$error_codes[] = 'too_many_retries';
 	return $error_codes;
 }
-add_filter('shake_error_codes', 'launchpad_login_failure_shake');
+if($GLOBALS['pagenow'] === 'wp-login.php') {
+	add_filter('shake_error_codes', 'launchpad_login_failure_shake');
+}
 
 
 /**
@@ -193,7 +197,9 @@ function launchpad_wp_authenticate_user($user, $password) {
 	$error->add('too_many_retries', 'Exhausted login attempts.');
 	return $error;
 }
-add_filter('wp_authenticate_user', 'launchpad_wp_authenticate_user', 99999, 2);
+if($GLOBALS['pagenow'] === 'wp-login.php') {
+	add_filter('wp_authenticate_user', 'launchpad_wp_authenticate_user', 99999, 2);
+}
 
 
 /**
@@ -255,7 +261,9 @@ function launchpad_login_add_error_message() {
 	}
 	return $error;
 }
-add_action('login_head', 'launchpad_login_add_error_message');
+if($GLOBALS['pagenow'] === 'wp-login.php') {
+	add_action('login_head', 'launchpad_login_add_error_message');
+}
 
 
 /**
@@ -271,4 +279,6 @@ function launchpad_clear_login_failures($user_login, $user) {
 		unlink($cache_file);
 	}
 }
-add_action('wp_login', 'launchpad_clear_login_failures', 10, 2);
+if($GLOBALS['pagenow'] === 'wp-login.php' || is_admin()) {
+	add_action('wp_login', 'launchpad_clear_login_failures', 10, 2);
+}
