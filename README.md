@@ -1,7 +1,7 @@
 Launchpad
 =========
 
-Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly.  
+Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly.  If you like to use plugins, this theme is not for you.
 
 I am currently developing the first production site based on Launchpad and the second is in development by @iamdangavin.  Feedback from this process is being integrated back into Launchpad as issues arise.
 
@@ -19,33 +19,33 @@ I'll be building out the feature list as I get the time.
 ## Front-end Features
 
 * CodeKit 2 support.
-* Developer-mode test grid based on CSS rules.  Access by pressing "g" key.
+* Developer-mode test grid based on CSS rules to help you understand your baseline grid.  Access by pressing "g" key.
 
 ### HTML-ish
 
 * Offline support with intelligent cache refreshing via applicationCache.
-* Input placeholder polyfill.
+* Input placeholder polyfill because WTF IE9.
 * Templates for Apple Startup Images and dummy files for Apple Touch Icons and Favicon.
-* HTML5 Shiv included for IE8.
+* HTML5 Shiv included for IE8 (until I decide to stop supporting IE8 on the front end, which will probably be some time in late 2014).
 
 ### SASS / CSS
 
 * Calculated percentage root font size based on SASS variable.  You enter '10px' and that gets converted to 62.5%.
-* REM mixin based on root font size variable (see previous bullet) to make it dead easy to use REMs with a fallback.  E.g. <code>@include rem('padding', 5px 20px);</code>
+* REM mixin based on root font size variable (see previous bullet) to make it dead easy to use REMs with a fallback.  E.g. <code>@include rem('padding', 5px 20px);</code>  A new version of the mixin might be better but it needs testing.
 * Vertical rhythm based on SASS variables.
-* Grid system.  Recently rewritten.
-* Conditional comments for IE8/9 that don't make your HTML look like a janky mess.  Use <code>.msie-8 ~ *</code> as your a prefix to a selector to change styles for IE8.
+* Grid system.  Recently rewritten (and therefore untested) because the old one was too slow and didn't match my co-worker's concept of what grid systems do.
+* Conditional comments for IE8/9 that don't make your HTML (specifically the actual <code>html</code> element) look like a janky mess.  Use <code>.msie-8 ~ *</code> as your a prefix to a selector to change styles for IE8 and <code>.msie-9 ~ *</code> for IE9.
 * Unsupported browser "[Universal Stylesheet](https://code.google.com/p/universal-ie6-css/)."
 
 ### jQuery / JavaScript
 
 * Ajax page loads with History PushState/PopState and Google Analytics pageview events.
 * Limited JavaScript feature detection for features that matter (screen DPI, position sticky, css transitions, and touch-capable) instead of including the full Modernizr suite.
-* Built-in <code>:target</code>-based "hamburger" menu.
+* Built-in <code>:target</code>-based "hamburger" menu.  You still have to style it, but the code handles some of the tedious bits.
 * [60FPS scrolling](http://www.thecssninja.com/javascript/follow-up-60fps-scroll) option.
-* Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit, ajaxRequestStart, ajaxRequestEnd.  More will be available eventually.
+* Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit, ajaxRequestStart, ajaxRequestEnd.  More will be available eventually, I think.
 * jQuery Custom Events for scrollStart, scrollStop, resizeStart, and resizeStop so that you don't have to shoot yourself in the foot by using resize and scroll events when you don't have to.
-* jQuery-based Height Match via <code>@data-height-match-group</code> with children containing <code>@data-height-match</code> or <code>@data-height-match-children</code> to height match all children.  Use either a min-width as a number or media query for when heightmatch should work.
+* jQuery-based Height Match via <code>@data-height-match-group</code> with children containing <code>@data-height-match</code> or <code>@data-height-match-children</code> to height match all children.  Use either a min-width as a number or media query for when heightmatch should work.  Media queries as height-match values are not supported by IE8 (always returns false because IE8 doesn't support Media Queries).
 
 
 ## SEO and Social Media Related Features
@@ -55,20 +55,20 @@ I'll be building out the feature list as I get the time.
 * Meta Description 
   * Custom meta descriptions.
   * Generated from excerpts automatically if no custom value provided.
-* Keyword density and title checks based on various best practices with suggestions.
+* Keyword density and title checks based on various best practices with suggestions on improvements.
 * SERP Preview Snippet
 * OpenGraph tags generated automatically.
 * Twitter Card tags generated automatically.
 * Google Analytics Support.
-* hCard example in footer.
-* Noindex, follow on listing pages.
-* XML Sitemaps
+* hCard example in footer if you're into that sort of thing.
+* Noindex, follow on archive pages.
+* XML Sitemaps generated automatically following schema.org standards.
 
 
 ## Back-end Features
 
 * Content caching with configurable cache timeouts and intelligent cache invalidating (i.e. on save).
-* Automagic AppCache Manifest generation that pays attention to individual file size and total cache size to avoid overloading the cache.
+* Automagic AppCache Manifest generation that pays attention to individual file size and total cache size to avoid overloading the cache and avoid the browser holding onto old caches.
 * Custom rewites:
   * /images/ rewrites to the theme's /images/ folder.
   * /css/ rewrites to the theme's /css/ folder.
@@ -76,10 +76,10 @@ I'll be building out the feature list as I get the time.
   * /api/ rewrites to /wp-admin/admin-ajax.php for easier JavaScript API calls.
   * /support/ rewrites to the theme's /support/ folder.
   * manifest.appcache rewrites to the API call for creating the manifest.
-* Phone number formatting function.
+* Phone number formatting function.  More of these type of functions coming eventually.
 * Automatic headers for X-UA-Compatible (IE=edge,chrome=1) so you don't have to put it in your markup.
 * Settings for HTML5 Boilerplate's .htaccess.
-* Support for saving custom post fields and examples of how to set them up.
+* Support for saving custom fields and examples of how to set them up.
 * Easy creation of custom post types.
 * Easy creation of custom fields on those custom post types, and easily add metaboxes to existing post types.
 * Flexible content.  Build modules in code as PHP arrays attached to post types. Includes built-in modules for:
@@ -99,8 +99,12 @@ I'll be building out the feature list as I get the time.
   * Relationships (Attach one or more posts in one or more post types)
   * Taxonomy (Select one or more taxonomies)
   * Menu selector (Select a menu created in Appearance > Menus)
+<<<<<<< HEAD
 * A ton of filters for modifying stuff.  See the functions-custom.php file for details.  More details eventually and more coming.
 * WordPress can consume a ton of memory.  If your peak memory usage gets within 500KB of the memory limit, the admin e-mail will get a message.
+=======
+* A ton of filters for modifying stuff.  See the /lib/custom/custom.php file for details.  More details eventually.
+>>>>>>> 0645d1d6a6fa6f3615cfc916e8e681c14a6d9161
 
 
 ## WordPress Features
@@ -110,9 +114,9 @@ I'll be building out the feature list as I get the time.
 * Support for a.button and a few other custom classes for the Visual Editor styles drop down.
 * WordPress admin stylesheet.
 * WordPress admin JavaScript.
-* Sample admin-ajax API call.
+* Sample admin-ajax API call that you can copy/paste to help you get going faster.
 * Automatically sets up a post and home page associations.
-* Automatically sets /uploads/ as upload folder.
+* Automatically sets /assets/ as upload folder.
 * Automatically adds header and footer navigation.
 * Easily-modifiable theme options.  Fields go in an array and the code does the rest.
 * Root-relative URLs in Visual Editor and beyond.
@@ -144,10 +148,11 @@ To Do For 1.0
   * Probably have the core theme (Launcpad) and a child theme (Liftoff).
   * CSS and JS may be part of Liftoff.
   * Probably need to use locate_template instead of include.
+  * Rewrites are not child-theme compatible.
   * Attempt to implement a child theme to figure all this out.
 * Do a COMPLETE feature / code review.
   * More in-code documentation. Still need to do:
-    * Then do a full review to make sure the comments are helpful.  Maybe call in some help.
+    * Full review to make sure the comments are helpful.  Maybe call in some help.
     * Repeater function needs phpdoc comments.
   * Refactor
     * Review outstanding @todo because many of those things are refactor related.
