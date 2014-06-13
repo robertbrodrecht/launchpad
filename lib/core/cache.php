@@ -241,7 +241,9 @@ function launchpad_clear_cache($post_id) {
 	}
 	return $post_id;
 }
-add_action('save_post', 'launchpad_clear_cache');
+if(is_admin()) {
+	add_action('save_post', 'launchpad_clear_cache');
+}
 
 
 /**
@@ -271,7 +273,9 @@ function launchpad_clear_all_cache() {
 	}
 	return true;
 }
-add_action('wp_update_nav_menu', 'launchpad_clear_all_cache');
+if(is_admin()) {
+	add_action('wp_update_nav_menu', 'launchpad_clear_all_cache');
+}
 
 
 /**
@@ -353,9 +357,9 @@ function launchpad_wp_nav_menu($args) {
  * Generate an App Cache Manifest
  *
  * @since		1.0
- * @todo		Make sure this is compatible with /img/ as a replacement to /images/.
  */
 function launchpad_cache_manifest() {
+	
 	// Get the site options.
 	$site_options = get_option('launchpad_site_options', '');
 	
@@ -401,7 +405,7 @@ function launchpad_cache_manifest() {
 		
 		// If the path is images, we only want top-level images.
 		// This avoids caching all icon assets, etc.
-		if($rewrite_path === '/images/') {
+		if($rewrite_path === '/images/' || $rewrite_path === '/img/') {
 			$files = scandir($path_local);
 		// Otherwise, we want to make sure we cache everything for css, js, etc.
 		} else {
@@ -770,5 +774,7 @@ function launchpad_cache_manifest() {
 	echo "/ /support/offline.html\n";
 	exit;
 }
-add_action('wp_ajax_cache_manifest', 'launchpad_cache_manifest');
-add_action('wp_ajax_nopriv_cache_manifest', 'launchpad_cache_manifest');
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_cache_manifest', 'launchpad_cache_manifest');
+	add_action('wp_ajax_nopriv_cache_manifest', 'launchpad_cache_manifest');
+}

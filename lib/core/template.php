@@ -10,15 +10,12 @@
  */
 
 
-// As a precaution, trigger a filter to put Gravity Forms code in footer below the jQuery include.
-add_filter('gform_init_scripts_footer', '__return_true');
-// Gravity forms tabindex is often harmful.  Turn it off.
-add_filter('gform_tabindex', create_function('', 'return false;'));
-
-// Remove capital_P_dangit.
-remove_filter('the_title', 'capital_P_dangit', 11);
-remove_filter('the_content', 'capital_P_dangit', 11);
-remove_filter('comment_text', 'capital_P_dangit', 31);
+if(class_exists('GFForms')) {
+	// As a precaution, trigger a filter to put Gravity Forms code in footer below the jQuery include.
+	add_filter('gform_init_scripts_footer', '__return_true');
+	// Gravity forms tabindex is often harmful.  Turn it off.
+	add_filter('gform_tabindex', create_function('', 'return false;'));
+}
 
 
 /**
@@ -58,6 +55,8 @@ function launchpad_theme_setup() {
 	
 	// Create the editor style.
 	add_editor_style('css/editor-style.css');
+	
+	launchpad_image_setup();
 }
 add_action('after_setup_theme', 'launchpad_theme_setup');
 
@@ -67,6 +66,7 @@ add_action('after_setup_theme', 'launchpad_theme_setup');
  *
  * @since		1.0
  * @link		https://developers.facebook.com/docs/opengraph/howtos/maximizing-distribution-media-content/
+ * @see			launchpad_theme_setup()
  */
 function launchpad_image_setup() {
 	// Support for a hand full of helpful image sizes.
@@ -92,7 +92,6 @@ function launchpad_image_setup() {
 		}
 	}
 }
-add_action('after_setup_theme', 'launchpad_image_setup');
 
 
 /**

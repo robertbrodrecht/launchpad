@@ -37,7 +37,9 @@ function launchpad_add_seo_metabox() {
 		}
 	}
 }
-add_action('add_meta_boxes', 'launchpad_add_seo_metabox', 10, 1);
+if(is_admin()) {
+	add_action('add_meta_boxes', 'launchpad_add_seo_metabox', 10, 1);
+}
 
 
 /**
@@ -61,7 +63,6 @@ add_filter('robots_txt', 'launchpad_robots_txt');
  * Depending on whether this is a request for the index or a single sitemap, display the sitemap.
  *
  * @since		1.0
- * @todo		This needs to cache.
  */
 function launchpad_sitemap() {
 	global $wpdb;
@@ -129,18 +130,21 @@ function launchpad_sitemap() {
 	}
 	exit;
 }
-add_action('wp_ajax_sitemap', 'launchpad_sitemap');
-add_action('wp_ajax_nopriv_sitemap', 'launchpad_sitemap');
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_sitemap', 'launchpad_sitemap');
+	add_action('wp_ajax_nopriv_sitemap', 'launchpad_sitemap');
+}
 
 
 
 /**
  * SEO Meta Box Handler
+ * 
+ * Generates all the code to handle the SEO metabox.  It's a horrible mess of stuff.  Sorry.
  *
  * @param		object $post The current post
  * @param		array $args Arguments passed from the metabox
  * @since		1.0
- * @todo		Find some way to make me not hate this.
  */
 function launchpad_seo_meta_box_handler($post, $args) {
 	

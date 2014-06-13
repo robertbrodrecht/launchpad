@@ -43,7 +43,9 @@ function launchpad_enable_media_upload() {
 		wp_enqueue_media();
 	}
 }
-add_action('admin_enqueue_scripts', 'launchpad_enable_media_upload');
+if(is_admin()) {
+	add_action('admin_enqueue_scripts', 'launchpad_enable_media_upload');
+}
 
 
 /**
@@ -513,10 +515,9 @@ function launchpad_render_field_taxonomy($field_output_name, $taxonomy = false, 
 		return;
 	}
 	
-	// Closing the label is a bit of a hack, but we have to trick the script into working this way.
 	// The empty hidden field, much like with the checkbox field, is needed to allow
 	// for saving with no checked items.
-	echo '</label><input type="hidden" name="' . $field_output_name . '">';
+	echo '<input type="hidden" name="' . $field_output_name . '">';
 	
 	// If we weren't given an array of taxonomies, split on commas.
 	if(!is_array($taxonomy)) {
@@ -668,7 +669,6 @@ function launchpad_render_field_repeater($field_output_name, $subfields, $label,
  * @param		string $field_prefix What prefix to add: launchpad_site_options, launchpad_meta, or launchpad_flexible.
  * @see			launchpad_get_setting_fields
  * @since		1.0
- * @todo		Break each field type into a function.  This is getting crazy.
  */
 function launchpad_render_form_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
 	
@@ -829,7 +829,9 @@ function launchpad_add_meta_boxes() {
 		}
 	}
 }
-add_action('add_meta_boxes', 'launchpad_add_meta_boxes', 10, 1);
+if(is_admin()) {
+	add_action('add_meta_boxes', 'launchpad_add_meta_boxes', 10, 1);
+}
 
 
 /**
@@ -864,7 +866,9 @@ function launchpad_save_post_data($post_id) {
 		update_post_meta($post_id, $meta_key, $meta_value);
 	}
 }
-add_action('save_post', 'launchpad_save_post_data');
+if(is_admin()) {
+	add_action('save_post', 'launchpad_save_post_data');
+}
 
 
 /**
@@ -911,33 +915,50 @@ function launchpad_meta_box_handler($post, $args) {
 			}
 			
 			// Render the field.
+			switch($v['args']['type']) {
+				case 'relationship':
+				case 'repeater':
+				case 'taxonomy':
+				case 'wysiwyg':
+				break;
+				default:
+					echo '<label>';
+				break;
+			}
+				
+			$v['args']['name'] = $k;
+			
+			// If there is a set value, override the developer specified value (if any).
+			// This is used in the render form field output.
+			if($post->$k && get_post_meta($post->ID, $k)) {
+				$v['args']['value'] = get_post_meta($post->ID, $k, true);
+			}
+			
+			// If this is not a checkbox, show the name before the field.
+			if($v['args']['type'] !== 'checkbox') {
+				echo $v['name']; 
+			}
+			
+			// Render the form field.	
+			launchpad_render_form_field($v['args'], false, 'launchpad_meta'); 
+			
+			// If this is a checkbox, show the name after the field.
+			if($v['args']['type'] === 'checkbox') {
+				echo $v['name']; 
+			}
+			
+			switch($v['args']['type']) {
+				case 'relationship':
+				case 'repeater':
+				case 'taxonomy':
+				case 'wysiwyg':
+				break;
+				default:
+					echo '</label>';
+				break;
+			}
+			
 			?>
-			<label>
-				<?php 
-					
-				$v['args']['name'] = $k;
-				
-				// If there is a set value, override the developer specified value (if any).
-				// This is used in the render form field output.
-				if($post->$k && get_post_meta($post->ID, $k)) {
-					$v['args']['value'] = get_post_meta($post->ID, $k, true);
-				}
-				
-				// If this is not a checkbox, show the name before the field.
-				if($v['args']['type'] !== 'checkbox') {
-					echo $v['name']; 
-				}
-				
-				// Render the form field.	
-				launchpad_render_form_field($v['args'], false, 'launchpad_meta'); 
-				
-				// If this is a checkbox, show the name after the field.
-				if($v['args']['type'] === 'checkbox') {
-					echo $v['name']; 
-				}
-				
-				?>
-			</label>
 		</div>
 	
 		<?php
@@ -1331,8 +1352,10 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 		return $ret;
 	}
 }
-add_action('wp_ajax_get_flexible_field', 'launchpad_get_flexible_field');
-add_action('wp_ajax_nopriv_get_flexible_field', 'launchpad_get_flexible_field');
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_get_flexible_field', 'launchpad_get_flexible_field');
+	add_action('wp_ajax_nopriv_get_flexible_field', 'launchpad_get_flexible_field');
+}
 
 
 /**
@@ -1356,8 +1379,10 @@ function launchpad_get_editor() {
 		);
 	exit;
 }
-add_action('wp_ajax_get_editor', 'launchpad_get_editor');
-add_action('wp_ajax_nopriv_get_editor', 'launchpad_get_editor');
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_get_editor', 'launchpad_get_editor');
+	add_action('wp_ajax_nopriv_get_editor', 'launchpad_get_editor');
+}
 
 
 /**
@@ -1422,5 +1447,7 @@ function launchpad_get_post_list() {
 	echo json_encode($ret);
 	exit;
 }
-add_action('wp_ajax_search_posts', 'launchpad_get_post_list');
-add_action('wp_ajax_nopriv_search_posts', 'launchpad_get_post_list');
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_search_posts', 'launchpad_get_post_list');
+	add_action('wp_ajax_nopriv_search_posts', 'launchpad_get_post_list');
+}

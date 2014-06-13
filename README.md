@@ -99,7 +99,12 @@ I'll be building out the feature list as I get the time.
   * Relationships (Attach one or more posts in one or more post types)
   * Taxonomy (Select one or more taxonomies)
   * Menu selector (Select a menu created in Appearance > Menus)
+<<<<<<< HEAD
+* A ton of filters for modifying stuff.  See the functions-custom.php file for details.  More details eventually and more coming.
+* WordPress can consume a ton of memory.  If your peak memory usage gets within 500KB of the memory limit, the admin e-mail will get a message.
+=======
 * A ton of filters for modifying stuff.  See the /lib/custom/custom.php file for details.  More details eventually.
+>>>>>>> 0645d1d6a6fa6f3615cfc916e8e681c14a6d9161
 
 
 ## WordPress Features
@@ -151,10 +156,7 @@ To Do For 1.0
     * Full review to make sure the comments are helpful.  Maybe call in some help.
     * Repeater function needs phpdoc comments.
   * Refactor
-    * Do a greater number of hooks / filters into WordPress have a significant performance cost? Is it better to consolidate?  Seems like no, but do some more research.
     * Review outstanding @todo because many of those things are refactor related.
-    * Fieldsets in admin are messed up.
-    * Some field types are broken in non-flexible types.  The break outside the metabox.  Test and fix.
   * Make sure everything still works.
     * Maybe call in some help.
 
