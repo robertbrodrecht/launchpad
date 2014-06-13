@@ -138,6 +138,7 @@ To Do For 1.0
 =============
 
 * Add /download/ rewrite to allow file downloads.
+* "Search Everything" type of functionality so that search includes flexible content modules / custom fields
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme (Launcpad) and a child theme (Liftoff).
@@ -169,7 +170,6 @@ To Do For 1.1
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
 * SEO+Social Stuff
   * Flipboard
-* "Search Everything" type of functionality so that search includes flexible content modules / custom fields
 
 
 To Do For 2.0-ish
