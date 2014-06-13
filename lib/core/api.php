@@ -26,34 +26,54 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 
 
 /**
- * Create Download Headers for LOCAL FILES
+ * Force Browser to Download File
+ * 
+ * You can either do /download/path/to/file.txt or
+ * /download/?file=/path/to/file.txt
  *
+ * @param		string $file The path or URL to the file.
  * @since		1.0
  */
 function launchpad_download_handler($file = false) {
+	// If the file is local, only allow downloading types that are allowed
+	// for uploading to WordPress.
+	$allowed_download_types = implode('|', array_keys(get_allowed_mime_types()));
+	
 	// If there is no file being passed, use the querystring.
 	if(!$file) {
 		$file = $_GET['file'];
 	}
 	
-	// Remove http:// because the file must be local.
-	$file = preg_replace('|https?://?|', '', $file);
+	// This is used as a flag for deciding whether to download or redirect.
+	$exec_download = true;
 	
-	// Remove any ../ to keep people from getting outside of the folder.
-	$file = preg_replace('|\.\./|', '', $file);
-	
-	// Replace the host name.
-	$file = str_replace($_SERVER['HTTP_HOST'], '', $file);
-	
-	if(substr($file, 0, 1) !== '/') {
-		$file = '/' . $file;
+	// If this is not 
+	if(!preg_match('|^https?://|', $file)) {
+		// Remove any ../ to keep people from getting outside of the folder.
+		$file = preg_replace('|\.\./|', '', $file);
+		
+		if(substr($file, 0, 1) !== '/') {
+			$file = '/' . $file;
+		}
+		
+		// Make it relative to the root.
+		$file = $_SERVER['DOCUMENT_ROOT'] . $file;
+		
+		// If the modifications turn the path into something that doesn't exist
+		// or if the path modifications point to a folder instead of a file,
+		// we can't download it, so set the variable to not allow the download.
+		if(!file_exists($file) || is_dir($file)) {
+			$exec_download = false;
+		}
+		
+		// If it's not an uploadable type, don't allow the download.
+		if(!preg_match('/(' . $allowed_download_types . ')$/', $file)) {
+			$exec_download = false;
+		}
 	}
 	
-	// Make it relative to the root.
-	$file = $_SERVER['DOCUMENT_ROOT'] . $file;
-	
-	// If the file exists, set the download headers and read it to the browser.
-	if(file_exists($file)) {
+	// If we decided to download the file, add headers and read it out.
+	if($exec_download) {
 		header('Content-Description: File Transfer');
 		header('Content-Type: application/octet-stream');
 		header('Content-Disposition: attachment; filename="' . basename($file) . '"');
@@ -62,7 +82,10 @@ function launchpad_download_handler($file = false) {
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Pragma: public');
-		header('Content-Length: ' . filesize($file));
+		if(file_exists($file)) {
+			header('Content-Length: ' . filesize($file));
+		}
+		
 		readfile($file);
 		
 	// If not, redirect to the file.

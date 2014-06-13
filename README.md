@@ -76,7 +76,8 @@ I'll be building out the feature list as I get the time.
   * /api/ rewrites to /wp-admin/admin-ajax.php for easier JavaScript API calls.
   * /support/ rewrites to the theme's /support/ folder.
   * manifest.appcache rewrites to the API call for creating the manifest.
-* Phone number formatting function.  More of these type of functions coming eventually.
+* Phone number formatting function.
+* US, Canadian, and UK postal code formatting.
 * Automatic headers for X-UA-Compatible (IE=edge,chrome=1) so you don't have to put it in your markup.
 * Settings for HTML5 Boilerplate's .htaccess.
 * Support for saving custom fields and examples of how to set them up.
@@ -99,12 +100,9 @@ I'll be building out the feature list as I get the time.
   * Relationships (Attach one or more posts in one or more post types)
   * Taxonomy (Select one or more taxonomies)
   * Menu selector (Select a menu created in Appearance > Menus)
-<<<<<<< HEAD
-* A ton of filters for modifying stuff.  See the functions-custom.php file for details.  More details eventually and more coming.
-* WordPress can consume a ton of memory.  If your peak memory usage gets within 500KB of the memory limit, the admin e-mail will get a message.
-=======
-* A ton of filters for modifying stuff.  See the /lib/custom/custom.php file for details.  More details eventually.
->>>>>>> 0645d1d6a6fa6f3615cfc916e8e681c14a6d9161
+  * A ton of filters for modifying stuff.  See the functions-custom.php file for details.  More details eventually and more coming.
+  * WordPress can consume a ton of memory.  If your peak memory usage gets within 500KB of the memory limit, the admin e-mail will get a message.
+  * Use /download/path/to/local/file or /download/?file=http://path.to/file/ to force-download a file
 
 
 ## WordPress Features
@@ -142,7 +140,6 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Add /download/ rewrite to allow file downloads.
 * "Search Everything" type of functionality so that search includes flexible content modules / custom fields
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
@@ -165,6 +162,7 @@ To Do For 1.0
 To Do For 1.1
 =============
 
+* Figure out the plug-in issue.
 * Implementation Documentation: Make a "Codex."  Note: https://help.github.com/articles/relative-links-in-readmes
 * Flexible content modules and field types.
   * What other modules should be built-in?

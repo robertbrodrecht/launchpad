@@ -283,9 +283,8 @@ function launchpad_mime_types($mimes) {
 	$mimes['svg'] = 'image/svg+xml';
 	return $mimes;
 }
-if(is_admin()) {
-	add_filter('upload_mimes', 'launchpad_mime_types');
-}
+add_filter('upload_mimes', 'launchpad_mime_types');
+
 
 
 /**

@@ -7,9 +7,65 @@
  *
  * @package 	Launchpad
  * @since		1.0
- * @todo		US / CA Postal Code Format
- * @todo		Validation: Phone, E-mail, US/CA Postal Code
  */
+
+
+
+/**
+ * Format US, Canadian, and UK postal codes.
+ * 
+ * Formatting based on Wikipedia's suggested standards.  The following is a test:
+ * 
+ * <code>
+ * $zips = array('35203', '35203-1234', 'K1A 0B1', 'EC1A 1BB', 'W1A 1HQ', 'M1 1AA', 'B33 8TH', 'CR2 6XH', 'DN55 1PT');
+ * foreach($zips as $zip) {var_dump($zip == format_postal_code($zip));}
+ * </code>
+ * 
+ * @link		http://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom
+ * @param		string $zip The postal code.
+ * @since		1.0
+ */
+function format_postal_code($zip = '') {
+	
+	// Remove any formatting that has been applied and upper case any letters.
+	$zip = strtoupper(preg_replace('/[^A-Z0-9]/i', '', $zip));
+	
+	// If the code is a US ZIP+4.
+	if(preg_match('/^[\d]{9}$/', $zip)) {
+		return substr($zip, 0, 5) . '-' . substr($zip, 5);
+	
+	// If the code is Canadian, format as "A9A 9A9"
+	} else if(preg_match('/^[A-Z]\d[A-Z]\d[A-Z]\d$/', $zip)) {
+		return substr($zip, 0, 3) . ' ' . substr($zip, 3);
+	
+	// If the code is a UK "AA9A 9AA"
+	} else if(preg_match('/^[A-Z]{2}\d[A-Z]\d[A-Z]{2}$/', $zip)) {
+		return substr($zip, 0, 4) . ' ' . substr($zip, 4);
+		
+	// If the code is a UK "A9A 9AA"
+	} else if(preg_match('/^[A-Z]\d[A-Z]\d[A-Z]{2}$/', $zip)) {
+		return substr($zip, 0, 3) . ' ' . substr($zip, 3);
+		
+	// If the code is a UK "A9 9AA"
+	} else if(preg_match('/^[A-Z]\d\d[A-Z]{2}$/', $zip)) {
+		return substr($zip, 0, 2) . ' ' . substr($zip, 2);
+		
+	// If the code is a UK "A99 9AA"
+	} else if(preg_match('/^[A-Z]\d\d\d[A-Z]{2}$/', $zip)) {
+		return substr($zip, 0, 3) . ' ' . substr($zip, 3);
+		
+	// If the code is a UK "AA9 9AA"
+	} else if(preg_match('/^[A-Z]{2}\d\d[A-Z]{2}$/', $zip)) {
+		return substr($zip, 0, 3) . ' ' . substr($zip, 3);
+		
+	// If the code is a UK "AA99 9AA"
+	} else if(preg_match('/^[A-Z]{2}\d\d\d[A-Z]{2}$/', $zip)) {
+		return substr($zip, 0, 4) . ' ' . substr($zip, 4);
+	}
+	
+	// If we couldn't figure out a format or didn't need to format, return the zip.
+	return $zip;
+}
 
 
 /**
@@ -123,9 +179,10 @@ function launchpad_scandir_deep($dir, $initial_dir = false) {
  *
  * @param		string $url Path to remote API.
  * @param		int $cachetime Time to cache.
+ * @param		resource $context A stream context resource created with stream_context_create().
  * @since		1.0
  */
-function file_get_contents_cache($url, $cachetime = 60) {
+function file_get_contents_cache($url, $cachetime = 60, $context = false) {
 	
 	// Get the site's temp folder.
 	$cache_file = sys_get_temp_dir() . '/' . launchpad_site_unique_string();
@@ -148,7 +205,7 @@ function file_get_contents_cache($url, $cachetime = 60) {
 	}
 	
 	// Return the contents from the cache file.
-	return file_get_contents($cache_file);
+	return file_get_contents($cache_file, false, ($context ? $context : null));
 }
 
 
