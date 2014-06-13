@@ -13,10 +13,10 @@
 if(!have_posts()) {
 
 ?>
-			<section>
+			<article>
 				<h1>Sorry!</h1>
 				<p>No matching posts were found.</p>
-			</section>
+			</article>
 
 <?php
 
@@ -26,24 +26,24 @@ while(have_posts()) {
 	the_post();
 
 ?>
-			<section>
+			<article>
+				<header>
+					<?php if(has_post_thumbnail()) { ?>
+
+					<figure>
+						<?php the_post_thumbnail(); ?>
+
+					</figure>
+					<?php } ?>
+
+					<h1><a href="<?php echo the_permalink() ?>"><?php the_title(); ?></a></h1>
+				</header>
+				<section>
+					<?php the_content(); ?>
+					<?php edit_post_link('Edit', '<p class="edit-link-container">', '</p>'); ?>
+				
+				</section>
 				<?php
-				
-				/*
-				if(has_post_thumbnail()) {
-					the_post_thumbnail();
-				}
-				*/
-				
-				?>
-				
-				<h1><a href="<?php echo the_permalink() ?>"><?php the_title(); ?></a></h1>
-				<?php 
-					
-				the_content();
-				
-				// Trying to protect the output.
-				edit_post_link('Edit', "\n				" . '<p class="edit-link-container">', '</p>' . "\n");
 				
 				// Handle the flexible content.
 				// Get the post types.
@@ -72,7 +72,6 @@ while(have_posts()) {
 									list($flex_type, $flex_values) = each($flex);
 									$flexible_prototype = $flexible_details['modules'][$flex_type];
 									
-									
 									// Use "include locate_template" so that variables are still in scope.
 									switch($flex_type) {
 										case 'accordion':
@@ -96,6 +95,5 @@ while(have_posts()) {
 				
 				?>
 
-			</section>
-
+			</article>
 <?php } ?>

@@ -1,8 +1,3 @@
-
-<section class="flexible-<?php echo sanitize_title($flex_type) ?>">
-<?php if($flex_values['title']) { ?>
-	<h1><?php echo $flex_values['title'] ?></h1>
-<?php } ?>
 <?php 
 
 $start = $flex_values['start'];
@@ -28,8 +23,14 @@ $children = get_children(
 		)
 	);
 	
+if($children) {
 
 ?>
+
+<section class="flexible-<?php echo sanitize_title($flex_type) ?>">
+<?php if($flex_values['title']) { ?>
+	<h1><?php echo $flex_values['title'] ?></h1>
+<?php } ?>
 
 	<ul class="section-navigation">
 		<?php 
@@ -114,15 +115,16 @@ $children = get_children(
 </section>
 <?php
 
-// Do some cleanup.
-
-$children = null;
-$child = null;
-
-$grand_children = null;
-$grand_child = null;
-
-$great_grand_children = null;
-$great_grand_child = null;
-
-unset($children, $child, $grand_children, $grand_child, $great_grand_children, $great_grand_child);
+	// Do some cleanup.
+	
+	$children = null;
+	$child = null;
+	
+	$grand_children = null;
+	$grand_child = null;
+	
+	$great_grand_children = null;
+	$great_grand_child = null;
+	
+	unset($children, $child, $grand_children, $grand_child, $great_grand_children, $great_grand_child);
+}

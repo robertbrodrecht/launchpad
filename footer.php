@@ -11,7 +11,6 @@ global $site_options;
 
 
 ?>
-			
 		</section>
 		<footer id="footer">
 			<div>
@@ -49,7 +48,7 @@ global $site_options;
 		<?php
 		
 		if(stristr($_SERVER['HTTP_HOST'], '.dev') !== false || stristr($_SERVER['HTTP_HOST'], '.git') !== false) {
-			echo "		<script>window.dev = true;</script>\n";
+			echo "<script>window.dev = true;</script>\n";
 		}
 		
 		?>

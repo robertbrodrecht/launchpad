@@ -42,7 +42,7 @@ I'll be building out the feature list as I get the time.
 * Ajax page loads with History PushState/PopState and Google Analytics pageview events.
 * Limited JavaScript feature detection for features that matter (screen DPI, position sticky, css transitions, and touch-capable) instead of including the full Modernizr suite.
 * Built-in <code>:target</code>-based "hamburger" menu.  You still have to style it, but the code handles some of the tedious bits.
-* [60FPS scrolling](http://www.thecssninja.com/javascript/follow-up-60fps-scroll) option.
+* [60FPS scrolling](http://www.thecssninja.com/javascript/follow-up-60fps-scroll) option.  Add data-scroll-helper to the body.
 * Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit, ajaxRequestStart, ajaxRequestEnd.  More will be available eventually, I think.
 * jQuery Custom Events for scrollStart, scrollStop, resizeStart, and resizeStop so that you don't have to shoot yourself in the foot by using resize and scroll events when you don't have to.
 * jQuery-based Height Match via <code>@data-height-match-group</code> with children containing <code>@data-height-match</code> or <code>@data-height-match-children</code> to height match all children.  Use either a min-width as a number or media query for when heightmatch should work.  Media queries as height-match values are not supported by IE8 (always returns false because IE8 doesn't support Media Queries).
@@ -141,7 +141,6 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme (Launcpad) and a child theme (Liftoff).
   * CSS and JS may be part of Liftoff.
