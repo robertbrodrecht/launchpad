@@ -563,6 +563,18 @@ function launchpad_render_field_taxonomy($field_output_name, $taxonomy = false, 
 	}
 }
 
+
+/**
+ * Render A Repeater Field
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		array $subfields The fields that go in the repeater.
+ * @param		string $label The name of the repeater.
+ * @param		string $field_prefix The prefix to use on the field name.
+ * @param		array $val The values to populate.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
 function launchpad_render_field_repeater($field_output_name, $subfields, $label, $field_prefix, $val) {
 	// Repeaters are complex fields.  A lot of the functionality is handeled via JavaScript.
 	

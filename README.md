@@ -149,11 +149,7 @@ To Do For 1.0
   * Rewrites are not child-theme compatible.
   * Attempt to implement a child theme to figure all this out.
 * Do a COMPLETE feature / code review.
-  * More in-code documentation. Still need to do:
-    * Full review to make sure the comments are helpful.  Maybe call in some help.
-    * Repeater function needs phpdoc comments.
-  * Refactor
-    * Review outstanding @todo because many of those things are refactor related.
+  * Refactor. Do a code review and make sure comments are helpful enough.
   * Make sure everything still works.
     * Maybe call in some help.
 
