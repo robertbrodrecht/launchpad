@@ -8,33 +8,10 @@
  * @since		1.0
  */
 
-$get_theme_name = explode('/themes/', get_template_directory());
 
-/** The base WP directory. */
-define('WP_BASE', wp_base_dir());
-/** The theme name. */
-define('THEME_NAME', next($get_theme_name));
-/** Root-relative content path. */
-define('RELATIVE_CONTENT_PATH', str_replace(site_url() . '/', '', content_url()));
+
 /** Root-relative theme path. */
-define('THEME_PATH', RELATIVE_CONTENT_PATH . '/themes/' . THEME_NAME);
-
-
-/**
- * Get Base URL for WP Subdir
- * 
- * This is modified from the Roots theme.
- *
- * @since		1.0
- */
-function wp_base_dir() {
-	preg_match('!(https?://[^/|"]+)([^"]+)?!', site_url(), $matches);
-	if (count($matches) === 3) {
-		return end($matches);
-	} else {
-		return '';
-	}
-}
+define('THEME_PATH', '/' . str_replace($_SERVER['DOCUMENT_ROOT'] . '/', '',get_template_directory()));
 
 
 /**

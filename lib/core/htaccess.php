@@ -42,7 +42,9 @@ function launchpad_rewrite_rules($content) {
 	$wp_rewrite->non_wp_rules = array_merge($wp_rewrite->non_wp_rules, $add_rewrite);
 	return $content;
 }
-add_action('generate_rewrite_rules', 'launchpad_rewrite_rules');
+if(is_admin()) {
+	add_action('generate_rewrite_rules', 'launchpad_rewrite_rules');
+}
 
 
 /**
@@ -76,7 +78,7 @@ function launchpad_add_h5bp_htaccess($content) {
 		
 		// If there are no Boilerplate Rules and the user wants them, add them.
 		if ($h5bp_rules === array() && $site_options['html5_bp'] === true) {
-			$filename = '../' . THEME_PATH . '/support/H5BPv4.3_htaccess';
+			$filename = '..' . THEME_PATH . '/support/H5BPv4.3_htaccess';
 			$boilerplate_rules = extract_from_markers($filename, 'HTML5 Boilerplate');
 		
 		// If there are Boilerplate rules and the user doesn't want them, remove them.
@@ -90,4 +92,6 @@ function launchpad_add_h5bp_htaccess($content) {
 	
 	return $content;
 }
-add_action('generate_rewrite_rules', 'launchpad_add_h5bp_htaccess');
+if(is_admin()) {
+	add_action('generate_rewrite_rules', 'launchpad_add_h5bp_htaccess');
+}

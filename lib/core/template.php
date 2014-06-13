@@ -411,3 +411,95 @@ function launchpad_gallery_shortcode($attr) {
 }
 remove_shortcode('gallery', 'gallery_shortcode');
 add_shortcode('gallery', 'launchpad_gallery_shortcode');
+
+
+/**
+ * Modify Search Join Query To Include Flexible Content
+ *
+ * @param		string $q The query.
+ * @since		1.0
+ */
+function launchpad_search_flexible_join($q) {
+	global $wpdb;
+	
+	// We only want to do this on a search page.
+	if(is_search()) {
+		// Get the post types so we can find out what flexible types there are.
+		$types = launchpad_get_post_types();
+		
+		// This keeps up with what flexible types we have already considered.
+		$used_flex = array();
+		
+		// If we have post types.
+		if($types) {
+			
+			// Loop the post types.
+			foreach($types as $type) {
+				
+				// If the type has flexible content.
+				if($type['flexible']) {
+					
+					// Loop the flexible content.
+					foreach($type['flexible'] as $flex_name => $flex_value) {
+						
+						// If we haven't used the flexible content, add it to the query.
+						if(!in_array($flex_name, $used_flex)) {
+							$used_flex[] = $flex_name;
+							$q .= " LEFT JOIN $wpdb->postmeta launchpad_search_$flex_name ON $wpdb->posts.ID = launchpad_search_$flex_name.post_id AND launchpad_search_$flex_name.meta_key = '$flex_name' ";
+						}
+					}
+				}
+			}
+		}
+	}
+	return $q;
+}
+add_action('posts_join', 'launchpad_search_flexible_join');
+
+
+/**
+ * Modify Search Where Query To Include Flexible Content
+ *
+ * @param		string $q The query.
+ * @since		1.0
+ */
+function launchpad_search_flexible_where($q) {
+	global $wpdb;
+	
+	// We only want to do this on a search page.
+	if(is_search()) {
+		// Get the post types so we can find out what flexible types there are.
+		$types = launchpad_get_post_types();
+		
+		// This keeps up with what flexible types we have already considered.
+		$used_flex = array();
+		
+		// If we have post types.
+		if($types) {
+		
+			// Loop the post types.
+			foreach($types as $type) {
+				
+				// If the type has flexible content.
+				if($type['flexible']) {
+					
+					// Loop the flexible content.
+					foreach($type['flexible'] as $flex_name => $flex_value) {
+					
+						// If we haven't used the flexible content, add it to the query.
+						// Unfortunately, the WHERE is already pretty populated by now.
+						// We can't just shove this onto the end. So, we use the post_title
+						// part of the WHERE as a template and use preg_replace trickery
+						// to put the right stuff in the right place.
+						if(!in_array($flex_name, $used_flex)) {
+							$used_flex[] = $flex_name;
+							$q = preg_replace("/(\($wpdb->posts.post_title LIKE '(%.*?%)'\))/", '$1 OR (launchpad_search_' . $flex_name . '.meta_value LIKE "$2")', $q);
+						}
+					}
+				}
+			}
+		}
+	}
+	return $q;
+}
+add_action('posts_search', 'launchpad_search_flexible_where');

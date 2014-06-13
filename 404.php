@@ -25,6 +25,7 @@ get_header();
 					<li><a href="<?php echo $_SERVER['HTTP_REFERER'] ?>">Go back and try again</a></li>
 
 					<?php } ?>
+
 					<li>Check for typos: <?php
 
 						$pageURL = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
@@ -62,13 +63,13 @@ get_header();
 				</p>
 				<ul>
 				<?php while(have_posts()) { the_post(); ?>
+
 					<li>
 						<a href="<?php echo get_permalink($post->ID) ?>"><?php echo $post->post_title ?></a>
 					</li>
-
 				<?php } ?>
-				</ul>
 
+				</ul>
 				<?php } ?>
 
 			</section>

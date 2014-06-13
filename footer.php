@@ -56,5 +56,6 @@ global $site_options;
 		<script src="/js/jquery-1.11.0.min.js"></script>
 		<script src="/js/main-min.js"></script>
 		<?php wp_footer(); ?>
+
 	</body>
 </html>

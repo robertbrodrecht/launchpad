@@ -29,28 +29,46 @@ while(have_posts()) {
 			<section>
 				<?php
 				
+				/*
 				if(has_post_thumbnail()) {
 					the_post_thumbnail();
 				}
+				*/
 				
 				?>
+				
 				<h1><a href="<?php echo the_permalink() ?>"><?php the_title(); ?></a></h1>
 				<?php 
 					
-					the_content();
-					
-				?>
-				<?php edit_post_link('Edit', '<p>', '</p>'); ?> 
-				<?php
+				the_content();
 				
+				// Trying to protect the output.
+				edit_post_link('Edit', "\n				" . '<p class="edit-link-container">', '</p>' . "\n");
+				
+				// Handle the flexible content.
+				// Get the post types.
 				$post_types = launchpad_get_post_types();
 				
+				// If there is flexible content for our current post type, render the flexible content.
 				if(isset($post_types) && isset($post_types[$post->post_type]['flexible'])) {
+					
+					// Loop the flexible types.
 					foreach($post_types[$post->post_type]['flexible'] as $flexible_type => $flexible_details) {
+						
+						// This is using the WordPress location as a signal for where the content will go.
+						// I'm not entirely sure this is "good" or "smart," but I'm doing it anyway.
 						if($flexible_details['location'] !== 'sidebar') {
+							
+							// Get the post meta value for the current flexible type.
 							$flexible = get_post_meta($post->ID, $flexible_type, true);
+							
+							// If there is any matching post meta, we need to render a field.
 							if($flexible) {
+								
+								// Loop the values of the flexible content.
 								foreach($flexible as $flex) {
+									
+									// Pull out key information from the flexible type.
 									list($flex_type, $flex_values) = each($flex);
 									$flexible_prototype = $flexible_details['modules'][$flex_type];
 									
@@ -77,6 +95,7 @@ while(have_posts()) {
 				}
 				
 				?>
+
 			</section>
 
 <?php } ?>

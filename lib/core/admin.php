@@ -21,8 +21,10 @@ function launchpad_user_logged_in() {
 	echo json_encode(is_user_logged_in());
 	exit;
 }
-add_action('wp_ajax_user_logged_in', 'launchpad_user_logged_in');
-add_action('wp_ajax_nopriv_user_logged_in', 'launchpad_user_logged_in');
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_user_logged_in', 'launchpad_user_logged_in');
+	add_action('wp_ajax_nopriv_user_logged_in', 'launchpad_user_logged_in');
+}
 
 
 /**

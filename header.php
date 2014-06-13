@@ -65,7 +65,6 @@ $excerpt = launchpad_seo_excerpt();
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		
 		<meta name="description" content="<?php echo $excerpt; ?>">
-		
 		<?php
 		
 		if(!$wp_query->is_single && !$wp_query->is_singular) {
@@ -96,10 +95,10 @@ $excerpt = launchpad_seo_excerpt();
 			$thumbnail = wp_get_attachment_image_src($thumbnail, 'opengraph');
 			if($thumbnail) {
 				?>
-				<meta property="og:image" content="<?php echo $thumbnail[0] ?>">
-				<meta property="og:image:width" content="<?php echo $thumbnail[1] ?>">
-				<meta property="og:image:height" content="<?php echo $thumbnail[2] ?>">
 				
+		<meta property="og:image" content="<?php echo $thumbnail[0] ?>">
+		<meta property="og:image:width" content="<?php echo $thumbnail[1] ?>">
+		<meta property="og:image:height" content="<?php echo $thumbnail[2] ?>">
 				<?php
 			}
 		}
@@ -117,10 +116,10 @@ $excerpt = launchpad_seo_excerpt();
 			$thumbnail = wp_get_attachment_image_src($thumbnail, 'opengraph');
 			if($thumbnail) {
 				?>
-				<meta property="twitter:image" content="<?php echo $thumbnail[0] ?>">
-				<meta property="twitter:image:width" content="<?php echo $thumbnail[1] ?>">
-				<meta property="twitter:image:height" content="<?php echo $thumbnail[2] ?>">
-				
+
+		<meta property="twitter:image" content="<?php echo $thumbnail[0] ?>">
+		<meta property="twitter:image:width" content="<?php echo $thumbnail[1] ?>">
+		<meta property="twitter:image:height" content="<?php echo $thumbnail[2] ?>">
 				<?php
 			}
 		}
@@ -159,4 +158,3 @@ $excerpt = launchpad_seo_excerpt();
 			<?php launchpad_wp_nav_menu(array('theme_location' => 'primary', 'menu_class' => 'nav-header', 'container' => false)); ?>
 		</nav>
 		<section id="main" role="main" aria-live="polite" aria-relevant="text">
-			

@@ -38,8 +38,8 @@ $use_uploads = false;
  * @since		1.0
  */
 function custom_launchpad_cache_manifest_file_paths($paths) {
-	unset($paths['/' . THEME_PATH . '/images/']);
-	$paths['/' . THEME_PATH . '/img/'] = '/img/';
+	unset($paths[THEME_PATH . '/images/']);
+	$paths[THEME_PATH . '/img/'] = '/img/';
 		
 	return $paths;
 }
@@ -294,16 +294,6 @@ function custom_launchpad_custom_post_types($post_types) {
 					)
 			)
 	);
-	
-/*
-  * Build your own modules, all in code.
-  * Image rotator / carousel.
-  * Grid of content.
-  * WYSIWYG Editor.
-  * Ad Space
-  * Link Panel
-  * Accordion
-*/
 	
 	return array_merge($post_types, $custom_post_types);
 }

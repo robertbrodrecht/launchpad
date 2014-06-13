@@ -387,9 +387,9 @@ function launchpad_cache_manifest() {
 	
 	// Locations for images and CSS.
 	$paths = array(
-			'/' . THEME_PATH . '/css/' => '/css/',
-			'/' . THEME_PATH . '/js/' => '/js/',
-			'/' . THEME_PATH . '/images/' => '/images/'
+			THEME_PATH . '/css/' => '/css/',
+			THEME_PATH . '/js/' => '/js/',
+			THEME_PATH . '/images/' => '/images/'
 		);
 	
 	// Apply filters so the developer can change any values.

@@ -1,7 +1,7 @@
 Launchpad
 =========
 
-Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly.  If you like to use plugins, this theme is not for you.
+Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly.  If you like to use plugins, this theme is not for you (yet).  If you develop out of a sub-folder, this theme is not for you (yet).  If you use WPMU, this theme is not for you (yet).  If you don't have mod_rewrite, this theme is not for you.
 
 I am currently developing the first production site based on Launchpad and the second is in development by @iamdangavin.  Feedback from this process is being integrated back into Launchpad as issues arise.
 
@@ -88,6 +88,7 @@ I'll be building out the feature list as I get the time.
   * Link List: A title, WYSIWYG editor, and relationship field for creating lists that link to other pages.
   * Section Navigation: Select title, starting point, and depth to render a list of child pages.
   * Simple Content: A title and WYSIWYG editor.
+* Flexible content is automatically included in searches, so you don't have to worry about important content not being considered in search.  NOTE: Certain fields like Relationships use IDs. So, for example, if you build a link list, the titles of the posts you are linking to won't be considered in search because they are stored as IDs.
 * Metabox and Flexible Content Fields:
   * Basic HTML inputs:
     * Checkbox
@@ -102,7 +103,7 @@ I'll be building out the feature list as I get the time.
   * Menu selector (Select a menu created in Appearance > Menus)
   * A ton of filters for modifying stuff.  See the functions-custom.php file for details.  More details eventually and more coming.
   * WordPress can consume a ton of memory.  If your peak memory usage gets within 500KB of the memory limit, the admin e-mail will get a message.
-  * Use /download/path/to/local/file or /download/?file=http://path.to/file/ to force-download a file
+  * Use /download/path/to/local/file or /download/?file=http://path.to/file to force-download a file
 
 
 ## WordPress Features
@@ -140,7 +141,6 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* "Search Everything" type of functionality so that search includes flexible content modules / custom fields
 * Add more custom events to JavaScript to aid in development.
 * Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
   * Probably have the core theme (Launcpad) and a child theme (Liftoff).
@@ -159,6 +159,8 @@ To Do For 1.1
 =============
 
 * Figure out the plug-in issue.
+* Figure out the subfolder issue.
+* Figure out any multi-site issues.
 * Implementation Documentation: Make a "Codex."  Note: https://help.github.com/articles/relative-links-in-readmes
 * Flexible content modules and field types.
   * What other modules should be built-in?
