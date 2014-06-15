@@ -33,7 +33,8 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
  * @since		1.0
  */
 function launchpad_activate_style_select($buttons) {
-	// Add support to MCE for style selection and return.
+	// Add support to MCE for style selection by inserting "styleselect" as 
+	// the first item of the mce_buttons_2 array (under the "kitchen sink" button)
 	array_unshift($buttons, 'styleselect');
 	return $buttons;
 }
