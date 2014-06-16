@@ -16,7 +16,6 @@ $site_options = get_option('launchpad_site_options', '');
 locate_template('lib/custom/custom.php', true, true);
 
 
-
 /** System functions like theme activation, rewrites, etc. */
 locate_template('lib/core/system.php', true, true);
 /** Code that manipulates the .htaccess file. */
