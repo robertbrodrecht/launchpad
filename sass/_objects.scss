@@ -198,12 +198,18 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 		display: block;
 	}
 		
-	> li.page-previous > a {
-		text-align: left;
+	> li.page-previous {
+		 > a,
+		 > span {
+			 text-align: left;
+		}
 	}
 		
-	> li.page-next > a {
-		text-align: right;
+	> li.page-next {
+		> a,
+		> span {
+			text-align: right;
+		}
 	}
 	
 	&:last-child {

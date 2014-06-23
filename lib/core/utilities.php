@@ -210,6 +210,53 @@ function file_get_contents_cache($url, $cachetime = 60, $context = false) {
 
 
 /**
+ * Generate Pagination Automagically
+ * 
+ * This should work at least 80% of the time.  I hope.
+ * 
+ * @since	1.0
+ * @uses	launchpad_paginate()
+ */
+function launchpad_auto_paginate() {
+	global $wp_query;
+	
+	// If we need pagination, add it.
+	if($wp_query->max_num_pages > 1) {
+		
+		// Determine the current page.
+		$current_page = get_query_var('paged');
+		if($current_page == 0) {
+			$current_page = 1;
+		}
+		
+		// Determine the base URI for the page.
+		$url_base = preg_replace(
+				array(
+					// Matches querystrings.
+					'/\?.*?$/',
+					// Matches page/#/
+					'/page.*?$/'
+				),
+				'',
+				$_SERVER['REQUEST_URI']
+			);
+		
+		// Call the function to output the pagination.
+		launchpad_paginate(
+			$url_base, 
+			$current_page, 
+			$wp_query->max_num_pages, 
+			array(
+				'next' => 'Next',
+				'previous' => 'Prev',
+				'total_page_links' => 5
+			)
+		);
+	}
+}
+
+
+/**
  * Pagination Helper
  * 
  * Don't use this unless you are testing it!!!  It's only been used on one site,
@@ -273,7 +320,7 @@ function launchpad_paginate($url_base = '/', $current_page = 1, $total_pages = 1
 			$ret .= '<li class="page-previous"><a href="' . $url_base . 'page/' . ($current_page-1) . '/">' . $previous . '</a></li>';
 		}
 	} else {
-		$ret .= '<li class="page-previous"></li>';
+		$ret .= '<li class="page-previous"><span>' . $previous . '</span></li>';
 	}
 	for(; $start_page <= $end_page; $start_page++) {
 		if($start_page == $current_page) {
@@ -289,7 +336,7 @@ function launchpad_paginate($url_base = '/', $current_page = 1, $total_pages = 1
 	if($current_page+1 <= $total_pages) {
 		$ret .= '<li class="page-next"><a href="' . $url_base . 'page/' . ($current_page+1) . '/">' . $next . '</a></li>';
 	} else {
-		$ret .= '<li class="page-next"></li>';
+		$ret .= '<li class="page-next"><span>' . $next . '</span></li>';
 	}
 	$ret .= '</ul>';	
 	

@@ -301,6 +301,8 @@
 }
 
 // The ugly way to clearfix.
+// You should ask yourself why overflow: hidden or 
+// overflow: auto isn't working for you.
 @mixin ugly-clearfix {
 	&:before {
 		content: '';

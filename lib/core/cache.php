@@ -55,6 +55,11 @@ function launchpad_get_cache_id() {
 		$cache_id .= '-POST+' . md5(json_encode($_POST));
 	}
 	
+	// If there is a page parameter, append it.
+	if(isset($wp_query->query_vars['paged']) && $wp_query->query_vars['paged']) {
+		$cache_id .= '-PAGE+' . $wp_query->query_vars['paged'];
+	}
+	
 	return $cache_id;
 }
 

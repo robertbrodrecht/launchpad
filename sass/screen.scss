@@ -16,8 +16,8 @@
 // 
 // Notes:
 // 
-// * extend %frontload for easy browser hiding.
-// * extend %image-replace for easy text-replacement
+// * include frontload for easy browser hiding.
+// * include image-replace for easy text-replacement
 // * div.system-notification is a good element to create and put user notifications in.
 // * @include rem(attribute, pixel_val) and @include toRems(pixel_val) creates rem 
 //   units from pixels. Rems are created from settings in _variables.scss.

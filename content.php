@@ -96,4 +96,11 @@ while(have_posts()) {
 				?>
 
 			</article>
-<?php } ?>
+<?php 
+
+}
+
+// Add pagination.
+launchpad_auto_paginate();
+
+?>
