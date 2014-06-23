@@ -1,7 +1,9 @@
 Launchpad
 =========
 
-Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly.  If you like to use plugins, this theme is not for you (yet).  If you develop out of a sub-folder, this theme is not for you (yet).  If you use WPMU, this theme is not for you (yet).  If you don't have mod_rewrite, this theme is not for you.
+Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly, but you should be able to child-theme it to some degree.  
+
+I'm doubtful that this theme is highly compatible with plugins at this point.  I'm not sure how compatible this theme is WPMU.  I'm certain that using this theme in a sub-folder-install of WordPress or without mod_rewrite will require a lot of tweaking.
 
 I am currently developing the first production site based on Launchpad and the second is in development by @iamdangavin.  Feedback from this process is being integrated back into Launchpad as issues arise.
 
@@ -141,12 +143,6 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
-* Anything else that needs to be done to make for easy child themes.  Child themes are currently not recommended.
-  * Probably have the core theme (Launcpad) and a child theme (Liftoff).
-  * CSS and JS may be part of Liftoff.
-  * Probably need to use locate_template instead of include.
-  * Rewrites are not child-theme compatible.
-  * Attempt to implement a child theme to figure all this out.
 * Do a COMPLETE feature / code review.
   * Refactor. Do a code review and make sure comments are helpful enough.
   * Make sure everything still works.
@@ -157,21 +153,21 @@ To Do For 1.0
 To Do For 1.1
 =============
 
-* Figure out the plug-in issue.
-* Figure out the subfolder issue.
-* Figure out any multi-site issues.
-* Implementation Documentation: Make a "Codex."  Note: https://help.github.com/articles/relative-links-in-readmes
 * Flexible content modules and field types.
   * What other modules should be built-in?
   * Other field types?
+* Implementation Documentation: Make a "Codex."  Note: https://help.github.com/articles/relative-links-in-readmes
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
-* SEO+Social Stuff
-  * Flipboard
 
 
-To Do For 2.0-ish
-=================
+Future Wants
+============
 
+* Decide About:
+  * More child theme work.
+  * Figuring out the plug-in issue.
+  * Figuring out the subfolder issue.
+  * Figuring out any multi-site issues.
 * Continue improving flexible content if more needs have arisen.
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
   * add_filter('gform_field_content', 'launchpad_fix_gravity_forms_output', 10, 5);
@@ -186,3 +182,5 @@ To Do For 2.0-ish
   * Ads
 * Something about widgets.
 * Updates through WP Admin.
+* SEO+Social Stuff
+  * Flipboard

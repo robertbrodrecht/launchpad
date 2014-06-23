@@ -1,3 +1,9 @@
+// *****************************
+// *                           *
+// * UNIT CONVERSION FUNCTIONS *
+// *                           *
+// *****************************
+
 // Figure out the root font percentage from a pixel value.
 @function rootRemPercent($px) {
 	@return $px/16px*100*1%;
@@ -64,39 +70,13 @@
 	}
 }
 
-// The ugly way to clearfix.
-@mixin ugly-clearfix {
-	&:before {
-		content: ' ';
-		display: table;
-	}
-	
-	&:after {
-		clear: both;
-		content: ' ';
-		display: table;
-	}
-}
 
-// Hide for visual browsers.
-@mixin frontload {
-	border: 0px !important;
-	box-shadow: none !important;
-	clip: auto !important;
-	height: 0px  !important;
-	overflow: hidden !important;
-	position: absolute !important;
-	width: 0px !important;
-}
 
-// Set up for an image replacement.
-@mixin image-replace {
-	clip: auto;
-	overflow: hidden;
-	position: relative;
-	text-indent: 110%;
-	white-space: nowrap;
-}
+// *****************************
+// *                           *
+// * MEDIA QUERY SHORTCUTS     *
+// *                           *
+// *****************************
 
 // Retina media query.
 @mixin media-2x {
@@ -217,4 +197,126 @@
 	@media (max-width: $small), (min-width: $large) {
 		@content;
 	}
+}
+
+
+
+// *****************************
+// *                           *
+// * DRY'ING OUT CSS           *
+// *                           *
+// *****************************
+
+// Make an unordered list into a dropdown.
+// Options are: 
+// * fade: add support for dropdowns that fade in on hover.
+// * fit: make the dropdown take up 100% width and evenly distribute between lis.
+@mixin dropdown($options: ()) {
+	@include unlist;
+	
+	@if index($options, "fit") {
+		display: table;
+		table-layout: fixed;
+		width: 100%;
+	} @else {
+		display: block;
+	}
+	
+	white-space: nowrap;
+	
+	> li {
+		@if index($options, "fit") {
+			display: table-cell;
+		} @else {
+			display: inline;
+		}
+		
+		> a {
+			display: inline-block;
+		}
+	}
+	
+	li {
+		position: relative;
+		
+		ul {
+			display: block;
+			position: absolute;
+			visibility: hidden;
+			
+			@if index($options, "fade") {
+				opacity: 0;
+				-webkit-transition: visibility 0s .5s, opacity .25s ease-in .25s;
+				-moz-transition: visibility 0s .5s, opacity .25s ease-in .25s;
+				-ms-transition: visibility 0s .5s, opacity .25s ease-in .25s;
+				transition: visibility 0s .5s, opacity .25s ease-in .25s;
+			}
+			
+			li,
+			a {
+				display: block;
+			}
+			
+			li > ul,
+			li:hover > ul,
+			li.target > ul {
+				left: 100%;
+				top: 0;
+			}
+		}
+		
+		&:hover > ul,
+		&.target > ul {
+			visibility: visible;
+			
+			@if index($options, "fade") {
+				opacity: 1;
+				-webkit-transition: visibility 0s 0s, opacity .25s ease-out 0s;
+				-moz-transition: visibility 0s 0s, opacity .25s ease-out 0s;
+				-ms-transition: visibility 0s 0s, opacity .25s ease-out 0s;
+				transition: visibility 0s 0s, opacity .25s ease-out 0s;
+			}
+		}
+	}
+}
+
+// Hide for visual browsers.
+@mixin frontload {
+	border: 0px !important;
+	box-shadow: none !important;
+	clip: auto !important;
+	height: 0px  !important;
+	overflow: hidden !important;
+	position: absolute !important;
+	width: 0px !important;
+}
+
+// Set up for an image replacement.
+@mixin image-replace {
+	clip: auto;
+	overflow: hidden;
+	position: relative;
+	text-indent: 110%;
+	white-space: nowrap;
+}
+
+// The ugly way to clearfix.
+@mixin ugly-clearfix {
+	&:before {
+		content: '';
+		display: table;
+	}
+	
+	&:after {
+		clear: both;
+		content: '';
+		display: table;
+	}
+}
+
+// Make a list not-a-list
+@mixin unlist {
+	list-style: none;
+	margin-bottom: 0;
+	padding: 0;
 }

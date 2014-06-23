@@ -38,8 +38,8 @@ $use_uploads = false;
  * @since		1.0
  */
 function custom_launchpad_cache_manifest_file_paths($paths) {
-	unset($paths[THEME_PATH . '/images/']);
-	$paths[THEME_PATH . '/img/'] = '/img/';
+	unset($paths[CHILD_THEME_PATH . '/images/']);
+	$paths[CHILD_THEME_PATH . '/img/'] = '/img/';
 		
 	return $paths;
 }
@@ -53,7 +53,7 @@ function custom_launchpad_cache_manifest_file_paths($paths) {
  */
 function custom_launchpad_rewrite_rules($rewrites) {
 	unset($rewrites['images/(.*)']);
-	$rewrites['img/(.*)'] = THEME_PATH . '/img/$1';
+	$rewrites['img/(.*)'] = CHILD_THEME_PATH . '/img/$1';
 	return $rewrites;
 }
 

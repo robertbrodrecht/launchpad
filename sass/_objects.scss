@@ -22,8 +22,6 @@ form {
 	border: 1px dotted gray;
 }
 
-.alignnone {}
-
 .alignleft {
 	text-align: left;
 }
@@ -51,11 +49,16 @@ img.aligncenter {
 	margin: auto;
 }
 
+#main img {
+	height: auto;
+	max-width: 100%;
+}
+
 // Calculate the gutter width.
 $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 
 .gallery {
-	@extend %ugly-clearfix;
+	@include ugly-clearfix;
 	
 	margin-left: 0-$gutter;
 	
@@ -184,9 +187,7 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 
 .page-navigate {
 	
-	@extend %unlist;
-	@extend %dropdown;
-	@extend %dropdown-fit-width;
+	@include dropdown(fit);
 	
 	> li {
 		text-align: center;

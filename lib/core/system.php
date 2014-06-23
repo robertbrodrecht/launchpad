@@ -12,6 +12,8 @@
 
 /** Root-relative theme path. */
 define('THEME_PATH', '/' . str_replace($_SERVER['DOCUMENT_ROOT'] . '/', '', get_template_directory()));
+/** Root-relative child theme path. */
+define('CHILD_THEME_PATH', '/' . str_replace($_SERVER['DOCUMENT_ROOT'] . '/', '', get_stylesheet_directory()));
 
 
 /**

@@ -297,15 +297,16 @@ jQuery(document).ready(
 				if(e.ctrlKey || e.altKey || e.metaKey || e.which === 91) {
 					return;
 				}
-				console.log(e, e.which);
-				me.val(me.val().substr(0, me.attr('maxlength')));
-				if (typeof this.selectionStart == "number") {
-					this.selectionStart = this.selectionEnd = this.value.length;
-				} else if (typeof this.createTextRange != "undefined") {
-					this.focus();
-					range = this.createTextRange();
-					range.collapse(false);
-					range.select();
+				if(me.val().length > me.attr('maxlength')) {
+					me.val(me.val().substr(0, me.attr('maxlength')));
+					if (typeof this.selectionStart == "number") {
+						this.selectionStart = this.selectionEnd = this.value.length;
+					} else if (typeof this.createTextRange != "undefined") {
+						this.focus();
+						range = this.createTextRange();
+						range.collapse(false);
+						range.select();
+					}
 				}
 			}
 		).add('input[maxlength]').on(

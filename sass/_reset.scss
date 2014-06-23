@@ -338,7 +338,7 @@ nav ul {
 }
 
 .frontload {
-	@extend %frontload;
+	@include frontload;
 }
 
 .admin-bar {

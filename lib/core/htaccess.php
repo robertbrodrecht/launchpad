@@ -23,13 +23,14 @@ function launchpad_rewrite_rules($content) {
 	
 	// WP Rewrites need the '/' removed.
 	$tmp_theme = substr(THEME_PATH, 1);
+	$tmp_child_theme = substr(CHILD_THEME_PATH, 1);
 	
 	// Set the rules we need.
 	$add_rewrite = array(
-		'favicon.ico' => $tmp_theme . '/favicon.ico',
-		'css/(.*)' => $tmp_theme . '/css/$1',
-	  	'js/(.*)' => $tmp_theme . '/js/$1',
-	  	'images/(.*)' => $tmp_theme . '/images/$1',
+		'favicon.ico' => $tmp_child_theme . '/favicon.ico',
+		'css/(.*)' => $tmp_child_theme . '/css/$1',
+	  	'js/(.*)' => $tmp_child_theme . '/js/$1',
+	  	'images/(.*)' => $tmp_child_theme . '/images/$1',
 	  	'support/(.*)' => $tmp_theme . '/support/$1',
 		'api/(.*)' => 'wp-admin/admin-ajax.php',
 		'download/(.*)' => 'wp-admin/admin-ajax.php?action=download&file=$1',
