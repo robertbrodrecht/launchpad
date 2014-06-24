@@ -58,6 +58,12 @@ function launchpad_add_custom_mcs_styles($init_array) {
 			'wrapper' => false,
 			'selector' => 'a'
 		),
+		array(
+			'title' => 'Callout',  
+			'block' => 'div',  
+			'classes' => 'callout',
+			'wrapper' => true
+		)
 	);
 	
 	/*

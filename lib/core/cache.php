@@ -100,6 +100,8 @@ function launchpad_get_cache_file($post_id = false, $type = false) {
 		$cache = sys_get_temp_dir() . '/' . $site_unique_string  . '/';
 	}
 	
+	$cache = preg_replace('|//+|', '/', $cache);
+	
 	// Apply filters to allow the developer to modify the value.
 	$cache = apply_filters('launchpad_cache_file_path', $cache, $post_id, $type);
 	
@@ -116,13 +118,26 @@ function launchpad_get_cache_file($post_id = false, $type = false) {
  * @since		1.0
  */
 function launchpad_cached($post_id, $type) {
-	global $site_options;
+	global $site_options, $launchpad_is_caching;
 	
 	// If cache is disabled or the user is logged in, we don't cache.
-	if(!USE_CACHE || is_user_logged_in()) {
+	if(!USE_CACHE || is_user_logged_in() || $launchpad_is_caching) {
 		if($site_options['cache_debug_comments']) {
+			// Default reason.
+			$reason = 'caching is disabled.';
+			
+			// If the user is logged in, update the reason.
+			if(is_user_logged_in()) {
+				$reason = 'you are logged in.';
+			}
+			
+			// If we're already within a cache, update the reason.
+			if($launchpad_is_caching) {
+				$reason = 'caching has already started for a page fragment that this cache request is included in: ' . $launchpad_is_caching;
+			}
+			
 			echo "\n";
-			echo '<!-- Cache disabled because ' . (!USE_CACHE ? 'caching is disabled.' : 'you are logged in.') . ' -->';
+			echo '<!-- Cache disabled because ' . $reason . ' -->';
 			echo "\n\n";
 		}
 		return false;
@@ -143,6 +158,7 @@ function launchpad_cached($post_id, $type) {
 	
 	// Otherwise, we need to turn on output buffering so we can cache the output.
 	} else {
+		$launchpad_is_caching = launchpad_get_cache_file($post_id, $type);
 		ob_start();
 		return false;
 	}
@@ -160,13 +176,29 @@ function launchpad_cached($post_id, $type) {
  * @since		1.0
  */
 function launchpad_cache($post_id, $type) {
-	global $site_options;
+	global $site_options, $launchpad_is_caching;
+	
+	// Get the cache file for the current post and type.
+	$cache = launchpad_get_cache_file($post_id, $type);
 	
 	// If cache is disabled or the user is logged in, we don't cache.
-	if(!USE_CACHE || is_user_logged_in()) {
+	if(!USE_CACHE || is_user_logged_in() || $launchpad_is_caching != $cache) {
 		if($site_options['cache_debug_comments']) {
+			// Default reason.
+			$reason = 'caching is disabled.';
+			
+			// If the user is logged in, update the reason.
+			if(is_user_logged_in()) {
+				$reason = 'you are logged in.';
+			}
+			
+			// If we're already within a cache, update the reason.
+			if($launchpad_is_caching) {
+				$reason = 'caching has already started for a page fragment that this cache request is included in: ' . $launchpad_is_caching;
+			}
+			
 			echo "\n";
-			echo '<!-- Not generating cache because ' . (!USE_CACHE ? 'caching is disabled.' : 'you are logged in.') . ' -->';
+			echo '<!-- Cache disabled because ' . $reason . ' -->';
 			echo "\n\n";
 		}
 		return false;
@@ -182,9 +214,6 @@ function launchpad_cache($post_id, $type) {
 		mkdir($cache_folder, 0777, true);
 	}
 	
-	// Get the cache file for the current post and type.
-	$cache = launchpad_get_cache_file($post_id, $type);
-	
 	// Save the output.  The live output will go to the screen.
 	$f = fopen($cache, 'w');
 	fwrite($f, $cache_content);
@@ -196,6 +225,10 @@ function launchpad_cache($post_id, $type) {
 		echo '<!-- CREATED CACHE @ ' . $cache . ' -->';
 		echo "\n\n";
 	}
+	
+	
+	// We're done caching the current file.
+	$launchpad_is_caching = false;
 }
 
 
@@ -270,7 +303,7 @@ function launchpad_clear_all_cache() {
 				
 				// If the first chunk is a post cache, delete the file.
 				$entry_parts = explode('-', $entry);
-				if($entry_parts[0] === 'launchpad_post_cache') {
+				if($entry_parts[0] === 'launchpad_post_cache' || $entry_parts[0] === 'launchpad_wpquery_cache') {
 					unlink($cachefolder . $entry);
 				}
 			}
@@ -782,4 +815,29 @@ function launchpad_cache_manifest() {
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 	add_action('wp_ajax_cache_manifest', 'launchpad_cache_manifest');
 	add_action('wp_ajax_nopriv_cache_manifest', 'launchpad_cache_manifest');
+}
+
+
+
+/**
+ * Cacheable WP_Query Stand In
+ *
+ * @since		1.0
+ */
+function LP_Query($query) {
+	// Get the current cache file based on the post ID and type.
+	$cache = launchpad_get_cache_file() . 'launchpad_wpquery_cache-' . md5(json_encode($query));
+	
+	// If the cache file exists and hasn't expired, send the cached output to the browser.
+	if(file_exists($cache) && time()-filemtime($cache) < USE_CACHE) {
+		return unserialize(file_get_contents($cache));
+	
+	// Otherwise, run the query, cache it, and return the query.
+	} else {
+		$ret = new WP_Query($query);
+		$f = fopen($cache, 'w');
+		fwrite($f, serialize($ret));
+		fclose($f);
+		return $ret;
+	}
 }

@@ -143,6 +143,7 @@ In many cases, I'm trying to force best practices.  JavaScript embeds are in the
 To Do For 1.0
 =============
 
+* Is fragment caching helping? Can I prevent the query from running?
 * Do a COMPLETE feature / code review.
   * Refactor. Do a code review and make sure comments are helpful enough.
   * Make sure everything still works.
