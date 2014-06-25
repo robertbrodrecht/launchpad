@@ -46,9 +46,10 @@ function launchpad_rewrite_rules($content) {
 	$wp_rewrite->non_wp_rules = array_merge($wp_rewrite->non_wp_rules, $add_rewrite);
 	return $content;
 }
-if(is_admin()) {
+if(is_admin() && (!defined('MULTISITE') || MULTISITE === false)) {
 	add_action('generate_rewrite_rules', 'launchpad_rewrite_rules');
 }
+
 
 
 /**
@@ -96,6 +97,6 @@ function launchpad_add_h5bp_htaccess($content) {
 	
 	return $content;
 }
-if(is_admin()) {
+if(is_admin() && (!defined('MULTISITE') || MULTISITE === false)) {
 	add_action('generate_rewrite_rules', 'launchpad_add_h5bp_htaccess');
 }

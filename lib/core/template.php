@@ -134,7 +134,10 @@ function launchpad_title($echo = false) {
 	
 	// If there is a title (i.e. not-the-home-page), add a pipe and branding.
 	$title = ($title != '' ? $title . ' | ' : '');
-	$title .= get_bloginfo('name') . ': ' . get_bloginfo('description', 'display');
+	
+	// Append the site name and description to the title.
+	$description = get_bloginfo('description', 'display');
+	$title .= get_bloginfo('name') . ($description ? ': ' . $description : '');
 	
 	// Apply filters to allow the developer to change it.
 	$title = apply_filters('launchpad_title', $title);

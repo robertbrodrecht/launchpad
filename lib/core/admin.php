@@ -501,6 +501,23 @@ function launchpad_site_options_validate($input) {
 	// Touching it helps avoid confusing issues with time zones (that's what she said).
 	touch($cache_folder, time(), time());
 	
+	if((int) $input['cache_timeout'] > 0) {
+		$db_conts = file_get_contents(dirname(__FILE__) . '/db.php');
+	} else {
+		$db_conts = '';
+	}
+	
+	if(
+		(file_exists(WP_CONTENT_DIR . '/db.php') && is_writable(WP_CONTENT_DIR . '/db.php')) || 
+		(!file_exists(WP_CONTENT_DIR . '/db.php') && is_writable(WP_CONTENT_DIR))
+	) {
+		$f = fopen(WP_CONTENT_DIR . '/db.php', 'w');
+		fwrite($f, $db_conts);
+		fclose($f);
+	}
+	
+	do_action('launchpad_site_options_validate');
+	
 	return $input;
 }
  
@@ -617,6 +634,8 @@ if(is_admin()) {
  * @since		1.0
  */
 function launchpad_theme_options_render_page() {
+	global $site_options;
+	
 	// If the current user lacks privileges, block them.
 	if(!current_user_can('manage_options')) {
 		wp_die('You do not have sufficient permissions to access this page.');
@@ -626,7 +645,34 @@ function launchpad_theme_options_render_page() {
 	?>
 	<div class="wrap">
 		<?php screen_icon(); ?>
-		<h2><?php echo function_exists( 'wp_get_theme' ) ? wp_get_theme() : get_current_theme() ?> Settings</h2> 
+		<h2><?php echo function_exists( 'wp_get_theme' ) ? wp_get_theme() : get_current_theme() ?> Settings</h2>
+		<?php
+		
+		if(
+			!is_writable(WP_CONTENT_DIR) && 
+			(
+				!file_exists(WP_CONTENT_DIR . '/db.php') || 
+				!is_writable(WP_CONTENT_DIR . '/db.php')
+			)
+		) {
+			if((int) $site_options['cache_timeout'] > 0) {
+				echo '<div class="error"><p><strong>Database Caching is disabled!</strong>  To enable database caching, create an empty file at wp-content/db.php, make the file writable, and save settings.</p></div>';
+			}
+		}
+		
+		if(
+			!is_writable($_SERVER['DOCUMENT_ROOT']) && 
+			(
+				!file_exists($_SERVER['DOCUMENT_ROOT'] . '/.htaccess') || 
+				!is_writable($_SERVER['DOCUMENT_ROOT'] . '/.htaccess')
+			)
+		) {
+			if((int) $site_options['html5_bp'] > 0) {
+				echo '<div class="error"><p><strong>HTML5 Boilerplate Not Installed!</strong>  To enable installation of HTML Boilerplate, make the .htaccess file writable.</p></div>';
+			}
+		}
+		
+		?> 
 		<form method="post" action="options.php">
 			<?php
 				

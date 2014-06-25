@@ -54,6 +54,15 @@ function launchpad_theme_activation_action() {
 		wp_delete_post($p, true);
 	}
 	
+	// Disable comments and such.
+	update_option('default_pingback_flag', 0);
+	update_option('default_ping_status', 0);
+	update_option('default_comment_status', 0);
+	
+	if(get_option('blogdescription') == 'Just another WordPress site') {
+		update_option('blogdescription', '');
+	}
+	
 	// Create a home page.
 	$page = new WP_Query('name=' . sanitize_title($home_page_name) . '&post_type=page');
 	if($page->post_count > 0) {

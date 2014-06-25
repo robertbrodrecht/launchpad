@@ -265,11 +265,15 @@ function launchpad_clear_cache($post_id) {
 				
 				// If anything matches, delete it.
 				if(
-					$entry_parts[0] === 'launchpad_post_cache' && 
+					$entry_parts[0] === 'launchpad_wpquery_cache' ||
+					$entry_parts[0] === 'launchpad_db_cache' ||
 					(
-						(int) $entry_parts[1] === (int) $post_id || 
-						$entry_parts[1] === $post->post_type || 
-						$entry_parts[1] === 'archive'
+						$entry_parts[0] === 'launchpad_post_cache' && 
+						(
+							(int) $entry_parts[1] === (int) $post_id || 
+							$entry_parts[1] === $post->post_type || 
+							$entry_parts[1] === 'archive'
+						)
 					)
 				) {
 					unlink($cachefolder . $entry);
@@ -303,7 +307,11 @@ function launchpad_clear_all_cache() {
 				
 				// If the first chunk is a post cache, delete the file.
 				$entry_parts = explode('-', $entry);
-				if($entry_parts[0] === 'launchpad_post_cache' || $entry_parts[0] === 'launchpad_wpquery_cache') {
+				if(
+					$entry_parts[0] === 'launchpad_post_cache' || 
+					$entry_parts[0] === 'launchpad_wpquery_cache' ||
+					$entry_parts[0] === 'launchpad_db_cache'
+				) {
 					unlink($cachefolder . $entry);
 				}
 			}
@@ -400,6 +408,11 @@ function launchpad_cache_manifest() {
 	
 	// Get the site options.
 	$site_options = get_option('launchpad_site_options', '');
+	
+	if(!$site_options['offline_support']) {
+		echo '';
+		exit;
+	}
 	
 	// The maximum file size to include in the cache is 250K
 	$file_max_size = 256000;
@@ -826,7 +839,7 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
  */
 function LP_Query($query) {
 	// Get the current cache file based on the post ID and type.
-	$cache = launchpad_get_cache_file() . 'launchpad_wpquery_cache-' . md5(json_encode($query));
+	$cache = launchpad_get_cache_file() . 'launchpad_wpquery_cache-' . md5(json_encode($query)) . '.cache';
 	
 	// If the cache file exists and hasn't expired, send the cached output to the browser.
 	if(file_exists($cache) && time()-filemtime($cache) < USE_CACHE) {
