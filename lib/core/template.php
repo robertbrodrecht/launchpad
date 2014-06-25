@@ -12,11 +12,10 @@
 
 if(class_exists('GFForms')) {
 	// As a precaution, trigger a filter to put Gravity Forms code in footer below the jQuery include.
-	add_filter('gform_init_scripts_footer', '__return_true');
+	// add_filter('gform_init_scripts_footer', '__return_true');
 	// Gravity forms tabindex is often harmful.  Turn it off.
 	add_filter('gform_tabindex', create_function('', 'return false;'));
 }
-
 
 /**
  * Setup of basic theme support
@@ -304,6 +303,9 @@ function launchpad_head_cleanup() {
 	remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
 	remove_action('wp_head', 'wp_generator');
 	remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
+	remove_action('wp_head', 'noindex', 1);
+	remove_action('wp_head', 'rel_canonical', 10);
+	
 	add_filter('use_default_gallery_style', '__return_null');
 }
 

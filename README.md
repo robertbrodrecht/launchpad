@@ -3,7 +3,7 @@ Launchpad
 
 Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly, but you should be able to child-theme it to some degree.  
 
-I'm doubtful that this theme is highly compatible with plugins at this point.  I'm not sure how compatible this theme is WPMU.  I'm certain that using this theme in a sub-folder-install of WordPress or without mod_rewrite will require a lot of tweaking.
+I'm not sure how compatible this theme is WPMU.  I'm certain that using this theme in a sub-folder-install of WordPress or without mod_rewrite will require a lot of tweaking.
 
 I am currently developing the first production site based on Launchpad and the second is in development by @iamdangavin.  Feedback from this process is being integrated back into Launchpad as issues arise.
 
@@ -48,6 +48,7 @@ I'll be building out the feature list as I get the time.
 * Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit, ajaxRequestStart, ajaxRequestEnd.  More will be available eventually, I think.
 * jQuery Custom Events for scrollStart, scrollStop, resizeStart, and resizeStop so that you don't have to shoot yourself in the foot by using resize and scroll events when you don't have to.
 * jQuery-based Height Match via <code>@data-height-match-group</code> with children containing <code>@data-height-match</code> or <code>@data-height-match-children</code> to height match all children.  Use either a min-width as a number or media query for when heightmatch should work.  Media queries as height-match values are not supported by IE8 (always returns false because IE8 doesn't support Media Queries).
+* Scripts are before the body close unless there is a plugin running.  Then they go at the top because plugins can't be trusted to do the right thing.
 
 
 ## SEO and Social Media Related Features
@@ -140,15 +141,6 @@ Notes
 In many cases, I'm trying to force best practices.  JavaScript embeds are in the footer, for example, and you can use <code>body.no-js</code> and <code>body.js</code> as hooks for styling with Progressive Enhancement.
 
 
-To Do For 1.0
-=============
-
-* Do a COMPLETE feature / code review.
-  * Refactor. Do a code review and make sure comments are helpful enough.
-  * Make sure everything still works.
-    * Maybe call in some help.
-
-
 
 To Do For 1.1
 =============
@@ -158,14 +150,13 @@ To Do For 1.1
   * Other field types?
 * Implementation Documentation: Make a "Codex."  Note: https://help.github.com/articles/relative-links-in-readmes
 * Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
-
+* Selectively add_filter( 'jpeg_quality', create_function( '', 'return 100;' ) );
 
 Future Wants
 ============
 
 * Decide About:
   * More child theme work.
-  * Figuring out the plug-in issue.
   * Figuring out the subfolder issue.
   * Figuring out any multi-site issues.
 * Continue improving flexible content if more needs have arisen.

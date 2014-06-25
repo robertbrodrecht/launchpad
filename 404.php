@@ -14,7 +14,7 @@ get_header();
 
 ?>
 
-			<section class="404">
+			<section class="error-404">
 				<h1>Page Not Found</h1>
 				<p>
 					Sorry, but the page you were trying to view does not exist.  You may be interested in one of the following options:

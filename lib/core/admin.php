@@ -672,6 +672,10 @@ function launchpad_theme_options_render_page() {
 			}
 		}
 		
+		if(!get_option('blog_public')) {
+			echo '<div class="error"><p><strong>Search Engines Blocked!</strong>  Don\'t forget that search engines are still being blocked.  To change that, go to Settings > Reading and update uncheck "Discourage search engines from indexing this site."</p></div>';
+		}
+		
 		?> 
 		<form method="post" action="options.php">
 			<?php

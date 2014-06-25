@@ -47,14 +47,23 @@ global $site_options;
 		</footer>
 		<?php
 		
-		if(stristr($_SERVER['HTTP_HOST'], '.dev') !== false || stristr($_SERVER['HTTP_HOST'], '.git') !== false) {
-			echo "<script>window.dev = true;</script>\n";
-		}
-		
+		// If no plugins are active, we can do scripts the right way.
+		// By right, I mean put them at the bottom so they don't block rendering.
+		if(!get_option('active_plugins')) {
+			if(stristr($_SERVER['HTTP_HOST'], '.dev') !== false || stristr($_SERVER['HTTP_HOST'], '.git') !== false) {
+				echo "<script>window.dev = true;</script>\n";
+			}
 		?>
 		<script src="/js/jquery-1.11.0.min.js"></script>
 		<script src="/js/main-min.js"></script>
-		<?php wp_footer(); ?>
+
+		<?php 
+		
+		} 
+		
+		wp_footer(); 
+		
+		?>
 
 	</body>
 </html>

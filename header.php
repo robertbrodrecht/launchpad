@@ -67,8 +67,10 @@ $excerpt = launchpad_seo_excerpt();
 		<meta name="description" content="<?php echo $excerpt; ?>">
 		<?php
 		
-		if(!$wp_query->is_single && !$wp_query->is_singular) {
-			echo '<meta name="robots" content="noindex, follow">';	
+		if(!get_option('blog_public')) {
+			echo '<meta name="robots" content="noindex, nofollow">';			
+		} else if(!$wp_query->is_single && !$wp_query->is_singular) {
+			echo '<meta name="robots" content="noindex, follow">';
 		}
 		
 		?>
@@ -142,7 +144,29 @@ $excerpt = launchpad_seo_excerpt();
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 		</script>
-		<?php } ?>
+		<?php 
+		
+		}
+		
+		// If plugins are active, we have to do scripts the wrong way.
+		// By wrong, I mean put them in <head> so that they block rendering.
+		if(get_option('active_plugins')) {
+			if(stristr($_SERVER['HTTP_HOST'], '.dev') !== false || stristr($_SERVER['HTTP_HOST'], '.git') !== false) {
+				echo "<script>window.dev = true;</script>\n";
+			}
+			
+		?>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/main-min.js"></script>
+
+		<?php 
+		
+		} 
+		
+		wp_head(); 
+		
+		
+		?>
 
 	</head>
 	<body <?php body_class('no-js'); ?> data-ajax="<?php echo $ajax; ?>">

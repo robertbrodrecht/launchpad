@@ -90,6 +90,11 @@ function format_phone($number = '', $mask = '(###) ###-####', $ext = ' x', $coun
 	// Remove all non-digit characters.
 	$number = preg_replace('/[^0-9]/', '', (string) $number);
 	
+	// If there is no number, return an empty string.
+	if($number === '') {
+		return '';
+	}
+	
 	// Check whether the phone number starts with a 1.
 	// If so, get it and set the country code flag.
 	if(substr($number, 0, 1) === '1') {

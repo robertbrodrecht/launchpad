@@ -15,15 +15,15 @@ if(!have_posts()) {
 ?>
 			<article>
 				<h1>Sorry!</h1>
-				<p>No matching posts were found.</p>
+				<p>No matching content was found.</p>
 			</article>
 
 <?php
 
-}
+} else {
 
-while(have_posts()) {
-	the_post();
+	while(have_posts()) {
+		the_post();
 
 ?>
 			<article>
@@ -97,7 +97,8 @@ while(have_posts()) {
 
 			</article>
 <?php 
-
+	
+	}
 }
 
 // Add pagination.

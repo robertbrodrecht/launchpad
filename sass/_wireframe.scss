@@ -1,0 +1,19 @@
+body {
+	padding: 0 20px;
+	
+	> header,
+	> nav,
+	> section,
+	> footer
+	{
+		@include row();
+		max-width: 1400px;
+	}
+}
+
+#navigation,
+div.nav-header { 
+	> ul {
+		@include dropdown(fade fit);
+	}
+}
