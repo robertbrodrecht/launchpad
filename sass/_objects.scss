@@ -234,7 +234,7 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 	display: none;
 }
 
-.flexible-accordion-list dd.target {
+.flexible-accordion-list dt.target + dd {
 	display: block;
 }
 

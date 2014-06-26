@@ -32,7 +32,7 @@ if($children) {
 	<h1><?php echo $flex_values['title'] ?></h1>
 <?php } ?>
 
-	<ul class="section-navigation">
+	<ul class="flexible-section-navigation">
 		<?php 
 		
 		

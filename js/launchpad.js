@@ -679,7 +679,7 @@
 			'.flexible-accordion-list dt a',
 			function(e) {
 				e.preventDefault();
-				$(this).closest('dt').next('dd').toggleClass('target');
+				$(this).closest('dt').toggleClass('target');
 			}
 		);
 		

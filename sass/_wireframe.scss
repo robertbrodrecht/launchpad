@@ -5,7 +5,9 @@ html {
 }
 
 body {
-
+	@include media-max(small) {
+		@include rems((padding-top: $body-line-height-px*2));
+	}
 	
 	> header,
 	> nav,
@@ -23,6 +25,13 @@ body {
 	}
 }
 
+a {
+	-webkit-transition: all .25s ease;
+	-moz-transition: all .25s ease;
+	-ms-transition: all .25s ease;
+	transition: all .25s ease;
+}
+
 h1, h2, h3, h4 {
 	a {
 		color: inherit;
@@ -31,7 +40,13 @@ h1, h2, h3, h4 {
 }
 
 #logo {
-	@include rems((font-size: $body-font-size-px*2, line-height: $body-line-height-px*2));
+	@include rems(
+		(
+			font-size: $body-font-size-px*2, 
+			line-height: $body-line-height-px*2,
+			padding: $body-line-height-px 0
+		)
+	);
 	
 	a {
 		text-decoration: none;
@@ -41,7 +56,9 @@ h1, h2, h3, h4 {
 		@include rems((font-size: $body-font-size-px*1.5));
 		
 		color: #FFF;
-		position: absolute;
+		padding: 0;
+		position: fixed;
+		top: 0;
 		z-index: 100;
 	}
 }
@@ -54,6 +71,10 @@ div.nav-header {
 	
 	@include media-max(small) {
 		@include rems((min-height: $body-line-height-px*2));
+		
+		position: fixed;
+		top: 0;
+		width: 100%;
 	}
 	
 	> ul {
@@ -223,6 +244,100 @@ div.nav-header {
 	h1, h2 {
 		@include rems((font-size: $body-font-size-px*2, line-height: $body-line-height-px*2));
 	}
+	
+	article > section {
+		@include rems((margin-bottom: $body-line-height-px*2));
+		
+		h1, h2 {
+			@include rems((font-size: $body-font-size-px, line-height: $body-line-height-px));
+			
+			border-bottom: 1px solid silver;
+			font-weight: bold;
+		}
+	}
+	
+	> article > header > figure {
+		@include rems((margin-bottom: $body-line-height-px));
+		
+		@include media-max(small) {
+			@include rems((margin: 0-$body-line-height-px -20px $body-line-height-px -20px));
+		}
+	}
 }
 
+.flexible-accordion-list {
+	border: 1px solid #CCC;		
+	border-radius: .25em;
+	background: #EFEFEF;
+	
+	dt {
+		border-top: 1px solid #CCC;
+		
+		&:first-child {
+			border-top: 0;
+		}
+		
+		a {
+			display: block;
+			padding: .5em .5em;
+			text-decoration: none;
+			
+			&:hover,
+			&:focus {
+				background: rgba(0, 0, 0, .05);
+			}
+		}
+		a:before {
+			content: '⊕ ';
+			font-size: 1.2em;
+		}
+		
+		&:target a:before {
+			content: '⊖ ';
+		}
+		
+		&.target a:before {
+			content: '⊖ ';
+		}
+	}
+	
+	dd {
+		padding: 1em 1.5em;
+	}
+	
+}
 
+.flexible-link_list,
+.flexible-section_navigation {
+	.flexible-links-list,
+	.flexible-section-navigation {
+		@include unlist;
+		@include rems((margin-bottom: $body-line-height-px));
+
+		border: 1px solid #CCC;		
+		border-radius: .25em;
+		background: #EFEFEF;
+		
+		li {
+			border-top: 1px solid #CCC;
+			
+			&:first-child {
+				border-top: 0;
+			}
+		}
+		
+		a {
+			display: block;
+			padding: .5em .5em;
+			text-decoration: none;
+			
+			&:hover,
+			&:focus {
+				background: rgba(0, 0, 0, .05);
+			}
+		}	
+		a:before {
+			content: '→ ';
+		}	
+	}
+}
