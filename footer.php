@@ -20,25 +20,105 @@ global $site_options;
 				</nav>
 			</section>
 			<section class="vcard">
+				<?php if($site_options['organization_name']) { ?>
 				<h1 class="fn"><?php echo $site_options['organization_name']; ?></h1>
+
+				<?php } ?>
+				<?php
+				
+				$adr = '';
+				
+				if($site_options['organization_address']) {
+					$adr .= '<span class="street-address">' . $site_options['organization_address'] .'</span><br>';
+				}
+				
+				if($site_options['organization_city']) {
+					$adr .= '<span class="locality">' . $site_options['organization_city'] .'</span>';
+				}
+				
+				if($site_options['organization_state']) {
+					if($site_options['organization_city']) {
+						$adr .= ', ';
+					}
+					
+					$adr .= '<span class="region">' . $site_options['organization_state'] .'</span><br>';
+				}
+				
+				if($site_options['organization_zip']) {
+					if($site_options['organization_city'] && !$site_options['organization_state']) {
+						$adr .= ', ';
+					}
+					
+					$adr .= '<span class="postal-code">' . $site_options['organization_zip'] .'</span>';
+				}
+				
+				if($adr) {
+				
+				?>
+				
 				<p class="adr">
-					<span class="street-address"><?php echo $site_options['organization_address']; ?></span><br>
-					<span class="locality"><?php echo $site_options['organization_city']; ?></span>,
-					<span class="region"><?php echo $site_options['organization_state']; ?></span>
-					<span class="postal-code"><?php echo $site_options['organization_zip']; ?></span>
+					<?php echo $adr ?>
 				</p>
+				<?php } ?>
+				
+				<?php
+				
+				$phone = '';
+				
+				if($site_options['organization_phone']) {
+					$phone .= '<span class="tel"><span class="type">Phone</span> ' .  format_phone($site_options['organization_phone']) . '</span><br>';
+				}
+				
+				if($site_options['organization_fax']) {
+					$phone .= '<span class="fax"><span class="type">Phone</span> ' .  format_phone($site_options['organization_fax']) . '</span><br>';
+				}
+				
+				if($phone) {
+								
+				?>
 				<p>
 					<span class="tel"><span class="type">Phone</span> <?php echo format_phone($site_options['organization_phone']); ?></span><br>
 					<span class="fax"><span class="type">Fax</span> <?php echo format_phone($site_options['organization_fax']); ?></span>
 				</p>
-				<p>Social Media</p>
+				<?php } ?>
+				
+				<?php
+				
+				$phone = '';
+				
+				if($site_options['organization_phone']) {
+					$phone .= '<span class="tel"><span class="type">Phone</span> ' .  format_phone($site_options['organization_phone']) . '</span><br>';
+				}
+				
+				if($site_options['organization_fax']) {
+					$phone .= '<span class="fax"><span class="type">Phone</span> ' .  format_phone($site_options['organization_fax']) . '</span><br>';
+				}
+				
+				$social_links = array(
+					'Facebook' => 'organization_facebook',
+					'Twitter' => 'organization_twitter',
+					'Pinterest' => 'organization_pinterest',
+					'Instagram' => 'organization_instagram',
+					'Google+' => 'organization_google',
+				);
+				
+				$social = '';
+				
+				foreach($social_links as $social_title => $social_key) {
+					if($site_options[$social_key]) {
+						$social .= '<li><a href="' . $site_options[$social_key] . '" class="url" rel="me" target="_blank">' . $social_title . '</a></li>';
+					}
+				}
+				
+				if($social) {
+								
+				?>
+				<p class="frontload">Social Media</p>
 				<ul>
-					<li><a href="<?php echo $site_options['organization_facebook']; ?>" class="url" rel="me" target="_blank">Facebook</a></li>
-					<li><a href="<?php echo $site_options['organization_twitter']; ?>" class="url" rel="me" target="_blank">Twitter</a></li>
-					<li><a href="<?php echo $site_options['organization_pinterest']; ?>" class="url" rel="me" target="_blank">Pinterest</a></li>
-					<li><a href="<?php echo $site_options['organization_instagram']; ?>" class="url" rel="me" target="_blank">Instagram</a></li>
-					<li><a href="<?php echo $site_options['organization_google']; ?>" class="url" rel="me" target="_blank">Google+</a></li>
+					<?php echo $social; ?>
 				</ul>
+				<?php } ?>
+				
 			</section>
 		</footer>
 		<?php
