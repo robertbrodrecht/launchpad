@@ -1,13 +1,27 @@
 body {
-	padding: 0 20px;
+
 	
 	> header,
 	> nav,
 	> section,
 	> footer
 	{
-		@include row();
+		@include rems((padding: 0 20px));
+		@include row(no-float);
+		
 		max-width: 1400px;
+	}
+	
+	> nav {
+		padding: 0;
+	}
+}
+
+#logo {
+	@include rems((font-size: 24px, line-height: 32px));
+	
+	a {
+		text-decoration: none;
 	}
 }
 
@@ -15,5 +29,53 @@ body {
 div.nav-header { 
 	> ul {
 		@include dropdown(fade fit);
+		@include rems((padding: 0 10px));
+	}
+	
+	ul {
+		background: #666;
+		
+		a {
+			@include rems((padding: 3px 10px));
+			color: #FFF;
+			display: block;
+			min-width: 100%;
+			text-decoration: none;
+			
+			&:hover,
+			&:focus {
+				background: #333;
+			}
+		}
+		
+		li:hover > a,
+		li:focus > a {
+				background: #333;
+		}
+	}
+}
+
+.hamburger {
+	display: none;
+}
+
+#footer > section {
+	@include col(50);
+	
+	@include media-max(medium) {
+		@include col(100);
+	}
+	
+	nav > ul {
+		@include dropdown(fit);
+		
+		> li > ul {
+			display: block;
+			visibility: visible;
+			
+			ul {
+				display: none;
+			}
+		}
 	}
 }
