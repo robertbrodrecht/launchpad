@@ -7,6 +7,10 @@ html {
 body {
 	@include media-max(small) {
 		@include rems((padding-top: $body-line-height-px*2));
+		
+		&.admin-bar {
+			margin-top: 0;
+		}
 	}
 	
 	> header,

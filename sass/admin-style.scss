@@ -715,6 +715,10 @@ body.login {
 		padding: 20px;
 		width: auto;
 		max-width: 480px;
+		
+		> h1 {
+			margin-bottom: 1em;
+		}
 	}
 	
 	div#login h1 a {
