@@ -13,7 +13,18 @@ Launchpad is an extremely opinionated WordPress theme created for developers.  L
 	<dt>Enforce best practices whenever possible.</dt>
 	<dd>Web developers have been espousing accessibility, performance, standards, and semantics for over a decade now, and many developers seem to have a short memory.  Rather than continue evangelizing, Launchpad tries to drag developers kicking and screaming.  JavaScript is included in the footer to prevent blocking rendering (if no plugins are installed) and to promote progressive enhancement.  The default JavaScript and CSS is written with progressive enhancement in mind.  The templates use semantic HTML, including a rewrite of the WordPress gallery short code.</dd>
 	<dt>Provide a toolset developers need.</dt>
-	<dd>The front end is built with SASS+Compass and jQuery, so the tools you need are ready out of the box.  On the back end, Launchpad streamlines a lot of complex functionality like custom post types, custom fields, and flexible content by making them easy to create with simple PHP arrays, and follows it up with filters for just about everything.</dd>
+	<dd>Launchpad is a bare-bones "boilerplate" theme that developers can build upon. The front end is built with SASS+Compass and jQuery, so the tools you need are ready out of the box.  On the back end, Launchpad streamlines a lot of complex functionality like custom post types, custom fields, and flexible content by making them easy to create with simple PHP arrays, and follows it up with filters for just about everything.</dd>
 </dl>
 
-Launchpad's feature set is massive and continually growing.  The following resources should help you make sense of it all.
+Launchpad's feature set is massive and continually growing.  As time permits, I'll build out complete documentation on how to work with Launchpad.
+
+This is a quick outline of documentation goals:
+
+* Caveats and Browser Support
+* Installation
+* Settings
+* Launchpad SASS
+* Launchpad JavaScript
+* Launchpad WordPress Hooks
+* SEO
+* Caching
