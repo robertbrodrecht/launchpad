@@ -103,6 +103,10 @@ div.nav-header {
 			
 			> li {
 				display: block;
+				
+				&:hover ul {
+					display: none;
+				}
 			}
 		}
 	}
@@ -159,6 +163,12 @@ div.nav-header {
 		-webkit-font-smoothing: antialiased;
 	}
 	
+	+ .hamburger:before {
+		content: '×';
+		font-size: 1em;
+		line-height: 1;
+	}
+	
 	@include media-max(small) {
 		display: block;
 		
@@ -212,21 +222,23 @@ div.nav-header {
 		}
 		
 		nav > ul {
-			@include dropdown();
+			display: table;
 			
 			a {
 				padding: 0 1em;
 			}
 			
 			> li {
-				border-left: 1px solid #333;
+				display: table-cell;
 				
-				&:first-child {
-					border-left: 0;
+				> a {
+					font-weight: bold;
 				}
 				
 				> ul {
 					display: block;
+					padding-right: .5em;
+					position: relative;
 					visibility: visible;
 					
 					ul {
