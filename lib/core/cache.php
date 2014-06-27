@@ -16,7 +16,7 @@
  * @since		1.0
  */
 function launchpad_site_unique_string() {
-	return md5($_SERVER['HTTP_HOST']);
+	return md5($_SERVER['HTTP_HOST'] . CHILD_THEME_PATH);
 }
 
 

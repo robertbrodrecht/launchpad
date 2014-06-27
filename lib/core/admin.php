@@ -473,7 +473,7 @@ function launchpad_site_options_validate($input) {
 	// Loop them, applying any needed validation to the POST'd values.
 	foreach($settings as $key => $setting) {
 		if($setting['args']['type'] === 'checkbox') {
-			if(!isset($input[$key]) || $input[$key] === '') {
+			if($input[$key] == '') {
 				$input[$key] = false;
 			} else {
 				$input[$key] = true;
@@ -655,7 +655,7 @@ function launchpad_theme_options_render_page() {
 				!is_writable(WP_CONTENT_DIR . '/db.php')
 			)
 		) {
-			if((int) $site_options['cache_timeout'] > 0) {
+			if(@$site_options['cache_timeout'] > 0) {
 				echo '<div class="error"><p><strong>Database Caching is disabled!</strong>  To enable database caching, create an empty file at wp-content/db.php, make the file writable, and save settings.</p></div>';
 			}
 		}

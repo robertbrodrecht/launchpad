@@ -3,7 +3,7 @@ Launchpad
 
 Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly, but you should be able to child-theme it to some degree.  
 
-I'm not sure how compatible this theme is WPMU.  I'm certain that using this theme in a sub-folder-install of WordPress or without mod_rewrite will require a lot of tweaking.
+I'm not sure how compatible this theme is WPMU.
 
 I am currently developing the first production site based on Launchpad and the second is in development by @iamdangavin.  Feedback from this process is being integrated back into Launchpad as issues arise.
 
@@ -149,15 +149,13 @@ To Do For 1.1
   * What other modules should be built-in?
   * Other field types?
 * Implementation Documentation: Make a "Codex."  Note: https://help.github.com/articles/relative-links-in-readmes
-* Add "basic" stylesheet that handles wireframe related things (i.e. Built-in nav classes with drop downs).
-* Selectively add_filter( 'jpeg_quality', create_function( '', 'return 100;' ) );
+
 
 Future Wants
 ============
 
 * Decide About:
   * More child theme work.
-  * Figuring out the subfolder issue.
   * Figuring out any multi-site issues.
 * Continue improving flexible content if more needs have arisen.
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
@@ -175,3 +173,5 @@ Future Wants
 * Updates through WP Admin.
 * SEO+Social Stuff
   * Flipboard
+* Security: some way to check MD5 of files to make sure they weren't modified.
+* Optimization: Selectively add_filter( 'jpeg_quality', create_function( '', 'return 100;' ) );
