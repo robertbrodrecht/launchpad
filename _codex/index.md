@@ -23,8 +23,10 @@ This is a quick outline of documentation goals:
 * Caveats and Browser Support
 * Installation
 * Settings
+* Basic Template Editing
 * Launchpad SASS
 * Launchpad JavaScript
+* 
 * Launchpad WordPress Hooks
 * SEO
 * Caching
