@@ -85,9 +85,18 @@ $excerpt = launchpad_seo_excerpt();
 		<?php } ?>
 		<?php } ?>
 		
+		<?php
+		
+		$card_type = 'website';
+		if(is_single() || is_singular()) {
+			$card_type = 'article';
+		}
+		
+		?>
+		
 		<meta property="og:title" content="<?php launchpad_title(true); ?>">
 		<meta property="og:description" content="<?php echo $excerpt; ?>">
-		<meta property="og:type" content="website">
+		<meta property="og:type" content="<?php echo $card_type ?>">
 		<meta property="og:url" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
 		<meta property="og:site_name" content="<?php bloginfo('name') ?>">
 		<?php
@@ -107,7 +116,16 @@ $excerpt = launchpad_seo_excerpt();
 		
 		?>
 
-		<meta property="twitter:card" content="summary">
+		<?php
+		
+		$card_type = 'summary';
+		if((is_single() || is_singular()) && has_post_thumbnail()) {
+			$card_type = 'summary_with_large_image';
+		}
+		
+		?>
+
+		<meta property="twitter:card" content="<?php echo $card_type ?>">
 		<meta property="twitter:url" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
 		<meta property="twitter:title" content="<?php launchpad_title(true); ?>">
 		<meta property="twitter:description" content="<?php echo $excerpt; ?>">
@@ -115,7 +133,7 @@ $excerpt = launchpad_seo_excerpt();
 		
 		if(has_post_thumbnail()) {
 			$thumbnail = get_post_thumbnail_id();
-			$thumbnail = wp_get_attachment_image_src($thumbnail, 'opengraph');
+			$thumbnail = wp_get_attachment_image_src($thumbnail, 'large'); // Large to hopefully stay under 1MB.
 			if($thumbnail) {
 				?>
 
