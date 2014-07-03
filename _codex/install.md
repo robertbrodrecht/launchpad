@@ -1,3 +1,5 @@
+<center>[Previous](caveats.md) | [Home](index.md) | [Next](settings.md)</center>
+
 Launchpad Installation
 ======================
 

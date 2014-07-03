@@ -1,3 +1,5 @@
+<center>[Previous](settings.md) | [Home](index.md) | [Next](post-types.md)</center>
+
 Launchpad Site Images
 =====================
 

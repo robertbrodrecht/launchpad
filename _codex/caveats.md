@@ -1,3 +1,5 @@
+<center>[Previous](index.md) | [Home](index.md) | [Next](install.md)</center>
+
 Launchpad Caveats and Browser Support
 =====================================
 
