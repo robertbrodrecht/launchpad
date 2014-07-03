@@ -26,12 +26,14 @@ There are polyfills for <code>input @placeholder</code> and <code>window.matchMe
 
 Unsupported versions of Internet Explorer recieve [Andrew Clarke's Universal Stylesheet](https://code.google.com/p/universal-ie6-css/).  Right now, that swap is based on a series of regular expressions in the JavaScript.  If you want to modify the default, create a global variable called <code>doNotSupportOverride</code> that is an array of regular expressions to test.  You must set this BEFORE jQuery's <code>document.ready</code> or you can tie into the <code>launchpadPreInit</code> event that fires on the <code>body</code>:
 
-	$(document.body).on(
-		'launchpadPreInit',
-		function() {
-			doNotSupportOverride = [/Safari/];
-		}
-	);
+```javascript
+$(document.body).on(
+	'launchpadPreInit',
+	function() {
+		doNotSupportOverride = [/Safari/];
+	}
+);
+```
 
 ## Development Workflow
 
