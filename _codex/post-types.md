@@ -63,6 +63,8 @@ The following key / values are optional:
 
 If your post type is more complex than these fields allow, you will need to send a complete array as specified by WordPress's [<code>register_post_type</code>](http://codex.wordpress.org/Function_Reference/register_post_type).  Simple include a <code>labels</code> key in your array to trigger bybass the automatic post type builder and have your raw array sent to <code>register_post_type</code>.
 
+In the event that you want to add taxonomies, metaboxes, or flexible content to a built-in post type (i.e. post and page), you can include a key / value for those types.  If you include any of the above settings for the post or page post type, those settings will be ignored.  You may only extend the existing post types with taxonomies, metaboxes, and flexible content via Launchpad's automatic post type handling.
+
 ## Taxonomies
 
 Like you'll see with metaboxes and flexible content, adding taxonomies to post types is simply adding a key to your post type array called "taxonomies" with key / value arrays of each taxonomy.  For example, we can build on top of our example above:
@@ -113,7 +115,7 @@ Metaboxes, like taxonomies, are created with an array of arrays created under th
 ## Complex Example
 
 ```php
-add_filter('launchpad_custom_post_types', 'custom_launchpad_custom_post_types');
+add_filter('launchpad_custom_post_types', 'my_custom_post_types');
 function my_custom_post_types($post_types) {
 	$custom_post_types = array(
 		'page' => array(
