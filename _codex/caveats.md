@@ -31,4 +31,15 @@ Unsupported versions of Internet Explorer recieve [Andrew Clarke's Universal Sty
 		}
 	);
 
-## Next
+## Development Workflow
+
+While Launchpad *should* work if installed in a sub-folder, it is designed around root installs.  The ideal environment would be something like this:
+
+<dl>
+	<dt>Development Environment</dt>
+	<dd>yourdomain.dev running on your local machine.</dd>
+	<dt>Staging Environment</dt>
+	<dd>dev.yourdomain.com running on the same server that the production site runs on.</dd>
+	<dt>Production Environment</dt>
+	<dd>yourdomain.com</dd>
+</dl>
