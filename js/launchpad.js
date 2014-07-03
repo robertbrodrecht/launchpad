@@ -534,6 +534,8 @@
 			doNotSupport = [/MSIE [1234567]\.(?!.*IEMobile)/],
 			l, i, startupImage = false;
 		
+		body.trigger('launchpadPreInit');
+		
 		window.supports = {};
 		
 		if(window.dev) {
@@ -546,6 +548,10 @@
 		
 		if(!window._gaq) {
 			window._gaq = [];
+		}
+		
+		if(window.doNotSupportOverride) {
+			doNotSupport = doNotSupportOverride;
 		}
 		
 		for(i = 0, l = doNotSupport.length; i < l; i++) {

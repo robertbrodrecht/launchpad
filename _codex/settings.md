@@ -33,7 +33,7 @@ If enabled, Launchpad will grab the clicked page with Ajax, replace the <code>bo
 
 ## HTML5 Boilerplate
 
-If enabled, Launchpad
+If enabled, Launchpad will add a slightly modified version of the [HTML5 Boilerplate](http://html5boilerplate.com) .htaccess configuration to your .htaccess file.  This file attempts to set great defaults for Apache, including content caching, gzipping, and special MIME types.
 
 ## Organization Contact Info
 
