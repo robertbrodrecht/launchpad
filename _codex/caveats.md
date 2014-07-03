@@ -43,3 +43,9 @@ While Launchpad *should* work if installed in a sub-folder, it is designed aroun
 	<dt>Production Environment</dt>
 	<dd>yourdomain.com</dd>
 </dl>
+
+All environments need the minimum requirements for WordPress.  Development of WordPress is done with PHP 5.4 and mySQL 5.6.  So, you'll probably want to use at least that version.  If you need help with this, check out [MAMP](http://www.mamp.info/).
+
+Ideally, you will have [CodeKit2](https://incident57.com/codekit/) for compiling SASS and minifying JavaScript.  If you prefer a different tool, you should be able to make it work.
+
+If you're comfortable with all that, you can [start installing](install.md).
