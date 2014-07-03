@@ -24,7 +24,7 @@ This is a quick outline of documentation goals:
 * [Installation](install.md)
 * [Settings](settings.md)
 * [Site Images](site-images.md)
-* [Custom Post Types, Metaboxes, and Flexible Content](post-types.md)
+* [Custom Post Types, Taxonomies, Metaboxes, and Flexible Content](post-types.md)
 * Basic Template Editing
 * Launchpad Hooks
 * Launchpad SASS
