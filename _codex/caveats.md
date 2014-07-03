@@ -30,7 +30,7 @@ Unsupported versions of Internet Explorer recieve [Andrew Clarke's Universal Sty
 $(document.body).on(
 	'launchpadPreInit',
 	function() {
-		doNotSupportOverride = [/Safari/];
+		doNotSupportOverride = [/BrowserA/, /BrowserB/];
 	}
 );
 ```
