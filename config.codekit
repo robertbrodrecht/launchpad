@@ -339,7 +339,7 @@
 		"outputAbbreviatedPath": "\/js\/admin-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/js\/admin.js": {
@@ -350,7 +350,7 @@
 		"outputAbbreviatedPath": "\/js\/admin-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/js\/jquery-1.11.0.min.js": {
@@ -361,7 +361,7 @@
 		"outputAbbreviatedPath": "\/js\/jquery-1.11.0.min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/js\/launchpad.js": {
@@ -372,7 +372,7 @@
 		"outputAbbreviatedPath": "\/js\/launchpad-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/js\/main-min.js": {
@@ -383,7 +383,7 @@
 		"outputAbbreviatedPath": "\/js\/main-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/js\/main.js": {
@@ -394,7 +394,7 @@
 		"outputAbbreviatedPath": "\/js\/main-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/lib\/core\/admin.php": {
@@ -555,15 +555,6 @@
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/lib\/third-party\/TextStatistics.php",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/README.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/README.html",
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
@@ -991,7 +982,7 @@
 	"javascriptAutoOutputPathReplace2": "",
 	"javascriptAutoOutputPathStyle": 0,
 	"javascriptCreateSourceMap": 1,
-	"javascriptOutputStyle": 1,
+	"javascriptOutputStyle": 2,
 	"javascriptOutputSuffix": "-min",
 	"javascriptSyntaxCheckerStyle": 1,
 	"jsCheckerReservedNamesString": "",
@@ -1515,7 +1506,7 @@
 			"flagValue": -1
 			},
 		"mangle": {
-			"active": 1,
+			"active": 0,
 			"flagValue": -1
 			},
 		"max-line-len": {

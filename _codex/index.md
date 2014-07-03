@@ -20,13 +20,15 @@ Launchpad's feature set is massive and continually growing.  As time permits, I'
 
 This is a quick outline of documentation goals:
 
-* Caveats and Browser Support
-* Installation
-* Settings
+* [Caveats and Browser Support](caveats.md)
+* [Installation](install.md)
+* [Settings](settings.md)
+* [Site Images](site-images.md)
+* [Custom Post Types, Metaboxes, and Flexible Content](post-types.md)
 * Basic Template Editing
+* Launchpad Hooks
 * Launchpad SASS
 * Launchpad JavaScript
-* 
-* Launchpad WordPress Hooks
 * SEO
 * Caching
+* Security
