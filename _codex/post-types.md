@@ -1,9 +1,9 @@
-<center>[Previous](site-images.md) | [Home](index.md) | Next</center>
+<center>[Previous](site-images.md) | [Home](index.md) | [Next](basic-template.md)</center>
 
 Post Types, Taxonomies, Metaboxes, and Flexible Content in Launchpad
 ========================================================
 
-Launchpad tries to make post types with taxonomies, metaboxes, and flexible content easy to add in code.  Simple post types have sane defaults or you can completely customize a post type, and have the settings passed directly to WordPress's <code>register_post_type</code>.  Metabox fields are stored as separate entries in WordPress post meta, and flexible content is stored as in a single post meta field that is automatically included in search.  Launchpad can even add metaboxes and flexible content to built-in posts and pages post types.  Launchpad also makes it easy to include help tooltips that tie into WordPress's help tabs.
+Launchpad tries to make post types with taxonomies, metaboxes, and flexible content easy to add in code.  Simple post types have sane defaults or you can completely customize a post type, and have the settings passed directly to WordPress's <code>register_post_type</code>.  Metabox fields are stored as separate entries in WordPress post meta, and flexible content is stored as in a single post meta field that is automatically included in search.  Launchpad can even add metaboxes and flexible content to built-in posts and pages post types (see the Extending Built-in Types section below).  Launchpad also makes it easy to include help tooltips that tie into WordPress's help tabs.
 
 Launchpad also ships with helpful flexible content modules with supporting CSS and JavaScript.
 
@@ -19,6 +19,7 @@ function my_custom_post_types($post_types) {
 			'plural' => 'Samples',
 			'single' => 'Sample',
 			'slug' => 'samples',
+			'help' => '<p>This is an example post type.</p>',
 		)
 	);
 	return array_merge($post_types, $custom_post_types);
@@ -77,6 +78,7 @@ function my_custom_post_types($post_types) {
 			'plural' => 'Samples',
 			'single' => 'Sample',
 			'slug' => 'samples',
+			'help' => '<p>This is an example post type.</p>',
 			'taxonomies' => array(
 				'launchpad_sample_tax' => array(
 						'plural' => 'Sample Taxonomies',
@@ -106,120 +108,39 @@ Metaboxes, like taxonomies, are created with an array of arrays created under th
 	<dt>help</dt>
 	<dd>A description of what the field does.</dd>
 	<dt>fields</dt>
-	<dd>An array of fields to include.  This will be discussed in detail below.</dd>
+	<dd>An array of fields to include.  This will be discussed in detail below in the Field Types section.</dd>
 </dl>
 
-
-
-
-## Complex Example
+If we extend our running example, it might look like this:
 
 ```php
 add_filter('launchpad_custom_post_types', 'my_custom_post_types');
 function my_custom_post_types($post_types) {
 	$custom_post_types = array(
-		'page' => array(
-			'flexible' => array(
-					'page_flexible' => array(
-						'name' => 'Page Flexible Content',
-						'location' => 'normal',
-						'position' => 'default',
-						'help' => '<p>The sample flexible content is designed to help you build your own flexible content.</p>',
-						'modules' => launchpad_get_default_flexible_modules()
-					)
-				)
-		),
 		'sample_post_type' => array(
 			'plural' => 'Samples',
 			'single' => 'Sample',
 			'slug' => 'samples',
-			'help' => '<p>This is a sample post type designed to help you see how things work.</p>',
-			'menu_position' => null,
-			// hierarchical is not required.  default: false.
-			'hierarchical' => true,
-			// supports is not required.  default: title, editor, thumbnail.
-			'supports' => array(
-					'title',
-					'editor',
-					'thumbnail',
-					'page-attributes'
-				),
-			// taxonomies is not required.
+			'help' => '<p>This is an example post type.</p>',
 			'taxonomies' => array(
-					'launchpad_sample_tax' => array(
-							'plural' => 'Sample Taxonomies',
-							'single' => 'Sample Taxonomy',
-							'slug' => 'sample_taxonomy'
-						)
-				),
-			// metaboxes is not required.
+				'launchpad_sample_tax' => array(
+						'plural' => 'Sample Taxonomies',
+						'single' => 'Sample Taxonomy',
+						'slug' => 'sample_taxonomy'
+					)
+			),
 			'metaboxes' => array(
-				'launchpad_sample_side_metabox' => array(
-					'name' => 'Sample Side Metabox',
+				'custom_metabox_id' => array(
+					'name' => 'Sample Metabox',
 					'location' => 'normal',
 					'position' => 'default',
-					'help' => '<p>The sample metabox is designed to help you build your own metaboxes.</p>',
+					'help' => '<p>Help about what this metabox does.</p>',
 					'fields' => array(
-						'sample_side_metabox_value_text' => array(
-							'name' => 'Text',
-							'help' => '<p>This field contains sample text.</p>',
+						'custom_metabox_field' => array(
+							'name' => 'Title',
+							'help' => '<p>Help about what this field does.</p>',
 							'args' => array(
 								'type' => 'text'
-							)
-						)
-					)
-				)
-			),
-			// flexible is not required.
-			'flexible' => array(
-				'page_flexible' => array(
-					'name' => 'Page Flexible Content',
-					'location' => 'normal',
-					'position' => 'default',
-					'help' => '<p>The sample flexible content is designed to help you build your own flexible content.</p>',
-					'modules' => array(
-						'accordion' => array(
-							'name' => 'Accordion List',
-							'icon' => 'dashicons dashicons-list-view',
-							'help' => '<p>Creates an accordion list.  This allows for a title the user can click on to view associated content.</p>',
-							'fields' => array(
-								'title' => array(
-									'name' => 'Title',
-									'help' => '<p>A title to the accordion section.</p>',
-									'args' => array(
-										'type' => 'text'
-									)
-								),
-								'description' => array(
-									'name' => 'Accordion Description',
-									'help' => '<p>A WYSIWYG editor to control the content that appears above the accordion list.</p>',
-									'args' => array(
-										'type' => 'wysiwyg'
-									)
-								),
-								'accordion' => array(
-									'name' => 'Accordion Item',
-									'help' => '<p>A single accordion item with a title and content.</p>',
-									'args' => array(
-										'type' => 'repeater',
-										'subfields' => array(
-											'title' => array(
-												'name' => 'Title',
-												'help' => '<p>Title of the accordion item.  The title is displayed as part of a list.  Clicking the title will show the description.</p>',
-												'args' => array(
-													'type' => 'text'
-												)
-											),
-											'description' => array(
-												'name' => 'Description',
-												'help' => '<p>The description associated with the title.</p>',
-												'args' => array(
-													'type' => 'wysiwyg'
-												)
-											)
-										)
-									)
-								)
 							)
 						)
 					)
@@ -230,3 +151,235 @@ function my_custom_post_types($post_types) {
 	return array_merge($post_types, $custom_post_types);
 }
 ```
+
+## Flexible Content
+
+Flexible Content allows the WordPress user to easily create varying layouts with different content layouts with the click of a button.  Launchpad has bult-in support for serveral flexible content types: Accordion List, Link List, Section Navigation, and additional visual editors via Simple Content.  You can add your own flexible content modules in much the same way you add custom metaboxes via the <code>flexible</code> key in the post type array that contains an array of arrays.  Much like the metaboxes array, the key is the flexible content ID and the array contains the configuration details.  Each set of flexible content modules contains the following keys:
+
+
+<dl>
+	<dt>name</dt>
+	<dd>The title of the flexible content module.</dd>
+	<dt>location</dt>
+	<dd>The location (or context, as WP calls it) of the metabox.  WordPress allows: 'normal', 'advanced', or 'side'</dd>
+	<dt>position</dt>
+	<dd>The position within the position (or priority, as WP calls it): 'high', 'core', 'default' or 'low'</dd>
+	<dt>help</dt>
+	<dd>A description of what the flexible content area is used for.</dd>
+	<dt>modules</dt>
+	<dd>
+		An array of modules to include.  Modules are essentially metaboxes and use a similar array format where the key is the ID of the module and the value is an array of settings.  The modules array contains the following keys: 
+		<dl>
+			<dt>name</dt>
+			<dd>The name of the module.</dd>
+			<dt>icon</dt>
+			<dd>Preferably a [dashicon](https://github.com/melchoyce/dashicons) such as <code>dashicons dashicons-list-view</code>, but can be a custom icon class.</dd>
+			<dt>help</dt>
+			<dd>A description of what the module does.</dd>
+			<dt>fields</dt>
+			<dd>An array of fields to include.  This will be discussed in detail below in the Field Types section.</dd>
+		</dl>
+	</dd>
+</dl>
+
+To continue expanding our example, adding a custom flexible content module in addition to the built-in custom content modules may work like this:
+
+```php
+add_filter('launchpad_custom_post_types', 'my_custom_post_types');
+function my_custom_post_types($post_types) {
+
+	$built_in_flexible = launchpad_get_default_flexible_modules();
+	$custom_flexible = array(
+		'custom_content_editor' => array(
+			'name' => 'Custom Content Editor',
+			'icon' => 'dashicons dashicons-admin-page',
+			'help' => '<p>Just a simple editor.</p>',
+			'fields' => array(
+				'description' => array(
+					'name' => 'Accordion Description',
+					'help' => '<p>An editor for you to use.</p>',
+					'args' => array(
+						'type' => 'wysiwyg'
+					)
+				)
+			)
+		)
+	);
+	
+	$custom_post_types = array(
+		'sample_post_type' => array(
+			'plural' => 'Samples',
+			'single' => 'Sample',
+			'slug' => 'samples',
+			'help' => '<p>This is an example post type.</p>',
+			'taxonomies' => array(
+				'launchpad_sample_tax' => array(
+						'plural' => 'Sample Taxonomies',
+						'single' => 'Sample Taxonomy',
+						'slug' => 'sample_taxonomy'
+					)
+			),
+			'metaboxes' => array(
+				'custom_metabox_id' => array(
+					'name' => 'Sample Metabox',
+					'location' => 'normal',
+					'position' => 'default',
+					'help' => '<p>Help about what this metabox does.</p>',
+					'fields' => array(
+						'custom_metabox_field' => array(
+							'name' => 'Title',
+							'help' => '<p>Help about what this field does.</p>',
+							'args' => array(
+								'type' => 'text'
+							)
+						)
+					)
+				)
+			),
+			'flexible' => array(
+				'page_flexible' => array(
+					'name' => 'Page Flexible Content',
+					'location' => 'normal',
+					'position' => 'default',
+					'help' => '<p>The sample flexible content is designed to help you build your own flexible content.</p>',
+					'modules' => array_merge($built_in_flexible, $custom_flexible)
+				)
+			)
+		)
+	);
+	return array_merge($post_types, $custom_post_types);
+}
+```
+
+## Field Types
+
+Metaboxes and Flexible Content use the field arrays to define what fields are available to the user.  The field array is an array of arrays where the key is the field name and the value is the settings for the field.  Launchpad supports many different field types, but the array format is the same.  A field contains the following keys:
+
+<dl>
+	<dt>name</dt>
+	<dd>The label for the field.</dd>
+	<dt>help</dt>
+	<dd>A discription of what the field does.</dd>
+	<dt>args</dt>
+	<dd>
+		The arguments for the field.  This value is an array with keys / values that control certain aspects of the field.  The keys are:
+		<dl>
+			<dt>type</dt>
+			<dd>The type of field to display.  See below for specific types that are available.</dd>
+			<dt>default</dt>
+			<dd>The default value of the field.</dd>
+			<dt>options</dt>
+			<dd>For select and selectmulti, options is a key / value array that translates to: <code>&lt;option value="key"&gt;Value&lt;/option&gt;</code>.  You can specify an array of arrays to include an optgroup where the key is the <code>optgroup</code>'s <code>label</code> and the value is a key / value array to specify the options in the optgroup.</dd>
+			<dt>post_type</dt>
+			<dd>For relationship fields, the post type to use to populate the list.</dd>
+			<dt>limit</dt>
+			<dd>For relationship fields, the total number of posts that can be attached.</dd>
+			<dt>taxonomy</dt>
+			<dd>For taxonomy fields, the taxonomy slug to populate the taxonomy list.</dd>
+			<dt>multiple</dt>
+			<dd>For taxonomy fields, whether multiple taxonomies can be selected.<dd>
+			<dt>label</dt>
+			<dd>For repeater fields, the label above the repeater.</dd>
+			<dt>subfields</dt>
+			<dd>For repeater fields, the subfields array is the same as the fields array.</dd>
+		</dl>
+	</dd>
+</dl>
+
+The following field types are available:
+
+<dl>
+	<dt>checkbox</dt>
+	<dd>An HTML checkbox field.</dd>
+	<dt>file</dt>
+	<dd>A WordPress file picker to select a single file.</dd>
+	<dt>menu</dt>
+	<dd>A drop down to select a menu.</dd>
+	<dt>relationship</dt>
+	<dd>A field that allows the user to select one or more of a particular post type.</dd>
+	<dt>repeater</dt>
+	<dd>A field group that allows the user to add multiple sets of specific fields.</dd>
+	<dt>select</dt>
+	<dd>An HTML select element.</dd>
+	<dt>selectmulti</dt>
+	<dd>An HTML select multiple element.</dd>
+	<dt>taxonomy</dt>
+	<dd>A select field populated with a specific taxonomy's terms.</dd>
+	<dt>text</dt>
+	<dd>An HTML text input.</dd>
+	<dt>textarea</dt>
+	<dd>An HTML textarea.</dd>
+	<dt>wysiwyg</dt>
+	<dd>A WordPress editor, complete with visual and text only views and media buttons.</dd>
+</dl>
+
+For a complete example of all the field types, look at lib/custom/examples.php.
+
+## Extending Built-in Types
+
+If you would like to extend the pages or posts built-in post types, you simply need to include the keys in your post type array with the additions you would like to include.  Since WordPress already has the post type registered, you'll only need to add the specific <code>taxonomies</code>, <code>metaboxes</code>, and <code>flexible</code> keys.  For example:
+
+```php
+add_filter('launchpad_custom_post_types', 'my_custom_post_types');
+function my_custom_post_types($post_types) {
+
+	$built_in_flexible = launchpad_get_default_flexible_modules();
+	$custom_flexible = array(
+		'custom_content_editor' => array(
+			'name' => 'Custom Content Editor',
+			'icon' => 'dashicons dashicons-admin-page',
+			'help' => '<p>Just a simple editor.</p>',
+			'fields' => array(
+				'description' => array(
+					'name' => 'Accordion Description',
+					'help' => '<p>An editor for you to use.</p>',
+					'args' => array(
+						'type' => 'wysiwyg'
+					)
+				)
+			)
+		)
+	);
+	
+	$custom_post_types = array(
+		'page' => array(
+			'taxonomies' => array(
+				'launchpad_sample_tax' => array(
+						'plural' => 'Sample Taxonomies',
+						'single' => 'Sample Taxonomy',
+						'slug' => 'sample_taxonomy'
+					)
+			),
+			'metaboxes' => array(
+				'custom_metabox_id' => array(
+					'name' => 'Sample Metabox',
+					'location' => 'normal',
+					'position' => 'default',
+					'help' => '<p>Help about what this metabox does.</p>',
+					'fields' => array(
+						'custom_metabox_field' => array(
+							'name' => 'Title',
+							'help' => '<p>Help about what this field does.</p>',
+							'args' => array(
+								'type' => 'text'
+							)
+						)
+					)
+				)
+			),
+			'flexible' => array(
+				'page_flexible' => array(
+					'name' => 'Page Flexible Content',
+					'location' => 'normal',
+					'position' => 'default',
+					'help' => '<p>The sample flexible content is designed to help you build your own flexible content.</p>',
+					'modules' => array_merge($built_in_flexible, $custom_flexible)
+				)
+			)
+		)
+	);
+	return array_merge($post_types, $custom_post_types);
+}
+```
+
+With a basic understanding of managing custom post types, you may want to read more about [Basic Template Editing](basic-template.md).
