@@ -269,7 +269,7 @@ Metaboxes and Flexible Content use the field arrays to define what fields are av
 			<dt>default</dt>
 			<dd>The default value of the field.</dd>
 			<dt>options</dt>
-			<dd>For select and selectmulti, options is a key / value array that translates to: <code><option value="key">value</option></code>.  You can specify an array of arrays to include an optgroup where the key is the <code>optgroup</code>'s <code>label</code> and the value is a key / value array to specify the options in the optgroup.</dd>
+			<dd>For select and selectmulti, options is a key / value array that translates to: <code>&lt;option value="key"&gt;value&lt;/option&gt;</code>.  You can specify an array of arrays to include an optgroup where the key is the <code>optgroup</code>'s <code>label</code> and the value is a key / value array to specify the options in the optgroup.</dd>
 			<dt>post_type</dt>
 			<dd>For relationship fields, the post type to use to populate the list.</dd>
 			<dt>limit</dt>
