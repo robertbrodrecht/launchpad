@@ -158,6 +158,7 @@ Future Wants
   * More child theme work.
   * Figuring out any multi-site issues.
 * Continue improving flexible content if more needs have arisen.
+* Add PDF generating library and support for /pdf/ like /download/.
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
   * add_filter('gform_field_content', 'launchpad_fix_gravity_forms_output', 10, 5);
   * http://www.gravityhelp.com/documentation/page/Gform_field_content

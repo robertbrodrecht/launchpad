@@ -508,3 +508,22 @@ function launchpad_search_flexible_where($q) {
 	return $q;
 }
 add_action('posts_search', 'launchpad_search_flexible_where');
+
+
+/**
+ * Attempt to find a flexible content module either in the custom folder or core folder.
+ *
+ * @param		string $type The type of flexible content to find.
+ * @since		1.0
+ */
+function launchpad_find_flexible_content($type = '') {
+	if($type === '') {
+		return '';
+	}
+	$attempt = locate_template('flexible/custom/' . $type);
+	if($attempt) {
+		return $attempt;
+	} else {
+		return locate_template('flexible/core/' . $type);
+	}
+}

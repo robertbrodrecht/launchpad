@@ -75,16 +75,16 @@ if(!have_posts()) {
 									// Use "include locate_template" so that variables are still in scope.
 									switch($flex_type) {
 										case 'accordion':
-											include locate_template('flexible/accordion.php');
+											include launchpad_find_flexible_content('accordion.php');
 										break;
 										case 'link_list':
-											include locate_template('flexible/link_list.php');
+											include launchpad_find_flexible_content('link_list.php');
 										break;
 										case 'section_navigation':
-											include locate_template('flexible/section_navigation.php');
+											include launchpad_find_flexible_content('section_navigation.php');
 										break;
 										case 'simple_content':
-											include locate_template('flexible/simple_content.php');
+											include launchpad_find_flexible_content('simple_content.php');
 										break;
 									}
 								}

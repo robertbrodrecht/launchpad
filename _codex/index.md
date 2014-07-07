@@ -29,6 +29,7 @@ This is a quick outline of documentation goals:
 * Launchpad Hooks
 * Launchpad SASS
 * Launchpad JavaScript
+* Admin Customizations
 * SEO
 * Caching
 * Security
