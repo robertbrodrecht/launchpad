@@ -9,8 +9,8 @@ If you are hacking directly on Launchpad, you may have to update Launchpad manua
 
 * header.php (use the wp_head action)
 * flexible/core/* (use flexible/custom/ instead, which can override flexible/core/ files)
-* functions.php (use lib/custom/custom.php)
-* lib/core/*  (use lib/custom/custom.php)
+* functions.php (use lib/custom/custom.php and [Launchpad Hooks](hooks.md))
+* lib/core/*  (use lib/custom/custom.php and [Launchpad Hooks](hooks.md))
 * lib/third-party/*  (you can add stuff, but be aware that Launchpad may add files in the future that collide with yours)
 * js/main.js (use js/custom.js)
 * js/launchpad.js (use js/custom.js)
@@ -52,5 +52,6 @@ echo '</div></div>';
 
 If you use a <code>launchpad_get_template_part</code> inside of a template being included in a <code>launchpad_get_template_part</code>, the template part doesn't cache since it is already caching.
 
-**Note: If you are pulling a third-party API, it is highly suggested that you use Launchpad's <code>file_get_contents_cache</code> so that you don't blow up the API or get blocked!!!***
+## Helpful Functions
 
+**Note: If you are pulling a third-party API, it is highly suggested that you use Launchpad's <code>file_get_contents_cache</code> so that you don't blow up the API or get blocked!!!***
