@@ -199,7 +199,7 @@ function file_get_contents_cache($url, $cachetime = 60, $context = false) {
 	if(!file_exists($cache_file) || time()-filemtime($cache_file) >= $cachetime) {
 		
 		// Fetch the file.
-		$results = file_get_contents($url);
+		$results = file_get_contents($url, false, ($context ? $context : null));
 		
 		// If there are results, write them to the cache file.
 		if($results) {
@@ -210,7 +210,7 @@ function file_get_contents_cache($url, $cachetime = 60, $context = false) {
 	}
 	
 	// Return the contents from the cache file.
-	return file_get_contents($cache_file, false, ($context ? $context : null));
+	return file_get_contents($cache_file);
 }
 
 

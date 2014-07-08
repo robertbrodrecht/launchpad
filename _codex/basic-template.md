@@ -1,4 +1,4 @@
-<center>[Previous](post-types.md) | [Home](index.md) | Next</center>
+<center>[Previous](post-types.md) | [Home](index.md) | [Next](hooks.md)</center>
 
 Basic Template Editing in Launchpad
 ===================================
@@ -54,4 +54,24 @@ If you use a <code>launchpad_get_template_part</code> inside of a template being
 
 ## Helpful Functions
 
+Launchpad comes with a few helpful functions:
+
+### <code>file_get_contents_cache($url, $cache_timeout = 60, $context = false)</code>
+
+This function fetches a local or remote file (if your server supports).  Pass a string <code>$url</code> of the API.  Optionally, include an integer <code>$cache_timeout</code> that specifies how long the cache is valid.  Finally, if you need to pass any <code>stream_context_create</code> context, use the <code>$context</code> parameter.
+
 **Note: If you are pulling a third-party API, it is highly suggested that you use Launchpad's <code>file_get_contents_cache</code> so that you don't blow up the API or get blocked!!!***
+
+### <code>format_postal_code($postal_code)</code>
+
+If you are displaying a postal code, use <code>format_postal_code</code> to format.  Launchpad auto-formats US ZIP and ZIP+4 codes, Canadian codes, and UK codes.
+
+### <code>format_phone($number = '', $mask = '(###) ###-####', $ext = ' x', $country = '+# ')</code>
+
+If you are displaying phone numbers, use <code>format_phone</code>.  Pass the phone number, an optional mask, an optional extension separator, and an optional country code format mask.
+
+### <code>launchpad_auto_paginate()</code>
+
+In generic cases, Launchpad can automatically handle your pagination via <code>launchpad_auto_paginate()</code>.
+
+Now that you are familiar with basic template editing in Launchpad, you can get more advanced with [Launchpad Hooks](hooks.md).

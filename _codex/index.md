@@ -26,7 +26,7 @@ This is a quick outline of documentation goals:
 * [Site Images](site-images.md)
 * [Custom Post Types, Taxonomies, Metaboxes, and Flexible Content](post-types.md)
 * [Basic Template Editing](basic-template.md)
-* Launchpad Hooks
+* [Launchpad Hooks](hooks.md)
 * Launchpad SASS
 * Launchpad JavaScript
 * Admin Customizations
