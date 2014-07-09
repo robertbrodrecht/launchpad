@@ -160,6 +160,7 @@ Future Wants
 * Continue improving flexible content if more needs have arisen.
 * Add PDF generating library and support for /pdf/ like /download/.
 * Research OCR for better alt tag creation: http://phpocr.sourceforge.net
+* Database and Asset Migration
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
   * add_filter('gform_field_content', 'launchpad_fix_gravity_forms_output', 10, 5);
   * http://www.gravityhelp.com/documentation/page/Gform_field_content
