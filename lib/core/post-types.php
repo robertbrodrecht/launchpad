@@ -122,6 +122,12 @@ function launchpad_register_post_types() {
 				'menu_position' => $post_type_menu_options,
 				'supports' => $supports
 			);
+			
+			// If the post type is false, make the post type "private."			
+			if(!$post_type_slug) {
+				$args['publicly_queryable'] = false;
+				$args['rewrite'] = false;
+			}
 		}
 		
 		// If the post type is not a built-in post type, register it.

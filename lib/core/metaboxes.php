@@ -118,13 +118,14 @@ function launchpad_render_field_checkbox($field_output_name, $field_output_id = 
  * 
  * @param		string $field_output_name The field's "name" attribute.
  * @param		string $field_output_id The field's "id" attribute.
+ * @param		array $args The arguments on the field.
  * @param		bool $val Whether the checkbox is checked.
  * @param		string $class A class to use on the label if this is a subfield.
  * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_text($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_text($field_output_name, $field_output_id = '', $args, $val = false, $class = '', $subfield = false) {
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -139,7 +140,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text">';
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . ((int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -151,13 +152,14 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
  * 
  * @param		string $field_output_name The field's "name" attribute.
  * @param		string $field_output_id The field's "id" attribute.
+ * @param		array $args The arguments on the field
  * @param		bool $val Whether the checkbox is checked.
  * @param		string $class A class to use on the label if this is a subfield.
  * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_textarea($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_textarea($field_output_name, $field_output_id = '', $args, $val = false, $class = '', $subfield = false) {
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -172,7 +174,7 @@ function launchpad_render_field_textarea($field_output_name, $field_output_id = 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code">' . $val . '</textarea>';
+	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . ((int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>' . $val . '</textarea>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -741,10 +743,10 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			launchpad_render_field_checkbox($field_output_name, $field_output_id, $val, $class, $subfield);
 		break;
 		case 'text':
-			launchpad_render_field_text($field_output_name, $field_output_id, $val, $class, $subfield);
+			launchpad_render_field_text($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'textarea':
-			launchpad_render_field_textarea($field_output_name, $field_output_id, $val, $class, $subfield);
+			launchpad_render_field_textarea($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'select':
 			launchpad_render_field_select($field_output_name, $field_output_id, $args['options'], $val, $class, $subfield);

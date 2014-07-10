@@ -15,7 +15,7 @@
  */
 function launchpad_add_seo_metabox() {
 	// Get all registered post types.
-	$post_types = get_post_types();
+	$post_types = get_post_types(array('publicly_queryable' => true));
 	
 	// For SEO-able post types, create metaboxes for SEO.
 	foreach($post_types as $post_type) {

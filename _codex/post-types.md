@@ -46,7 +46,7 @@ The Launchpad post types array uses a key that represents the post type (the fir
 	<dt>single</dt>
 	<dd>The singular name of the post type.</dd>
 	<dt>slug</dt>
-	<dd>The slug of the post type for rewrites.</dd>
+	<dd>The slug of the post type for rewrites.  If you specify false, the post type becomes "private."  That is, no rewrite and not publically query-able.</dd>
 </dl>
 
 The single and plural keys are used to populate the various <code>labels</code> values.  All other values sent to <code>register_post_type</code> will be created from default values.
@@ -270,6 +270,8 @@ Metaboxes and Flexible Content use the field arrays to define what fields are av
 			<dd>The default value of the field.</dd>
 			<dt>options</dt>
 			<dd>For select and selectmulti, options is a key / value array that translates to: <code>&lt;option value="key"&gt;value&lt;/option&gt;</code>.  You can specify an array of arrays to include an optgroup where the key is the <code>optgroup</code>'s <code>label</code> and the value is a key / value array to specify the options in the optgroup.</dd>
+			<dt>maxlength</dt>
+			<dd>For text and textarea fields, the maximum number of characters that can go in the field.</dd>
 			<dt>post_type</dt>
 			<dd>For relationship fields, the post type to use to populate the list.</dd>
 			<dt>limit</dt>
