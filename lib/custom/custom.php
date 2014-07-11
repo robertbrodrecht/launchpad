@@ -23,6 +23,29 @@ function custom_launchpad_custom_post_types($post_types) {
 						'modules' => launchpad_get_default_flexible_modules()
 					)
 				)
+		),
+		'lp_sample' => array(
+			'plural' => 'Samples',
+			'single' => 'Sample',
+			'slug' => 'samples',
+				'metaboxes' => array(
+						'launchpad_sample_side_metabox' => array(
+							'name' => 'Sample Side Metabox',
+							'location' => 'normal',
+							'position' => 'default',
+							'help' => '<p>The sample metabox is designed to help you build your own metaboxes.</p>',
+							'fields' => array(
+								'sample_side_metabox_checkbox_1' => array(
+									'name' => 'Test',
+									'help' => '<p>This is a checkbox.</p>',
+									'args' => array(
+										'type' => 'textarea',
+										'maxlength' => 20
+									)
+								),
+							)
+						)
+					)
 		)
 	);
 	return array_merge($post_types, $custom_post_types);

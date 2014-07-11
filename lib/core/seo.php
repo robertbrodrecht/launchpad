@@ -15,24 +15,27 @@
  */
 function launchpad_add_seo_metabox() {
 	// Get all registered post types.
-	$post_types = get_post_types(array('publicly_queryable' => true));
+	$post_types = get_post_types(array(), 'objects');
 	
 	// For SEO-able post types, create metaboxes for SEO.
-	foreach($post_types as $post_type) {
+	foreach($post_types as $post_type => $post_details) {
 		switch($post_type) {
 			case 'attachment':
 			case 'revision':
 			case 'nav_menu_item':
 			break;
 			default:
-				add_meta_box(
-					'launchpad-seo',
-					'SEO and Social Media Options',
-					'launchpad_seo_meta_box_handler',
-					$post_type,
-					'advanced',
-					'core'
-				);
+				
+				if($post_details->_builtin || $post_details->publicly_queryable) {
+					add_meta_box(
+						'launchpad-seo',
+						'SEO and Social Media Options',
+						'launchpad_seo_meta_box_handler',
+						$post_type,
+						'advanced',
+						'core'
+					);
+				}
 			break;
 		}
 	}

@@ -130,11 +130,19 @@ jQuery(document).ready(
 					master_replace_with = 'launchpad-' + new Date().getTime() + '-repeater',
 					visualeditors;
 				
-				master.find('[name]').each(
+				master.find('[name], button[data-for]').each(
 					function() {
 						var me = $(this);
+						if(me.is('[name]')) {
+							me.attr('name', me.attr('name').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
+							me.attr('id', me.attr('id').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
+						}
+						if(me.is('button[data-for]')) {
+							me.attr('data-for', me.attr('data-for').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
+							me.parent().find('a.launchpad-delete-file').remove();
+							me.parent().find('input[type=hidden]').get(0).value = '';
+						}
 						
-						me.attr('name', me.attr('name').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
 						if(me.is('input:not(checkbox)')) {
 							me.val('');
 						}

@@ -450,7 +450,7 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	echo '</ul></div>';
 	
 	// Add a note about how many items can go in the list.
-	if($limit > -1) {
+	if($limit > 0) {
 		$tmp_item_count_note = 'Maximum of ' . $limit . ' item' . ($limit == 1 ? '' : 's');
 	} else {
 		$tmp_item_count_note = 'Add as many as you like';
@@ -544,6 +544,10 @@ function launchpad_render_field_taxonomy($field_output_name, $taxonomy = false, 
 			
 			// Create a fieldset to house the checkboxes.
 			echo '<fieldset class="launchpad-metabox-fieldset"><legend>' . $tax->labels->name . '</legend>';
+			
+			if(!$terms) {
+				echo '<p>No "' . $tax->labels->name . '" terms have been set.</p>';
+			}
 			
 			// Loop the terms.
 			foreach($terms as $term) {
@@ -1321,8 +1325,10 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 		}
 		
 		// If we need a label, print it for the field.
-		if($use_label) {
+		if($use_label && $field['args']['type'] !== 'checkbox') {
 			echo '<label for="' . $id . '">' . $field['name'] . '</label>';
+		} else if($use_label) {
+			echo '<label for="' . $id . '">';
 		}
 		
 		// If any values were passed, set them as an argument so they will be populated.
@@ -1343,6 +1349,10 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 				false, 
 				'launchpad_flexible'
 			);
+		
+		if($use_label && $field['args']['type'] === 'checkbox') {
+			echo $field['name'] . '</label>';
+		}
 		
 		// Close the field container.
 		echo '</div>';
