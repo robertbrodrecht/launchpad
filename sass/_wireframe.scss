@@ -254,7 +254,7 @@ div.nav-header {
 	}
 }
 
-#main {
+.main {
 	@include rems((padding-bottom: $body-line-height-px, padding-top: $body-line-height-px));
 	
 	h1, h2 {

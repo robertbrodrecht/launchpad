@@ -2,7 +2,7 @@
 	<h1><?php echo $flex_values['title'] ?></h1>
 	<?php 
 	
-	echo wpautop($flex_values['editor']);
+	echo apply_filters('the_content', $flex_values['editor']);
 	
 	?>
 

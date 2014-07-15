@@ -676,8 +676,14 @@ function launchpad_theme_options_render_page() {
 			echo '<div class="error"><p><strong>Search Engines Blocked!</strong>  Don\'t forget that search engines are still being blocked.  To change that, go to Settings > Reading and update uncheck "Discourage search engines from indexing this site."</p></div>';
 		}
 		
-		if(stristr(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/wp-config.php'), 'put your unique phrase here') !== false) {
+		$wp_config = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/wp-config.php');
+		
+		if(stristr($wp_config, 'put your unique phrase here') !== false) {
 			echo '<div class="error"><p><strong>Salt Your Keys!</strong>  Open wp-config.php and salt your keys.  <strong>DO IT RIGHT NOW!!!</strong></p></div>';
+		}
+		
+		if(stristr($wp_config, '$table_prefix  = \'wp_\';') !== false) {
+			echo '<div class="error"><p><strong>Change Your Table Prefix!</strong>  Open wp-config.php and change your table prefix from "wp_" to anything else.  Unfortunately, since you didn\'t do this when you were setting up WordPress, you will probably have to reinstall WordPress to make this warning go away.</p></div>';
 		}
 		
 		?> 

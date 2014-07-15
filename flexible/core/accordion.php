@@ -36,7 +36,7 @@ if($flex_values['description']) {
 
 			<dt id="<?php echo $id ?>"><a href="#<?php echo $id ?>"><?php echo $accordion['title'] ?></a></dt>
 			<dd>
-				<?php echo wpautop($accordion['description']); ?>
+				<?php echo apply_filters('the_content', $accordion['description']); ?>
 			</dd>
 		<?php } ?>
 

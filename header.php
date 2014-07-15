@@ -200,4 +200,4 @@ $excerpt = launchpad_seo_excerpt();
 			<a href="#header" class="hamburger">Hide Menu</a>
 			<?php launchpad_wp_nav_menu(array('theme_location' => 'primary', 'menu_class' => 'nav-header', 'container' => false)); ?>
 		</nav>
-		<section id="main" role="main" aria-live="polite" aria-relevant="text">
+		<section id="main" class="main" role="main" aria-live="polite" aria-relevant="text">
