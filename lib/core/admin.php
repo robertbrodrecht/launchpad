@@ -676,6 +676,10 @@ function launchpad_theme_options_render_page() {
 			echo '<div class="error"><p><strong>Search Engines Blocked!</strong>  Don\'t forget that search engines are still being blocked.  To change that, go to Settings > Reading and update uncheck "Discourage search engines from indexing this site."</p></div>';
 		}
 		
+		if(stristr(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/wp-config.php'), 'put your unique phrase here') !== false) {
+			echo '<div class="error"><p><strong>Salt Your Keys!</strong>  Open wp-config.php and salt your keys.  <strong>DO IT RIGHT NOW!!!</strong></p></div>';
+		}
+		
 		?> 
 		<form method="post" action="options.php">
 			<?php

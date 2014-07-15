@@ -291,7 +291,14 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
 	}
 	
 	if((int) $val > 0) {
-		$existing = wp_get_attachment_image((int) $val);
+		$img = wp_get_attachment_image((int) $val, 'thumbnail', true);
+		$existing = wp_get_attachment_metadata((int) $val);
+		
+		if(!$img && $existing) {
+			$existing = 'Preview Not Available';
+		} else {
+			$existing = $img;
+		}
 	} else {
 		$existing = false;
 	}

@@ -144,14 +144,15 @@ function launchpad_add_h5bp_htaccess($content) {
 		if ($h5bp_rules === array() && $site_options['html5_bp'] === true) {
 			$filename = $_SERVER['DOCUMENT_ROOT'] . '/' . THEME_PATH . '/support/H5BPv4.3_htaccess';
 			$boilerplate_rules = extract_from_markers($filename, 'HTML5 Boilerplate');
+			// Update the HTACCESS file.
+			insert_with_markers($htaccess_file, 'HTML5 Boilerplate', $boilerplate_rules);
 		
 		// If there are Boilerplate rules and the user doesn't want them, remove them.
 		} else if($h5bp_rules !== array() && $site_options['html5_bp'] !== true) {
 			$boilerplate_rules = '';
+			// Update the HTACCESS file.
+			insert_with_markers($htaccess_file, 'HTML5 Boilerplate', $boilerplate_rules);
 		}
-		
-		// Update the HTACCESS file.
-		insert_with_markers($htaccess_file, 'HTML5 Boilerplate', $boilerplate_rules);
 	}
 	
 	return $content;
