@@ -27,7 +27,7 @@ This is a quick outline of documentation goals:
 * [Custom Post Types, Taxonomies, Metaboxes, and Flexible Content](post-types.md)
 * [Basic Template Editing](basic-template.md)
 * [Launchpad Hooks](hooks.md)
-* Launchpad SASS
+* [Launchpad SASS](sass.md)
 * Launchpad JavaScript
 * Admin Customizations
 * SEO

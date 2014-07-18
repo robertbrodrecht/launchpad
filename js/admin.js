@@ -274,7 +274,7 @@ jQuery(document).ready(
 				
 				cp.append($('<input type="hidden" name="' + fname + '" value="' + me.data('id') + '">'));
 				
-				if(!$('[value="' + me.data('id') + '"]', addto).length && (limit === '-1' || $('[value]', addto).length < +limit)) {
+				if(!$('[value="' + me.data('id') + '"]', addto).length && (+limit <= 0 || $('[value]', addto).length < +limit)) {
 					me = $('<li>');
 					me.css('height', 0);
 					me.append(cp);

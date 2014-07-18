@@ -44,26 +44,41 @@ If you want to use different settings for activation-related values (e.g. the pa
 	<dt>launchpad_post_formats</dt>
 	<dd>If you need access to post formats, include this filter and add to the array that is passed.  By default, post formats are disabled.</dd>
 	<dt>launchpad_nav_menus</dt>
-	<dd></dd>
+	<dd>To add or remove menus, modify the array.  The array is a key / value list of menu slugs / menu names (respectively).</dd>
 	<dt>launchpad_custom_post_types</dt>
-	<dd></dd>
+	<dd>If you want to add custom post types, this is where you do it.  See the [post types section](post-types.md) for more info.</dd>
 </dl>
 
 ## Template Customization
 
-launchpad_title
-launchpad_excerpt
-launchpad_modify_default_flexible_modules
-launchpad_body_class
+<dl>
+	<dt>launchpad_title</dt>
+	<dd>To change anything that goes in the <code>&lt;title&gt;</code>, modify this string.</dd>
+	<dt>launchpad_excerpt</dt>
+	<dd>To change anything that goes in the excerpt, including the meta description excerpt, modift this string.</dd>
+	<dt>launchpad_modify_default_flexible_modules</dt>
+	<dd>Launchpad ships with a few built-in flexible content modules.  If you would like to add or remove any, you can do it through this filter by editing the array.</dd>
+	<dt>launchpad_body_class</dt>
+	<dd>An array of classes that will be applied to the <code>body</code> can be modified with this filter.</dd>
+</dl>
+
 
 ## Admin Modifications
 
-launchpad_mce_style_formats
-launchpad_setting_fields
-launchpad_theme_options_page
-launchpad_mce_style_formats
-mce_buttons
+<dl>
+	<dt>launchpad_mce_style_formats</dt>
+	<dd>To add additional fields to the styles dropdown on in TinyMCE, use this filter.  You can see sample code in <kbd>lib/custom/examples.php</kbd>.</dd>
+	<dt>mce_buttons</dt>
+	<dd>You can use this filter to add back built-in buttons on TinyMCE.  You can see sample code in <kbd>lib/custom/examples.php</kbd>.</dd>
+	<dt>launchpad_setting_fields</dt>
+	<dd>To modify the settings fields that appear in the Launchpad Settings screen, modify it here.  They are basically the same as the metabox field format.  You should be able to figure it out if you add the filter and <code>var_dump</code> the array.</dd>
+	<dt>launchpad_theme_options_page</dt>
+	<dd>If you don't want the settings screen to appear under Settings &gt; Launchpad, you can change it here.  You can see sample code in <kbd>lib/custom/examples.php</kbd>.</dd>
+</dl>
 
 ## Advanced Backend Modifications
 
-launchpad_cache_file_path
+<dl>
+	<dt>launchpad_cache_file_path</dt>
+	<dd>Use this filter to change the path (as a string) where Launchpad puts cache files.</dd>
+</dl>
