@@ -37,3 +37,18 @@ The screen style sheet includes the bulk of the SASS partials.  These are the pa
 	<dt>ie</dt>
 	<dd></dd>
 </dl>
+
+### print.scss
+
+The print style sheet just pulls the basics to provide a simple print stylesheet.  It also includes code to remove the header, footer, navigation, and WordPress admin bar, as well as some link niceties.
+
+<dl>
+	<dt>variables</dt>
+	<dd></dd>
+	<dt>mixins</dt>
+	<dd></dd>
+	<dt>reset</dt>
+	<dd></dd>
+	<dt>typography</dt>
+	<dd></dd>
+</dl>
