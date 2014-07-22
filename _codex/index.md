@@ -28,7 +28,7 @@ This is a quick outline of documentation goals:
 * [Basic Template Editing](basic-template.md)
 * [Launchpad Hooks](hooks.md)
 * [Launchpad SASS](sass.md)
-* Launchpad JavaScript
+* [Launchpad JavaScript](js.md)
 * Admin Customizations
 * SEO
 * Caching
