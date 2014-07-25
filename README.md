@@ -1,7 +1,7 @@
 Launchpad
 =========
 
-Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still in beta, but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly, but you should be able to child-theme it to some degree.  
+Launchpad is an extremely opinionated WordPress theme for developers.  This theme is still "in beta," but is probably usable if you test settings extensively before launch.  The theme is meant to be hacked on directly, but you should be able to child-theme it to some degree.  
 
 I'm not sure how compatible this theme is WPMU.
 
