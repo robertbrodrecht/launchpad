@@ -9,6 +9,11 @@ I am currently developing the first production site based on Launchpad and the s
 
 I use CodeKit 2 to compile SASS and handle JavaScript includes and minification.  Child-theme support is on the list for possible features, but it is probably a long way off.
 
+[Codex](_codex/index.md)
+========================
+
+For a detailed walk through, check out the [Codex](_codex/index.md).
+
 
 Features
 ========
