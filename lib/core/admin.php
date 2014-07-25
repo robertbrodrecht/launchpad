@@ -672,10 +672,6 @@ function launchpad_theme_options_render_page() {
 			}
 		}
 		
-		if(!get_option('blog_public')) {
-			echo '<div class="error"><p><strong>Search Engines Blocked!</strong>  Don\'t forget that search engines are still being blocked.  To change that, go to Settings > Reading and update uncheck "Discourage search engines from indexing this site."</p></div>';
-		}
-		
 		$wp_config = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/wp-config.php');
 		
 		if(stristr($wp_config, 'put your unique phrase here') !== false) {
@@ -698,6 +694,21 @@ function launchpad_theme_options_render_page() {
 		</form>
 	</div>
 	<?php
+}
+
+
+/**
+ * Add notices for critical things.
+ *
+ * @since		1.0
+ */
+function launchpad_admin_notices() {
+	if(!get_option('blog_public')) {
+		echo '<div class="error"><p><strong>Search Engines Blocked!</strong>  Don\'t forget that search engines are still being blocked.  To change that, go to Settings > Reading and update uncheck "Discourage search engines from indexing this site."</p></div>';
+	}
+}
+if(is_admin()) {
+	add_action('admin_notices', 'launchpad_admin_notices');
 }
 
 
