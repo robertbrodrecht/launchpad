@@ -5,9 +5,7 @@ Launchpad is an extremely opinionated WordPress theme for developers.  This them
 
 I'm not sure how compatible this theme is WPMU.
 
-I am currently developing the first production site based on Launchpad and the second is in development by @iamdangavin.  Feedback from this process is being integrated back into Launchpad as issues arise.
-
-I use CodeKit 2 to compile SASS and handle JavaScript includes and minification.  Child-theme support is on the list for possible features, but it is probably a long way off.
+A few sites have been developed on top of Launchpad, and more are in the works.  Feedback from this process is being integrated back into Launchpad as issues arise.
 
 [Codex](_codex/index.md)
 ========================
