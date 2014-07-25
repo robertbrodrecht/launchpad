@@ -1,4 +1,4 @@
-<center>[Previous](caching.md) | [Home](index.md) | [Next](index.md)</center>
+<center>[Previous](caching.md) | [Home](index.md) | [Next](features.md)</center>
 
 Launchpad Security
 ==================
@@ -11,4 +11,4 @@ If your client gets locked out, all you have to do is save the Launchpad setting
 
 The rest of Launchpad's security features are built into the HTML5 Boilerplate htaccess file.  These special additions add [the 5G Blacklist](http://perishablepress.com/5g-blacklist-2013/) and some best practices like denying directory listings, hidden files, and WordPress's wp-includes files.
 
-Thanks for your interest in Launchpad.  You have reached the end of this document.
+Thanks for your interest in Launchpad.  You have reached the end of this document.  You may be interested at looking through this [feature list](features.md).

@@ -33,3 +33,4 @@ This is a quick outline of documentation goals:
 * [SEO](seo.md)
 * [Caching](caching.md)
 * [Security](security.md)
+* [Feature List](features.md)
