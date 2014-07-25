@@ -10,8 +10,8 @@ Launchpad has helpful additions as well as code to handle core theme functionali
 Launchpad includes support for the following features in no particular order:
 
 1. Special Polyfills
-   A. Input placeholder support (phased out once IE9 support is dropped).
-   B. matchMedia  (phased out once IE9 support is dropped).
+   1. Input placeholder support (phased out once IE9 support is dropped).
+   2. matchMedia  (phased out once IE9 support is dropped).
 2. Custom events for scrollStart, scrollEnd, resizeStart, and resizeEnd.
 3. Manage built-in fleible content, i.e. accordion list.
 4. 60FPS scrolling hack to improve scrolling on complex sites.  Just add a data-scroll-helper attribute to the body.
@@ -20,10 +20,10 @@ Launchpad includes support for the following features in no particular order:
 7. Startup Image management for Apple's "Add to Home Screen" feature.
 8. Mobile nav menu management.
 9. Feature detection for important things so you don't HAVE to use Modernizr.
-   A. 2x DPI detection.
-   B. Touch support.
-   C. Position sticky support.
-   D. CSS Transition support.
+   1. 2x DPI detection.
+   2. Touch support.
+   3. Position sticky support.
+   4. CSS Transition support.
 10. Height Matching.
 
 Some of these features require more detailed explanation.
