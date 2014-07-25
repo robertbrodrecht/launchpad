@@ -1,4 +1,4 @@
-<center>[Previous](sass.md) | [Home](index.md) | [Next](install.md)</center>
+<center>[Previous](sass.md) | [Home](index.md) | [Next](admin.md)</center>
 
 Launchpad JavaScript
 ====================
@@ -28,6 +28,33 @@ Launchpad includes support for the following features in no particular order:
 
 Some of these features require more detailed explanation.
 
+## Launchpad Events
+
+<dl>
+	<dt>launchpadPreInit</dt>
+	<dd>Fires on the body as soon as Launchpad starts initing before it does anything.  If you wish to modify the supported browsers list, this is where to do it.</dd>
+	<dt>launchpadInit</dt>
+	<dd>Fires on the body as soon as Launchpad does the first init.</dd>
+	<dt>launchpadReinit</dt>
+	<dd>Fires on the body every time Launchpad reinits (e.g. after ajax loads).</dd>
+	<dt>launchpadMenuOpen</dt>
+	<dd>Fires on the body when the mobile nav menu opens via a click to the hamburger.</dd>
+	<dt>launchpadMenuClose</dt>
+	<dd>Fires on the body when the mobile nav menu closes via a click to the hamburger.</dd>
+	<dt>scrollStart</dt>
+	<dd>When the scroll event fires for the first time.</dd>
+	<dt>scrollEnd</dt>
+	<dd>Fires when the user stops scrolling for 100ms.</dd>
+	<dt>resizeStart</dt>
+	<dd>Fires when the user starts resizing for the first time.</dd>
+	<dt>resizeEnd</dt>
+	<dd>Fires when the user stops scrolling for 250ms.</dd>
+	<dt>ajaxRequestStart</dt>
+	<dd>Fires on the <code>body</code> immediately before the ajax request is sent.</dd>
+	<dt>ajaxRequestEnd</dt>
+	<dd>Fires after the page content has been replaced.</dd>
+</dl>
+
 ## Feature Detection
 
 You don't need the full Modernizr suite to get your job done.  The most common questions that I encounter in my work are:
@@ -55,7 +82,23 @@ So, detection of those properties are built in.  You can access this information
 
 ## Ajax Page Loads
 
+If enabled in the WordPress admin, Launchpad will try to load pages with ajax if the page is on the same domain.  The script fetches the page and replace the contents of the <code>body</code>, the body's classes, and the <code>title</code>.  Events are fired both before and after an ajax page load:
+
+<dl>
+	<dt>ajaxRequestStart</dt>
+	<dd>Fires on the <code>body</code> immediately before the ajax request is sent.</dd>
+	<dt>ajaxRequestEnd</dt>
+	<dd>Fires after the page content has been replaced.</dd>
+</dl>
+
+You can hook into these events to handle page transitions.
+
 ## Application Cache Management
+
+In order to make the Application Cache work better, Launchpad attempts to handle invalidating it.  When the user comes online, the JavaScript attempts to reload the cache.  The JavaScript also monitors whether the user has logged in every 60 seconds.  If the user logs in, the JavaScript attempts to reload the cache.  If all this works properly, users will have their cache invalidated whenever they are online and admins will see the freshest content always.
 
 ## Height Matching
 
+Launchpad's height matching ties into the resizeEnd event to handle height matching.  If you want to height match all children, add a <code>data-height-match-children</code> to the parent.  If you want more control, add <code>data-height-match-group</code> to the parent and <code>data-height-match</code> to each child that needs to be height matched.
+
+Both <code>data-height-match-children</code> and <code>data-height-match-group</code> both accept a parameter of either the width in pixels above which height matching should happen or a media query that specifies when the height matching should happen.  Outside of those values, the height matching is removed.
