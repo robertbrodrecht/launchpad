@@ -32,15 +32,15 @@ Some of these features require more detailed explanation.
 
 <dl>
 	<dt>launchpadPreInit</dt>
-	<dd>Fires on the body as soon as Launchpad starts initing before it does anything.  If you wish to modify the supported browsers list, this is where to do it.</dd>
+	<dd>Fires on the <code>body</code> as soon as Launchpad starts initing before it does anything.  If you wish to modify the supported browsers list, this is where to do it.</dd>
 	<dt>launchpadInit</dt>
-	<dd>Fires on the body as soon as Launchpad does the first init.</dd>
+	<dd>Fires on the <code>body</code> as soon as Launchpad does the first init.</dd>
 	<dt>launchpadReinit</dt>
-	<dd>Fires on the body every time Launchpad reinits (e.g. after ajax loads).</dd>
+	<dd>Fires on the <code>body</code> every time Launchpad reinits (e.g. after ajax loads).</dd>
 	<dt>launchpadMenuOpen</dt>
-	<dd>Fires on the body when the mobile nav menu opens via a click to the hamburger.</dd>
+	<dd>Fires on the <code>body</code> when the mobile nav menu opens via a click to the hamburger.</dd>
 	<dt>launchpadMenuClose</dt>
-	<dd>Fires on the body when the mobile nav menu closes via a click to the hamburger.</dd>
+	<dd>Fires on the <code>body</code> when the mobile nav menu closes via a click to the hamburger.</dd>
 	<dt>scrollStart</dt>
 	<dd>When the scroll event fires for the first time.</dd>
 	<dt>scrollEnd</dt>
@@ -52,7 +52,7 @@ Some of these features require more detailed explanation.
 	<dt>ajaxRequestStart</dt>
 	<dd>Fires on the <code>body</code> immediately before the ajax request is sent.</dd>
 	<dt>ajaxRequestEnd</dt>
-	<dd>Fires after the page content has been replaced.</dd>
+	<dd>Fires on the <code>body</code> after the page content has been replaced.</dd>
 </dl>
 
 ## Feature Detection
