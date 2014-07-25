@@ -3,10 +3,7 @@
 Features
 ========
 
-This theme has been in the works for over a year.  After working with a team that was using the [Roots WordPress theme](http://roots.io), I adopted a few conventions from there (e.g. more useful body classes, root-relative URLs, built-in custom rewrites, and HTML5 Boilerplate integration) and combined them with some of my previous developer-friendly theme ideas.  I also had some thoughts on how to make a modern website work (e.g. built-in content caching, offline support with intelligent applicationCache reloading, and AJAX page loading), so I added those to it.
-
-I'll be building out the feature list as I get the time.
-
+In case I forgot anything in the previous sections...
 
 ## Front-end Features
 
