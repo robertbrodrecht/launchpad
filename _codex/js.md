@@ -91,7 +91,9 @@ If enabled in the WordPress admin, Launchpad will try to load pages with ajax if
 	<dd>Fires after the page content has been replaced.</dd>
 </dl>
 
-You can hook into these events to handle page transitions.
+You can hook into these events to handle page transitions.  Since ajax page loads don't load scripts at every page load, it's important to remember that your normal practices are probably not going to work because they are based on the assumption of a page loading your scripts fresh every time the user goes to a new page.  With ajax page loads, you MUST deligate event handling whenever possible.  If an event can't be delegated, you must add the event every time <code>launchpadReinit</code> fires.
+
+If you can't figure out how to make ajax page loads work for you, just don't use it.
 
 ## Application Cache Management
 
