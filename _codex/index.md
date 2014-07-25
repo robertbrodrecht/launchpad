@@ -29,7 +29,7 @@ This is a quick outline of documentation goals:
 * [Launchpad Hooks](hooks.md)
 * [Launchpad SASS](sass.md)
 * [Launchpad JavaScript](js.md)
-* Admin Customizations
-* SEO
-* Caching
-* Security
+* [Admin Customizations](admin.md)
+* [SEO](seo.md)
+* [Caching](caching.md)
+* [Security](security.md)

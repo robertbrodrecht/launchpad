@@ -102,3 +102,5 @@ In order to make the Application Cache work better, Launchpad attempts to handle
 Launchpad's height matching ties into the resizeEnd event to handle height matching.  If you want to height match all children, add a <code>data-height-match-children</code> to the parent.  If you want more control, add <code>data-height-match-group</code> to the parent and <code>data-height-match</code> to each child that needs to be height matched.
 
 Both <code>data-height-match-children</code> and <code>data-height-match-group</code> both accept a parameter of either the width in pixels above which height matching should happen or a media query that specifies when the height matching should happen.  Outside of those values, the height matching is removed.
+
+Now that you have an idea about how the JavaScript works, you can dig into the [WordPress admin modifications](admin.md).

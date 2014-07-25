@@ -82,3 +82,5 @@ If you want to use different settings for activation-related values (e.g. the pa
 	<dt>launchpad_cache_file_path</dt>
 	<dd>Use this filter to change the path (as a string) where Launchpad puts cache files.</dd>
 </dl>
+
+Now that you know a few hooks, check out [Launchpad SASS](sass.md).

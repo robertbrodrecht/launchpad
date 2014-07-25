@@ -69,7 +69,7 @@ $excerpt = launchpad_seo_excerpt();
 		
 		if(!get_option('blog_public')) {
 			echo '<meta name="robots" content="noindex, nofollow">';			
-		} else if(!$wp_query->is_single && !$wp_query->is_singular) {
+		} else if(!$wp_query->is_single && !$wp_query->is_singular && !is_front_page()) {
 			echo '<meta name="robots" content="noindex, follow">';
 		}
 		

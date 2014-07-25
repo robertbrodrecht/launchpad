@@ -76,6 +76,14 @@ function launchpad_sitemap() {
 	// These types don't need to appear in a sitemap.
 	$ignore_types = "'nav_menu_item', 'attachment', 'revision'";
 	
+	// Add any post types that don't have human-accessible pages.
+	$post_types = get_post_types(array(), 'objects');
+	foreach($post_types as $post_type => $post_details) {
+		if(!$post_details->_builtin && !$post_details->publicly_queryable) {
+			$ignore_types .= ", '$post_type'";
+		}
+	}
+	
 	// Include 10,000 posts per sitemap file.
 	// The max is 50,000 but we need to stay under 10MB uncompressed.
 	// So, we're just going to hope 10K is low enough to stay under the limit.
