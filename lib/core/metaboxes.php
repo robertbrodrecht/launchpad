@@ -811,6 +811,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
  * @since		1.0
  */
 function launchpad_add_meta_boxes() {
+	global $post;
 	
 	// Get all developer-manipulated post types.
 	$post_types = launchpad_get_post_types();
@@ -826,30 +827,48 @@ function launchpad_add_meta_boxes() {
 		// If there are metabox keys, loop the metaboxes and add them.
 		if(isset($post_type_details['metaboxes']) && $post_type_details['metaboxes']) {
 			foreach($post_type_details['metaboxes'] as $metabox_id => $metabox_details) {
-				add_meta_box(
-					$metabox_id,
-					$metabox_details['name'],
-					'launchpad_meta_box_handler',
-					$post_type,
-					$metabox_details['location'],
-					$metabox_details['position'],
-					$metabox_details
-				);
+				$add_metabox = true;
+				if(isset($metabox_details['limit'])) {
+					$add_metabox = $metabox_details['limit']($post);
+					if($add_metabox !== true && $add_metabox !== false) {
+						$add_metabox = true;
+					}
+				}
+				if($add_metabox) {
+					add_meta_box(
+						$metabox_id,
+						$metabox_details['name'],
+						'launchpad_meta_box_handler',
+						$post_type,
+						$metabox_details['location'],
+						$metabox_details['position'],
+						$metabox_details
+					);
+				}
 			}
 		}
 		
 		// If there are flexible content keys, loop the flexible content types and add metaboxes.
 		if(isset($post_type_details['flexible']) && $post_type_details['flexible']) {
 			foreach($post_type_details['flexible'] as $flex_id => $flex_details) {
-				add_meta_box(
-					$flex_id,
-					$flex_details['name'],
-					'launchpad_flexible_handler',
-					$post_type,
-					$flex_details['location'],
-					$flex_details['position'],
-					$flex_details
-				);
+				$add_metabox = true;
+				if(isset($flex_details['limit'])) {
+					$add_metabox = $flex_details['limit']($post);
+					if($add_metabox !== true && $add_metabox !== false) {
+						$add_metabox = true;
+					}
+				}
+				if($add_metabox) {
+					add_meta_box(
+						$flex_id,
+						$flex_details['name'],
+						'launchpad_flexible_handler',
+						$post_type,
+						$flex_details['location'],
+						$flex_details['position'],
+						$flex_details
+					);
+				}
 			}
 		}
 	}
@@ -1036,7 +1055,16 @@ function launchpad_flexible_handler($post, $args) {
 					
 					// Loop all flexible modules so the user can pick them from a hover list.
 					foreach($args['args']['modules'] as $k => $v) {
-						echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '" title="' . sanitize_text_field($v['help']) . '"><span class="' . ($v['icon'] ? $v['icon'] : 'dashicons dashicons-plus-alt') . '"></span> ' . $v['name'] . '</a></li>';
+						$add_metabox = true;
+						if(isset($v['limit'])) {
+							$add_metabox = $v['limit']($post);
+							if($add_metabox !== true && $add_metabox !== false) {
+								$add_metabox = true;
+							}
+						}
+						if($add_metabox) {
+							echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '" title="' . sanitize_text_field($v['help']) . '"><span class="' . ($v['icon'] ? $v['icon'] : 'dashicons dashicons-plus-alt') . '"></span> ' . $v['name'] . '</a></li>';
+						}
 					}
 					
 					?>
