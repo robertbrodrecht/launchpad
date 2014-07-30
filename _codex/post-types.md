@@ -107,6 +107,8 @@ Metaboxes, like taxonomies, are created with an array of arrays created under th
 	<dd>The position within the position (or priority, as WP calls it): 'high', 'core', 'default' or 'low'</dd>
 	<dt>help</dt>
 	<dd>A description of what the field does.</dd>
+	<dt>limit</dt>
+	<dd>An anonymous function that accepts a post as the only argument.  This is used to decide whether the metabox will appear on the post's edit screen.  Thiis is discussed in detail below in the Limiting Metaboxes and Flexible Content section.</dd>
 	<dt>fields</dt>
 	<dd>An array of fields to include.  This will be discussed in detail below in the Field Types section.</dd>
 </dl>
@@ -166,6 +168,8 @@ Flexible Content allows the WordPress user to easily create varying layouts with
 	<dd>The position within the position (or priority, as WP calls it): 'high', 'core', 'default' or 'low'</dd>
 	<dt>help</dt>
 	<dd>A description of what the flexible content area is used for.</dd>
+	<dt>limit</dt>
+	<dd>An anonymous function that accepts a post as the only argument.  This is used to decide whether the flexible content block will appear on the post's edit screen.  Thiis is discussed in detail below in the Limiting Metaboxes and Flexible Content section.</dd>
 	<dt>modules</dt>
 	<dd>
 		An array of modules to include.  Modules are essentially metaboxes and use a similar array format where the key is the ID of the module and the value is an array of settings.  The modules array contains the following keys: 
@@ -176,6 +180,8 @@ Flexible Content allows the WordPress user to easily create varying layouts with
 			<dd>Preferably a [dashicon](https://github.com/melchoyce/dashicons) such as <code>dashicons dashicons-list-view</code>, but can be a custom icon class.</dd>
 			<dt>help</dt>
 			<dd>A description of what the module does.</dd>
+			<dt>limit</dt>
+			<dd>An anonymous function that accepts a post as the only argument.  This is used to decide whether the flexible content module will appear on the post's edit screen.  Thiis is discussed in detail below in the Limiting Metaboxes and Flexible Content section.</dd>
 			<dt>fields</dt>
 			<dd>An array of fields to include.  This will be discussed in detail below in the Field Types section.</dd>
 		</dl>
@@ -383,5 +389,41 @@ function my_custom_post_types($post_types) {
 	return array_merge($post_types, $custom_post_types);
 }
 ```
+
+## Limiting Metaboxes and Flexible Content
+
+With Launchpad 1.1 you can now limit where metaboxes and flexible content appear.  For example, if you only want a post with a specific ID to recieve a specific metabox, that is now possible through an anonymous function (introduced in PHP 5.3).  For example, if you only want a metabox to appear on the Home page, add a key to your metabox called "limit" with a value that is an anonymous function that does the check you need:
+
+```php
+	$custom_post_types = array(
+		'page' => array(
+			'metaboxes' => array(
+				'custom_metabox_id' => array(
+					'name' => 'Sample Metabox',
+					'location' => 'normal',
+					'position' => 'default',
+					'help' => '<p>Help about what this metabox does.</p>',
+					'limit' => function($post) {
+						if($post->post_name === 'home') {
+							return true;
+						}
+						return false;
+					},
+					'fields' => array(
+						'custom_metabox_field' => array(
+							'name' => 'Title',
+							'help' => '<p>Help about what this field does.</p>',
+							'args' => array(
+								'type' => 'text'
+							)
+						)
+					)
+				)
+			)
+		)
+	);
+```
+
+Since you are passed the post object, you can evaluate the post object or get specific information about the post (e.g. is it in a specific category?) to apply your own filtering that you write yourself.  Simply return <code>true</code> to allow the metabox, flexible content block, or flexible content module to appear for the post.  Return <code>false</code> to prevent it from appearing.  If you return anything other than a boolean <code>true</code> or <code>false</code> the metabox, flexible content block. or flexible content module will appear.
 
 With a basic understanding of managing custom post types, you may want to read more about [Basic Template Editing](basic-template.md).
