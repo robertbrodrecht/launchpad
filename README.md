@@ -30,7 +30,8 @@ Future Wants
   * Figuring out any multi-site issues.
 * Continue improving flexible content if more needs have arisen.
 * Add PDF generating library and support for /pdf/ like /download/.
-* Research OCR for better alt tag creation: http://phpocr.sourceforge.net
+* Research OCR for better alt tag creation.
+	* This was not helpful. Still very alpha. http://phpocr.sourceforge.net
 * Database and Asset Migration
 * Pretty Search URLs
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
