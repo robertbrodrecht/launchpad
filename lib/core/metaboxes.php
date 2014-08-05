@@ -927,6 +927,15 @@ function launchpad_meta_box_handler($post, $args) {
 	
 	// Loop the fields that go into the metabox.
 	foreach($args['args']['fields'] as $k => $v) {
+		$add_metabox_field = true;
+		if(isset($v['limit'])) {
+			$add_metabox_field = $v['limit']($post);
+			if($add_metabox_field !== true && $add_metabox_field !== false) {
+				$add_metabox_field = true;
+			}
+		}
+		if($add_metabox_field) {
+	
 		?>
 		<div class="launchpad-metabox-field">
 			<?php
@@ -1006,6 +1015,7 @@ function launchpad_meta_box_handler($post, $args) {
 		</div>
 	
 		<?php
+		}
 	}
 }
 
