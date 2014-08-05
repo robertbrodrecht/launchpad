@@ -135,7 +135,9 @@ jQuery(document).ready(
 						var me = $(this);
 						if(me.is('[name]')) {
 							me.attr('name', me.attr('name').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
-							me.attr('id', me.attr('id').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
+							if(me.attr('id')) {
+								me.attr('id', me.attr('id').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
+							}
 						}
 						if(me.is('button[data-for]')) {
 							me.attr('data-for', me.attr('data-for').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
@@ -207,7 +209,6 @@ jQuery(document).ready(
 				$.get(
 					'/api/?action=get_flexible_field&type=' + me.data('launchpad-flexible-type') + '&name=' + me.data('launchpad-flexible-name') + '&id=' + me.data('launchpad-flexible-post-id'),
 					function(data) {
-						console.log();
 						var visualeditors;
 						data = $(data);
 						
@@ -267,8 +268,6 @@ jQuery(document).ready(
 					addto = container.find('.launchpad-relationship-items'),
 					fname = container.data('field-name'),
 					limit = container.data('limit');
-				
-				console.log(e, this);
 				
 				e.preventDefault();
 				

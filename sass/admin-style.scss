@@ -507,6 +507,11 @@ small.launchpad-inline {
 		width: 100%;
 	}
 	
+	a {
+		display: block;
+		overflow: hidden;
+	}
+	
 	.launchpad-relationship-search {
 		background: #EFEFEF;
 		border-right: 1px solid #DDDDDD;
