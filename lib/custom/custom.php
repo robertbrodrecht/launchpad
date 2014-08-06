@@ -36,11 +36,11 @@ function custom_launchpad_custom_post_types($post_types) {
 							'help' => '<p>The sample metabox is designed to help you build your own metaboxes.</p>',
 							'fields' => array(
 								'sample_side_metabox_checkbox_1' => array(
-									'name' => 'Test',
-									'help' => '<p>This is a checkbox.</p>',
+									'name' => 'Address',
+									'help' => '<p>This is an address.</p>',
 									'args' => array(
-										'type' => 'textarea',
-										'maxlength' => 20
+										'label' => 'Company Address',
+										'type' => 'address'
 									)
 								),
 							)

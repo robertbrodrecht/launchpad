@@ -297,6 +297,8 @@ Metaboxes and Flexible Content use the field arrays to define what fields are av
 The following field types are available:
 
 <dl>
+	<dt>address</dt>
+	<dd>A complex field to contain street address, suite number, city, state, and zip with automatic back-end geocoding if you have provided a Google Maps API key in Launchpad Setting.</dd>
 	<dt>checkbox</dt>
 	<dd>An HTML checkbox field.</dd>
 	<dt>file</dt>

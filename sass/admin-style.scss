@@ -17,15 +17,49 @@
 	textarea.small-text {
 		height: 3em;
 	}
+	
+	label > small {
+		display: block;
+	}
 }
 
 .launchpad-metabox-fieldset {
 	border: 1px solid #DDD;
+	clear: both;
 	margin-bottom: 1em;
 	padding: 1em 1em 0% 1em;
 	
 	legend {
 		padding: 0 1em;
+	}
+}
+
+.launchpad-address {
+	margin-top: .25em;
+	
+	div {
+		margin-bottom: 1em;
+	}
+	
+	.launchpad-csz-container {
+		overflow: hidden;
+		width: 100%;
+		
+		> div {
+			float: left;
+			margin-bottom: 0em;
+			margin-left: 5%;
+			width: 20%
+		}
+		
+		> div:first-child {
+			margin-left: 0;
+			width: 50%;
+		}
+		
+		small {
+			display: none;
+		}
 	}
 }
 

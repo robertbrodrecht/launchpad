@@ -1046,6 +1046,9 @@ if(is_admin()) {
 function launchpad_get_field_help($type) {
 	$ret = '';
 	switch($type) {
+		case 'address':
+			$ret = '<p>The address field type is used to enter complex addresses.  Enter the address to the best of your ability.  When you save the post, if you have entered a Google Maps API Key in Launchpad Settings, the address will automatically be geocoded if possible.</p>';
+		break;
 		case 'file':
 			$ret = '<p>To use this field, click the "Upload File" button, then either browse through your Media Library or drag-and-drop a new file to upload.  Once you have found the file, make sure it is selected with a check mark at the top right of the file icon, then click the "Add File" button.</p>';
 		break;

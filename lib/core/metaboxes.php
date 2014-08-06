@@ -683,6 +683,49 @@ function launchpad_render_field_repeater($field_output_name, $subfields, $label,
 
 
 /**
+ * Render Address Fields
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		array $args The arguments on the field.
+ * @param		bool $val Whether the checkbox is checked.
+ * @param		string $class A class to use on the label if this is a subfield.
+ * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_address($field_output_name, $field_output_id = '', $args, $val = false, $class = '', $subfield = false) {
+	$field_output_name = trim($field_output_name);
+	$field_output_id = trim($field_output_id);
+	if(!$field_output_name) {
+		return;
+	}
+	
+	if(!$field_output_id) {
+		$field_output_id = $field_output_name;
+	}
+	
+	echo '<fieldset class="launchpad-address launchpad-metabox-fieldset"><legend>' . ($args['label'] ? $args['label'] : 'Address Details') . '</legend>';
+	
+	echo '<div><label><input type="text" name="' . $field_output_name . '[street]" value="' . $val['street'] . '" class="regular-text">Street Address</label></div>';
+	echo '<div><label><input type="text" name="' . $field_output_name . '[number]" value="' . $val['number'] . '" class="regular-text">Apartment / Suite Number</label></div>';
+	
+	echo '<div class="launchpad-csz-container">';
+
+	echo '<div><label><input type="text" name="' . $field_output_name . '[city]" value="' . $val['city'] . '" class="regular-text">City</label></div>';	
+	
+	echo '<div><label><input type="text" name="' . $field_output_name . '[state]" value="' . $val['state'] . '" class="regular-text" maxlength="2">State</label></div>';	
+	
+	echo '<div><label><input type="text" name="' . $field_output_name . '[zip]" value="' . $val['zip'] . '" class="regular-text" maxlength="10">Zip</label></div>';
+	
+	echo '</div>';
+	echo '<input type="hidden" name="' . $field_output_name . '[latitude]" value="' . $val['latitude'] . '">';
+	echo '<input type="hidden" name="' . $field_output_name . '[longitude]" value="' . $val['longitude'] . '">';
+	echo '</fieldset>';
+}
+
+
+/**
  * Render fields
  * 
  * This gets a bit convoluted because it is used to render both launchpad site options fields
@@ -782,6 +825,9 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 		break;
 		case 'repeater':
 			launchpad_render_field_repeater($field_output_name, $args['subfields'], $args['label'], $field_prefix, $val);
+		break;
+		case 'address':
+			launchpad_render_field_address($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'subfield':
 			// SUBFIELDS ARE FOR SETTINGS ONLY!!!
@@ -969,6 +1015,7 @@ function launchpad_meta_box_handler($post, $args) {
 			
 			// Render the field.
 			switch($v['args']['type']) {
+				case 'address':
 				case 'relationship':
 				case 'repeater':
 				case 'taxonomy':
@@ -988,7 +1035,7 @@ function launchpad_meta_box_handler($post, $args) {
 			}
 			
 			// If this is not a checkbox, show the name before the field.
-			if($v['args']['type'] !== 'checkbox') {
+			if($v['args']['type'] !== 'checkbox' && $v['args']['type'] !== 'address') {
 				echo $v['name']; 
 			}
 			
@@ -1001,6 +1048,7 @@ function launchpad_meta_box_handler($post, $args) {
 			}
 			
 			switch($v['args']['type']) {
+				case 'address':
 				case 'relationship':
 				case 'repeater':
 				case 'taxonomy':
