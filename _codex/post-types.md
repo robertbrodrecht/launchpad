@@ -287,7 +287,7 @@ Metaboxes and Flexible Content use the field arrays to define what fields are av
 			<dt>multiple</dt>
 			<dd>For taxonomy fields, whether multiple taxonomies can be selected.<dd>
 			<dt>label</dt>
-			<dd>For repeater fields, the label above the repeater.</dd>
+			<dd>For repeater fields, the label above the repeater. For address fields, the legend of the fieldset containing the address.</dd>
 			<dt>subfields</dt>
 			<dd>For repeater fields, the subfields array is the same as the fields array.</dd>
 		</dl>
