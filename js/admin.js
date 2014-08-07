@@ -295,6 +295,59 @@ jQuery(document).ready(
 					}
 				);
 			}		
+		).on(
+			'change',
+			'fieldset.launchpad-address input',
+			function() {
+				var me = $(this),
+					fs = me.closest('.launchpad-address'),
+					addr = '';
+				
+				$('input:not([type=hidden])', fs).each(
+					function() {
+						var me = $(this);
+						if(me.attr('name').indexOf('[number]') === -1) {
+							addr += me.val();
+							if(me.attr('name').indexOf('[street]') !== -1 || me.attr('name').indexOf('[city]') !== -1 && addr) {
+								addr += ',';
+							}
+							addr += ' ';
+						}
+					}
+				);
+				
+				addr = addr.replace(/\s\s+/g, ' ').replace(/ , /, ' ').replace(/, ?$/, '');
+				
+				$('.launchpad-google-map-embed', fs).html('<div>Searching for: ' + addr + '</div>');
+				
+				if(addr) {
+					$.post(
+						'/api/',
+						{action: 'geocode', 'address': addr},
+						function(data) {
+							$('input', fs).each(
+								function() {
+									var me = $(this);
+									if(me.attr('name').indexOf('[latitude]') !== -1) {
+										me.val(data.lat);
+									}
+									if(me.attr('name').indexOf('[longitude]') !== -1) {
+										me.val(data.lng);
+									}
+								}
+							);
+							
+							if(data.lat == 0 && data.lng == 0) {
+								$('.launchpad-google-map-embed', fs).html('<div>No Matches Found.</div>');
+							} else {						
+								$('.launchpad-google-map-embed', fs).html('<iframe width="100%" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="//maps.google.com/maps?q=' + data.lat + ',' + data.lng + '+(Your Location)&amp;output=embed"></iframe>');
+							}
+						}
+					);
+				} else {
+					$('.launchpad-google-map-embed', fs).html('<div>No Address Provided.</div>');
+				}
+			}
 		);
 		
 		$('textarea[maxlength]').keyup(

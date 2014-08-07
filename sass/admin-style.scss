@@ -63,6 +63,17 @@
 	}
 }
 
+.launchpad-google-map-embed > div {
+	background: #EAE6DD;
+	line-height: 200px;
+	text-align: center;
+	
+	&.small-notice {
+		line-height: 40px;
+		opacity: .5;
+	}
+}
+
 table.launchpad-metabox-table {
 	border-bottom: 1px solid #21759B;
 	border-collapse: collapse;

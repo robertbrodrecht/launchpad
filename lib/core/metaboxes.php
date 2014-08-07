@@ -663,7 +663,7 @@ function launchpad_render_field_repeater($field_output_name, $subfields, $label,
 						)
 					), 
 					$field['name'], 
-					$field_prefix
+					''
 				);
 			
 			// Close the metabox field container.
@@ -695,6 +695,8 @@ function launchpad_render_field_repeater($field_output_name, $subfields, $label,
  * @since		1.0
  */
 function launchpad_render_field_address($field_output_name, $field_output_id = '', $args, $val = false, $class = '', $subfield = false) {
+	global $site_options;
+	
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -706,6 +708,14 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
 	}
 	
 	echo '<fieldset class="launchpad-address launchpad-metabox-fieldset"><legend>' . ($args['label'] ? $args['label'] : 'Address Details') . '</legend>';
+	
+	echo '<div class="launchpad-google-map-embed">';
+	if($val['latitude'] && $val['longitude']) {
+		echo '<iframe width="100%" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="//maps.google.com/maps?q=' . $val['latitude'] . ',' . $val['longitude'] . '+(Your Location)&amp;output=embed"></iframe>';
+	} else if(!$site_options['google_maps_api']) {
+		echo '<div class="small-notice">Address Geocoding is not Enabled</div>';
+	}
+	echo '</div>';
 	
 	echo '<div><label><input type="text" name="' . $field_output_name . '[street]" value="' . $val['street'] . '" class="regular-text">Street Address</label></div>';
 	echo '<div><label><input type="text" name="' . $field_output_name . '[number]" value="' . $val['number'] . '" class="regular-text">Apartment / Suite Number</label></div>';
@@ -721,6 +731,7 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
 	echo '</div>';
 	echo '<input type="hidden" name="' . $field_output_name . '[latitude]" value="' . $val['latitude'] . '">';
 	echo '<input type="hidden" name="' . $field_output_name . '[longitude]" value="' . $val['longitude'] . '">';
+	
 	echo '</fieldset>';
 }
 
@@ -771,7 +782,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	}
 	
 	// If we're dealing with flexible content, the field's @name needs to be sandboxed into an array.
-	if($field_prefix !== 'launchpad_flexible') {
+	if($field_prefix !== 'launchpad_flexible' && stristr($args['name'], 'launchpad_meta') === false) {
 		$field_output_name = $field_prefix . '[' . $args['name'] . ']';
 		
 	// Otherwise, it can be whatever the developer wanted it to be.
@@ -931,6 +942,8 @@ if(is_admin()) {
  * @since		1.0
  */
 function launchpad_save_post_data($post_id) {
+	global $site_options;
+	
 	// Touch the API file to reset the appcache.
 	// This helps avoid confusing issues with time zones.
 	touch(launchpad_get_cache_file(), time(), time());
@@ -950,7 +963,7 @@ function launchpad_save_post_data($post_id) {
 			return;
 		}
 	}
-	
+		
 	// Save each meta value.
 	foreach($_POST['launchpad_meta'] as $meta_key => $meta_value) {
 		update_post_meta($post_id, $meta_key, $meta_value);

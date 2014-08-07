@@ -203,41 +203,6 @@ function launchpad_get_setting_fields() {
 					)
 				)
 			),
-			'seo_social' => array(
-				'name' => 'SEO and Social <small class="launchpad-block">Don\'t mess with this unless you know what you are doing.',
-				'args' => array(
-					'type' => 'subfield',
-					'subfields' => array(
-						'google_analytics_id' => array(
-							'name' => 'Google Analytics ID',
-							'args' => array(
-								'small' => 'A code like "UA-XXXXXX-X" provided in the <a href="http://google.com/analytics/" target="_blank">Google Analytics</a> Admin area.',
-								'type' => 'text'
-							)
-						),
-						'fb_app_id' => array(
-							'name' => 'Facebook App ID',
-							'args' => array(
-								'type' => 'text'
-							)
-						),
-						'fb_admin_id' => array(
-							'name' => 'Facebook Admin IDs',
-							'args' => array(
-								'small' => 'Separate each ID by a comma without any spaces.',
-								'type' => 'text'
-							)
-						),
-						'twitter_card_username' => array(
-							'name' => 'Twitter Card Username',
-							'args' => array(
-								'small' => 'DO NOT include the @.',
-								'type' => 'text'
-							)
-						)
-					)
-				),
-			),
 			'cache_options' => array(
 				'name' => 'Caching <small class="launchpad-block">Save settings to clear all caches. Save page to clear related caches.</small>',
 				'args' => array(
@@ -290,6 +255,48 @@ function launchpad_get_setting_fields() {
 				'args' => array(
 					'small' => 'Include HTML5 Boilerplate in .htaccess.',
 					'type' => 'checkbox'
+				)
+			),
+			'seo_social' => array(
+				'name' => 'SEO and Social <small class="launchpad-block">Don\'t mess with this unless you know what you are doing.',
+				'args' => array(
+					'type' => 'subfield',
+					'subfields' => array(
+						'google_analytics_id' => array(
+							'name' => 'Google Analytics ID',
+							'args' => array(
+								'small' => 'A code like "UA-XXXXXX-X" provided in the <a href="http://google.com/analytics/" target="_blank">Google Analytics</a> Admin area.',
+								'type' => 'text'
+							)
+						),
+						'fb_app_id' => array(
+							'name' => 'Facebook App ID',
+							'args' => array(
+								'type' => 'text'
+							)
+						),
+						'fb_admin_id' => array(
+							'name' => 'Facebook Admin IDs',
+							'args' => array(
+								'small' => 'Separate each ID by a comma without any spaces.',
+								'type' => 'text'
+							)
+						),
+						'twitter_card_username' => array(
+							'name' => 'Twitter Card Username',
+							'args' => array(
+								'small' => 'DO NOT include the @.',
+								'type' => 'text'
+							)
+						)
+					)
+				),
+			),
+			'google_maps_api' => array(
+				'name' => 'Google Maps API Key',
+				'args' => array(
+					'small' => 'Required to perform geocoding on address fields, but you may not need it.',
+					'type' => 'text'
 				)
 			),
 			'organization_contact_info' => array(

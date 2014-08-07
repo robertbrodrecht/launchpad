@@ -26,6 +26,52 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 
 
 /**
+ * AJAX Map API Call
+ *
+ * @since		1.1
+ */
+function launchpad_geocode($addr_string = false) {
+	global $site_options;
+	
+	$is_ajax = false;
+	
+	$ret = array('lat' => 0, 'lng' => 0);
+	
+	if(!$addr_string) {
+		$addr_string = $_POST['address'];
+		$is_ajax = true;
+	}
+	
+	$addr_string = trim($addr_string);
+	$geocode = false;
+	
+	if($site_options['google_maps_api']) {
+		$geocode = file_get_contents_cache(
+			'https://maps.googleapis.com/maps/api/geocode/json?address=' . 
+				urlencode($addr_string) . '&key=' . $site_options['google_maps_api'],
+				86400
+		);
+		$geocode = json_decode($geocode);
+	}
+	
+	if(isset($geocode->results[0]->geometry->location)) {
+		$ret = $geocode->results[0]->geometry->location;
+	}
+	
+	if($is_ajax) {
+		header('Content-type: application/json');
+		echo json_encode($ret);
+		exit;
+	} else {
+		return $ret;
+	}
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_geocode', 'launchpad_geocode');
+}
+
+
+/**
  * Force Browser to Download File
  * 
  * You can either do /download/path/to/file.txt or
