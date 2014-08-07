@@ -20,8 +20,6 @@ To Do For 1.1
 * Flexible content modules and field types.
   * What other modules should be built-in?
   * Other Field Types
-    * Address field with nice formatting.  Should have lat/long and geocode if user has entered Google API key.
-* Add geocode API key to launchpad settings
 
 Future Wants
 ============
