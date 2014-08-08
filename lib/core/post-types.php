@@ -76,6 +76,7 @@ function launchpad_register_post_types() {
 			$post_type_single = $post_type_details['single'];
 			$post_type_slug = $post_type_details['slug'];
 			$post_type_menu_options = $post_type_details['menu_position'];
+			$post_type_menu_icon = $post_type_details['menu_icon'];
 			
 			// If the developer set 'supports' values, use those.
 			if($post_type_details['supports']) {
@@ -122,6 +123,11 @@ function launchpad_register_post_types() {
 				'menu_position' => $post_type_menu_options,
 				'supports' => $supports
 			);
+			
+					
+			if($post_type_menu_icon) {
+				$args['menu_icon'] = $post_type_menu_icon;
+			}
 			
 			// If the post type is false, make the post type "private."			
 			if(!$post_type_slug) {

@@ -60,6 +60,8 @@ The following key / values are optional:
 	<dd>A boolean of whether the post should be hierarchical.  The default is <code>false</code>.</dd>
 	<dt>supports</dt>
 	<dd>An array of WordPress features that the post type should support. The default is: title, editor, and thumbnail</dd>
+	<dt>menu_icon</dt>
+	<dd>An option dashicon or URL as described in the [WordPress documentation](http://codex.wordpress.org/Function_Reference/register_post_type).</dd>
 </dl>
 
 If your post type is more complex than these fields allow, you will need to send a complete array as specified by WordPress's [<code>register_post_type</code>](http://codex.wordpress.org/Function_Reference/register_post_type).  Simple include a <code>labels</code> key in your array to trigger bybass the automatic post type builder and have your raw array sent to <code>register_post_type</code>.
