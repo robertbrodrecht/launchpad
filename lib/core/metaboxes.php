@@ -468,6 +468,9 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	echo '<strong> Saved Items (' . $tmp_item_count_note . ')</strong>';
 	echo '<ul class="launchpad-relationship-items">';
 	
+	// Default Value
+	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
+	
 	// If there are values, we need to populate them.
 	if($val) {
 		// Loop the values.
