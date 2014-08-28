@@ -421,6 +421,9 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	// Field container.
 	echo '<div class="launchpad-relationship-container" data-post-type="' . $post_type . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $limit . '">';
 	
+	// Default Value
+	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
+	
 	// Post list container.
 	echo '<div class="launchpad-relationship-search"><label><input type="search" class="launchpad-relationship-search-field" placeholder="Search"></label><ul class="launchpad-relationship-list">';
 	
@@ -467,9 +470,6 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	echo '<div class="launchpad-relationship-items-container">';
 	echo '<strong> Saved Items (' . $tmp_item_count_note . ')</strong>';
 	echo '<ul class="launchpad-relationship-items">';
-	
-	// Default Value
-	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
 	
 	// If there are values, we need to populate them.
 	if($val) {
