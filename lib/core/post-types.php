@@ -53,7 +53,7 @@ function launchpad_register_post_types() {
 	foreach($post_types as $post_type => $post_type_details) {
 		
 		// If the current post type has custom taxonomies, put them in an array.
-		if($post_type_details['taxonomies'] && is_array($post_type_details['taxonomies'])) {
+		if(isset($post_type_details['taxonomies']) && $post_type_details['taxonomies'] && is_array($post_type_details['taxonomies'])) {
 			$taxonomies = $post_type_details['taxonomies'];
 			
 		// Otherwise, set the list to false.
@@ -65,21 +65,37 @@ function launchpad_register_post_types() {
 		unset($post_type_details['taxonomies']);
 		
 		// If the developer sets a 'labels' key, it means the developer wants full control of the registration array.
-		if($post_type_details['labels']) {
+		if(isset($post_type_details['labels'])) {
 			$args = $post_type_details;
 		
 		// Otherwise, we need to create an array to send to register_post_type.
-		} else {
+		} else if(isset($post_type_details['plural'])) {
 		
 			// Grab the values set by the developer.
 			$post_type_plural = $post_type_details['plural'];
-			$post_type_single = $post_type_details['single'];
-			$post_type_slug = $post_type_details['slug'];
-			$post_type_menu_options = $post_type_details['menu_position'];
-			$post_type_menu_icon = $post_type_details['menu_icon'];
+			if(isset($post_type_details['single'])) {
+				$post_type_single = $post_type_details['single'];
+			} else {
+				$post_type_single = $post_type_details['plural'] . 's';
+			}
+			if(isset($post_type_details['slug'])) {
+				$post_type_slug = $post_type_details['slug'];
+			} else {
+				$post_type_slug = false;
+			}
+			if(isset($post_type_details['menu_position'])) {
+				$post_type_menu_options = $post_type_details['menu_position'];
+			} else {
+				$post_type_menu_options = null;
+			}
+			if(isset($post_type_details['menu_icon'])) {
+				$post_type_menu_icon = $post_type_details['menu_icon'];				
+			} else {
+				$post_type_menu_icon = false;
+			}
 			
 			// If the developer set 'supports' values, use those.
-			if($post_type_details['supports']) {
+			if(isset($post_type_details['supports'])) {
 				$supports = $post_type_details['supports'];
 			
 			// If not, use the defaults.
@@ -119,7 +135,7 @@ function launchpad_register_post_types() {
 					),
 				'capability_type' => 'page',
 				'has_archive' => true,
-				'hierarchical' => (bool) $post_type_details['hierarchical'],
+				'hierarchical' => isset($post_type_details['hierarchical']) ? (bool) $post_type_details['hierarchical'] : false,
 				'menu_position' => $post_type_menu_options,
 				'supports' => $supports
 			);

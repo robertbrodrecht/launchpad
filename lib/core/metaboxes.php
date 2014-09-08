@@ -140,7 +140,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . ((int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -794,7 +794,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	}
 	
 	// If there is an ID specified for a field, set it as the @id for the field.
-	if($args['id']) {
+	if(isset($args['id'])) {
 		$field_output_id = $args['id'];
 	
 	// Otherwise, fallback to using the @name as the @id.

@@ -75,7 +75,7 @@ function launchpad_get_cache_id() {
 function launchpad_get_cache_file($post_id = false, $type = false) {
 	
 	// If cache is disabled, return false.
-	if(!USE_CACHE) {
+	if(!defined('USE_CACHE') || !USE_CACHE) {
 		return false;
 	}
 	
