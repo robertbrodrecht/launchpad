@@ -93,6 +93,11 @@ function launchpad_register_post_types() {
 			} else {
 				$post_type_menu_icon = false;
 			}
+			if(isset($post_type_details['show_in_menu'])) {
+				$post_type_show_in_menu = $post_type_details['show_in_menu'];				
+			} else {
+				$post_type_show_in_menu = true;
+			}
 			
 			// If the developer set 'supports' values, use those.
 			if(isset($post_type_details['supports'])) {
@@ -126,7 +131,7 @@ function launchpad_register_post_types() {
 					),
 				'public' => true,
 				'publicly_queryable' => true,
-				'show_ui' => true, 
+				'show_ui' => $post_type_show_in_menu, 
 				'show_in_menu' => true, 
 				'query_var' => true,
 				'rewrite' => array(
