@@ -131,8 +131,8 @@ function launchpad_register_post_types() {
 					),
 				'public' => true,
 				'publicly_queryable' => true,
-				'show_ui' => $post_type_show_in_menu, 
-				'show_in_menu' => true, 
+				'show_ui' => true, 
+				'show_in_menu' => $post_type_show_in_menu, 
 				'query_var' => true,
 				'rewrite' => array(
 						'slug' => $post_type_slug,
