@@ -500,7 +500,14 @@ function launchpad_site_options_validate($input) {
 	
 	// Clear all lockouts when settings are saved.
 	$cache_folder = launchpad_get_cache_file();
-	$all_files = scandir($cache_folder);
+	if(!file_exists($cache_folder)) {
+		@mkdir($cache_folder, 0777);
+	}
+	if(!file_exists($cache_folder)) {
+		$all_files = array();
+	} else {
+		$all_files = scandir($cache_folder);
+	}
 	foreach($all_files as $current_file) {
 		if(preg_match('/^launchpad_limit_logins\-/', $current_file)) {
 			unlink($cache_folder . $current_file);
