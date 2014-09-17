@@ -192,6 +192,10 @@ function file_get_contents_cache($url, $cachetime = 60, $context = false) {
 	// Get the site's temp folder.
 	$cache_file = sys_get_temp_dir() . '/' . launchpad_site_unique_string();
 	
+	if(!file_exists($cache_file)) {
+		@mkdir($cache_file, 0777);
+	}
+	
 	// Append a hash of the URL.
 	$cache_file = $cache_file . '/' . md5($url) . '.cache';
 	
@@ -204,8 +208,12 @@ function file_get_contents_cache($url, $cachetime = 60, $context = false) {
 		// If there are results, write them to the cache file.
 		if($results) {
 			$f = fopen($cache_file, 'w');
-			fwrite($f, $results);
-			fclose($f);
+			if($f) {
+				fwrite($f, $results);
+				fclose($f);
+			} else {
+				return $results;
+			}
 		}
 	}
 	
