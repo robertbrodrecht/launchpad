@@ -29,6 +29,7 @@ function launchpad_rewrite_rules($content) {
 	$add_rewrite = array(
 		'favicon.ico' => $tmp_child_theme . '/favicon.ico',
 		'css/(.*)' => $tmp_child_theme . '/css/$1',
+		'sass/(.*)' => $tmp_child_theme . '/sass/$1',
 	  	'js/(.*)' => $tmp_child_theme . '/js/$1',
 	  	'images/(.*)' => $tmp_child_theme . '/images/$1',
 	  	'support/(.*)' => $tmp_theme . '/support/$1',

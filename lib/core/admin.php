@@ -142,7 +142,12 @@ function launchpad_get_setting_fields() {
 	
 	// Check for cache files.
 	$cache_dir = launchpad_get_cache_file();
-	$cache_files = scandir($cache_dir);
+	
+	if($cache_dir) {
+		$cache_files = scandir($cache_dir);
+	} else {
+		$cache_files = array();
+	}
 	
 	// Loop the cached files.
 	foreach($cache_files as $cache_file) {
@@ -878,7 +883,7 @@ function launchpad_auto_help_tab() {
 	}
 	
 	// If there are custom fields associated with the post type, start checking them for help.	
-	if($post_types[$post_type]) {
+	if(isset($post_types[$post_type])) {
 		
 		// If there is a help section, add a help tab.
 		// NOTE: This means you can have help in your fields WITHOUT a help tab showing up.

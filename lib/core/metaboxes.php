@@ -140,7 +140,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . ((int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -420,6 +420,9 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	
 	// Field container.
 	echo '<div class="launchpad-relationship-container" data-post-type="' . $post_type . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $limit . '">';
+	
+	// Default Value
+	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
 	
 	// Post list container.
 	echo '<div class="launchpad-relationship-search"><label><input type="search" class="launchpad-relationship-search-field" placeholder="Search"></label><ul class="launchpad-relationship-list">';
@@ -791,7 +794,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	}
 	
 	// If there is an ID specified for a field, set it as the @id for the field.
-	if($args['id']) {
+	if(isset($args['id'])) {
 		$field_output_id = $args['id'];
 	
 	// Otherwise, fallback to using the @name as the @id.
