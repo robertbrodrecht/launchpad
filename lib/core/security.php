@@ -30,7 +30,7 @@ function launchpad_get_failures_cache($username) {
 	
 	// If it doesn't exist, create it.
 	if(!file_exists($cache_folder)) {
-		mkdir($cache_folder, 0777, true);
+		@mkdir($cache_folder, 0777, true);
 	}
 	
 	// Generate a cache file name based on the username and IP.
