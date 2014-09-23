@@ -872,3 +872,40 @@ body.login.interim-login #login {
     margin-bottom: 0;
   }
 }
+
+/* line 858, ../sass/admin-style.scss */
+.ui-datepicker {
+  background: #FFF;
+  border: 1px solid silver;
+  padding: 10px;
+}
+/* line 863, ../sass/admin-style.scss */
+.ui-datepicker .ui-datepicker-header {
+  overflow: hidden;
+}
+/* line 867, ../sass/admin-style.scss */
+.ui-datepicker .ui-datepicker-prev {
+  float: left;
+}
+/* line 871, ../sass/admin-style.scss */
+.ui-datepicker .ui-datepicker-next {
+  float: right;
+}
+/* line 875, ../sass/admin-style.scss */
+.ui-datepicker .ui-datepicker-title {
+  font-weight: bold;
+  text-align: center;
+}
+/* line 879, ../sass/admin-style.scss */
+.ui-datepicker .ui-state-active {
+  background: #DDD;
+}
+/* line 883, ../sass/admin-style.scss */
+.ui-datepicker table a {
+  display: block;
+  line-height: 1.5;
+  padding: 3px;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+}

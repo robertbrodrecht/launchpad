@@ -76,6 +76,8 @@ jQuery(document).ready(
 		}
 		
 		makeSortable();
+		
+		$("[type=date]").datepicker();
 	
 		// Do admin stuff.
 		$(document.body).on(

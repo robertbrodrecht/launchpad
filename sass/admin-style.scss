@@ -854,3 +854,38 @@ body.login {
 		}
 	}
 }
+
+.ui-datepicker {
+	background: #FFF;
+	border: 1px solid silver;
+	padding: 10px;
+	
+	.ui-datepicker-header {
+		overflow: hidden;
+	}
+	
+	.ui-datepicker-prev {
+		float: left;
+	}
+	
+	.ui-datepicker-next {
+		float: right;
+	}
+	
+	.ui-datepicker-title {
+		font-weight: bold;
+		text-align: center;
+	}
+	.ui-state-active {
+		background: #DDD;
+	}
+	
+	table a {
+		display: block;
+		line-height: 1.5;
+		padding: 3px;
+		text-align: center;
+		text-decoration: none;
+		width: 100%;
+	}
+}
