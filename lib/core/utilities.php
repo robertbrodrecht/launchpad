@@ -230,7 +230,7 @@ function file_get_contents_cache($url, $cachetime = 60, $context = false) {
  * @since	1.0
  * @uses	launchpad_paginate()
  */
-function launchpad_auto_paginate() {
+function launchpad_auto_paginate($next = 'Next', $prev = 'Prev', $link_count = 5) {
 	global $wp_query;
 	
 	// If we need pagination, add it.
@@ -260,9 +260,9 @@ function launchpad_auto_paginate() {
 			$current_page, 
 			$wp_query->max_num_pages, 
 			array(
-				'next' => 'Next',
-				'previous' => 'Prev',
-				'total_page_links' => 5
+				'next' => $next,
+				'previous' => $prev,
+				'total_page_links' => $link_count
 			)
 		);
 	}
