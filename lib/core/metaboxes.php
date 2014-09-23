@@ -140,6 +140,18 @@ function launchpad_render_field_generic($field_output_name, $field_output_id = '
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
+	
+	if($val) {
+		switch($args['type']) {
+			case 'date':
+				$val = date('m/d/Y', strtotime($val));
+			break;
+			case 'datetime':
+				$val = date('m/d/Y g:i a', strtotime($val));
+			break;
+		}
+	}
+	
 	echo '<input type="' . $args['type'] . '" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
 	if($subfield) {
 		echo '</label>';

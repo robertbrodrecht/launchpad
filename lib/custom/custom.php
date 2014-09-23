@@ -12,6 +12,27 @@
 function custom_launchpad_custom_post_types($post_types) {
 	$custom_post_types = array(
 		'page' => array(
+			'metaboxes' => array(
+				'test' => array(
+					'name' => 'Test',
+					'location' => 'normal',
+					'position' => 'default',
+					'fields' => array(
+						'date_test' => array(
+							'name' => 'Date Test',
+							'args' => array(
+								'type' => 'date'
+							)
+						),
+						'datetime_test' => array(
+							'name' => 'Date Test',
+							'args' => array(
+								'type' => 'datetime'
+							)
+						)
+					)
+				)
+			),
 			'flexible' => array(
 				'page_flexible' => array(
 					'name' => 'Page Flexible Content',
