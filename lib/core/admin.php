@@ -83,9 +83,6 @@ function launchpad_add_custom_mcs_styles($init_array) {
 	// Apply filters to allow the developer to change it.
 	$launchpad_mce_style_formats = apply_filters('launchpad_mce_style_formats', $launchpad_mce_style_formats);
 	
-	// Only keep the unique values.
-	$launchpad_mce_style_formats = array_unique($launchpad_mce_style_formats);
-	
 	// Apply the styles and return them.
 	$init_array['style_formats'] = json_encode($launchpad_mce_style_formats);
 	return $init_array;
@@ -742,7 +739,7 @@ function launchpad_admin_script_includes() {
 	wp_enqueue_style('launchpad_wp_admin_css');
 	
 	// Add admin.js.
-	wp_enqueue_script('launchpad_wp_admin_js', get_template_directory_uri() . '/js/admin.js');
+	wp_enqueue_script('launchpad_wp_admin_js', get_template_directory_uri() . '/js/admin-min.js');
 }
 if(is_admin()) {
 	add_action('admin_enqueue_scripts', 'launchpad_admin_script_includes');
@@ -895,7 +892,7 @@ function launchpad_auto_help_tab() {
 		// If there is a help section, add a help tab.
 		// NOTE: This means you can have help in your fields WITHOUT a help tab showing up.
 		// NOTE: You should document your post type! At least give an overview of what it is.
-		if($post_types[$post_type]['help']) {
+		if(isset($post_types[$post_type]['help'])) {
 			$screen->add_help_tab(
 				array(
 					'id' => $post_type . '-launchpad_help',
@@ -906,7 +903,7 @@ function launchpad_auto_help_tab() {
 		}
 		
 		// Generate help data for each metabox type if metaboxes exist.
-		if($post_types[$post_type]['metaboxes']) {
+		if(isset($post_types[$post_type]['metaboxes'])) {
 			
 			// Loop the metaboxes.
 			foreach($post_types[$post_type]['metaboxes'] as $metabox_key => $metabox) {
@@ -915,7 +912,7 @@ function launchpad_auto_help_tab() {
 				$content = '';
 				
 				// If the metbox itself has help, add it to the text.
-				if($metabox['help']) {
+				if(isset($metabox['help'])) {
 					$content .= $metabox['help'];
 				}
 				
@@ -927,7 +924,7 @@ function launchpad_auto_help_tab() {
 					
 					// If the field has help, add it to the string.
 					// We're using the name to help with with the output loop (key = name, value = help text).
-					if($field['help']) {
+					if(isset($field['help'])) {
 						$field_content[$field['name']] = $field['help'];
 					}
 					
@@ -966,7 +963,7 @@ function launchpad_auto_help_tab() {
 		}
 		
 		// Generate help data for each flexible content, if any exist.
-		if($post_types[$post_type]['flexible']) {
+		if(isset($post_types[$post_type]['flexible'])) {
 			// Loop the flexible content types.
 			foreach($post_types[$post_type]['flexible'] as $flex_key => $flex_details) {
 				
@@ -974,7 +971,7 @@ function launchpad_auto_help_tab() {
 				$content = '';
 				
 				// If the flexible content itself has help, add it to the text.
-				if($flex_details['help']) {
+				if(isset($flex_details['help'])) {
 					$content .= $flex_details['help'];
 				}
 				
@@ -993,7 +990,7 @@ function launchpad_auto_help_tab() {
 					foreach($module['fields'] as $field) {
 						
 						// If the fiel has help, add it to the module's help text temporary holding place.
-						if($field['help']) {
+						if(isset($field['help'])) {
 							$module_content[$module['name']]['fields'][$field['name']] = $field['help'];
 						}
 						
@@ -1019,7 +1016,7 @@ function launchpad_auto_help_tab() {
 						$content .= $module_help['help'];
 						
 						// If there is any help in the fields...
-						if($module_help['fields']) {
+						if(isset($module_help['fields'])) {
 							$content .= '<p>The following fields are available:</p><dl>';
 							
 							// Loop the fields and add each field's help.
