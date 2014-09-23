@@ -24,6 +24,7 @@ function launchpad_enable_media_upload() {
 			'jquery-ui-core',
 			'jquery-ui-tabs',
 			'jquery-ui-sortable',
+			'jquery-ui-datepicker',
 			'wp-color-picker',
 			'thickbox',
 			'media-upload'	
