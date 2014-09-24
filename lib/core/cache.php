@@ -122,7 +122,7 @@ function launchpad_cached($post_id, $type) {
 	
 	// If cache is disabled or the user is logged in, we don't cache.
 	if(!USE_CACHE || is_user_logged_in() || $launchpad_is_caching) {
-		if($site_options['cache_debug_comments']) {
+		if(isset($site_options['cache_debug_comments']) && $site_options['cache_debug_comments']) {
 			// Default reason.
 			$reason = 'caching is disabled.';
 			
@@ -149,7 +149,7 @@ function launchpad_cached($post_id, $type) {
 	// If the cache file exists and hasn't expired, send the cached output to the browser.
 	if(file_exists($cache) && time()-filemtime($cache) < USE_CACHE) {
 		readfile($cache);
-		if($site_options['cache_debug_comments']) {
+		if(isset($site_options['cache_debug_comments']) && $site_options['cache_debug_comments']) {
 			echo "\n";
 			echo '<!-- USED ' . (time()-filemtime($cache)) . ' SECOND OLD CACHE @ ' . $cache . ' -->';
 			echo "\n\n";
@@ -183,7 +183,7 @@ function launchpad_cache($post_id, $type) {
 	
 	// If cache is disabled or the user is logged in, we don't cache.
 	if(!USE_CACHE || is_user_logged_in() || $launchpad_is_caching != $cache) {
-		if($site_options['cache_debug_comments']) {
+		if(isset($site_options['cache_debug_comments']) && $site_options['cache_debug_comments']) {
 			// Default reason.
 			$reason = 'caching is disabled.';
 			

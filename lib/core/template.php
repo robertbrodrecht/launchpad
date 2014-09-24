@@ -164,6 +164,8 @@ function launchpad_title($echo = false) {
 function launchpad_excerpt($max_words = 32, $echo = false, $id = false) {
 	global $post;
 	
+	$tmp_post = false;
+	
 	// If an ID was passed, get the individual post.
 	if($id !== false && (int) $id) {
 		$tmp_post = get_post((int) $id);
@@ -219,6 +221,8 @@ function launchpad_excerpt($max_words = 32, $echo = false, $id = false) {
  */
 function launchpad_seo_excerpt($max_words = 32, $echo = false, $id = false) {
 	global $post;
+	
+	$tmp_post = false;
 	
 	// If an ID was passed, get the individual post.
 	if($id !== false && (int) $id) {
@@ -321,10 +325,10 @@ function launchpad_set_page_defines() {
 	global $site_options;
 	
 	/** Google Analytics ID. */
-	define('GA_ID', $site_options['google_analytics_id']);
+	define('GA_ID', isset($site_options['google_analytics_id']) ?  $site_options['google_analytics_id'] : '');
 
 	/** Whether to use cache. If things get weird, turn it off by setting the value to 0. */
-	define('USE_CACHE', (int) $site_options['cache_timeout']);
+	define('USE_CACHE', isset($site_options['cache_timeout']) ? (int) $site_options['cache_timeout'] : 0);
 }
 add_action('template_redirect', 'launchpad_set_page_defines');
 

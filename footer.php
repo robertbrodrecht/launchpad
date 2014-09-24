@@ -20,7 +20,7 @@ global $site_options;
 				</nav>
 			</section>
 			<section class="vcard">
-				<?php if($site_options['organization_name']) { ?>
+				<?php if(isset($site_options['organization_name']) && $site_options['organization_name']) { ?>
 				<h1 class="fn"><?php echo $site_options['organization_name']; ?></h1>
 
 				<?php } ?>
@@ -28,24 +28,24 @@ global $site_options;
 				
 				$adr = '';
 				
-				if($site_options['organization_address']) {
+				if(isset($site_options['organization_address']) && $site_options['organization_address']) {
 					$adr .= '<span class="street-address">' . $site_options['organization_address'] .'</span><br>';
 				}
 				
-				if($site_options['organization_city']) {
+				if(isset($site_options['organization_city']) && $site_options['organization_city']) {
 					$adr .= '<span class="locality">' . $site_options['organization_city'] .'</span>';
 				}
 				
-				if($site_options['organization_state']) {
-					if($site_options['organization_city']) {
+				if(isset($site_options['organization_state']) && $site_options['organization_state']) {
+					if(isset($site_options['organization_city']) && $site_options['organization_city']) {
 						$adr .= ', ';
 					}
 					
 					$adr .= '<span class="region">' . $site_options['organization_state'] .'</span><br>';
 				}
 				
-				if($site_options['organization_zip']) {
-					if($site_options['organization_city'] && !$site_options['organization_state']) {
+				if(isset($site_options['organization_zip']) && $site_options['organization_zip']) {
+					if(isset($site_options['organization_city']) && $site_options['organization_city'] && (!isset($site_options['organization_state']) || !$site_options['organization_state'])) {
 						$adr .= ', ';
 					}
 					
@@ -65,11 +65,11 @@ global $site_options;
 				
 				$phone = '';
 				
-				if($site_options['organization_phone']) {
+				if(isset($site_options['organization_phone']) && $site_options['organization_phone']) {
 					$phone .= '<span class="tel"><span class="type">Phone</span> ' .  format_phone($site_options['organization_phone']) . '</span><br>';
 				}
 				
-				if($site_options['organization_fax']) {
+				if(isset($site_options['organization_fax']) && $site_options['organization_fax']) {
 					$phone .= '<span class="fax"><span class="type">Phone</span> ' .  format_phone($site_options['organization_fax']) . '</span><br>';
 				}
 				
@@ -86,11 +86,11 @@ global $site_options;
 				
 				$phone = '';
 				
-				if($site_options['organization_phone']) {
+				if(isset($site_options['organization_phone']) && $site_options['organization_phone']) {
 					$phone .= '<span class="tel"><span class="type">Phone</span> ' .  format_phone($site_options['organization_phone']) . '</span><br>';
 				}
 				
-				if($site_options['organization_fax']) {
+				if(isset($site_options['organization_fax']) && $site_options['organization_fax']) {
 					$phone .= '<span class="fax"><span class="type">Phone</span> ' .  format_phone($site_options['organization_fax']) . '</span><br>';
 				}
 				
@@ -105,7 +105,7 @@ global $site_options;
 				$social = '';
 				
 				foreach($social_links as $social_title => $social_key) {
-					if($site_options[$social_key]) {
+					if(isset($site_options[$social_key]) && $site_options[$social_key]) {
 						$social .= '<li><a href="' . $site_options[$social_key] . '" class="url" rel="me" target="_blank">' . $social_title . '</a></li>';
 					}
 				}

@@ -10,12 +10,12 @@
 global $site_options;
 
 $ajax = '';
-if($site_options['ajax_page_loads'] === true) {
+if(isset($site_options['ajax_page_loads']) && $site_options['ajax_page_loads'] === true) {
 	$ajax = 'true';
 }
 
 $offline = '';
-if($site_options['offline_support'] === true) {
+if(isset($site_options['offline_support']) && $site_options['offline_support'] === true) {
 	$offline = '/manifest.appcache';
 }
 
@@ -74,11 +74,11 @@ $excerpt = launchpad_seo_excerpt();
 		}
 		
 		?>
-		<?php if($site_options['fb_app_id']) { ?>
+		<?php if(isset($site_options['fb_app_id']) && $site_options['fb_app_id']) { ?>
 		
 		<meta property="fb:app_id" content="<?php echo $site_options['fb_app_id'] ?>">
 		<?php } ?>
-		<?php if($site_options['fb_admin_id']) { ?>
+		<?php if(isset($site_options['fb_admin_id']) && $site_options['fb_admin_id']) { ?>
 		<?php foreach(explode(',', $site_options['fb_admin_id']) as $fb_admin_id) { ?>
 		
 		<meta property="fb:admins" content="<?php echo trim($fb_admin_id) ?>">
@@ -145,7 +145,7 @@ $excerpt = launchpad_seo_excerpt();
 		}
 		
 		?>
-		<?php if($site_options['twitter_card_username']) { ?>
+		<?php if(isset($site_options['twitter_card_username']) && $site_options['twitter_card_username']) { ?>
 		
 		<meta property="twitter:site" content="@<?php echo $site_options['twitter_card_username'] ?>">
 		<?php } ?>
