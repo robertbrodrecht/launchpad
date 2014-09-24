@@ -303,6 +303,8 @@ The following field types are available:
 	<dd>A complex field to contain street address, suite number, city, state, and zip with automatic back-end geocoding if you have provided a Google Maps API key in Launchpad Setting.</dd>
 	<dt>checkbox</dt>
 	<dd>An HTML checkbox field.</dd>
+	<dt>date</dt>
+	<dd>An HTML type="date" that reveals a jQuery date picker.</dd>
 	<dt>file</dt>
 	<dd>A WordPress file picker to select a single file.</dd>
 	<dt>menu</dt>
