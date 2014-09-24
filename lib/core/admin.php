@@ -481,12 +481,24 @@ function launchpad_site_options_validate($input) {
 	
 	// Loop them, applying any needed validation to the POST'd values.
 	foreach($settings as $key => $setting) {
-		if($setting['args']['type'] === 'checkbox') {
-			if($input[$key] == '') {
-				$input[$key] = false;
-			} else {
-				$input[$key] = true;
-			}
+		switch($setting['args']['type']) {
+			case 'date':
+				if($input[$key] != '') {
+					$input[$key] = date('m/d/Y', strtotime($input[$key]));
+				}
+			break;
+			case 'datetime':
+				if($input[$key] != '') {
+					$input[$key] = date('m/d/Y g:i a', strtotime($input[$key]));
+				}
+			break;
+			case 'checkbox':
+				if($input[$key] == '') {
+					$input[$key] = false;
+				} else {
+					$input[$key] = true;
+				}
+			break;
 		}
 		
 		$site_options[$key] = $input[$key];

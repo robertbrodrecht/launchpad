@@ -1040,11 +1040,13 @@ function launchpad_save_post_data($post_id) {
 			if(isset($fields[$meta_key])) {
 				switch($fields[$meta_key]['args']['type']) {
 					case 'date':
+						$meta_value = trim($meta_value);
 						if($meta_value !== '') {
 							$meta_value = date('Y-m-d', strtotime($meta_value));
 						}
 					break;
 					case 'datetime':
+						$meta_value = trim($meta_value);
 						if($meta_value !== '') {
 							$meta_value = date('Y-m-d H:i:s', strtotime($meta_value));
 						}
