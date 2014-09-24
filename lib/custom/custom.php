@@ -22,7 +22,7 @@ function custom_launchpad_custom_post_types($post_types) {
 					// Use launchpad_modify_default_flexible_modules filter to modify the defaults.
 					'modules' => launchpad_get_default_flexible_modules()
 				)
-			),
+			)
 		)
 	);
 	return array_merge($post_types, $custom_post_types);
