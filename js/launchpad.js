@@ -110,7 +110,7 @@
 	 */
 	function initHeightMatch() {
 		function heightMatch() {
-			$('[data-height-match-group]').css('height', 'auto').each(
+			$('[data-height-match-group]').each(
 					function() {
 						var me = $(this),
 							height = 0,
@@ -136,7 +136,7 @@
 											height = h;
 										}
 									}
-								).add(me).css('height', height);
+								).css('height', height);
 						} else {
 							me.children('[data-height-match]').css('height', 'auto');
 						}
