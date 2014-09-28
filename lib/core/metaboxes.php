@@ -24,7 +24,6 @@ function launchpad_enable_media_upload() {
 			'jquery-ui-core',
 			'jquery-ui-tabs',
 			'jquery-ui-sortable',
-			'jquery-ui-datepicker',
 			'wp-color-picker',
 			'thickbox',
 			'media-upload'	
@@ -70,7 +69,7 @@ function launchpad_create_select_options($options, $values) {
 		
 		// Otherwise, create the individual options.
 		} else {
-			$ret .= '<option value="' . $option_value . '"' . (is_array($values) ? (in_array($option_value, $values) ? ' selected="selected"' : '') : ($values == $option_value ? ' selected="selected"' : '')) . '>' . $option_text . '</option>';
+			$ret .= '<option value="' . htmlentities($option_value) . '"' . (is_array($values) ? (in_array($option_value, $values) ? ' selected="selected"' : '') : ($values == $option_value ? ' selected="selected"' : '')) . '>' . htmlentities($option_text) . '</option>';
 		}
 	}
 	return $ret;
@@ -115,53 +114,6 @@ function launchpad_render_field_checkbox($field_output_name, $field_output_id = 
 
 
 /**
- * Render A Generic Input
- * 
- * @param		string $field_output_name The field's "name" attribute.
- * @param		string $field_output_id The field's "id" attribute.
- * @param		array $args The arguments on the field.
- * @param		bool $val Whether the checkbox is checked.
- * @param		string $class A class to use on the label if this is a subfield.
- * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
- * @see			launchpad_render_form_field
- * @since		1.0
- */
-function launchpad_render_field_generic($field_output_name, $field_output_id = '', $args, $val = false, $class = '', $subfield = false) {
-	$field_output_name = trim($field_output_name);
-	$field_output_id = trim($field_output_id);
-	if(!$field_output_name) {
-		return;
-	}
-	
-	if(!$field_output_id) {
-		$field_output_id = $field_output_name;
-	}
-	
-	// Text is pretty simple.  Just output the field.
-	if($subfield) {
-		echo '<label class="' . $class . '">' . $subfield . ' ';
-	}
-	
-	if($val) {
-		switch($args['type']) {
-			case 'date':
-				$val = date('m/d/Y', strtotime($val));
-			break;
-			case 'datetime':
-				$val = date('m/d/Y g:i a', strtotime($val));
-			break;
-		}
-	}
-	
-	echo '<input type="' . $args['type'] . '" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
-	if($subfield) {
-		echo '</label>';
-	}
-}
-
-
-
-/**
  * Render A Input Text
  * 
  * @param		string $field_output_name The field's "name" attribute.
@@ -188,7 +140,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . htmlentities($val) . '" class="regular-text"' . ((int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -222,7 +174,7 @@ function launchpad_render_field_textarea($field_output_name, $field_output_id = 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . ((int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>' . $val . '</textarea>';
+	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . ((int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>' . html_entity_decode($val) . '</textarea>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -758,6 +710,12 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
 		$field_output_id = $field_output_name;
 	}
 	
+	if($val) {
+		foreach($val as &$value) {
+			$value = htmlentities($value);
+		}
+	}
+	
 	echo '<fieldset class="launchpad-address launchpad-metabox-fieldset"><legend>' . ($args['label'] ? $args['label'] : 'Address Details') . '</legend>';
 	
 	echo '<div class="launchpad-google-map-embed">';
@@ -816,12 +774,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	// Otherwise, we're dealing with post meta.
 	} else {
 		// Set the value to the the args value.
-		if(isset($args['value'])) {
-			$val = $args['value'];
-		} else {
-			$val = false;
-		}
-		
+		$val = $args['value'];
 		// If there is no value and there is a default, set the default as the value.
 		if(!$val && $val !== '' && isset($args['default'])) {
 			$val = $args['default'];
@@ -847,7 +800,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	}
 	
 	// If there is an ID specified for a field, set it as the @id for the field.
-	if(isset($args['id'])) {
+	if($args['id']) {
 		$field_output_id = $args['id'];
 	
 	// Otherwise, fallback to using the @name as the @id.
@@ -860,9 +813,6 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	
 	// Determine how to handle each field based on the type of field it is.
 	switch($args['type']) {
-		default:
-			launchpad_render_field_generic($field_output_name, $field_output_id, $args, $val, $class, $subfield);
-		break;
 		case 'checkbox':
 			launchpad_render_field_checkbox($field_output_name, $field_output_id, $val, $class, $subfield);
 		break;
@@ -1003,17 +953,6 @@ if(is_admin()) {
 function launchpad_save_post_data($post_id) {
 	global $site_options;
 	
-	$fields = array();
-	
-	$post_types = launchpad_get_post_types();
-	$post_info = get_post($post_id);
-	
-	if(isset($post_types[$post_info->post_type]) && isset($post_types[$post_info->post_type]['metaboxes'])) {
-		foreach($post_types[$post_info->post_type]['metaboxes'] as $metabox) {
-			$fields = array_merge($fields, $metabox['fields']);
-		}
-	}
-	
 	// Touch the API file to reset the appcache.
 	// This helps avoid confusing issues with time zones.
 	touch(launchpad_get_cache_file(), time(), time());
@@ -1036,24 +975,6 @@ function launchpad_save_post_data($post_id) {
 		
 	// Save each meta value.
 	foreach($_POST['launchpad_meta'] as $meta_key => $meta_value) {
-		foreach($fields as $field) {
-			if(isset($fields[$meta_key])) {
-				switch($fields[$meta_key]['args']['type']) {
-					case 'date':
-						$meta_value = trim($meta_value);
-						if($meta_value !== '') {
-							$meta_value = date('Y-m-d', strtotime($meta_value));
-						}
-					break;
-					case 'datetime':
-						$meta_value = trim($meta_value);
-						if($meta_value !== '') {
-							$meta_value = date('Y-m-d H:i:s', strtotime($meta_value));
-						}
-					break;
-				}
-			}
-		}
 		update_post_meta($post_id, $meta_key, $meta_value);
 	}
 }
