@@ -24,6 +24,8 @@ To Do For 1.1
 Future Wants
 ============
 
+* Replace Media?
+* Regen Thumbnails?
 * Codex review.
 * Decide About:
   * More child theme work.
