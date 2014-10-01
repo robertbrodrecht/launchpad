@@ -800,13 +800,15 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	}
 	
 	// If there is an ID specified for a field, set it as the @id for the field.
-	if($args['id']) {
+	if(isset($args['id'])) {
 		$field_output_id = $args['id'];
 	
 	// Otherwise, fallback to using the @name as the @id.
 	} else {
 		$field_output_id = $args['name'];
 	}
+	
+	
 	
 	// Sanitize it just in case.
 	$field_output_id = sanitize_title($field_output_id);
@@ -1025,6 +1027,7 @@ function launchpad_meta_box_handler($post, $args) {
 	
 	// Loop the fields that go into the metabox.
 	foreach($args['args']['fields'] as $k => $v) {
+		
 		$add_metabox_field = true;
 		if(isset($v['limit'])) {
 			$add_metabox_field = $v['limit']($post);
@@ -1082,8 +1085,9 @@ function launchpad_meta_box_handler($post, $args) {
 			
 			// If there is a set value, override the developer specified value (if any).
 			// This is used in the render form field output.
-			if($post->$k && get_post_meta($post->ID, $k)) {
-				$v['args']['value'] = get_post_meta($post->ID, $k, true);
+			$tmp_meta_value = get_post_meta($post->ID, $k, true);
+			if($tmp_meta_value) {
+				$v['args']['value'] = $tmp_meta_value;
 			}
 			
 			// If this is not a checkbox, show the name before the field.
