@@ -873,10 +873,24 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			launchpad_render_field_textarea($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'select':
-			launchpad_render_field_select($field_output_name, $field_output_id, $args['options'], $val, $class, $subfield);
+			launchpad_render_field_select(
+				$field_output_name, 
+				$field_output_id, 
+				isset($args['options']) ? $args['options'] : array(), 
+				$val, 
+				$class, 
+				$subfield
+			);
 		break;
 		case 'selectmulti':
-			launchpad_render_field_selectmulti($field_output_name, $field_output_id, $args['options'], $val, $class, $subfield);
+			launchpad_render_field_selectmulti(
+				$field_output_name, 
+				$field_output_id, 
+				isset($args['options']) ? $args['options'] : array(), 
+				$val,
+				$class,
+				$subfield
+			);
 		break;
 		case 'file':
 			launchpad_render_field_file($field_output_name, $field_output_id, $val, $class, $subfield);
@@ -888,13 +902,29 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			launchpad_render_field_menu($field_output_name, $field_output_id, $val, $class, $subfield);
 		break;
 		case 'relationship':
-			launchpad_render_field_relationship($field_output_name, $args['post_type'], $args['limit'], $val);
+			launchpad_render_field_relationship(
+				$field_output_name, 
+				isset($args['post_type']) ? $args['post_type'] : 'any', 
+				isset($args['limit']) ? $args['limit'] : -1, 
+				$val
+			);
 		break;
 		case 'taxonomy':
-			launchpad_render_field_taxonomy($field_output_name, $args['taxonomy'], $args['multiple'], $val);
+			launchpad_render_field_taxonomy(
+				$field_output_name, 
+				isset($args['taxonomy']) ? $args['taxonomy'] : 'category', 
+				isset($args['multiple']) ? $args['multiple'] : false, 
+				$val
+			);
 		break;
 		case 'repeater':
-			launchpad_render_field_repeater($field_output_name, $args['subfields'], $args['label'], $field_prefix, $val);
+			launchpad_render_field_repeater(
+				$field_output_name, 
+				isset($args['subfields']) ? $args['subfields'] : array(), 
+				isset($args['label']) ? $args['label'] : 'Item', 
+				$field_prefix, 
+				$val
+			);
 		break;
 		case 'address':
 			launchpad_render_field_address($field_output_name, $field_output_id, $args, $val, $class, $subfield);
@@ -1222,7 +1252,7 @@ function launchpad_flexible_handler($post, $args) {
 							}
 						}
 						if($add_metabox) {
-							echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '" title="' . sanitize_text_field($v['help']) . '"><span class="' . ($v['icon'] ? $v['icon'] : 'dashicons dashicons-plus-alt') . '"></span> ' . $v['name'] . '</a></li>';
+							echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '" title="' . (isset($v['help']) ? sanitize_text_field($v['help']) : '') . '"><span class="' . (isset($v['icon']) && $v['icon'] ? $v['icon'] : 'dashicons dashicons-plus-alt') . '"></span> ' . $v['name'] . '</a></li>';
 						}
 					}
 					
@@ -1443,7 +1473,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
 	
 	// If there are help details for the module, include them here.
-	if($details['help']) {
+	if(isset($details['help'])) {
 		?>
 		<div class="launchpad-inline-help">
 			<span>?</span>
@@ -1460,97 +1490,103 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	$flex_uid = preg_replace('/[^A-Za-z0-9\-\_]/', '', $field_name . '-' . uniqid());
 	
 	// Loop the field details.
-	foreach($details['fields'] as $sub_field_name => $field) {
-		// Assume we want a label.
-		$use_label = true;
-		
-		// We don't want a label for these complex fields.
-		switch($field['args']['type']) {
-			case 'wysiwyg':
-			case 'repeater':
-				$use_label = false;
-			break;
-		}
-		
-		// Generate a unique ID for this field.
-		$id = preg_replace('/[^A-Za-z0-9]/', '', $field_name . '' . $sub_field_name . '' . uniqid());
-		
-		// Print the field container.
-		echo '<div class="launchpad-metabox-field">';
-		
-		// Get the help information for this field type.
-		$generic_help = launchpad_get_field_help($field['args']['type']);
-		
-		// If the field doesn't have a help key, create it.
-		if(!isset($field['help'])) {
-			$field['help'] = '';
-		}
-		
-		// Append generic help.
-		$field['help'] .= $generic_help;
-		
-		// Set a temporary variable for help content.
-		$help = $field['help'];
-		
-		// If the field is a repeater, we have to get the help info out of the sub-fields.
-		if($field['args']['type'] === 'repeater') {
-			$help .= '<p>Available fields:</p><dl>';
+	if(isset($details['fields'])) {
+		foreach($details['fields'] as $sub_field_name => $field) {
+			// Assume we want a label.
+			$use_label = true;
 			
-			// Loop the sub fields and build the help.
-			foreach($field['args']['subfields'] as $subfield_detail) {
-				$help .= '<dt>' . $subfield_detail['name'] . '</dt>';
-				if($subfield_detail['help']) {
-					$help .= '<dd>' . $subfield_detail['help'] . '</dd>';
-				} else {
-					$help .= '<dd><p>No information provided.</p></dd>';					
+			// We don't want a label for these complex fields.
+			switch($field['args']['type']) {
+				case 'wysiwyg':
+				case 'repeater':
+					$use_label = false;
+				break;
+			}
+			
+			// Generate a unique ID for this field.
+			$id = preg_replace('/[^A-Za-z0-9]/', '', $field_name . '' . $sub_field_name . '' . uniqid());
+			
+			// Print the field container.
+			echo '<div class="launchpad-metabox-field">';
+			
+			// Get the help information for this field type.
+			$generic_help = launchpad_get_field_help($field['args']['type']);
+			
+			// If the field doesn't have a help key, create it.
+			if(!isset($field['help'])) {
+				$field['help'] = '';
+			}
+			
+			// Append generic help.
+			$field['help'] .= $generic_help;
+			
+			// Set a temporary variable for help content.
+			$help = $field['help'];
+			
+			// If the field is a repeater, we have to get the help info out of the sub-fields.
+			if($field['args']['type'] === 'repeater') {
+				if(isset($field['args']['subfields'])) {
+					$help .= '<p>Available fields:</p><dl>';
+					
+					// Loop the sub fields and build the help.
+					foreach($field['args']['subfields'] as $subfield_detail) {
+						$help .= '<dt>' . $subfield_detail['name'] . '</dt>';
+						if(isset($subfield_detail['help'])) {
+							$help .= '<dd>' . $subfield_detail['help'] . '</dd>';
+						} else {
+							$help .= '<dd><p>No information provided.</p></dd>';					
+						}
+					}
+					$help .= '</dl>';
 				}
 			}
-			$help .= '</dl>';
+			
+			// If we managed to create any help, create a help tooltip.
+			if($help) {
+				?>
+				<div class="launchpad-inline-help">
+					<span>?</span>
+					<div><?php echo $help; ?></div>
+				</div>
+				<?php
+			}
+			
+			// If we need a label, print it for the field.
+			if($use_label && $field['args']['type'] !== 'checkbox') {
+				echo '<label for="' . $id . '">' . $field['name'] . '</label>';
+			} else if($use_label) {
+				echo '<label for="' . $id . '">';
+			}
+			
+			// If any values were passed, set them as an argument so they will be populated.
+			if($values) {
+				$field['args']['value'] = $values[$sub_field_name];
+			}
+			
+			// Render the form field.
+			launchpad_render_form_field(
+					array_merge(
+						$field['args'], 
+						array(
+							'name' => 'launchpad_meta[' . $type . '][' . $flex_uid . '][' . $field_name . '][' . $sub_field_name . ']',
+							'id' => $id,
+							'label' => $field['name']
+						)
+					), 
+					false, 
+					'launchpad_flexible'
+				);
+			
+			if($use_label && $field['args']['type'] === 'checkbox') {
+				echo $field['name'] . '</label>';
+			}
+			
+			// Close the field container.
+			echo '</div>';
+			
 		}
-		
-		// If we managed to create any help, create a help tooltip.
-		if($help) {
-			?>
-			<div class="launchpad-inline-help">
-				<span>?</span>
-				<div><?php echo $help; ?></div>
-			</div>
-			<?php
-		}
-		
-		// If we need a label, print it for the field.
-		if($use_label && $field['args']['type'] !== 'checkbox') {
-			echo '<label for="' . $id . '">' . $field['name'] . '</label>';
-		} else if($use_label) {
-			echo '<label for="' . $id . '">';
-		}
-		
-		// If any values were passed, set them as an argument so they will be populated.
-		if($values) {
-			$field['args']['value'] = $values[$sub_field_name];
-		}
-		
-		// Render the form field.
-		launchpad_render_form_field(
-				array_merge(
-					$field['args'], 
-					array(
-						'name' => 'launchpad_meta[' . $type . '][' . $flex_uid . '][' . $field_name . '][' . $sub_field_name . ']',
-						'id' => $id,
-						'label' => $field['name']
-					)
-				), 
-				false, 
-				'launchpad_flexible'
-			);
-		
-		if($use_label && $field['args']['type'] === 'checkbox') {
-			echo $field['name'] . '</label>';
-		}
-		
-		// Close the field container.
-		echo '</div>';
-		
+	} else {
+		echo '<input type="hidden" name="' . $field_name . '"><div class="launchpad-metabox-field">No fields defined.  An empty placeholder has been added.</div>';
 	}
 	
 	// Close the module container.

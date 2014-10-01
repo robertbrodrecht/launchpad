@@ -60,7 +60,11 @@ function launchpad_get_failures($username) {
 	global $launchpad_login_failures, $site_options;
 	
 	// Local value for lockout time in hours.
-	$lockout_time = $site_options['lockout_time'];
+	if(isset($site_options['lockout_time'])) {
+		$lockout_time = $site_options['lockout_time'];
+	} else {
+		$lockout_time = 1;
+	}
 	if(!$lockout_time) {
 		$lockout_time = 1;
 	}
@@ -111,7 +115,7 @@ function launchpad_login_failed($username) {
 	$launchpad_login_failures++;
 	
 	// If the user has exhausted the number of login failures, don't bother logging it.
-	if($site_options['allowed_failures']-$launchpad_login_failures < 0) {
+	if(!isset($site_options['allowed_failures']) || $site_options['allowed_failures']-$launchpad_login_failures < 0) {
 		return;
 	}
 	

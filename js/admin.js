@@ -131,20 +131,28 @@ jQuery(document).ready(
 					master = container.children().first().clone(),
 					master_replace_with = 'launchpad-' + new Date().getTime() + '-repeater',
 					visualeditors;
+					
+				console.log(master);
 				
-				master.find('[name], button[data-for]').each(
+				master.find('[name], [data-field-name], button[data-for]').each(
 					function() {
 						var me = $(this);
+						
 						if(me.is('[name]')) {
 							me.attr('name', me.attr('name').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
 							if(me.attr('id')) {
 								me.attr('id', me.attr('id').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
 							}
 						}
+						
 						if(me.is('button[data-for]')) {
 							me.attr('data-for', me.attr('data-for').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
 							me.parent().find('a.launchpad-delete-file').remove();
 							me.parent().find('input[type=hidden]').get(0).value = '';
+						}
+						
+						if(me.is('[data-field-name]')) {
+							me.attr('data-field-name', me.attr('data-field-name').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
 						}
 						
 						if(me.is('input:not(checkbox)')) {
@@ -155,6 +163,11 @@ jQuery(document).ready(
 						}
 					}
 				);
+				
+				// Replace inner HTML
+				master.find('.launchpad-relationship-items').html('');
+				
+				console.log(master);
 				
 				container.append(master);
 				
@@ -177,7 +190,7 @@ jQuery(document).ready(
 							editor.addClass('launchpad-editor-loading');
 							
 							$.get(
-								'/api/?action=get_editor&id=' + editor_current_id + '&name=' + me.attr('name'),
+								'/wp-admin/admin-ajax.php?action=get_editor&id=' + editor_current_id + '&name=' + me.attr('name'),
 								function(data) {
 									data = $(data);
 									editor.replaceWith(data);
@@ -209,7 +222,7 @@ jQuery(document).ready(
 				var me = $(this);
 				e.preventDefault();
 				$.get(
-					'/api/?action=get_flexible_field&type=' + me.data('launchpad-flexible-type') + '&name=' + me.data('launchpad-flexible-name') + '&id=' + me.data('launchpad-flexible-post-id'),
+					'/wp-admin/admin-ajax.php?action=get_flexible_field&type=' + me.data('launchpad-flexible-type') + '&name=' + me.data('launchpad-flexible-name') + '&id=' + me.data('launchpad-flexible-post-id'),
 					function(data) {
 						var visualeditors;
 						data = $(data);
@@ -246,7 +259,7 @@ jQuery(document).ready(
 				}
 				
 				$.get(
-					'/api/?action=search_posts&post_type=' + container.data('post-type') + '&terms=' + me.val(),
+					'/wp-admin/admin-ajax.php?action=search_posts&post_type=' + container.data('post-type') + '&terms=' + me.val(),
 					function(data) {
 						listing.html('');
 						$.each(
@@ -324,7 +337,7 @@ jQuery(document).ready(
 				
 				if(addr) {
 					$.post(
-						'/api/',
+						'/wp-admin/admin-ajax.php',
 						{action: 'geocode', 'address': addr},
 						function(data) {
 							$('input', fs).each(

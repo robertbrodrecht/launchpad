@@ -169,7 +169,7 @@ function launchpad_seo_meta_box_handler($post, $args) {
 	if($post->post_status === 'publish') {
 		
 		// Grab the full page.
-		$full_content = file_get_contents(get_permalink($post->ID));
+		$full_content = @file_get_contents(get_permalink($post->ID));
 		
 		// Grab the title title from the page.
 		preg_match_all('|<title>(.*?)</title>|s', $full_content, $title);

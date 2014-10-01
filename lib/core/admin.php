@@ -996,23 +996,25 @@ function launchpad_auto_help_tab() {
 					// If any exists, create a module-name key with the module help 
 					// text and an empty array for individual field help.
 					// The name / value stuff, again, is used for easier output in a loop.
-					$module_content[$module['name']] = array('help' => ($module['help'] ? $module['help'] : ''), 'fields' => array());
+					$module_content[$module['name']] = array('help' => (isset($module['help']) ? $module['help'] : ''), 'fields' => array());
 					
 					// Loop the fields.
-					foreach($module['fields'] as $field) {
-						
-						// If the fiel has help, add it to the module's help text temporary holding place.
-						if(isset($field['help'])) {
-							$module_content[$module['name']]['fields'][$field['name']] = $field['help'];
-						}
-						
-						// Try to get generic help about the field type.
-						// Some of the more complex fields need some generic documentation.
-						$generic_help = launchpad_get_field_help($field['args']['type']);
-						
-						// If there is generic help, add it to the field's help.						
-						if($generic_help) {
-							$module_content[$module['name']]['fields'][$field['name']] .= $generic_help;
+					if(isset($module['fields'])) {
+						foreach($module['fields'] as $field) {
+							
+							// If the fiel has help, add it to the module's help text temporary holding place.
+							if(isset($field['help'])) {
+								$module_content[$module['name']]['fields'][$field['name']] = $field['help'];
+							}
+							
+							// Try to get generic help about the field type.
+							// Some of the more complex fields need some generic documentation.
+							$generic_help = launchpad_get_field_help($field['args']['type']);
+							
+							// If there is generic help, add it to the field's help.						
+							if($generic_help) {
+								$module_content[$module['name']]['fields'][$field['name']] .= $generic_help;
+							}
 						}
 					}
 				}

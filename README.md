@@ -14,22 +14,24 @@ For a detailed walk through, check out the [Codex](_codex/index.md).
 
 For the long feature list that was formerly here, see the [Codex Features List](_codex/features.md).
 
-To Do For 1.1
+To Do For 1.3
 =============
 
 * Flexible content modules and field types.
   * What other modules should be built-in?
   * Other Field Types
+* Filters to relationship field, etc.
+* Fix PHP notices.
+* Codex review.
+* Resolive remaining issues in Github.
 
 Future Wants
 ============
 
 * Replace Media?
 * Regen Thumbnails?
-* Codex review.
-* Decide About:
-  * More child theme work.
-  * Figuring out any multi-site issues.
+* Continue child theme optimizations.
+* Figuring out any multi-site issues.
 * Continue improving flexible content if more needs have arisen.
 * Add PDF generating library and support for /pdf/ like /download/.
 * Research OCR for better alt tag creation.
