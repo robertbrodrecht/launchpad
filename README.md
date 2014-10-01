@@ -20,16 +20,22 @@ To Do For 1.3
 * Flexible content modules and field types.
   * What other modules should be built-in?
   * Other Field Types
-* Filters to relationship field, etc.
-* Fix PHP notices.
+* Improve Filters (e.g. add to relationship field results, etc.)
+* Squash as many PHP notices as you can.
 * Codex review.
-* Resolive remaining issues in Github.
 
 Future Wants
 ============
 
-* Replace Media?
 * Regen Thumbnails?
+	* Add menu item under tools with a button to start.
+	* API call to get media list, probably paginated.
+	* API call to regen single thumbnail
+		* get_attached_file
+		* update_attached_file?
+		* delete all but original
+		* wp_generate_attachment_metadata
+* Replace Media?
 * Continue child theme optimizations.
 * Figuring out any multi-site issues.
 * Continue improving flexible content if more needs have arisen.
