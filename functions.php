@@ -38,3 +38,5 @@ locate_template('lib/core/template.php', true, true);
 locate_template('lib/core/utilities.php', true, true);
 /** Code for custom API calls. */
 locate_template('lib/core/api.php', true, true);
+/** Code for tools like regen thumbnails. */
+locate_template('lib/core/tools.php', true, true);

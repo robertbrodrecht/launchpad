@@ -84,6 +84,18 @@ jQuery(document).ready(
 		// Do admin stuff.
 		$(document.body).on(
 			'click',
+			'#start-regen',
+			function() {
+				$.get(
+					'/wp-admin/admin-ajax.php?action=get_attachment_list',
+					function(data) {
+						console.log(data);
+					}
+				);
+			}
+		);
+		$(document.body).on(
+			'click',
 			'.launchpad-file-button',
 			function(e) {
 				var me = $(this),
