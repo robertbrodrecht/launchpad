@@ -77,7 +77,9 @@ jQuery(document).ready(
 		
 		makeSortable();
 		
-		$("[type=date]").datepicker();
+		if($("[type=date]").length) {
+			$("[type=date]").datepicker();
+		}
 	
 		// Do admin stuff.
 		$(document.body).on(

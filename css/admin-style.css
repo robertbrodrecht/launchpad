@@ -464,29 +464,33 @@ small.launchpad-inline {
 .launchpad-flexible-metabox-container.closed .handlediv::before {
   content: '\f140' !important;
 }
-/* line 454, ../sass/admin-style.scss */
+/* line 453, ../sass/admin-style.scss */
+.launchpad-flexible-metabox-container.closed .launchpad-inline-help {
+  visibility: hidden;
+}
+/* line 458, ../sass/admin-style.scss */
 .launchpad-flexible-metabox-container > .launchpad-inline-help {
   display: inline-block;
   float: left;
   margin-right: 1em;
   margin-top: .75em;
 }
-/* line 460, ../sass/admin-style.scss */
+/* line 464, ../sass/admin-style.scss */
 .launchpad-flexible-metabox-container > .launchpad-inline-help div {
   left: 0px;
   right: auto;
 }
-/* line 464, ../sass/admin-style.scss */
+/* line 468, ../sass/admin-style.scss */
 .launchpad-flexible-metabox-container > .launchpad-inline-help div:before {
   left: 12px;
   right: auto;
 }
-/* line 469, ../sass/admin-style.scss */
+/* line 473, ../sass/admin-style.scss */
 .launchpad-flexible-metabox-container > .launchpad-inline-help div:after {
   left: 13px;
   right: auto;
 }
-/* line 476, ../sass/admin-style.scss */
+/* line 480, ../sass/admin-style.scss */
 .launchpad-flexible-metabox-container .launchpad-flexible-metabox-close {
   color: inherit;
   float: right;
@@ -497,75 +501,75 @@ small.launchpad-inline {
   text-decoration: none;
   width: 2em;
 }
-/* line 487, ../sass/admin-style.scss */
+/* line 491, ../sass/admin-style.scss */
 .launchpad-flexible-metabox-container h3 {
   margin-bottom: 3em;
 }
-/* line 491, ../sass/admin-style.scss */
+/* line 495, ../sass/admin-style.scss */
 .launchpad-flexible-metabox-container .launchpad-metabox-field {
   padding: .5em 2em;
 }
 
-/* line 497, ../sass/admin-style.scss */
+/* line 501, ../sass/admin-style.scss */
 .launchpad-flexible-container .launchpad-repeater-container {
   margin: .5em -2em;
 }
-/* line 501, ../sass/admin-style.scss */
+/* line 505, ../sass/admin-style.scss */
 .launchpad-inline-help + .launchpad-repeater-container {
   clear: both;
 }
-/* line 505, ../sass/admin-style.scss */
+/* line 509, ../sass/admin-style.scss */
 .launchpad-repeater-container .launchpad-repeater-metabox-container {
   margin: 0;
   margin-bottom: -1px;
 }
 
-/* line 511, ../sass/admin-style.scss */
+/* line 515, ../sass/admin-style.scss */
 .launchpad-repeater-container div:first-child .launchpad-flexible-metabox-close {
   display: none;
 }
 
-/* line 516, ../sass/admin-style.scss */
+/* line 520, ../sass/admin-style.scss */
 .launchpad-repeater-container.launchpad-metabox-field + .launchpad-repeater-container.launchpad-metabox-field {
   border-top: 1px solid #DDD;
   padding-top: 1em;
 }
 
-/* line 521, ../sass/admin-style.scss */
+/* line 525, ../sass/admin-style.scss */
 .launchpad-editor-loading {
   background: #EFEFEF url(/images/admin_loading.gif) no-repeat center;
   height: 300px;
 }
-/* line 525, ../sass/admin-style.scss */
+/* line 529, ../sass/admin-style.scss */
 .launchpad-editor-loading * {
   display: none;
 }
 
-/* line 530, ../sass/admin-style.scss */
+/* line 534, ../sass/admin-style.scss */
 .launchpad-relationship-container {
   background: #FFF;
   border: 1px solid #DDDDDD;
   margin-top: .5em;
   overflow: hidden;
 }
-/* line 536, ../sass/admin-style.scss */
+/* line 540, ../sass/admin-style.scss */
 .launchpad-relationship-container > * {
   box-sizing: border-box;
   float: left;
   padding: 1em;
   width: 50%;
 }
-/* line 542, ../sass/admin-style.scss */
+/* line 546, ../sass/admin-style.scss */
 .launchpad-relationship-container > *:last-child {
   margin-right: 0;
 }
-/* line 546, ../sass/admin-style.scss */
+/* line 550, ../sass/admin-style.scss */
 #side-sortables .launchpad-relationship-container > * {
   float: none;
   margin-right: auto !important;
   width: auto;
 }
-/* line 553, ../sass/admin-style.scss */
+/* line 557, ../sass/admin-style.scss */
 .launchpad-relationship-container input[type=search] {
   border-radius: 2em;
   display: block;
@@ -573,29 +577,29 @@ small.launchpad-inline {
   padding-left: 1em;
   width: 100%;
 }
-/* line 561, ../sass/admin-style.scss */
+/* line 565, ../sass/admin-style.scss */
 .launchpad-relationship-container a {
   display: block;
   overflow: hidden;
 }
-/* line 566, ../sass/admin-style.scss */
+/* line 570, ../sass/admin-style.scss */
 .launchpad-relationship-container .launchpad-relationship-search {
   background: #EFEFEF;
   border-right: 1px solid #DDDDDD;
 }
-/* line 570, ../sass/admin-style.scss */
+/* line 574, ../sass/admin-style.scss */
 #side-sortables .launchpad-relationship-container .launchpad-relationship-search {
   border-bottom: 1px solid #DDDDDD;
   border-right: 0;
 }
-/* line 575, ../sass/admin-style.scss */
+/* line 579, ../sass/admin-style.scss */
 .launchpad-relationship-container .launchpad-relationship-search > label {
   display: block;
   height: 2.25em;
   margin: 0;
   margin-bottom: .5em;
 }
-/* line 582, ../sass/admin-style.scss */
+/* line 586, ../sass/admin-style.scss */
 .launchpad-relationship-container .launchpad-relationship-search a:before {
   content: '\f502';
   display: inline-block;
@@ -603,29 +607,29 @@ small.launchpad-inline {
   font-size: .75em;
   margin-right: 1em;
 }
-/* line 592, ../sass/admin-style.scss */
+/* line 596, ../sass/admin-style.scss */
 .launchpad-relationship-container .launchpad-relationship-items-container {
   box-shadow: inset 3px 3px 3px rgba(0, 0, 0, 0.05);
 }
-/* line 595, ../sass/admin-style.scss */
+/* line 599, ../sass/admin-style.scss */
 #side-sortables .launchpad-relationship-container .launchpad-relationship-items-container {
   box-shadow: none;
 }
-/* line 599, ../sass/admin-style.scss */
+/* line 603, ../sass/admin-style.scss */
 .launchpad-relationship-container .launchpad-relationship-items-container > strong {
   display: block;
   line-height: 2.25em;
   margin: 0;
   margin-bottom: .5em;
 }
-/* line 608, ../sass/admin-style.scss */
+/* line 612, ../sass/admin-style.scss */
 .launchpad-relationship-container ul {
   height: 150px;
   margin: 0em -1em;
   overflow: auto;
   position: relative;
 }
-/* line 614, ../sass/admin-style.scss */
+/* line 618, ../sass/admin-style.scss */
 .launchpad-relationship-container ul li {
   background: transparent;
   margin: 0;
@@ -634,43 +638,43 @@ small.launchpad-inline {
   -ms-transition: background .5s ease;
   transition: background .5s ease;
 }
-/* line 623, ../sass/admin-style.scss */
+/* line 627, ../sass/admin-style.scss */
 .launchpad-relationship-container ul li a {
   display: block;
   line-height: 2em;
   padding: 0 1em;
   text-decoration: none;
 }
-/* line 630, ../sass/admin-style.scss */
+/* line 634, ../sass/admin-style.scss */
 .launchpad-relationship-container ul li:nth-child(even) {
   background: rgba(0, 0, 0, 0.05);
 }
-/* line 635, ../sass/admin-style.scss */
+/* line 639, ../sass/admin-style.scss */
 .launchpad-relationship-container small {
   float: right;
   color: rgba(0, 0, 0, 0.25);
 }
 
-/* line 641, ../sass/admin-style.scss */
+/* line 645, ../sass/admin-style.scss */
 dl.launchpad-inline-listing {
   text-align: left;
 }
-/* line 645, ../sass/admin-style.scss */
+/* line 649, ../sass/admin-style.scss */
 dl.launchpad-inline-listing dt {
   display: run-in;
   font-weight: 900;
 }
-/* line 649, ../sass/admin-style.scss */
+/* line 653, ../sass/admin-style.scss */
 dl.launchpad-inline-listing dt:after {
   content: ': ';
 }
-/* line 654, ../sass/admin-style.scss */
+/* line 658, ../sass/admin-style.scss */
 dl.launchpad-inline-listing dd {
   margin-bottom: 1em;
   margin-left: 0;
 }
 
-/* line 660, ../sass/admin-style.scss */
+/* line 664, ../sass/admin-style.scss */
 .launchpad-serp-preview {
   background: #FFF;
   border: 1px solid #DDD;
@@ -680,11 +684,11 @@ dl.launchpad-inline-listing dd {
   line-height: 18px;
   padding: 1em;
 }
-/* line 669, ../sass/admin-style.scss */
+/* line 673, ../sass/admin-style.scss */
 .launchpad-serp-preview * {
   max-width: 531px;
 }
-/* line 673, ../sass/admin-style.scss */
+/* line 677, ../sass/admin-style.scss */
 .launchpad-serp-preview .launchpad-serp-heading {
   color: #1a0dab;
   font-size: 18px;
@@ -694,30 +698,30 @@ dl.launchpad-inline-listing dd {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* line 683, ../sass/admin-style.scss */
+/* line 687, ../sass/admin-style.scss */
 .launchpad-serp-preview .launchpad-serp-url {
   color: #006621;
   line-height: 16px;
 }
 
-/* line 689, ../sass/admin-style.scss */
+/* line 693, ../sass/admin-style.scss */
 .launchpad-hr {
   margin-bottom: 2em;
   margin-top: 2em;
 }
 
-/* line 694, ../sass/admin-style.scss */
+/* line 698, ../sass/admin-style.scss */
 .launchpad-table-columns {
   display: table;
   table-layout: fixed;
   width: 100%;
 }
-/* line 699, ../sass/admin-style.scss */
+/* line 703, ../sass/admin-style.scss */
 .launchpad-table-columns > * {
   display: table-cell;
 }
 
-/* line 704, ../sass/admin-style.scss */
+/* line 708, ../sass/admin-style.scss */
 #poststuff h3.launchpad-sub-section-heading,
 h3.launchpad-sub-section-heading {
   margin-bottom: 1em;
@@ -725,36 +729,36 @@ h3.launchpad-sub-section-heading {
   padding-left: 0;
 }
 
-/* line 712, ../sass/admin-style.scss */
+/* line 716, ../sass/admin-style.scss */
 .launchpad-statistics-list .dashicons-yes {
   color: green;
 }
-/* line 715, ../sass/admin-style.scss */
+/* line 719, ../sass/admin-style.scss */
 .launchpad-statistics-list .dashicons-no {
   color: red;
 }
-/* line 718, ../sass/admin-style.scss */
+/* line 722, ../sass/admin-style.scss */
 .launchpad-statistics-list .dashicons-visibility {
   color: #ffa300;
 }
 
-/* line 723, ../sass/admin-style.scss */
+/* line 727, ../sass/admin-style.scss */
 #wp-auth-check-wrap .wp-auth-check-close {
   top: 3px;
 }
 
-/* line 729, ../sass/admin-style.scss */
+/* line 733, ../sass/admin-style.scss */
 body.login {
   background: #333;
   overflow: auto;
 }
-/* line 733, ../sass/admin-style.scss */
+/* line 737, ../sass/admin-style.scss */
 body.login:after, body.login:before {
   content: ' ';
   display: block;
   height: 80px;
 }
-/* line 740, ../sass/admin-style.scss */
+/* line 744, ../sass/admin-style.scss */
 body.login #nav a:hover,
 body.login #backtoblog a:hover,
 body.login #nav a:focus,
@@ -762,7 +766,7 @@ body.login #backtoblog a:focus,
 body.login a:active {
   color: #333;
 }
-/* line 748, ../sass/admin-style.scss */
+/* line 752, ../sass/admin-style.scss */
 body.login .wp-core-ui .button-primary,
 body.login .wp-core-ui .button-primary:hover,
 body.login .wp-core-ui .button-primary:focus,
@@ -772,13 +776,13 @@ body.login .wp-core-ui .button-primary:active {
   border-radius: 0;
   box-shadow: none;
 }
-/* line 757, ../sass/admin-style.scss */
+/* line 761, ../sass/admin-style.scss */
 body.login .wp-core-ui .button-primary:hover,
 body.login .wp-core-ui .button-primary:focus,
 body.login .wp-core-ui .button-primary:active {
   opacity: .75;
 }
-/* line 763, ../sass/admin-style.scss */
+/* line 767, ../sass/admin-style.scss */
 body.login #login {
   background: #F6F6F6;
   border: 15px solid rgba(0, 0, 0, 0.85);
@@ -791,33 +795,33 @@ body.login #login {
   width: auto;
   max-width: 480px;
 }
-/* line 775, ../sass/admin-style.scss */
+/* line 779, ../sass/admin-style.scss */
 body.login #login > h1 {
   margin-bottom: 1em;
 }
-/* line 780, ../sass/admin-style.scss */
+/* line 784, ../sass/admin-style.scss */
 body.login div#login h1 a {
   margin-bottom: 0;
 }
-/* line 784, ../sass/admin-style.scss */
+/* line 788, ../sass/admin-style.scss */
 body.login form {
   border-radius: 10px;
   box-shadow: none;
   margin-bottom: 12px;
   padding-bottom: 26px;
 }
-/* line 791, ../sass/admin-style.scss */
+/* line 795, ../sass/admin-style.scss */
 body.login #nav {
   float: right;
   margin: 0;
   padding: 0;
 }
-/* line 796, ../sass/admin-style.scss */
+/* line 800, ../sass/admin-style.scss */
 body.login #backtoblog {
   margin: 0;
   padding: 0;
 }
-/* line 801, ../sass/admin-style.scss */
+/* line 805, ../sass/admin-style.scss */
 body.login .message,
 body.login #login_error {
   background: #EFEFEF;
@@ -827,80 +831,80 @@ body.login #login_error {
   margin-right: 24px;
   text-align: center;
 }
-/* line 811, ../sass/admin-style.scss */
+/* line 815, ../sass/admin-style.scss */
 body.login.interim-login #login {
   margin: auto;
 }
 @media (max-width: 480px) {
-  /* line 816, ../sass/admin-style.scss */
+  /* line 820, ../sass/admin-style.scss */
   body.login html, body.login body {
     height: 100%;
   }
-  /* line 820, ../sass/admin-style.scss */
+  /* line 824, ../sass/admin-style.scss */
   body.login:after, body.login:before {
     display: none;
   }
-  /* line 825, ../sass/admin-style.scss */
+  /* line 829, ../sass/admin-style.scss */
   body.login #login {
     border: 0;
     border-radius: 0;
     min-height: 100%;
   }
-  /* line 831, ../sass/admin-style.scss */
+  /* line 835, ../sass/admin-style.scss */
   body.login .login form {
     border-radius: 0;
   }
-  /* line 835, ../sass/admin-style.scss */
+  /* line 839, ../sass/admin-style.scss */
   body.login .login #nav {
     margin-right: 10px;
   }
-  /* line 839, ../sass/admin-style.scss */
+  /* line 843, ../sass/admin-style.scss */
   body.login .login #backtoblog {
     margin-left: 10px;
   }
-  /* line 843, ../sass/admin-style.scss */
+  /* line 847, ../sass/admin-style.scss */
   body.login.interim-login {
     height: 100%;
   }
-  /* line 847, ../sass/admin-style.scss */
+  /* line 851, ../sass/admin-style.scss */
   body.login .interim-login #login {
     margin: auto;
     padding: .5em 2em;
   }
-  /* line 852, ../sass/admin-style.scss */
+  /* line 856, ../sass/admin-style.scss */
   body.login .interim-login h1 a {
     margin-bottom: 0;
   }
 }
 
-/* line 858, ../sass/admin-style.scss */
+/* line 862, ../sass/admin-style.scss */
 .ui-datepicker {
   background: #FFF;
   border: 1px solid silver;
   padding: 10px;
 }
-/* line 863, ../sass/admin-style.scss */
+/* line 867, ../sass/admin-style.scss */
 .ui-datepicker .ui-datepicker-header {
   overflow: hidden;
 }
-/* line 867, ../sass/admin-style.scss */
+/* line 871, ../sass/admin-style.scss */
 .ui-datepicker .ui-datepicker-prev {
   float: left;
 }
-/* line 871, ../sass/admin-style.scss */
+/* line 875, ../sass/admin-style.scss */
 .ui-datepicker .ui-datepicker-next {
   float: right;
 }
-/* line 875, ../sass/admin-style.scss */
+/* line 879, ../sass/admin-style.scss */
 .ui-datepicker .ui-datepicker-title {
   font-weight: bold;
   text-align: center;
 }
-/* line 879, ../sass/admin-style.scss */
+/* line 883, ../sass/admin-style.scss */
 .ui-datepicker .ui-state-active {
   background: #DDD;
 }
-/* line 883, ../sass/admin-style.scss */
+/* line 887, ../sass/admin-style.scss */
 .ui-datepicker table a {
   display: block;
   line-height: 1.5;

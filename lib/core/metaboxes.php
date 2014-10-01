@@ -140,7 +140,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . htmlentities($val) . '" class="regular-text"' . ((int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . htmlentities($val) . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -774,7 +774,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	// Otherwise, we're dealing with post meta.
 	} else {
 		// Set the value to the the args value.
-		$val = $args['value'];
+		$val = isset($args['value']) ? $args['value'] : '';
 		// If there is no value and there is a default, set the default as the value.
 		if(!$val && $val !== '' && isset($args['default'])) {
 			$val = $args['default'];
