@@ -977,6 +977,33 @@ if(is_admin()) {
 
 
 /**
+ * Recursively Check Array for Values
+ *
+ * @param		array $data The metadata array
+ * @since		1.0
+ */
+function launchpad_check_post_data_keys($data) {
+	// Loop the data
+	foreach($data as $data_item) {
+		// If it is an array, recursively check.
+		if(is_array($data_item)) {
+			// If the array contains any value, return true.
+			if(launchpad_check_post_data_keys($data_item)) {
+				return true;
+			}
+		// Otherwise, if the field is not empty, return true.
+		} else {
+			if(!empty($data_item)) {
+				return true;
+			}
+		}
+	}
+	// The array has no values, so return true.
+	return false;
+}
+
+
+/**
  * Save launchpad_meta fields
  *
  * @param		number $post_id The post ID that the meta applies to
@@ -1007,6 +1034,11 @@ function launchpad_save_post_data($post_id) {
 		
 	// Save each meta value.
 	foreach($_POST['launchpad_meta'] as $meta_key => $meta_value) {
+		// If the field is something stored in an array, see if there are any values.
+		// If there are no values, make it an empty string so it is easier to check against.
+		if(is_array($meta_value) && !launchpad_check_post_data_keys($meta_value)) {
+			$meta_value = '';
+		}
 		update_post_meta($post_id, $meta_key, $meta_value);
 	}
 }
