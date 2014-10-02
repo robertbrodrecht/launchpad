@@ -32,8 +32,8 @@ function launchpad_add_seo_metabox() {
 						'SEO and Social Media Options',
 						'launchpad_seo_meta_box_handler',
 						$post_type,
-						'advanced',
-						'core'
+						'normal',
+						'low'
 					);
 				}
 			break;
