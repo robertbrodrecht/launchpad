@@ -14,6 +14,17 @@
 
 
 
+function launchpad_set_admin_ajax_nonce(){
+	$ajax_nonce = wp_create_nonce('launchpad-admin-ajax-request');
+	echo "<script type='text/javascript'>\n";
+	echo 'var launchpad_nonce = "' . $ajax_nonce . '";';
+	echo "\n</script>";
+}
+if(is_admin()) {
+	add_action( 'admin_print_scripts', 'launchpad_set_admin_ajax_nonce' );	
+}
+
+
 /**
  * Get the failure cache for a user.
  *

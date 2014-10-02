@@ -918,3 +918,45 @@ body.login.interim-login #login {
   text-decoration: none;
   width: 100%;
 }
+
+/* line 901, ../sass/admin-style.scss */
+#launchpad-processing-percent {
+  margin-top: 30px;
+}
+
+/* line 910, ../sass/admin-style.scss */
+.launchpad-regen-waiting:before,
+.launchpad-regen-processing:before,
+.launchpad-regen-complete:before,
+.launchpad-regen-failed:before,
+.launchpad-regen-canceled:before {
+  background-image: url(/wp-admin/images/wpspin_light-2x.gif);
+  background-size: contain;
+  content: '';
+  display: inline-block;
+  height: 13px;
+  margin-right: .5em;
+  vertical-align: middle;
+  width: 13px;
+}
+
+/* line 922, ../sass/admin-style.scss */
+.launchpad-regen-waiting:before {
+  opacity: .2;
+}
+
+/* line 926, ../sass/admin-style.scss */
+.launchpad-regen-complete:before {
+  background-image: url(/wp-admin/images/yes.png);
+}
+
+/* line 929, ../sass/admin-style.scss */
+.launchpad-regen-failed:before {
+  background-image: url(/wp-admin/images/no.png);
+}
+
+/* line 932, ../sass/admin-style.scss */
+.launchpad-regen-canceled:before {
+  background-image: url(/wp-admin/images/marker.png);
+  opacity: .2;
+}

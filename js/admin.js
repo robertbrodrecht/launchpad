@@ -75,6 +75,8 @@ jQuery(document).ready(
 			}
 		}
 		
+		var regenerate_thumbnail_ids = [];
+		
 		makeSortable();
 		
 		if($("[type=date]").length) {
@@ -86,14 +88,76 @@ jQuery(document).ready(
 			'click',
 			'#start-regen',
 			function() {
-				$.get(
-					'/wp-admin/admin-ajax.php?action=get_attachment_list',
-					function(data) {
-						console.log(data);
-					}
-				);
+				var status_area = $('#launchpad-regen-thumbnail-status'),
+					button = $(this),
+					percent_area = $('#launchpad-processing-percent');
+				
+				if(button.data('processing') !== true) {
+					status_area.html('');
+					button.data('processing', true).attr('value', 'Stop Processing');
+					percent_area.html('0% Complete');
+					$.get(
+						'/wp-admin/admin-ajax.php?action=get_attachment_list&nonce=' + launchpad_nonce,
+						function(data) {
+							function process() {
+								var cur;
+								if(regenerate_thumbnail_ids.length) {
+									cur = regenerate_thumbnail_ids.shift();
+									$('#launchpad-regen-' + cur).attr('class', 'launchpad-regen-processing');
+									$('#launchpad-regen-' + cur).find('.status').html('Processing...');
+									$.get(
+										'/wp-admin/admin-ajax.php?action=do_regenerate_image&attachment_id=' + cur + '&nonce=' + launchpad_nonce,
+										function(data) {
+											var message;
+											
+											$('#launchpad-regen-' + data.attachment_id).attr('class', '');
+											
+											if(data.status === 1) {
+												message = 'Complete.';
+												$('#launchpad-regen-' + data.attachment_id).addClass('launchpad-regen-complete');
+											} else {
+												message = 'Failed.';
+												$('#launchpad-regen-' + data.attachment_id).addClass('launchpad-regen-failed');
+											}
+											$('#launchpad-regen-' + data.attachment_id).find('.status').html(message);
+											
+											button.attr('value', 'Stop Processing');
+												
+											percent_area.html(Math.round(status_area.find('div.launchpad-regen-complete, div.launchpad-regen-fail').length/status_area.find('div').length*100) + '% Complete');
+											
+											process();
+										}
+									);
+								} else {
+									button.data('processing', false).attr('value', 'Start Regenerating Thumbnails');
+								}
+							}
+							
+							regenerate_thumbnail_ids = data;
+							$.each(
+								regenerate_thumbnail_ids,
+								function() {
+									status_area.append('<div id="launchpad-regen-' + this + '" class="launchpad-regen-waiting">Image № ' + this + ': <span class="status">Waiting...</span></div>');
+								}
+							);
+							process();
+						}
+					);
+				} else {
+					button.data('processing', false).attr('value', 'Restart Regenerating Thumbnails');
+					$.each(
+						regenerate_thumbnail_ids,
+						function() {
+							$('#launchpad-regen-' + this).attr('class', '');
+							$('#launchpad-regen-' + this).addClass('launchpad-regen-canceled');
+							$('#launchpad-regen-' + this).find('.status').html('Canceled.');
+						}
+					);
+					regenerate_thumbnail_ids = [];
+				}
 			}
 		);
+		
 		$(document.body).on(
 			'click',
 			'.launchpad-file-button',
@@ -204,7 +268,7 @@ jQuery(document).ready(
 							editor.addClass('launchpad-editor-loading');
 							
 							$.get(
-								'/wp-admin/admin-ajax.php?action=get_editor&id=' + editor_current_id + '&name=' + me.attr('name'),
+								'/wp-admin/admin-ajax.php?action=get_editor&id=' + editor_current_id + '&name=' + me.attr('name') + '&nonce=' + launchpad_nonce,
 								function(data) {
 									data = $(data);
 									editor.replaceWith(data);
@@ -236,7 +300,7 @@ jQuery(document).ready(
 				var me = $(this);
 				e.preventDefault();
 				$.get(
-					'/wp-admin/admin-ajax.php?action=get_flexible_field&type=' + me.data('launchpad-flexible-type') + '&name=' + me.data('launchpad-flexible-name') + '&id=' + me.data('launchpad-flexible-post-id'),
+					'/wp-admin/admin-ajax.php?action=get_flexible_field&type=' + me.data('launchpad-flexible-type') + '&name=' + me.data('launchpad-flexible-name') + '&id=' + me.data('launchpad-flexible-post-id') + '&nonce=' + launchpad_nonce,
 					function(data) {
 						var visualeditors;
 						data = $(data);
@@ -273,7 +337,7 @@ jQuery(document).ready(
 				}
 				
 				$.get(
-					'/wp-admin/admin-ajax.php?action=search_posts&post_type=' + container.data('post-type') + '&terms=' + me.val(),
+					'/wp-admin/admin-ajax.php?action=search_posts&post_type=' + container.data('post-type') + '&terms=' + me.val() + '&nonce=' + launchpad_nonce,
 					function(data) {
 						listing.html('');
 						$.each(
@@ -352,7 +416,7 @@ jQuery(document).ready(
 				if(addr) {
 					$.post(
 						'/wp-admin/admin-ajax.php',
-						{action: 'geocode', 'address': addr},
+						{action: 'geocode', 'address': addr, 'nonce': launchpad_nonce},
 						function(data) {
 							$('input', fs).each(
 								function() {

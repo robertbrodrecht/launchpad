@@ -39,6 +39,8 @@ function launchpad_display_regenerate_thumbnails_page() {
 	<p>
 		<input type="button" class="button button-primary button-large" value="Start Regenerating Thumbnails" id="start-regen">
 	</p>
+	<h2 id="launchpad-processing-percent"></h2>
+	<div id="launchpad-regen-thumbnail-status"></div>
 	<?php
 }
 
@@ -50,12 +52,38 @@ function launchpad_display_regenerate_thumbnails_page() {
  */
 function launchpad_get_attachment_list() {
 	global $wpdb;
-	$images = $wpdb->get_results("SELECT ID FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' ORDER BY ID DESC");
+	
+	check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
+	
+	$image_records = $wpdb->get_results("SELECT ID FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' ORDER BY ID DESC");
+	
+	$images = array();
+	foreach($image_records as $image_record) {
+		$images[] = (int) $image_record->ID;
+	}
+	
 	header('Content-type: application/json');
 	echo json_encode($images);
 	exit;
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 	add_action('wp_ajax_get_attachment_list', 'launchpad_get_attachment_list');
-	add_action('wp_ajax_nopriv_get_attachment_list', 'launchpad_get_attachment_list');
+}
+
+
+/**
+ * Regenerate thumbnails for a specified ID.
+ * 
+ * @since		1.3
+ */
+function launchpad_do_regenerate_image() {
+	check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
+	sleep(5);
+	
+	header('Content-type: application/json');
+	echo json_encode(array('attachment_id' => $_GET['attachment_id'], 'status' => 1));
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_do_regenerate_image', 'launchpad_do_regenerate_image');
 }

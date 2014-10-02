@@ -16,6 +16,8 @@
  * @since		1.0
  */
 function launchpad_hello_world() {
+	check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
+	
 	echo json_encode('Hello, World!');
 	exit;
 }
@@ -40,6 +42,7 @@ function launchpad_geocode($addr_string = false) {
 	if(!$addr_string) {
 		$addr_string = $_POST['address'];
 		$is_ajax = true;
+		check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
 	}
 	
 	$addr_string = trim($addr_string);

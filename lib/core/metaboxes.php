@@ -1391,6 +1391,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 		
 		// Set AJAX to true to handle how the output works.
 		$is_ajax = true;
+		check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
 		
 		// Assign all parameters based off the GET parameters.
 		$type = $_GET['type'];
@@ -1565,7 +1566,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 	add_action('wp_ajax_get_flexible_field', 'launchpad_get_flexible_field');
-	add_action('wp_ajax_nopriv_get_flexible_field', 'launchpad_get_flexible_field');
+	//add_action('wp_ajax_nopriv_get_flexible_field', 'launchpad_get_flexible_field');
 }
 
 
@@ -1575,6 +1576,8 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
  * @since		1.0
  */
 function launchpad_get_editor() {
+	check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
+	
 	// Generate the editor skeleton code.
 	wp_editor(
 			'', 
@@ -1592,7 +1595,7 @@ function launchpad_get_editor() {
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 	add_action('wp_ajax_get_editor', 'launchpad_get_editor');
-	add_action('wp_ajax_nopriv_get_editor', 'launchpad_get_editor');
+	//add_action('wp_ajax_nopriv_get_editor', 'launchpad_get_editor');
 }
 
 
@@ -1602,6 +1605,8 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
  * @since		1.0
  */
 function launchpad_get_post_list() {
+	check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
+	
 	// JSON output header.
 	header('Content-type: application/json');
 	
@@ -1660,5 +1665,5 @@ function launchpad_get_post_list() {
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 	add_action('wp_ajax_search_posts', 'launchpad_get_post_list');
-	add_action('wp_ajax_nopriv_search_posts', 'launchpad_get_post_list');
+	//add_action('wp_ajax_nopriv_search_posts', 'launchpad_get_post_list');
 }

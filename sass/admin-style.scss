@@ -897,3 +897,39 @@ body.login {
 		width: 100%;
 	}
 }
+
+#launchpad-processing-percent {
+	margin-top: 30px;
+}
+
+.launchpad-regen-waiting,
+.launchpad-regen-processing,
+.launchpad-regen-complete,
+.launchpad-regen-failed,
+.launchpad-regen-canceled {
+	&:before {
+		background-image: url(/wp-admin/images/wpspin_light-2x.gif);
+		background-size: contain;
+		content: '';
+		display: inline-block;
+		height: 13px;
+		margin-right: .5em;
+		vertical-align: middle;
+		width: 13px;
+	}
+}
+
+.launchpad-regen-waiting:before {
+	opacity: .2;
+}
+
+.launchpad-regen-complete:before {
+	background-image: url(/wp-admin/images/yes.png);
+}
+.launchpad-regen-failed:before {
+	background-image: url(/wp-admin/images/no.png);
+}
+.launchpad-regen-canceled:before {
+	background-image: url(/wp-admin/images/marker.png);
+	opacity: .2;
+}
