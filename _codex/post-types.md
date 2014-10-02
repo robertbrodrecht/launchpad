@@ -46,7 +46,7 @@ The Launchpad post types array uses a key that represents the post type (the fir
 	<dt>single</dt>
 	<dd>The singular name of the post type.</dd>
 	<dt>slug</dt>
-	<dd>The slug of the post type for rewrites.  If you specify false, the post type becomes "private."  That is, no rewrite and not publically query-able.</dd>
+	<dd>The slug of the post type for rewrites.  If you specify false, the post type becomes "private."  That is, no rewrite, not publically query-able, and not public.</dd>
 </dl>
 
 The single and plural keys are used to populate the various <code>labels</code> values.  All other values sent to <code>register_post_type</code> will be created from default values.
