@@ -152,6 +152,7 @@ function launchpad_register_post_types() {
 			
 			// If the post type is false, make the post type "private."			
 			if(!$post_type_slug) {
+				$args['public'] = false;
 				$args['publicly_queryable'] = false;
 				$args['rewrite'] = false;
 			}
