@@ -79,8 +79,8 @@ jQuery(document).ready(
 		
 		makeSortable();
 		
-		if($("[type=date]").length) {
-			$("[type=date]").datepicker();
+		if($("input.launchpad-date-picker").length) {
+			$("input.launchpad-date-picker").datepicker();
 		}
 	
 		// Do admin stuff.
