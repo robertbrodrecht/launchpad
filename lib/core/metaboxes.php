@@ -813,7 +813,7 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
  * @since		1.0
  */
 function launchpad_render_form_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
-	
+			
 	// If we're dealing with site options, handle the set up.
 	if($field_prefix === 'launchpad_site_options') {
 		// Get the site options.
@@ -830,7 +830,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 		// Set the value to the the args value.
 		$val = isset($args['value']) ? $args['value'] : '';
 		// If there is no value and there is a default, set the default as the value.
-		if(!$val && $val !== '' && isset($args['default'])) {
+		if(!isset($args['value']) && isset($args['default'])) {
 			$val = $args['default'];
 		}
 	}
@@ -989,7 +989,13 @@ function launchpad_add_meta_boxes() {
 						$add_metabox = true;
 					}
 				}
-				if($add_metabox) {
+				if(!isset($metabox_details['location'])) {
+					$metabox_details['location'] = 'normal';
+				}
+				if(!isset($metabox_details['position'])) {
+					$metabox_details['position'] = 'default';
+				}
+				if($add_metabox && isset($metabox_details['name']) && !empty($metabox_details['name'])) {
 					add_meta_box(
 						$metabox_id,
 						$metabox_details['name'],
@@ -1012,6 +1018,12 @@ function launchpad_add_meta_boxes() {
 					if($add_metabox !== true && $add_metabox !== false) {
 						$add_metabox = true;
 					}
+				}
+				if(!isset($flex_details['location'])) {
+					$flex_details['location'] = 'normal';
+				}
+				if(!isset($flex_details['position'])) {
+					$flex_details['position'] = 'default';
 				}
 				if($add_metabox) {
 					add_meta_box(
@@ -1206,7 +1218,8 @@ function launchpad_meta_box_handler($post, $args) {
 			// If there is a set value, override the developer specified value (if any).
 			// This is used in the render form field output.
 			$tmp_meta_value = get_post_meta($post->ID, $k, true);
-			if($tmp_meta_value) {
+			$tmp_meta_value_arr = get_post_meta($post->ID, $k, false);
+			if(count($tmp_meta_value_arr)) {
 				$v['args']['value'] = $tmp_meta_value;
 			}
 			
