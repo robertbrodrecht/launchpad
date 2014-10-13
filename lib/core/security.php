@@ -183,7 +183,7 @@ function launchpad_wp_authenticate_user($user, $password) {
 	$launchpad_login_failures = launchpad_get_failures($user->data->user_login);
 	
 	// Get the allowed faulures and set a default if none is set.
-	$allowed_failures = $site_options['allowed_failures'];
+	$allowed_failures = isset($site_options['allowed_failures']) ? $site_options['allowed_failures'] : 10;
 	if(!$allowed_failures) {
 		$allowed_failures = 10;
 	}
