@@ -438,6 +438,7 @@ function launchpad_search_flexible_join($q) {
 		
 		// This keeps up with what flexible types we have already considered.
 		$used_flex = array();
+		$used_meta = array();
 		
 		// If we have post types.
 		if($types) {
@@ -455,6 +456,20 @@ function launchpad_search_flexible_join($q) {
 						if(!in_array($flex_name, $used_flex)) {
 							$used_flex[] = $flex_name;
 							$q .= " LEFT JOIN $wpdb->postmeta launchpad_search_$flex_name ON $wpdb->posts.ID = launchpad_search_$flex_name.post_id AND launchpad_search_$flex_name.meta_key = '$flex_name' ";
+						}
+					}
+				}
+				
+				// If the type has metabox content.
+				if($type['metaboxes']) {
+					
+					// Loop the metabox content.
+					foreach($type['metaboxes'] as $meta_name => $meta_value) {
+						
+						// If we haven't used the metabox content, add it to the query.
+						if(!in_array($meta_name, $used_meta)) {
+							$used_meta[] = $meta_name;
+							$q .= " LEFT JOIN $wpdb->postmeta launchpad_search_$meta_name ON $wpdb->posts.ID = launchpad_search_$meta_name.post_id AND launchpad_search_$meta_name.meta_key = '$meta_name' ";
 						}
 					}
 				}
@@ -482,6 +497,7 @@ function launchpad_search_flexible_where($q) {
 		
 		// This keeps up with what flexible types we have already considered.
 		$used_flex = array();
+		$used_meta = array();
 		
 		// If we have post types.
 		if($types) {
@@ -503,6 +519,24 @@ function launchpad_search_flexible_where($q) {
 						if(!in_array($flex_name, $used_flex)) {
 							$used_flex[] = $flex_name;
 							$q = preg_replace("/(\($wpdb->posts.post_title LIKE '(%.*?%)'\))/", '$1 OR (launchpad_search_' . $flex_name . '.meta_value LIKE "$2")', $q);
+						}
+					}
+				}
+				
+				// If the type has metabox content.
+				if($type['metaboxes']) {
+					
+					// Loop the metabox content.
+					foreach($type['metaboxes'] as $meta_name => $meta_value) {
+					
+						// If we haven't used the metabox content, add it to the query.
+						// Unfortunately, the WHERE is already pretty populated by now.
+						// We can't just shove this onto the end. So, we use the post_title
+						// part of the WHERE as a template and use preg_replace trickery
+						// to put the right stuff in the right place.
+						if(!in_array($meta_name, $used_meta)) {
+							$used_meta[] = $meta_name;
+							$q = preg_replace("/(\($wpdb->posts.post_title LIKE '(%.*?%)'\))/", '$1 OR (launchpad_search_' . $meta_name . '.meta_value LIKE "$2")', $q);
 						}
 					}
 				}
