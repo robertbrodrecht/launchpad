@@ -22,33 +22,6 @@ function custom_launchpad_custom_post_types($post_types) {
 					// Use launchpad_modify_default_flexible_modules filter to modify the defaults.
 					'modules' => launchpad_get_default_flexible_modules()
 				)
-			),
-			'metaboxes' => array(
-				'test' => array(
-					'name' => 'Test',
-					'fields' => array(
-						'test1' => array(
-							'name' => 'Test 1',
-							'args' => array(
-								'type' => 'text',
-								'default' => 'HELLO'
-							)
-						),
-						'test2' => array(
-							'name' => 'Test 2',
-							'args' => array(
-								'type' => 'select',
-								'options' => array(
-									'H' => 'H',
-									'E' => 'E',
-									'L' => 'L',
-									'O' => 'O'
-								),
-								'default' => 'E'
-							)
-						)
-					)
-				)
 			)
 		)
 	);
