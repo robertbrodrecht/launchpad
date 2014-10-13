@@ -10,6 +10,79 @@
 
 
 /**
+ * Add a field to media that will allow for media replacement.
+ * 
+ * @since		1.3
+ */
+function launchpad_add_media_replacement_fields($post_types) {
+	$custom_post_types = array(
+		'attachment' => array(
+			'metaboxes' => array(
+				'launchpad_replace' => array(
+					'name' => 'Media Replace',
+					'help' => '<p>Upload a new file to replace this one.  It will use the same file name.</p>',
+					'location' => 'side',
+					'position' => 'default',
+					'fields' => array(
+						'replacement' => array(
+							'name' => 'New File',
+							'help' => '<p>Upload a new file that will replace this file.  This file will be renamed to the name of the existing file, so it would be wise of you to replace the file with the same media (e.g. a JPEG with a JPEG).  This is done to preserve direct links to the file.</p>',
+							'args' => array(
+								'type' => 'file'
+							)
+						)
+					)
+				)
+			)
+		)
+	);
+	return array_merge($post_types, $custom_post_types);
+}
+add_filter('launchpad_custom_post_types', 'launchpad_add_media_replacement_fields', 1);
+
+
+/**
+ * Save launchpad_meta fields
+ *
+ * @param		number $post_id The post ID that the meta applies to
+ * @since		1.0
+ */
+function launchpad_handle_media_replace($post) {
+	if(!$replace_id = $post['launchpad_meta']['replacement']) {
+		return $post;
+	}
+	
+	$post_id = $post['ID'];
+	$replace_id = $post['launchpad_meta']['replacement'];
+	
+	$original_source = get_attached_file($post_id);
+	$replace_source = get_attached_file($replace_id);
+	
+	if($original_source && $replace_source) {
+		$imginfo = pathinfo($original_source);
+		$all_files = scandir($imginfo['dirname']);
+		foreach($all_files as $all_file) {
+			if(preg_match('/' . $imginfo['filename'] . '-\d+x\d+\.(jpeg|jpg|png|gif)$/i', $all_file)) {
+				unlink($imginfo['dirname'] . DIRECTORY_SEPARATOR . $all_file);
+			}
+		}
+		
+		unlink($original_source);
+		copy($replace_source, $original_source);
+		
+		update_attached_file($post_id, $original_source);
+		$metadata = wp_generate_attachment_metadata($post_id, $original_source);
+		wp_update_attachment_metadata($post_id, $metadata);
+	}
+	
+	return $post;
+}
+if(is_admin()) {
+	add_action('attachment_fields_to_save', 'launchpad_handle_media_replace', 1);
+}
+
+
+/**
  * Add entry in Tools for regen thumbnails
  * 
  * @since		1.3
@@ -94,7 +167,8 @@ function launchpad_do_regenerate_image() {
 				unlink($imginfo['dirname'] . DIRECTORY_SEPARATOR . $all_file);
 			}
 		}
-		wp_generate_attachment_metadata($att_id, $original_source);
+		$metadata = wp_generate_attachment_metadata($att_id, $original_source);
+		wp_update_attachment_metadata($att_id, $metadata);
 		
 	} else {
 		echo json_encode(
