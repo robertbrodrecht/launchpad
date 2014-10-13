@@ -338,7 +338,7 @@
 								body.html(content.html());
 								
 								if(gaon) {
-									ga('send', 'pageview', {'page': href],'title': document.title});
+									ga('send', 'pageview', {'page': href,'title': document.title});
 								}
 								
 								if(history.pushState && e.pushState !== false) {
