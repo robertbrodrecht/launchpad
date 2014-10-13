@@ -23,6 +23,8 @@
 		return;
 	}
 	
+	var gaon = ($('#google-analytics').length > 0);
+	
 	
 	/**
 	 * Attempt to Manage ApplicationCache Refresh Intelligently
@@ -335,7 +337,9 @@
 								
 								body.html(content.html());
 								
-								window._gaq.push(['_trackPageview', href]);
+								if(gaon) {
+									ga('send', 'pageview', {'page': href],'title': document.title});
+								}
 								
 								if(history.pushState && e.pushState !== false) {
 									if(window.dev) {
@@ -396,7 +400,9 @@
 			window.supports.touch = false;
 		}
 		
-		window._gaq.push(['_setCustomVar', 1, 'Browser Support', 'Touch', window.supports.touch]);
+		if(gaon) {
+			ga('set', 'metric1', window.supports.touch ? 1 : 0);
+		}
 	}
 	
 	/**
@@ -420,7 +426,9 @@
 			window.supports.transitions = false;
 		}
 		
-		window._gaq.push(['_setCustomVar', 1, 'Browser Support', 'CSS Transitions', window.supports.transitions]);
+		if(gaon) {
+			ga('set', 'metric2', window.supports.transitions ? 1 : 0);
+		}
 	}
 	
 	/**
@@ -448,7 +456,10 @@
 			$(document.body).addClass('css-not-sticky');
 		}
 		
-		window._gaq.push(['_setCustomVar', 1, 'Browser Support', 'Sticky Positioning', window.supports.sticky]);
+		
+		if(gaon) {
+			ga('set', 'metric3', window.supports.sticky ? 1 : 0);
+		}
 	}
 	
 	/**
@@ -462,6 +473,10 @@
 			window.supports.dpi = window.devicePixelRatio;
 		}
 		window._gaq.push(['_setCustomVar', 1, 'Browser Support', 'Device Pixel Ratio', window.supports.dpi]);
+		
+		if(gaon) {
+			ga('set', 'metric4', window.supports.dpi);
+		}
 	}
 	
 	/**
