@@ -472,7 +472,6 @@
 		if(window.devicePixelRatio !== undefined) {
 			window.supports.dpi = window.devicePixelRatio;
 		}
-		window._gaq.push(['_setCustomVar', 1, 'Browser Support', 'Device Pixel Ratio', window.supports.dpi]);
 		
 		if(gaon) {
 			ga('set', 'metric4', window.supports.dpi);
