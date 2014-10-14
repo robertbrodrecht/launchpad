@@ -27,15 +27,6 @@ To Do For 1.3
 Future Wants
 ============
 
-* Regen Thumbnails?
-	* Add menu item under tools with a button to start.
-	* API call to get media list, probably paginated.
-	* API call to regen single thumbnail
-		* get_attached_file
-		* update_attached_file?
-		* delete all but original
-		* wp_generate_attachment_metadata
-* Replace Media?
 * Continue child theme optimizations.
 * Figuring out any multi-site issues.
 * Continue improving flexible content if more needs have arisen.

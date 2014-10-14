@@ -115,6 +115,8 @@ In case I forgot anything in the previous sections...
 * Custom login skin with settings to change key colors and logo.
 * Semantic rewrite of the WordPress Gallery shortcode.
 * Smart 404 page.  Presents options for "Go Back" (if HTTP_REFERER is present), check URL for typos, and go to home page.  Finally, the URL is parsed for search terms and a search is executed for matching pages.  If any are found, the user is presented with the results.
+* Regenerate Thumbnails.  If you add or change an image size, regenerate thumbnails under Tools > Regen Thumbnails.
+* Media Replace.  If you have a file that needs to be updated in place with a new version, go to Media Library, edit the file, then use the Media Replace feature on the right sidebar.
 
 
 ## Security Features
