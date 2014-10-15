@@ -14,6 +14,21 @@
  *
  * @since		1.0
  */
+function launchpad_hoise_advanced_metaboxes() {
+    global $post, $wp_meta_boxes;
+    do_meta_boxes(get_current_screen(), 'advanced', $post);
+    unset($wp_meta_boxes[$post->post_type]['advanced']);
+}
+if(is_admin()) {
+	add_action('edit_form_after_title', 'launchpad_hoise_advanced_metaboxes');
+}
+
+
+/**
+ * Enable file upload support for metabox support.
+ *
+ * @since		1.0
+ */
 function launchpad_enable_media_upload() {
 	global $post; 
 	
