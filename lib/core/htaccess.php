@@ -34,6 +34,7 @@ function launchpad_rewrite_rules($content) {
 	  	'images/(.*)' => $tmp_child_theme . '/images/$1',
 	  	'support/(.*)' => $tmp_theme . '/support/$1',
 		'api/(.*)' => 'wp-admin/admin-ajax.php',
+		'(.*)/pdf/' => 'wp-admin/admin-ajax.php?action=generate_pdf&file=$1',
 		'download/(.*)' => 'wp-admin/admin-ajax.php?action=download&file=$1',
 		'manifest.appcache' => 'wp-admin/admin-ajax.php?action=cache_manifest',
 		'sitemap-(\d*).xml/?' => 'wp-admin/admin-ajax.php?action=sitemap&sitemap=$1',

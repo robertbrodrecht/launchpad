@@ -508,6 +508,7 @@ h4, h5, h6 {
 }
 
 /* line 6, ../sass/print.scss */
+#skip-to-content,
 #header,
 #footer,
 #navigation,
@@ -515,19 +516,19 @@ h4, h5, h6 {
   display: none;
 }
 
-/* line 13, ../sass/print.scss */
+/* line 14, ../sass/print.scss */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* line 18, ../sass/print.scss */
+/* line 19, ../sass/print.scss */
 a:after {
   color: #EEE;
   content: " [" attr(href) "]";
 }
 
-/* line 24, ../sass/print.scss */
+/* line 25, ../sass/print.scss */
 h1 a:after, h2 a:after, h3 a:after, h4 a:after {
   display: none;
 }

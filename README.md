@@ -30,9 +30,6 @@ Future Wants
 * Continue child theme optimizations.
 * Figuring out any multi-site issues.
 * Continue improving flexible content if more needs have arisen.
-* Add PDF generating library and support for /pdf/ like /download/.
-* Research OCR for better alt tag creation.
-	* This was not helpful. Still very alpha. http://phpocr.sourceforge.net
 * Database and Asset Migration
 * Pretty Search URLs
 * Make Gravity Forms output better and include generic form stylesheets in _objects.scss.
@@ -51,4 +48,13 @@ Future Wants
 * SEO+Social Stuff
   * Flipboard
 * Security: some way to check MD5 of files to make sure they weren't modified.
+
+Really Want But Can't Find A Suitable Way
+=========================================
+
 * Optimization: Selectively add_filter( 'jpeg_quality', create_function( '', 'return 100;' ) );
+
+Would Like But Not Sure If Realistic
+====================================
+* Research OCR for better alt tag creation.
+	* This was not helpful. Still very alpha. http://phpocr.sourceforge.net

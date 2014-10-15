@@ -148,3 +148,32 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 	add_action('wp_ajax_download', 'launchpad_download_handler');
 	add_action('wp_ajax_nopriv_download', 'launchpad_download_handler');
 }
+
+
+/**
+ * Create a PDF of the Current Page
+ * 
+ * Link to: /path/to/page/pdf/
+ *
+ * @since		1.0
+ */
+function launchpad_pdf_handler() {
+	$file = trim($_GET['file']);
+	if(!$file) {
+		exit;
+	}
+	
+	$file = get_bloginfo('wpurl') . '/' . $file . '/';
+	
+	include $_SERVER['DOCUMENT_ROOT'] . THEME_PATH . '/lib/third-party/mpdf/mpdf.php';
+	$mpdf = new mPDF('utf-8', 'A4', '10', 'Helvetica', 10, 10, 0, 10, 0, 0); 
+	$mpdf->useOnlyCoreFonts = false;
+	$mpdf->CSSselectMedia = 'print';
+	$mpdf->WriteHTML(file_get_contents($file));
+	$mpdf->Output();
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_generate_pdf', 'launchpad_pdf_handler');
+	add_action('wp_ajax_nopriv_generate_pdf', 'launchpad_pdf_handler');
+}

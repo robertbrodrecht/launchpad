@@ -28,6 +28,10 @@ function launchpad_site_unique_string() {
 function launchpad_get_cache_id() {
 	global $post, $wp_query;
 	
+	if(!$post) {
+		return md5($_SERVER['REQUEST_URI']);
+	}
+	
 	// If the post is singular, the cache id is the post id.
 	if($wp_query->is_singular || $wp_query->is_single) {
 		$cache_id = $post->ID;

@@ -12,7 +12,7 @@
 
 if(class_exists('GFForms')) {
 	// As a precaution, trigger a filter to put Gravity Forms code in footer below the jQuery include.
-	// add_filter('gform_init_scripts_footer', '__return_true');
+	add_filter('gform_init_scripts_footer', '__return_true');
 	// Gravity forms tabindex is often harmful.  Turn it off.
 	add_filter('gform_tabindex', create_function('', 'return false;'));
 }
@@ -232,6 +232,10 @@ function launchpad_seo_excerpt($max_words = 32, $echo = false, $id = false) {
 	// If there was no post based on the ID, use the global $post.
 	if(!$tmp_post) {
 		$tmp_post = $post;
+	}
+	
+	if(!$tmp_post) {
+		return;
 	}
 	
 	// Get the SEO information for the post.
