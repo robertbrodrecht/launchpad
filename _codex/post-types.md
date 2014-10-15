@@ -104,7 +104,7 @@ Metaboxes, like taxonomies, are created with an array of arrays created under th
 	<dt>name</dt>
 	<dd>The title of the metabox.</dd>
 	<dt>location</dt>
-	<dd>The location (or context, as WP calls it) of the metabox.  WordPress allows: 'normal', 'advanced', or 'side'</dd>
+	<dd>The location (or context, as WP calls it) of the metabox.  WordPress allows: 'normal', 'advanced', or 'side'.  If you use 'advanced,' Launchpad will hoist the fields above the visual editor.</dd>
 	<dt>position</dt>
 	<dd>The position within the position (or priority, as WP calls it): 'high', 'core', 'default' or 'low'</dd>
 	<dt>help</dt>
