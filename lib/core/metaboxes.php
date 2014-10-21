@@ -1109,7 +1109,10 @@ function launchpad_save_post_data($post_id) {
 	
 	// Touch the API file to reset the appcache.
 	// This helps avoid confusing issues with time zones.
-	touch(launchpad_get_cache_file(), time(), time());
+	$cache_file = launchpad_get_cache_file();
+	if($cache_file !== false && file_exists($cache_file)) {
+		touch($cache_file, time(), time());
+	}
 	
 	// If there is no Launchpad fields, don't affect anything.
 	if(empty($_POST) || !isset($_POST['launchpad_meta'])) {

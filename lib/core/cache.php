@@ -21,6 +21,32 @@ function launchpad_site_unique_string() {
 
 
 /**
+ * Add a field to media that will allow for media replacement.
+ * 
+ * @since		1.3
+ */
+ function launchpad_temp_dir() {
+	$system_temp = sys_get_temp_dir();
+	
+	if(!file_exists($system_temp) || !is_writable($system_temp)) {
+		if(is_writable($_SERVER['DOCUMENT_ROOT'])) {
+			$system_temp = $_SERVER['DOCUMENT_ROOT'] . '/tmp/';
+			$system_temp = str_replace('//', '/', $system_temp);
+			@mkdir($system_temp, 0777, true);
+		}
+		
+		if(file_exists($system_temp) && is_writable($system_temp)) {
+			return $system_temp;
+		} else {
+			return false;
+		}
+	}
+	
+	return $system_temp;
+ }
+
+
+/**
  * Get Current Cache ID
  *
  * @since		1.0
@@ -79,35 +105,49 @@ function launchpad_get_cache_id() {
 function launchpad_get_cache_file($post_id = false, $type = false) {
 	
 	// If cache is disabled, return false.
-	if(!defined('USE_CACHE') || !USE_CACHE) {
-		return false;
-	}
+	//if(!defined('USE_CACHE') || !USE_CACHE) {
+	//	return false;
+	//}
 	
 	// Get the site's unique string.
 	$site_unique_string = launchpad_site_unique_string();
 	
+	$temp = launchpad_temp_dir();
+	
+	if($temp === false) {
+		return false;
+	}
+	
 	// Create the site cache folder if it doesn't exist.
-	if(!file_exists(sys_get_temp_dir() . '/' . $site_unique_string  . '/')) {
-		mkdir(sys_get_temp_dir() . '/' . $site_unique_string  . '/', 0777, true);
+	if(!file_exists($temp . '/' . $site_unique_string  . '/')) {
+		@mkdir($temp . '/' . $site_unique_string  . '/', 0777, true);
 	}
 	
 	// If the cache file is for a post but not a type, set a file name with just the ID.
 	if($post_id && !$type) {
-		$cache = sys_get_temp_dir() . '/' . $site_unique_string . '/launchpad_post_cache-' . $post_id . '-file.html';
+		$cache = $temp . '/' . $site_unique_string . '/launchpad_post_cache-' . $post_id . '-file.html';
 	
 	// If there is a post and type, set a file name with both ID and type.
 	} else if($post_id && $type) {
-		$cache = sys_get_temp_dir() . '/' . $site_unique_string  . '/launchpad_post_cache-' . $post_id . '-' . $type . '-file.html';
+		$cache = $temp . '/' . $site_unique_string  . '/launchpad_post_cache-' . $post_id . '-' . $type . '-file.html';
 	
 	// Otherwise, just return the folder.
 	} else {
-		$cache = sys_get_temp_dir() . '/' . $site_unique_string  . '/';
+		$cache = $temp . '/' . $site_unique_string  . '/';
 	}
 	
 	$cache = preg_replace('|//+|', '/', $cache);
 	
 	// Apply filters to allow the developer to modify the value.
 	$cache = apply_filters('launchpad_cache_file_path', $cache, $post_id, $type);
+	
+	$cache_dir = dirname($cache);
+	if(!file_exists($cache_dir)) {
+		@mkdir($cache_dir, 077, true);
+		if(!file_exists($cache_dir) || !is_writable($cache_dir)) {
+			return false;
+		}
+	}
 	
 	return $cache;
 }
@@ -151,7 +191,7 @@ function launchpad_cached($post_id, $type) {
 	$cache = launchpad_get_cache_file($post_id, $type);
 	
 	// If the cache file exists and hasn't expired, send the cached output to the browser.
-	if(file_exists($cache) && time()-filemtime($cache) < USE_CACHE) {
+	if($cache !== false && file_exists($cache) && time()-filemtime($cache) < USE_CACHE) {
 		readfile($cache);
 		if(isset($site_options['cache_debug_comments']) && $site_options['cache_debug_comments']) {
 			echo "\n";
@@ -186,7 +226,7 @@ function launchpad_cache($post_id, $type) {
 	$cache = launchpad_get_cache_file($post_id, $type);
 	
 	// If cache is disabled or the user is logged in, we don't cache.
-	if(!USE_CACHE || is_user_logged_in() || $launchpad_is_caching != $cache) {
+	if($cache === false || !USE_CACHE || is_user_logged_in() || $launchpad_is_caching != $cache) {
 		if(isset($site_options['cache_debug_comments']) && $site_options['cache_debug_comments']) {
 			// Default reason.
 			$reason = 'caching is disabled.';
@@ -194,6 +234,11 @@ function launchpad_cache($post_id, $type) {
 			// If the user is logged in, update the reason.
 			if(is_user_logged_in()) {
 				$reason = 'you are logged in.';
+			}
+			
+			// If there is no cache folder because there is nowhere to write.
+			if($cache === false) {
+				$reason = 'the cache folder does not have write permissions.';
 			}
 			
 			// If we're already within a cache, update the reason.
@@ -214,8 +259,16 @@ function launchpad_cache($post_id, $type) {
 	
 	// Get the site cache folder.  Since we pass no params, it will be the folder.
 	$cache_folder = launchpad_get_cache_file();
-	if(!file_exists($cache_folder)) {
-		mkdir($cache_folder, 0777, true);
+	if($cache_folder !== false && !file_exists($cache_folder)) {
+		@mkdir($cache_folder, 0777, true);
+	}
+	
+	if(!$cache_folder || !is_writable($cache_folder)) {
+		echo "\n";
+		echo '<!-- COULD NOT WRITE CACHE @ ' . $cache . ' -->';
+		echo "\n\n";
+		$launchpad_is_caching = false;
+		return;
 	}
 	
 	// Save the output.  The live output will go to the screen.
@@ -257,7 +310,7 @@ function launchpad_clear_cache($post_id) {
 	// That basically includes anything with the post's ID, the post's post type
 	// of any archive.  We clear all archives because it's more efficient to 
 	// clear all than detect which types need to be cleared for a specific post ID.
-	if(file_exists($cachefolder)) {
+	if($cachefolder !== false && file_exists($cachefolder)) {
 		// Open the folder.
 		if($handle = opendir($cachefolder)) {
 			
@@ -302,7 +355,7 @@ function launchpad_clear_all_cache() {
 	$cachefolder = launchpad_get_cache_file();
 	
 	// If there is a cache folder, we need to clear out anything designated as a post cache.
-	if(file_exists($cachefolder)) {
+	if($cachefolder !== false && file_exists($cachefolder)) {
 		// Open the folder.
 		if($handle = opendir($cachefolder)) {
 			
@@ -852,9 +905,11 @@ function LP_Query($query) {
 	// Otherwise, run the query, cache it, and return the query.
 	} else {
 		$ret = new WP_Query($query);
-		$f = fopen($cache, 'w');
-		fwrite($f, serialize($ret));
-		fclose($f);
+		$f = @fopen($cache, 'w');
+		if($f) {
+			fwrite($f, serialize($ret));
+			fclose($f);
+		}
 		return $ret;
 	}
 }

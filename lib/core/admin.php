@@ -500,8 +500,9 @@ function launchpad_site_options_validate($input) {
 				}
 			break;
 		}
-		
-		$site_options[$key] = $input[$key];
+		if(isset($input[$key])) {
+			$site_options[$key] = $input[$key];
+		}
 	}
 	
 	// Flush rewrite rules when settings are saved.

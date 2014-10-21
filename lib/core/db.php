@@ -13,16 +13,25 @@ class LaunchpadDB extends wpdb {
 			$cache_time = 0;
 		}
 		
+		$system_temp = sys_get_temp_dir();
+		if(!file_exists($system_temp) || !is_writable($system_temp)) {
+			$system_temp = $_SERVER['DOCUMENT_ROOT'] . '/tmp/';
+			$system_temp = str_replace('//', '/', $system_temp);
+		}
+		
 		$cache = 'launchpad_db_cache-' . md5(serialize($query) . serialize($output)) . '.cache';
-		$cache = sys_get_temp_dir() . '/' . md5($_SERVER['HTTP_HOST'])  . '/' . $cache;
+		$cache = $system_temp . '/' . md5($_SERVER['HTTP_HOST'])  . '/' . $cache;
+		
 		if(file_exists($cache) && time()-filemtime($cache) < $cache_time) {
 			$return_val = unserialize(file_get_contents($cache));
 		} else {
 			$return_val = parent::get_results($query, $output);
 			if($cache_time > 0) {
-				$f = fopen($cache, 'w');
-				fwrite($f, serialize($return_val));
-				fclose($f);
+				$f = @fopen($cache, 'w');
+				if($f) {
+					fwrite($f, serialize($return_val));
+					fclose($f);
+				}
 			}
 		}
 		return $return_val;

@@ -44,6 +44,10 @@ function launchpad_get_failures_cache($username) {
 		@mkdir($cache_folder, 0777, true);
 	}
 	
+	if(!file_exists($cache_folder) || !is_writable($cache_folder)) {
+		return false;
+	}
+	
 	// Generate a cache file name based on the username and IP.
 	$ip = $_SERVER['REMOTE_ADDR'];
 	$file_name = 'launchpad_limit_logins-' . sanitize_title($username) . '-' . $ip . '.txt';
@@ -84,7 +88,7 @@ function launchpad_get_failures($username) {
 	$cache_path = launchpad_get_failures_cache($username);
 	
 	// If the file does not exist, the number of failures is zero.
-	if(!file_exists($cache_path)) {
+	if($cache_path === false || !file_exists($cache_path)) {
 		$launchpad_login_failures = 0;
 	
 	// If the file does exist, the number of failures varies.

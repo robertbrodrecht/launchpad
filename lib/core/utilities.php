@@ -189,8 +189,10 @@ function launchpad_scandir_deep($dir, $initial_dir = false) {
  */
 function file_get_contents_cache($url, $cachetime = 60, $context = false) {
 	
+	$system_temp = launchpad_temp_dir();
+	
 	// Get the site's temp folder.
-	$cache_file = sys_get_temp_dir() . '/' . launchpad_site_unique_string();
+	$cache_file = $system_temp . '/' . launchpad_site_unique_string();
 	
 	if(!file_exists($cache_file)) {
 		@mkdir($cache_file, 0777);
