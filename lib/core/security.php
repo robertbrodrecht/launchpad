@@ -13,7 +13,12 @@
  */
 
 
-
+/**
+ * A NONCE for Admin Stuff
+ *
+ * @package 	Launchpad
+ * @since		1.0
+ */
 function launchpad_set_admin_ajax_nonce(){
 	$ajax_nonce = wp_create_nonce('launchpad-admin-ajax-request');
 	echo "<script type='text/javascript'>\n";
