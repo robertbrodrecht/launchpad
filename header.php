@@ -164,21 +164,10 @@ $excerpt = launchpad_seo_excerpt();
 		<?php 
 		
 		}
-		
-		// If plugins are active, we have to do scripts the wrong way.
-		// By wrong, I mean put them in <head> so that they block rendering.
-		if(get_option('active_plugins')) {
-			if(stristr($_SERVER['HTTP_HOST'], '.dev') !== false || stristr($_SERVER['HTTP_HOST'], '.git') !== false) {
-				echo "<script>window.dev = true;</script>\n";
-			}
-			
-		?>
-		<script src="/js/jquery-1.11.0.min.js"></script>
-		<script src="/js/main-min.js"></script>
 
-		<?php 
-		
-		} 
+		if(stristr($_SERVER['HTTP_HOST'], '.dev') !== false || stristr($_SERVER['HTTP_HOST'], '.git') !== false) {
+			echo "<script>window.dev = true;</script>\n";
+		}
 		
 		wp_head(); 
 		

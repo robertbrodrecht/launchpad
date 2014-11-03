@@ -17,6 +17,7 @@ if(class_exists('GFForms')) {
 	add_filter('gform_tabindex', create_function('', 'return false;'));
 }
 
+
 /**
  * Setup of basic theme support
  *
@@ -58,6 +59,24 @@ function launchpad_theme_setup() {
 	launchpad_image_setup();
 }
 add_action('after_setup_theme', 'launchpad_theme_setup');
+
+
+/**
+ * Enqueue Scripts
+ *
+ * @since		1.0
+ */
+function launchpad_enqueue_scripts() {
+	$load_footer = get_option('active_plugins') ? false : true;
+	if(!is_admin()) {
+		wp_deregister_script('jquery');
+		wp_register_script('jquery', get_template_directory_uri() . '/js/jquery-1.11.1.min.js', false, null, $load_footer);
+		wp_enqueue_script('jquery');
+		wp_register_script('launchpad_main', get_template_directory_uri() . '/js/main-min.js', array('jquery'), null, $load_footer);
+		wp_enqueue_script('launchpad_main');
+	}
+}
+add_action('wp_enqueue_scripts', 'launchpad_enqueue_scripts', 100);
 
 
 /**
