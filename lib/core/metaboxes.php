@@ -475,20 +475,34 @@ function launchpad_render_field_menu($field_output_name, $field_output_id = '', 
  */
 function launchpad_render_field_relationship($field_output_name, $post_type = '', $limit = -1, $val = false) {
 	$field_output_name = trim($field_output_name);
-	$post_type = trim($post_type);
 	if(!$field_output_name) {
 		return;
 	}
 	
-	if($post_type === '') {
-		$post_type = 'any';
+	$post_type_str = '';
+	
+	if(is_string($post_type)) {
+		$post_type = trim($post_type);
+		if($post_type === '') {
+			$post_type = 'any';
+		}
+	} else if(is_array($post_type)) {
+		if(empty($post_type)) {
+			$post_type = 'any';
+		}
+	}
+	
+	if(is_array($post_type)) {
+		$post_type_str = implode(',', $post_type);
+	} else {
+		$post_type_str = $post_type;
 	}
 	
 	// This field is quite complex.  A lot of the functionality is handeled via JavaScript
 	// and the search_posts API that is driven by launchpad_get_post_list().
 	
 	// Field container.
-	echo '<div class="launchpad-relationship-container" data-post-type="' . $post_type . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $limit . '">';
+	echo '<div class="launchpad-relationship-container" data-post-type="' . $post_type_str . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $limit . '">';
 	
 	// Default Value
 	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
@@ -1736,7 +1750,7 @@ function launchpad_get_post_list() {
 	if($_GET['terms']) {
 		$res = new WP_Query(
 				array(
-					'post_type' => $_GET['post_type'],
+					'post_type' => explode(',', $_GET['post_type']),
 					's' => $_GET['terms']
 				)
 			);
@@ -1745,7 +1759,7 @@ function launchpad_get_post_list() {
 	} else {
 		$res = new WP_Query(
 				array(
-					'post_type' => $_GET['post_type'],
+					'post_type' => explode(',', $_GET['post_type']),
 					'posts_per_page' => 25
 				)
 			);
