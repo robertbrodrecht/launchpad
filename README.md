@@ -19,10 +19,14 @@ To Do For 1.3
 
 * Flexible content modules and field types.
   * What other modules should be built-in?
+    * Gallery
   * Other Field Types
 * Improve Filters (e.g. add to relationship field results, etc.)
 * Squash as many PHP notices as you can.
 * Codex review.
+* AddThis support
+* Boilerplate Post Types
+  * Employees
 
 Future Wants
 ============
