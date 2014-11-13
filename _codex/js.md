@@ -105,4 +105,13 @@ Launchpad's height matching ties into the resizeEnd event to handle height match
 
 Both <code>data-height-match-children</code> and <code>data-height-match-group</code> both accept a parameter of either the width in pixels above which height matching should happen or a media query that specifies when the height matching should happen.  Outside of those values, the height matching is removed.
 
+If you need to height match something that is not a child of the <code>data-height-match-group</code>, you can specify a <code>data-height-match-query</code> on the element that has <code>data-height-match-group</code>.  The query is passed to jQuery via <code>.find()</code>.  This would allow you to, for example, height match all figures inside of an unordered list by using something like this:
+
+```
+<ul data-height-match-group="568" data-height-match-query="figure">
+	<li><figure data-height-match><img src="clear.gif" width="100" height="300></figure>Some Text</li>
+	<li><figure data-height-match><img src="clear.gif" width="100" height="350></figure>Some Text</li>
+</ul>
+```
+
 Now that you have an idea about how the JavaScript works, you can dig into the [WordPress admin modifications](admin.md).

@@ -113,37 +113,42 @@
 	function initHeightMatch() {
 		function heightMatch() {
 			$('[data-height-match-group]').each(
-					function() {
-						var me = $(this),
-							height = 0,
-							lowest_width = me.attr('data-height-match-group'),
-							is_match = false;
-						
-						if(isNaN(+lowest_width)) {
-							is_match = window.matchMedia(lowest_width);
-							if(is_match !== false) {
-								is_match = is_match.matches;
-							} else {
-								is_match = true;
-							}
-						} else {
-							is_match = (+lowest_width < $(document.body).width());
-						}
-						
-						if(is_match) {
-							me.children('[data-height-match]').css('height', 'auto').each(
-									function() {
-										var h = $(this).outerHeight();
-										if(h > height) {
-											height = h;
-										}
-									}
-								).css('height', height);
-						} else {
-							me.children('[data-height-match]').css('height', 'auto');
-						}
+				function() {
+					var me = $(this),
+						height = 0,
+						lowest_width = me.attr('data-height-match-group'),
+						is_match = false,
+						matchable = me.children('[data-height-match]');
+					
+					if(me.attr('data-height-match-query')) {
+						matchable = me.find(me.attr('data-height-match-query') + '[data-height-match]');
 					}
-				);
+					
+					if(isNaN(+lowest_width)) {
+						is_match = window.matchMedia(lowest_width);
+						if(is_match !== false) {
+							is_match = is_match.matches;
+						} else {
+							is_match = true;
+						}
+					} else {
+						is_match = (+lowest_width < $(document.body).width());
+					}
+					
+					if(is_match) {
+						matchable.css('height', 'auto').each(
+								function() {
+									var h = $(this).outerHeight();
+									if(h > height) {
+										height = h;
+									}
+								}
+							).css('height', height);
+					} else {
+						matchable.css('height', 'auto');
+					}
+				}
+			);
 		}
 		
 		reinitHeightMatch();
