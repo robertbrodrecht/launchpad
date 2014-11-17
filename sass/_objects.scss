@@ -57,6 +57,53 @@ img.aligncenter {
 	margin: auto;
 }
 
+.alignleft {
+	@include rem('margin-bottom', $body-line-height-px);
+}
+
+.alignright {
+	@include rem('margin-bottom', $body-line-height-px);
+}
+
+@media (min-width: 53em) {
+	.alignleft,
+	.wp-caption.alignright {
+		float: left;
+		@include rem('margin-right', $body-line-height-px);
+	}
+	
+	.alignright,
+	.wp-caption.alignright {
+		float: right;
+		@include rem('margin-left', $body-line-height-px);
+	}
+}
+
+.wp-caption[style] {
+	background: transparent;
+	border: 0;
+	@include rem('margin-bottom', $body-line-height-px);
+	max-width: 100%;
+	padding: 0;
+	
+	@media (min-width: 34em) {
+		width: 100%;
+	}
+	
+	img {
+		max-width: 100%;
+	}
+	
+	p.wp-caption-text {
+		font-size: .75em;
+		line-height: 1.5;
+		
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
 .main img {
 	height: auto;
 	max-width: 100%;
