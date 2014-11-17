@@ -27,6 +27,7 @@ To Do For 1.3
 * AddThis support
 * Boilerplate Post Types
   * Employees
+  * Jobs
 
 Future Wants
 ============
