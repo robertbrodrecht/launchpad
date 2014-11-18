@@ -337,7 +337,7 @@ jQuery(document).ready(
 				}
 				
 				$.get(
-					'/wp-admin/admin-ajax.php?action=search_posts&post_type=' + container.data('post-type') + '&terms=' + me.val() + '&nonce=' + launchpad_nonce,
+					'/wp-admin/admin-ajax.php?action=search_posts&post_type=' + container.data('post-type') + '&query=' + (container.data('query') ? encodeURIComponent($.param(container.data('query'))) : '') + '&terms=' + me.val() + '&nonce=' + launchpad_nonce,
 					function(data) {
 						listing.html('');
 						$.each(

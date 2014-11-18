@@ -471,9 +471,10 @@ function launchpad_render_field_menu($field_output_name, $field_output_id = '', 
  * @param		int $limit The max number of fields to allow.
  * @param		bool $val Whether the checkbox is checked.
  * @see			launchpad_render_form_field
+ * @see			launchpad_get_post_list
  * @since		1.0
  */
-function launchpad_render_field_relationship($field_output_name, $post_type = '', $limit = -1, $val = false) {
+function launchpad_render_field_relationship($field_output_name, $post_type = '', $limit = -1, $query = array(), $val = false) {
 	$field_output_name = trim($field_output_name);
 	if(!$field_output_name) {
 		return;
@@ -501,8 +502,10 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	// This field is quite complex.  A lot of the functionality is handeled via JavaScript
 	// and the search_posts API that is driven by launchpad_get_post_list().
 	
+	
+	
 	// Field container.
-	echo '<div class="launchpad-relationship-container" data-post-type="' . $post_type_str . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $limit . '">';
+	echo '<div class="launchpad-relationship-container" data-post-type="' . $post_type_str . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $limit . '" data-query="' . htmlentities(json_encode($query)) . '">';
 	
 	// Default Value
 	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
@@ -510,13 +513,16 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	// Post list container.
 	echo '<div class="launchpad-relationship-search"><label><input type="search" class="launchpad-relationship-search-field" placeholder="Search"></label><ul class="launchpad-relationship-list">';
 	
+	$query = array_merge(
+		array(
+			'post_type' => $post_type,
+			'posts_per_page' => 25,
+		),
+		$query
+	);
+	
 	// Select the most recent 25 items in the post type.
-	$preload = new WP_Query(
-			array(
-				'post_type' => $post_type,
-				'posts_per_page' => 25,
-			)
-		);
+	$preload = new WP_Query($query);
 	
 	// Loop each.
 	foreach($preload->posts as $p) {
@@ -943,7 +949,8 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			launchpad_render_field_relationship(
 				$field_output_name, 
 				isset($args['post_type']) ? $args['post_type'] : 'any', 
-				isset($args['limit']) ? $args['limit'] : -1, 
+				isset($args['limit']) ? $args['limit'] : -1,
+				isset($args['query']) ? $args['query'] : array(),
 				$val
 			);
 		break;
@@ -1746,21 +1753,38 @@ function launchpad_get_post_list() {
 	// Trim the requested search terms.
 	$_GET['terms'] = trim($_GET['terms']);
 	
+	// Get the query to merge.
+	if($_GET['query']) {
+		$query_extra = urldecode($_GET['query']);
+		parse_str($query_extra, $query_extra);
+		if(!is_array($query_extra)) {
+			$query_extra = array();
+		}
+	} else {
+		$query_extra = array();
+	}
+	
 	// If there are search terms, search for the terms.
 	if($_GET['terms']) {
 		$res = new WP_Query(
-				array(
-					'post_type' => explode(',', $_GET['post_type']),
-					's' => $_GET['terms']
+				array_merge(
+					array(
+						'post_type' => explode(',', $_GET['post_type']),
+						's' => $_GET['terms']
+					),
+					$query_extra
 				)
 			);
 	
 	// If there are no terms, get the most recent 25 of post_type.
 	} else {
 		$res = new WP_Query(
-				array(
-					'post_type' => explode(',', $_GET['post_type']),
-					'posts_per_page' => 25
+				array_merge(
+					array(
+						'post_type' => explode(',', $_GET['post_type']),
+						'posts_per_page' => 25
+					),
+					$query_extra
 				)
 			);
 	}
