@@ -6,6 +6,24 @@
 	user-select: none;
 }
 
+.video-container {
+	box-sizing: content-box;
+	height: 0; 
+	overflow: hidden;
+	position: relative;
+	padding-bottom: 56.25%;
+	padding-top: 30px; 
+}
+ 
+.video-container iframe,
+.video-container object,
+.video-container embed {
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
 
 form {
 }
