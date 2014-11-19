@@ -107,7 +107,7 @@ $excerpt = launchpad_seo_excerpt();
 			if($thumbnail) {
 				?>
 				
-		<meta property="og:image" content="<?php echo $thumbnail[0] ?>">
+		<meta property="og:image" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php echo $thumbnail[0] ?>">
 		<meta property="og:image:width" content="<?php echo $thumbnail[1] ?>">
 		<meta property="og:image:height" content="<?php echo $thumbnail[2] ?>">
 				<?php
@@ -137,7 +137,7 @@ $excerpt = launchpad_seo_excerpt();
 			if($thumbnail) {
 				?>
 
-		<meta property="twitter:image" content="<?php echo $thumbnail[0] ?>">
+		<meta property="twitter:image" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php echo $thumbnail[0] ?>">
 		<meta property="twitter:image:width" content="<?php echo $thumbnail[1] ?>">
 		<meta property="twitter:image:height" content="<?php echo $thumbnail[2] ?>">
 				<?php

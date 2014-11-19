@@ -1,9 +1,3 @@
-html {
-	@include media-min(large) {
-		font-size: rootRemPercent($root-font-px*1.5);
-	}
-}
-
 body {
 	@include media-max(small) {
 		@include rems((padding-top: $body-line-height-px*2));
