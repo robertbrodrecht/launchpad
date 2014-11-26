@@ -17,6 +17,7 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.3
 =============
 
+* Clean nav classes
 * AddThis support
 * Flexible content modules and field types.
   * What other modules should be built-in?
@@ -30,6 +31,10 @@ To Do For 1.3
   * Employees
   * Jobs
   * Menus
+
+To Do For 1.5
+=============
+* Forms
 
 Future Wants
 ============

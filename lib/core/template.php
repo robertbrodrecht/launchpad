@@ -331,6 +331,41 @@ add_filter('body_class', 'launchpad_modify_body_class');
 
 
 /**
+ * Modify body classes to something more useful
+ * 
+ * This is modified from the Roots theme.
+ *
+ * @param		array $classes The WordPress-created classes for the nav item
+ * @param		object $item The current menu item.
+ * @since		1.3
+ */
+function launchpad_modify_nav_class($classes, $item) {
+	$slug = sanitize_title($item->title);
+	$classes = preg_replace('/^((menu|page)[-_\w+]+)+/', '', $classes);
+	
+	$classes[] = 'menu-' . $slug;
+	
+	$link_url = preg_replace('|^https?://' . $_SERVER['HTTP_HOST'] . '/|', '/', $item->url);
+	$current_url = $_SERVER['REQUEST_URI'];
+	
+	if($link_url != '/' && $current_url !== $link_url && stristr($current_url, $link_url) !== false) {
+		$classes[] = 'current-hierarchy-ancestor';
+	}
+	
+	$classes = array_unique($classes);
+	
+	return array_filter(
+		$classes, 
+		function($el) {
+			$el = trim($el);
+			return empty($el) ? false : true;
+		}
+	);
+}
+//add_filter('nav_menu_css_class', 'launchpad_modify_nav_class', 10, 2);
+
+
+/**
  * Remove WordPress's header junk
  *
  * Removes useless header junk so the developer can DIY.
