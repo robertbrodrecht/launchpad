@@ -12,8 +12,6 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 // * no-float: don't automatically apply float: left to children
 @mixin row($options: ()) {
 	
-	@include ugly-clearfix;
-	
 	@if index($options, "gutter") and not index($options, "table") {
 		margin-left: 0-$gutter;
 	} @else if not index($options, "no-margin") {
@@ -25,6 +23,8 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 	
 	@if index($options, "table") {
 		display: table;
+	} @else {
+		@include ugly-clearfix;
 	}
 	
 	> * {

@@ -163,7 +163,7 @@ function launchpad_pdf_handler() {
 		exit;
 	}
 	
-	$file = get_bloginfo('wpurl') . '/' . $file . '/';
+	$file = get_bloginfo('wpurl') . '/' . $file . '/?' . http_build_query($_GET);
 	
 	include $_SERVER['DOCUMENT_ROOT'] . THEME_PATH . '/lib/third-party/mpdf/mpdf.php';
 	$mpdf = new mPDF('utf-8', 'A4', '10', 'Helvetica', 10, 10, 0, 10, 0, 0); 

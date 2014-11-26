@@ -64,7 +64,7 @@ add_action('after_setup_theme', 'launchpad_theme_setup');
 /**
  * Enqueue Scripts
  *
- * @since		1.0
+ * @since		1.3
  */
 function launchpad_enqueue_scripts() {
 	$load_footer = get_option('active_plugins') ? false : true;
@@ -77,6 +77,22 @@ function launchpad_enqueue_scripts() {
 	}
 }
 add_action('wp_enqueue_scripts', 'launchpad_enqueue_scripts', 100);
+
+
+/**
+ * Defer Script Loading
+ *
+ * @since		1.3
+ */
+function launchpad_defer_scripts($url) {
+	if(strpos($url, '.js') === false) {
+		return $url;
+	}
+	return "$url' defer='defer";
+}
+if(!is_admin()) {
+	add_filter('clean_url', 'launchpad_defer_scripts', 11, 1);
+}
 
 
 /**

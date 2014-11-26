@@ -320,19 +320,31 @@ function launchpad_clear_cache($post_id) {
 				// Explode the path to make it easy to check IDs and such.
 				$entry_parts = explode('-', $entry);
 				
+				// By default, assume we won't clear the cache file.
+				$clear = false;
+				
+				// Do a series of gnarly checks to see if we need to clear it.
+				// This used to be a single IF but it seemed like a solid
+				// point of failure for future maintenances, so I reworked
+				// it to be an easier-to-read series of conditionals.
+				if($entry_parts[0] === 'launchpad_wpquery_cache') {
+					$clear = true;
+				} else if($entry_parts[0] === 'launchpad_db_cache') {
+					$clear = true;
+				} else if($entry_parts[0] === 'launchpad_post_cache') {
+					if((int) $entry_parts[1] === (int) $post_id) {
+						$clear = true;
+					} else if($entry_parts[1] === 'archive') {
+						$clear = true;
+					} else if(isset($post->post_type)) {
+						if($entry_parts[1] === $post->post_type) {
+							$clear = true;
+						}
+					}
+				}
+				
 				// If anything matches, delete it.
-				if(
-					$entry_parts[0] === 'launchpad_wpquery_cache' ||
-					$entry_parts[0] === 'launchpad_db_cache' ||
-					(
-						$entry_parts[0] === 'launchpad_post_cache' && 
-						(
-							(int) $entry_parts[1] === (int) $post_id || 
-							$entry_parts[1] === $post->post_type || 
-							$entry_parts[1] === 'archive'
-						)
-					)
-				) {
+				if($clear) {
 					unlink($cachefolder . $entry);
 				}
 			}

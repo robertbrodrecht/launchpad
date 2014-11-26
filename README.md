@@ -17,17 +17,19 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.3
 =============
 
+* AddThis support
 * Flexible content modules and field types.
   * What other modules should be built-in?
     * Gallery
-  * Other Field Types
+    * Image with Caption
+  * Other Field Types?
 * Improve Filters (e.g. add to relationship field results, etc.)
 * Squash as many PHP notices as you can.
 * Codex review.
-* AddThis support
 * Boilerplate Post Types
   * Employees
   * Jobs
+  * Menus
 
 Future Wants
 ============
@@ -50,8 +52,6 @@ Future Wants
   * Ads
 * Something about widgets.
 * Updates through WP Admin.
-* SEO+Social Stuff
-  * Flipboard
 * Security: some way to check MD5 of files to make sure they weren't modified.
 
 Really Want But Can't Find A Suitable Way
