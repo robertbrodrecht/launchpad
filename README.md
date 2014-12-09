@@ -27,14 +27,17 @@ To Do For 1.3
 * Improve Filters (e.g. add to relationship field results, etc.)
 * Squash as many PHP notices as you can.
 * Codex review.
+* Update things like the hamburger menu to use checkbox/radio instead of target.
+
+To Do For 1.5
+=============
+* MU Support
+* Child Theme
+* Forms
 * Boilerplate Post Types
   * Employees
   * Jobs
   * Menus
-
-To Do For 1.5
-=============
-* Forms
 
 Future Wants
 ============
@@ -66,5 +69,6 @@ Really Want But Can't Find A Suitable Way
 
 Would Like But Not Sure If Realistic
 ====================================
+
 * Research OCR for better alt tag creation.
 	* This was not helpful. Still very alpha. http://phpocr.sourceforge.net
