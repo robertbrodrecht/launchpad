@@ -29,8 +29,8 @@ To Do For 1.3
 * Codex review.
 * Update things like the hamburger menu to use checkbox/radio instead of target.
 
-To Do For 1.5
-=============
+To Do For 1.4 / 1.5
+===================
 * MU Support
 * Child Theme
 * Forms
@@ -38,6 +38,15 @@ To Do For 1.5
   * Employees
   * Jobs
   * Menus
+* Look into image optimization based on ImageOptim workflow:
+  * [PNGOut](http://www.advsys.net/ken/util/pngout.htm)
+  * [Zopfli](http://googledevelopers.blogspot.co.uk/2013/02/compress-data-more-densely-with-zopfli.html)
+  * [Pngcrush](http://pmt.sourceforge.net/pngcrush/)
+  * [AdvPNG](http://advancemame.sourceforge.net/doc-advpng.html)
+  * [OptiPNG](http://optipng.sourceforge.net/)
+  * [JpegOptim](http://www.kokkonen.net/tjko/projects.html)
+  * jpegrescan
+  * jpegtran
 
 Future Wants
 ============
