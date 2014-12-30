@@ -28,11 +28,11 @@ To Do For 1.3
 * Squash as many PHP notices as you can.
 * Codex review.
 * Update things like the hamburger menu to use checkbox/radio instead of target.
+* Decide about whether offline support should be removed.
 
 To Do For 1.4 / 1.5
 ===================
 * MU Support
-* Decide about whether offline support should be removed.
 * Child Theme
 * Forms
 * Boilerplate Post Types
