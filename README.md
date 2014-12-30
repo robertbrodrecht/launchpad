@@ -32,6 +32,7 @@ To Do For 1.3
 To Do For 1.4 / 1.5
 ===================
 * MU Support
+* Decide about whether offline support should be removed.
 * Child Theme
 * Forms
 * Boilerplate Post Types
