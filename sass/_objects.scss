@@ -314,3 +314,92 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 .flexible-accordion-list dt:target + dd {
 	display: block;
 }
+
+[class*="slide-toggle-"] {
+	clip: auto;
+	height: 0;
+	position: absolute;
+	width: 0;
+}
+
+.flexible-gallery-item {
+	@include rem(margin-bottom, $body-line-height-px);
+	width: 100%;
+	
+	img {
+		display: block;
+		height: auto;
+		width: 100%;
+	}
+	
+	figcaption {
+		@include rems((padding-top: $body-line-height-px, padding-bottom: $body-line-height-px));
+	}
+}
+
+.flexible-gallery-container {
+	
+	$trans-time: .5s;
+	
+	@include rem(margin-bottom, $body-line-height-px);
+	overflow: hidden;
+	position: relative;
+	z-index: inherit;
+	
+	> figcaption {
+		text-align: center;
+		
+		ul, 
+		li {
+			display: inline-block;
+			list-style: none;
+			margin: auto;
+			padding: 0;
+		}
+		
+		label {
+			background: #666;
+			border-radius: 100%;
+			clip: auto;
+			cursor: pointer;
+			display: inline-block;
+			height: 1em;
+			margin: 0 .5em;
+			opacity: .5;
+			overflow: hidden;
+			position: relative;
+			text-indent: 110%;
+			transition: all $trans-time ease;
+			width: 1em;
+			
+			&:hover {
+				opacity: .75;
+			}
+		}
+	}
+	
+	.flexible-gallery-item {
+		left: 0;
+		margin-bottom: 0;
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		transition: opacity $trans-time 0s, z-index 0s 0s, visibility 0s $trans-time+.1s;
+		visibility: hidden;
+		z-index: 1;
+	}
+	
+	@for $slide_count from 0 through 25 {
+		.slide-toggle-#{$slide_count}:checked ~ .slide-target-#{$slide_count} {
+			opacity: 1;
+			position: relative;
+			transition: opacity $trans-time 0s, z-index 0s 0s, visibility 0s 0s;
+			visibility: visible;
+			z-index: 2;
+		}
+		
+		.slide-toggle-#{$slide_count}:checked ~ figcaption .slide-indicator-#{$slide_count} label {
+			opacity: 1;
+		}
+	}
+}

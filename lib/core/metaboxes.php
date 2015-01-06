@@ -243,7 +243,7 @@ function launchpad_render_field_textarea($field_output_name, $field_output_id = 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . ((int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>' . html_entity_decode($val) . '</textarea>';
+	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>' . html_entity_decode($val) . '</textarea>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -335,13 +335,15 @@ function launchpad_render_field_selectmulti($field_output_name, $field_output_id
  * 
  * @param		string $field_output_name The field's "name" attribute.
  * @param		string $field_output_id The field's "id" attribute.
+  * @param		array $args Pass any arguments.
  * @param		bool $val Whether the checkbox is checked.
  * @param		string $class A class to use on the label if this is a subfield.
  * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_file($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_file($field_output_name, $field_output_id = '', $args = array(), $val = false, $class = '', $subfield = false) {
+	
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -376,7 +378,7 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
 	}
 	
 	// The file ID is stored here.
-	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" class="file-button">Upload File</button>';
+	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" ' . (array_key_exists('limit', $args) ? 'data-limit="' . html_entity_decode($args['limit']) . '"' : '') . ' class="file-button">Upload File</button>';
 	
 	// If there is an existing image, add a "remove" button.
 	if($existing) {
@@ -941,7 +943,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			);
 		break;
 		case 'file':
-			launchpad_render_field_file($field_output_name, $field_output_id, $val, $class, $subfield);
+			launchpad_render_field_file($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'wysiwyg':
 			launchpad_render_field_wysiwyg($field_output_name, $field_output_id, $val);
@@ -1157,6 +1159,7 @@ function launchpad_save_post_data($post_id) {
 		
 	// Save each meta value.
 	foreach($_POST['launchpad_meta'] as $meta_key => $meta_value) {
+		
 		// If the field is something stored in an array, see if there are any values.
 		// If there are no values, make it an empty string so it is easier to check against.
 		if(is_array($meta_value) && !launchpad_check_post_data_keys($meta_value)) {
@@ -1409,6 +1412,51 @@ function launchpad_get_default_flexible_modules() {
 								'help' => '<p>The description associated with the title.</p>',
 								'args' => array(
 									'type' => 'wysiwyg'
+								)
+							)
+						)
+					)
+				)
+			)
+		),
+		'gallery' => array(
+			'name' => 'Gallery',
+			'icon' => 'dashicons dashicons-format-gallery',
+			'help' => '<p>Creates a gallery section.</p>',
+			'fields' => array(
+				'title' => array(
+					'name' => 'Title',
+					'help' => '<p>A title to the gallery section.</p>',
+					'args' => array(
+						'type' => 'text'
+					)
+				),
+				'description' => array(
+					'name' => 'Gallery Description',
+					'help' => '<p>A WYSIWYG editor to control the content that appears above the gallery.</p>',
+					'args' => array(
+						'type' => 'wysiwyg'
+					)
+				),
+				'gallery' => array(
+					'name' => 'Gallery Item',
+					'help' => '<p>A single gallery item with a caption and image.</p>',
+					'args' => array(
+						'type' => 'repeater',
+						'subfields' => array(
+							'caption' => array(
+								'name' => 'Caption',
+								'help' => '<p>A caption for the gallery image.</p>',
+								'args' => array(
+									'type' => 'text'
+								)
+							),
+							'image' => array(
+								'name' => 'Image',
+								'help' => '<p>The image that will be used in the gallery.</p>',
+								'args' => array(
+									'type' => 'file',
+									'limit' => 'image'
 								)
 							)
 						)

@@ -163,15 +163,20 @@ jQuery(document).ready(
 			'.launchpad-file-button',
 			function(e) {
 				var me = $(this),
-					custom_uploader = wp.media(
-						{
-							title: 'Upload File',
-							button: {
-								text: 'Add File'
-							},
-							multiple: false  // Set this to true to allow multiple files to be selected
-						}
-					).on(
+					config	= {
+						title: 'Upload File',
+						button: {
+							text: 'Add File'
+						},
+						multiple: false  // Set this to true to allow multiple files to be selected
+					},
+					custom_uploader;
+					
+					if(me.data('limit')) {
+						config.library = {type: me.data('limit')};
+					}
+					
+					custom_uploader = wp.media(config).on(
 						'select', 
 						function() {
 							var attachment = custom_uploader.state().get('selection').first().toJSON(),

@@ -6,7 +6,7 @@
 <?php 
 
 if($flex_values['description']) {
-	echo wpautop($flex_values['description']);
+	echo apply_filters('the_content', $flex_values['description']);
 } 
 
 ?>

@@ -77,6 +77,9 @@ if(!have_posts()) {
 										case 'accordion':
 											include launchpad_find_flexible_content('accordion.php');
 										break;
+										case 'gallery':
+											include launchpad_find_flexible_content('gallery.php');
+										break;
 										case 'link_list':
 											include launchpad_find_flexible_content('link_list.php');
 										break;
@@ -85,6 +88,14 @@ if(!have_posts()) {
 										break;
 										case 'simple_content':
 											include launchpad_find_flexible_content('simple_content.php');
+										break;
+										default:
+											$path = launchpad_find_flexible_content($flex_type . '.php');
+											if($path) {
+												include $path;
+											} else {
+												trigger_error('Could not find template for ' . $flex_type . ' flexible content.');
+											}
 										break;
 									}
 								}

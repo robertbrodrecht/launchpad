@@ -24,7 +24,6 @@ To Do For 1.3
     * Gallery
     * Image with Caption
   * Other Field Types?
-* Improve Filters (e.g. add to relationship field results, etc.)
 * Codex review.
 * Update things like the hamburger menu to use checkbox/radio instead of target.
 * Decide about whether offline support should be removed.
@@ -48,6 +47,7 @@ To Do For 1.4 / 1.5
   * [JpegOptim](http://www.kokkonen.net/tjko/projects.html)
   * jpegrescan
   * jpegtran
+* Determine feasibility of conditional logic for meta fields.
 
 Future Wants
 ============
