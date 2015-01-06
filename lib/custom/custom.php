@@ -23,6 +23,7 @@ function custom_launchpad_custom_post_types($post_types) {
 					'modules' => launchpad_get_default_flexible_modules()
 				)
 			)
+		)
 	);
 	return array_merge($post_types, $custom_post_types);
 }

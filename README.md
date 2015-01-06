@@ -25,13 +25,13 @@ To Do For 1.3
     * Image with Caption
   * Other Field Types?
 * Improve Filters (e.g. add to relationship field results, etc.)
-* Squash as many PHP notices as you can.
 * Codex review.
 * Update things like the hamburger menu to use checkbox/radio instead of target.
 * Decide about whether offline support should be removed.
 
 To Do For 1.4 / 1.5
 ===================
+
 * MU Support
 * Child Theme
 * Forms
