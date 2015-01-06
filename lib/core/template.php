@@ -350,6 +350,8 @@ function launchpad_modify_nav_class($classes, $item) {
 	
 	if($link_url != '/' && $current_url !== $link_url && stristr($current_url, $link_url) !== false) {
 		$classes[] = 'current-hierarchy-ancestor';
+	} else if($current_url === $link_url) {
+		$classes[] = 'current-hierarchy-page';		
 	}
 	
 	$classes = array_unique($classes);
@@ -362,7 +364,7 @@ function launchpad_modify_nav_class($classes, $item) {
 		}
 	);
 }
-//add_filter('nav_menu_css_class', 'launchpad_modify_nav_class', 10, 2);
+add_filter('nav_menu_css_class', 'launchpad_modify_nav_class', 10, 2);
 
 
 /**
