@@ -514,6 +514,14 @@ small.launchpad-inline {
 		margin: 0;
 		margin-bottom: -1px;
 	}
+	
+	td > & {
+		h3 {
+			font-size: 1em;
+			margin: 0;
+			padding: .5em 2em;
+		}
+	}
 }
 
 .launchpad-repeater-container div:first-child .launchpad-flexible-metabox-close {

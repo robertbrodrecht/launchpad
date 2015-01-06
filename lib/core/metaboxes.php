@@ -848,7 +848,7 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
  * @since		1.0
  */
 function launchpad_render_form_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
-			
+				
 	// If we're dealing with site options, handle the set up.
 	if($field_prefix === 'launchpad_site_options') {
 		// Get the site options.
@@ -880,7 +880,11 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	}
 	
 	// If we're dealing with flexible content, the field's @name needs to be sandboxed into an array.
-	if($field_prefix !== 'launchpad_flexible' && stristr($args['name'], 'launchpad_meta') === false) {
+	if(
+		$field_prefix !== 'launchpad_flexible' && 
+		stristr($args['name'], 'launchpad_meta') === false &&
+		!preg_match('/^' . $field_prefix . '/', $args['name'])
+	) {
 		$field_output_name = $field_prefix . '[' . $args['name'] . ']';
 		
 	// Otherwise, it can be whatever the developer wanted it to be.
