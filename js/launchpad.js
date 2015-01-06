@@ -549,6 +549,7 @@
 	 */
 	function init() {
 		var body = $(document.body),
+			addthis_id = $('body[data-addthis]'),
 			scrollingIsJanky = body.data('scroll-helper'),
 			doNotSupport = [/MSIE [1234567]\.(?!.*IEMobile)/],
 			l, i, startupImage = false;
@@ -585,11 +586,15 @@
 		initHeightMatch();
 		$(window).load(initHeightMatch);
 		
-		if($('[data-ajax="true"]').length && !!history.pushState) {
+		if($('[data-ajax="true"]').length && !!history.pushState && !addthis_id.length) {
 			window.supports.ajax = true;
 			initAjax();
 		} else {
 			window.supports.ajax = false;
+			addthis_id = addthis_id.data('addthis_id');
+			body.append(
+				$('<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=' + addthis_id + '"></script>')
+			);
 		}
 		
 		// Start up offline support code if needed.

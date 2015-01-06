@@ -351,3 +351,26 @@ div.nav-header {
 		}	
 	}
 }
+
+.share-container {
+	h1,
+	div,
+	ul,
+	li {
+		display: inline-block;
+		font-size: 1em;
+		list-style: none;
+		margin: auto;
+		padding: 0;
+		text-transform: none;
+	}
+	
+	h1:after {
+		content: ': ';
+	}
+	
+	a {
+		display: inline-block;
+		margin-left: 1em;
+	}
+}

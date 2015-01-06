@@ -290,6 +290,12 @@ function launchpad_get_setting_fields() {
 								'small' => 'DO NOT include the @.',
 								'type' => 'text'
 							)
+						),
+						'add_this_id' => array(
+							'name' => 'Add This ID',
+							'args' => array(
+								'type' => 'text'
+							)
 						)
 					)
 				),
