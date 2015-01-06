@@ -19,11 +19,6 @@ To Do For 1.3
 
 * Clean nav classes
 * AddThis support
-* Flexible content modules and field types.
-  * What other modules should be built-in?
-    * Gallery
-    * Image with Caption
-  * Other Field Types?
 * Codex review.
 * Update things like the hamburger menu to use checkbox/radio instead of target.
 * Decide about whether offline support should be removed.
@@ -48,6 +43,9 @@ To Do For 1.4 / 1.5
   * jpegrescan
   * jpegtran
 * Determine feasibility of conditional logic for meta fields.
+* Flexible content modules and field types.
+  * What other modules should be built-in?
+  * Other Field Types?
 
 Future Wants
 ============
