@@ -18,9 +18,8 @@ Due to the slow update cycle of Internet Explorer, the Launchpad front end curre
 
 * Internet Explorer 10
 * Internet Explorer 9
-* Internet Explorer 8
 
-**Internet Explorer 8 support will be dropped by the end of 2014!!!***
+**Internet Explorer 8 support was dropped at the end of 2014!**
 
 There are polyfills for <code>input @placeholder</code> and <code>window.matchMedia</code> that will be removed when IE9 support is dropped.  After IE10 is dropped, the HTML5 Shiv will be removed.
 

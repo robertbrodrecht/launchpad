@@ -551,7 +551,7 @@
 		var body = $(document.body),
 			addthis_id = $('body[data-addthis]'),
 			scrollingIsJanky = body.data('scroll-helper'),
-			doNotSupport = [/MSIE [1234567]\.(?!.*IEMobile)/],
+			doNotSupport = [/MSIE [12345678]\.(?!.*IEMobile)/],
 			l, i, startupImage = false;
 		
 		body.trigger('launchpadPreInit');

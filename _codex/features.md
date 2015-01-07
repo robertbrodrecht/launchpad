@@ -12,7 +12,6 @@ In case I forgot anything in the previous sections...
 
 ### HTML-ish
 
-* Offline support with intelligent cache refreshing via applicationCache.
 * Input placeholder polyfill because WTF IE9.
 * Templates for Apple Startup Images and dummy files for Apple Touch Icons and Favicon.
 * HTML5 Shiv included for IE8 (until I decide to stop supporting IE8 on the front end, which will probably be some time in late 2014).
@@ -23,14 +22,14 @@ In case I forgot anything in the previous sections...
 * REM mixin based on root font size variable (see previous bullet) to make it dead easy to use REMs with a fallback.  E.g. <code>@include rem('padding', 5px 20px);</code>  A new version of the mixin might be better but it needs testing.
 * Vertical rhythm based on SASS variables.
 * Grid system.  Recently rewritten (and therefore untested) because the old one was too slow and didn't match my co-worker's concept of what grid systems do.
-* Conditional comments for IE8/9 that don't make your HTML (specifically the actual <code>html</code> element) look like a janky mess.  Use <code>.msie-8 ~ *</code> as your a prefix to a selector to change styles for IE8 and <code>.msie-9 ~ *</code> for IE9.
+* Conditional comments for IE9 that don't make your HTML (specifically the actual <code>html</code> element) look like a janky mess.  Use <code>.msie-9 ~ *</code> for IE9.
 * Unsupported browser "[Universal Stylesheet](https://code.google.com/p/universal-ie6-css/)."
+* Built-in <code>:checked</code>-based "hamburger" menu.  You still have to style it, but the code handles some of the tedious bits.
 
 ### jQuery / JavaScript
 
 * Ajax page loads with History PushState/PopState and Google Analytics pageview events.
 * Limited JavaScript feature detection for features that matter (screen DPI, position sticky, css transitions, and touch-capable) instead of including the full Modernizr suite.
-* Built-in <code>:target</code>-based "hamburger" menu.  You still have to style it, but the code handles some of the tedious bits.
 * [60FPS scrolling](http://www.thecssninja.com/javascript/follow-up-60fps-scroll) option.  Add data-scroll-helper to the body.
 * Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit, ajaxRequestStart, ajaxRequestEnd.  More will be available eventually, I think.
 * jQuery Custom Events for scrollStart, scrollStop, resizeStart, and resizeStop so that you don't have to shoot yourself in the foot by using resize and scroll events when you don't have to.
