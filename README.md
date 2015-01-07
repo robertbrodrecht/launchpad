@@ -17,7 +17,6 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.4
 =============
 
-* Remove offline support
 * Take another stab at MU Support
 * Determine feasibility of conditional logic for meta fields.
 * Pretty Search URLs

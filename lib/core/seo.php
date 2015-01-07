@@ -8,6 +8,25 @@
  */
 
 
+
+
+/**
+ * Handle redirecting searches.
+ *
+ * @since		1.4
+ */
+function launchpad_pretty_search_redirect() {
+	global $wp_rewrite;
+	if(is_search() && !is_admin() && !preg_match('|^/search/|', $_SERVER['REQUEST_URI'])) {
+		wp_redirect(home_url('/' . $wp_rewrite->search_base . '/' . urlencode(get_query_var('s')) . '/'));
+		exit;
+	}
+}
+if($wp_rewrite->using_permalinks()) {
+	add_action('template_redirect', 'launchpad_pretty_search_redirect');
+}
+
+
 /**
  * Add SEO Meta Boxes
  *
