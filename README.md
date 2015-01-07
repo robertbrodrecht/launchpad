@@ -18,7 +18,6 @@ To Do For 1.3
 =============
 
 * Codex review.
-* Decide about whether offline support should be removed.
 
 To Do For 1.4 / 1.5
 ===================
