@@ -181,13 +181,13 @@ $excerpt = launchpad_seo_excerpt();
 		<script>document.body.className = document.body.className.replace(/no-js/g, 'js');</script>
 		<!--[if IE 9]><span class="msie-9"></span><![endif]-->
 		<!--[if IE 8]><span class="msie-8"></span><![endif]-->
+		<input type="checkbox" id="mobile-nav-toggle" class="ui-toggle">
 		<a href="#main" id="skip-to-content">Skip to Content</a>
 		<header id="header" role="banner">
 			<h1 id="logo"><a href="/"><?php bloginfo('name') ?></a></h1>
 		</header>
 		<nav id="navigation" role="navigation">
-			<a href="#navigation" class="hamburger">Show Menu</a>
-			<a href="#header" class="hamburger">Hide Menu</a>
+			<label for="mobile-nav-toggle" class="ui-toggle-target hamburger">Show Menu</label>
 			<?php launchpad_wp_nav_menu(array('theme_location' => 'primary', 'menu_class' => 'nav-header', 'container' => false)); ?>
 		</nav>
 		<section id="main" class="main" role="main" aria-live="polite" aria-relevant="text">

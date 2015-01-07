@@ -18,7 +18,6 @@ To Do For 1.3
 =============
 
 * Codex review.
-* Update things like the hamburger menu to use checkbox/radio instead of target.
 * Decide about whether offline support should be removed.
 * Add default pages with smart launchpad_get_template_part instead of single index page.
 

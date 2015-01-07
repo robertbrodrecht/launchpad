@@ -1,4 +1,14 @@
 .ui-toggle {
+	clip: auto;
+	height: 0;
+	overflow: hidden;
+	position: fixed;
+	visibility: hidden;
+	top: -200px;
+	width: 0;
+}
+
+.ui-toggle-target {
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
@@ -313,13 +323,6 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 
 .flexible-accordion-list dt:target + dd {
 	display: block;
-}
-
-[class*="slide-toggle-"] {
-	clip: auto;
-	height: 0;
-	position: absolute;
-	width: 0;
 }
 
 .flexible-gallery-item {

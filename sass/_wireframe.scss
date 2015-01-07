@@ -163,6 +163,15 @@ div.nav-header {
 		line-height: 1;
 	}
 	
+	#mobile-nav-toggle:checked ~ #navigation &,
+	#mobile-nav-toggle:checked ~ * #navigation & {
+		&:before {
+			content: '×';
+			font-size: 1em;
+			line-height: 1;
+		}
+	}
+	
 	@include media-max(small) {
 		display: block;
 		
@@ -172,26 +181,12 @@ div.nav-header {
 	}
 }
 
-@include media-max(small) {
-	%navtarget {
-		.hamburger {
-			display: none;
-		}
-		
-		.hamburger + .hamburger {
-			display: block;
-		}
-		
+@include media-max(small) {	
+	#mobile-nav-toggle:checked ~ #navigation,
+	#mobile-nav-toggle:checked ~ * #navigation {
 		> ul {
 			@include rems((height: $body-line-height-px*20));
 		}
-	}
-	#navigation.target {
-		@extend %navtarget;
-	}
-	
-	#navigation:target {
-		@extend %navtarget;
 	}
 }
 

@@ -640,28 +640,14 @@
 				'*',
 				function(e) {
 					var i = $(this),
-						href = i.attr('href'),
-						nav = $('#navigation');
+						href = i.attr('href');
 					if(!href) {
 						return;
 					}
-					if(i.is('a.hamburger')) {
-						e.preventDefault();
-						nav.toggleClass('target');
-						body.trigger(nav.hasClass('target') ? 'launchpadMenuOpen' : 'launchpadMenuClose');
-						if(location.hash === '#navigation' && !nav.hasClass('target')) {
-							location.hash = '';
-						}
-					} else if(window.navigator.standalone && !window.supports.ajax) {
+					if(window.navigator.standalone && !window.supports.ajax) {
 						if(href.substr(0, 1) === '/' || location.href.split('/')[2] === href.split('/')[2]) {
 							e.preventDefault();
 							location.href = href;
-						}
-					} else {
-						nav.removeClass('target');
-						body.trigger('launchpadMenuClose');
-						if(location.hash === '#navigation') {
-							location.hash = '';
 						}
 					}
 				}
