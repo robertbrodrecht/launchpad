@@ -17,10 +17,7 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.4
 =============
 
-* Take another stab at MU Support
 * Determine feasibility of conditional logic for meta fields.
-* Pretty Search URLs
-* Figure out if anything needs to be put in different projects for better sharing.
 
 To Do For 1.5
 =============
@@ -39,9 +36,15 @@ To Do For 1.5
   * Other Field Types?
 * Database and Asset Migration
 
+To Do For 1.6
+=============
+
+* Take another stab at MU Support
+
 Future Wants
 ============
 
+* Figure out if anything needs to be put in different projects for better sharing.
 * Header Ad Designer.
   * Create ads as post type.
   * Design ads in the browser.  Fonts in theme and positioning.
