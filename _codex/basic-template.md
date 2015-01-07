@@ -20,7 +20,28 @@ If you are hacking directly on Launchpad, you may have to update Launchpad manua
 
 Launchpad embraces WordPress's file layout that has been espoused since the twentyeleven theme was released: master page files with includes to specific content files.  Therefore, the [template hierarchy](http://codex.wordpress.org/Template_Hierarchy) is preserved.
 
-Launchpad ships with an index.php file that attempts to use "content-post_type.php" where "post_type" is the post type "code" sent as the first parameter to <code>register_post_type</code> (e.g. post or page for WordPress's built-in post types).  By default this is handled through Launchpad's caching system.  If you are working on a page that includes randomly generated content or content pulled from a third-party that requires different caching than the caching used for the page, you should break you template into chunks.  For example:
+Launchpad ships with an index.php file that attempts to find the best possible content file.  By default, this will be content-posttype.php and will be overridden when more specific templates are found.  The hierarchy is something like this:
+
+- Single Objects
+  - content-slug.php
+  - content-page-slug.php
+  - content-posttype-postformat.php
+  - content-postformat.php
+  - content-single-posttype.php
+  - content-single.php
+- Taxonomy Pages
+  - content-taxid-termslug.php
+  - content-taxid.php
+  - content-archive-posttype.php
+  - content-archive.php
+  - content-posttype.php
+- Archive Pages
+  - content-archive.php
+  - content-posttype.php
+- Search
+  - content-search.php
+
+The inclusion of template files in index.php is handled through Launchpad's caching system.  If you are working on a page that includes randomly generated content or content pulled from a third-party that requires different caching than the caching used for the page, you should break you template into chunks.  For example:
 
 ```php
 get_header();	

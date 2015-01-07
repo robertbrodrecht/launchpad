@@ -65,7 +65,11 @@ function launchpad_get_cache_id() {
 	// If we're on an archive page, get the the taxonomy and slug as the cache id.
 	} else if($wp_query->is_archive) {
 		$cur_tax = $wp_query->get_queried_object();
-		$cache_id = 'archive-' . $cur_tax->taxonomy . '-' . $cur_tax->slug;
+		if($cur_tax && isset($cur_tax->taxonomy)) {
+			$cache_id = 'archive-' . $cur_tax->taxonomy . '-' . $cur_tax->slug;
+		} else {
+			$cache_id = md5($_SERVER['REQUEST_URI']);
+		}
 	
 	// If we're on a posts page, use the post type with the request URI as the cache id.
 	} else if($wp_query->is_posts_page) {

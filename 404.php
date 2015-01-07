@@ -20,7 +20,7 @@ get_header();
 					Sorry, but the page you were trying to view does not exist.  You may be interested in one of the following options:
 				</p>
 				<ul>
-					<?php if($_SERVER['HTTP_REFERER']) { ?>
+					<?php if(isset($_SERVER['HTTP_REFERER'])) { ?>
 
 					<li><a href="<?php echo $_SERVER['HTTP_REFERER'] ?>">Go back and try again</a></li>
 

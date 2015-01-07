@@ -523,7 +523,7 @@ function launchpad_search_flexible_join($q) {
 			foreach($types as $type) {
 				
 				// If the type has flexible content.
-				if($type['flexible']) {
+				if(isset($type['flexible'])) {
 					
 					// Loop the flexible content.
 					foreach($type['flexible'] as $flex_name => $flex_value) {
@@ -537,7 +537,7 @@ function launchpad_search_flexible_join($q) {
 				}
 				
 				// If the type has metabox content.
-				if($type['metaboxes']) {
+				if(isset($type['metaboxes'])) {
 					
 					// Loop the metabox content.
 					foreach($type['metaboxes'] as $meta_name => $meta_value) {
@@ -582,7 +582,7 @@ function launchpad_search_flexible_where($q) {
 			foreach($types as $type) {
 				
 				// If the type has flexible content.
-				if($type['flexible']) {
+				if(isset($type['flexible'])) {
 					
 					// Loop the flexible content.
 					foreach($type['flexible'] as $flex_name => $flex_value) {
@@ -600,7 +600,7 @@ function launchpad_search_flexible_where($q) {
 				}
 				
 				// If the type has metabox content.
-				if($type['metaboxes']) {
+				if(isset($type['metaboxes'])) {
 					
 					// Loop the metabox content.
 					foreach($type['metaboxes'] as $meta_name => $meta_value) {

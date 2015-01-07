@@ -169,7 +169,7 @@ function launchpad_register_post_types() {
 			// Loop the taxonomies.
 			foreach($taxonomies as $taxonomy => $taxonomy_details) {
 				// If the developer included 'labels', they want full control.
-				if($taxonomy_details['labels']) {
+				if(isset($taxonomy_details['labels'])) {
 					register_taxonomy($taxonomy_details);
 				
 				// Otherwise, we have to build an array for the developer.
