@@ -30,7 +30,9 @@
 	 * Attempt to Manage ApplicationCache Refresh Intelligently
 	 *
 	 * @since	1.0
+	 * @deprecated	Deprecated since 1.4
 	 */
+	/*
 	function initMonitorLogin() {
 		var login_interval = false,
 			cache_update_interval = false,
@@ -81,7 +83,7 @@
 		checkLogin();
 		login_interval = setInterval(checkLogin, 60000);
 	}
-	
+	*/
 	
 	/**
 	 * Create Height Match Data from Children Data
@@ -161,7 +163,7 @@
 			);
 			
 		$(document.body).on(
-				'ajaxRequestEnd load',
+				'ajaxRequestEnd ajaxComplete load',
 				function() {
 					setTimeout(heightMatch, 100);
 				}
@@ -173,7 +175,9 @@
 	 * Functionality Related to Offline Support.
 	 *
 	 * @since	1.0
+	 * @deprecated	Deprecated since 1.4
 	 */
+	/*
 	function initOfflineSupport() {
 		// Watch to see if the user logs in or out so we can manage their cache.
 		initMonitorLogin();
@@ -245,7 +249,7 @@
 				);
 		}
 	}
-	
+	*/
 	
 	/**
 	 * Manage Ajax Page Loads
@@ -600,9 +604,9 @@
 		}
 		
 		// Start up offline support code if needed.
-		if(window.applicationCache && $('html[manifest]').length) {
-			initOfflineSupport();
-		}
+		//if(window.applicationCache && $('html[manifest]').length) {
+		//	initOfflineSupport();
+		//}
 		
 		if(window.navigator.standalone && window.supports.ajax) {
 			$('link[rel=apple-touch-startup-image]').each(
