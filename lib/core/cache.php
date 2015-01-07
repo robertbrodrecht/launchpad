@@ -476,6 +476,7 @@ function launchpad_wp_nav_menu($args) {
  * Generate an App Cache Manifest
  *
  * @since		1.0
+ * @deprecated deprecated since version 1.4
  */
 function launchpad_cache_manifest() {
 	

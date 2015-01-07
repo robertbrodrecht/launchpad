@@ -16,15 +16,10 @@ if(isset($site_options['ajax_page_loads']) && $site_options['ajax_page_loads'] =
 	$ajax = 'true';
 }
 
-$offline = '';
-if(isset($site_options['offline_support']) && $site_options['offline_support'] === true) {
-	$offline = '/manifest.appcache';
-}
-
 $excerpt = launchpad_seo_excerpt();
 
 ?><!DOCTYPE html>
-<html lang="en"<?php echo $offline ? ' manifest="' . $offline . '"' : '' ?>>
+<html lang="en">
 	<head>
 		<meta charset="<?php bloginfo('charset'); ?>">
 		<title><?php launchpad_title(true); ?></title>
