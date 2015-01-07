@@ -238,15 +238,6 @@ function launchpad_get_setting_fields() {
 					)
 				)
 			),
-			/*
-			'offline_support' => array(
-				'name' => 'Offline Support <small class="launchpad-block">All pages, 100 posts, and various assets will be available offline. <br><strong><em>NOT DEVELOPMENT FRIENDLY!</em></strong></small>',
-				'args' => array(
-					'small' => 'Enable offline support.',
-					'type' => 'checkbox'
-				)
-			),
-			*/
 			'ajax_page_loads' => array(
 				'name' => 'Ajax Page Loads',
 				'args' => array(

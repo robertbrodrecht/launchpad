@@ -25,66 +25,6 @@
 	
 	var gaon = ($('#google-analytics').length > 0);
 	
-	
-	/**
-	 * Attempt to Manage ApplicationCache Refresh Intelligently
-	 *
-	 * @since	1.0
-	 * @deprecated	Deprecated since 1.4
-	 */
-	/*
-	function initMonitorLogin() {
-		var login_interval = false,
-			cache_update_interval = false,
-			logged_in = false,
-			is_first_run = true;
-		
-		function updateCache() {
-			if(logged_in && navigator.onLine && $('html[manifest]').length) {
-				if(window.dev) {
-					console.log('Forcing AppCache to update because user is logged in.');
-				}
-				window.applicationCache.update();
-			}
-		}
-		
-		function checkLogin() {
-			if(navigator.onLine) {
-				$.get('/api/?action=user_logged_in').done(
-					function(data) {
-						logged_in = data;
-						if(logged_in) {
-							if(!cache_update_interval) {
-								if(window.dev) {
-									console.log('Starting to invalidate AppCache every 60 seconds because user is logged in.');
-								}
-								updateCache();
-								cache_update_interval = setInterval(updateCache, 60000);
-							}
-						} else if(cache_update_interval) {
-							if(window.dev) {
-								console.log('Removing AppCache invalidation interval because user is not logged in.');
-							}
-							clearInterval(cache_update_interval);
-							cache_update_interval = false;
-						} else if(is_first_run) {
-							if(window.dev) {
-								console.log('User is not logged in.  Allowing AppCache to self-manage.');
-							}
-						}
-						is_first_run = false;
-					}
-				);
-			} else {
-				clearInterval(cache_update_interval);
-			}
-		}
-		
-		checkLogin();
-		login_interval = setInterval(checkLogin, 60000);
-	}
-	*/
-	
 	/**
 	 * Create Height Match Data from Children Data
 	 *
@@ -170,86 +110,6 @@
 			);
 	}
 	
-	
-	/**
-	 * Functionality Related to Offline Support.
-	 *
-	 * @since	1.0
-	 * @deprecated	Deprecated since 1.4
-	 */
-	/*
-	function initOfflineSupport() {
-		// Watch to see if the user logs in or out so we can manage their cache.
-		initMonitorLogin();
-	
-		// Handle online/offline transitions.
-		$(window).on(
-				'offline',
-				function() {
-					if(window.dev) {
-						console.log('Browser is offline.');
-					}
-					$(document.body).append(
-						$('<div id="offline-notification" class="system-notification">✱ You are currently offline.</div>')
-					);
-				}
-			).on(
-				'online',
-				function() {
-					if(window.dev) {
-						console.log('Browser is online.');
-					}
-					$('#offline-notification').remove();
-					try {
-						applicationCache.update();
-					} catch(err) {
-						if(window.dev) {
-							console.log('Attempting to force an update to the appCache threw an error, but we caught it.', err);
-						}
-					}
-				}
-			);
-		
-		// Handle appcache updates.
-		if(!navigator.onLine) {
-			$(window).trigger('offline');
-		} else {
-			if(window.dev) {
-				console.log('Browser lacks cache. Initiating appcache update.');
-			}
-			$(window).trigger('online');
-		}
-		
-		// Add listeners for cache updates.
-		applicationCache.addEventListener(
-				'updateready',
-				function() {
-					if(applicationCache.status === applicationCache.UPDATEREADY) {
-						if(window.dev) {
-							console.log('Appcache updated. Swapping now.');
-						}
-						applicationCache.swapCache();
-					}
-				}
-			);
-		
-		// If in dev mode, show helpful event logs.
-		if(window.dev) {
-			applicationCache.addEventListener(
-					'progress',
-					function(e) {
-						console.log('Appcache loading ' + e.loaded + ' of ' + e.total + '.');
-					}
-				);
-			applicationCache.addEventListener(
-					'obsolete',
-					function() {
-						console.log('Appcache has been obsoleted.');
-					}
-				);
-		}
-	}
-	*/
 	
 	/**
 	 * Manage Ajax Page Loads
@@ -602,11 +462,6 @@
 				);
 			}
 		}
-		
-		// Start up offline support code if needed.
-		//if(window.applicationCache && $('html[manifest]').length) {
-		//	initOfflineSupport();
-		//}
 		
 		if(window.navigator.standalone && window.supports.ajax) {
 			$('link[rel=apple-touch-startup-image]').each(
