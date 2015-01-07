@@ -21,6 +21,7 @@ To Do For 1.4
 * Take another stab at MU Support
 * Determine feasibility of conditional logic for meta fields.
 * Pretty Search URLs
+* Figure out if anything needs to be put in different projects for better sharing.
 
 To Do For 1.5
 =============
