@@ -68,10 +68,10 @@ foreach($flex_values['gallery'] as $gallery_item) {
 
 // Do some cleanup.
 
+$gallery_items = null;
+$gallery_item = null;
 $uuid = null;
 $image = null;
-$gallery_item = null;
-$gallery_items = null;
 $imgcount = null;
 
-unset($gallery_items, $uuid, $image, $gallery_item, $imgcount);
+unset($gallery_items, $gallery_item, $uuid, $image, $imgcount);

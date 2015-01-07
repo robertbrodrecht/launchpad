@@ -17,9 +17,6 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.3
 =============
 
-* AddThis support
-	* Use SEO titles
-	* Test
 * Codex review.
 * Update things like the hamburger menu to use checkbox/radio instead of target.
 * Decide about whether offline support should be removed.

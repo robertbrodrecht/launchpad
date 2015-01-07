@@ -591,10 +591,12 @@
 			initAjax();
 		} else {
 			window.supports.ajax = false;
-			addthis_id = addthis_id.data('addthis_id');
-			body.append(
-				$('<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=' + addthis_id + '"></script>')
-			);
+			if(addthis_id.length) {
+				addthis_id = addthis_id.data('addthis_id');
+				body.append(
+					$('<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=' + addthis_id + '"></script>')
+				);
+			}
 		}
 		
 		// Start up offline support code if needed.

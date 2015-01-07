@@ -53,6 +53,7 @@ In case I forgot anything in the previous sections...
 * hCard example in footer if you're into that sort of thing.
 * Noindex, follow on archive pages.
 * XML Sitemaps generated automatically following schema.org standards.
+* AddThis support built in.
 
 
 ## Back-end Features
