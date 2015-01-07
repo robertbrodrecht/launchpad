@@ -25,6 +25,7 @@ In case I forgot anything in the previous sections...
 * Conditional comments for IE9 that don't make your HTML (specifically the actual <code>html</code> element) look like a janky mess.  Use <code>.msie-9 ~ *</code> for IE9.
 * Unsupported browser "[Universal Stylesheet](https://code.google.com/p/universal-ie6-css/)."
 * Built-in <code>:checked</code>-based "hamburger" menu.  You still have to style it, but the code handles some of the tedious bits.
+* Basic wireframing code that you can copy/paste into your final stylesheet.
 
 ### jQuery / JavaScript
 
