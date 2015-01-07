@@ -18,7 +18,7 @@ To Do For 1.4
 =============
 
 * Determine feasibility of conditional logic for meta fields.
-* Figure out how to break out some excess code as examples, e.g. ajax page loads.
+* Figure out how to break out some excess JS code as examples, e.g. ajax page loads.
 
 To Do For 1.5
 =============
