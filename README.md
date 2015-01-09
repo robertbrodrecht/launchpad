@@ -19,6 +19,8 @@ To Do For 1.4
 
 * Determine feasibility of conditional logic for meta fields.
 * Figure out how to break out some excess JS code as examples, e.g. ajax page loads.
+* Add settings for iOS icons and images.
+* Add settings for Facebook OG and Twitter Card support.
 
 To Do For 1.5
 =============
