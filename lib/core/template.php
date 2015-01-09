@@ -410,6 +410,22 @@ add_action('template_redirect', 'launchpad_set_page_defines');
 
 
 /**
+ * Wrap YouTube video in the video-contianer wrapper.
+ *
+ * @param		str $html The embed HTML
+ * @param		str $url The video URL
+ * @since		1.4
+ */
+function add_video_embed_note($html, $url) {
+	if(preg_match('|https?://w*?\.?youtu|', $url) || preg_match('|https?://w*?\.?vimeo\.com|', $url)) {
+		$html = '<div class="video-container">' . $html . '</div>';
+	}
+	return $html;
+}
+add_filter('embed_oembed_html', 'add_video_embed_note', 10, 3);
+
+
+/**
  * A More Semantic Gallery Shortcode Handler
  *
  * @param		array $attr The attributes from the shortcode.
