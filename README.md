@@ -21,6 +21,8 @@ To Do For 1.4
 * Figure out how to break out some excess JS code as examples, e.g. ajax page loads.
 * Add settings for iOS icons and images.
 * Add settings for Facebook OG and Twitter Card support.
+* Video embed module or else override oembed.  https://wordpress.org/support/topic/filter-hook-for-built-in-oembed-providers-eg-youtube
+* Fix date / datetime field bugs.
 
 To Do For 1.5
 =============
