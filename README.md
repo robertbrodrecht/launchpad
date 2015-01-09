@@ -19,10 +19,7 @@ To Do For 1.4
 
 * Determine feasibility of conditional logic for meta fields.
 * Figure out how to break out some excess JS code as examples, e.g. ajax page loads.
-* Add settings for iOS icons and images.
-* Add settings for Facebook OG and Twitter Card support.
 * Video embed module or else override oembed.  https://wordpress.org/support/topic/filter-hook-for-built-in-oembed-providers-eg-youtube
-* Fix date / datetime field bugs.
 
 To Do For 1.5
 =============
@@ -45,6 +42,7 @@ To Do For 1.6
 =============
 
 * Take another stab at MU Support
+* Metabox and Flexible Content UI
 
 Future Wants
 ============

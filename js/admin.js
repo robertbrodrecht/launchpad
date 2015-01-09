@@ -80,7 +80,7 @@ jQuery(document).ready(
 		makeSortable();
 		
 		if($("input.launchpad-date-picker").length) {
-			$("input.launchpad-date-picker").datepicker();
+			$("input.launchpad-date-picker").datepicker().unbind('keydown').unbind('keyup').unbind('keypress');
 		}
 	
 		// Do admin stuff.
