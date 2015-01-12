@@ -75,9 +75,78 @@ jQuery(document).ready(
 			}
 		}
 		
+		function handleToggleStates() {
+			$('[data-toggle]').each(
+				function() {
+					var me = $(this),
+						cont = me.closest('.launchpad-flexible-metabox-container, .postbox')
+						toggle = me.data('toggle');
+					
+					$.each(
+						toggle,
+						function(index) {
+							var val = this,
+								ishidden = true,
+								tmp;
+							if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
+								if(this === '') {
+									if(me.prop('checked')) {
+										ishidden = false;
+									} else {
+										ishidden = true;
+									}
+								} else {
+									if(me.prop('checked')) {
+										ishidden = true;
+									} else {
+										ishidden = false;
+									}
+								}
+							} else {
+								if($.isArray(this)) {
+									$.each(
+										val,
+										function(index) {
+											val[index] = val[index].toString().toLowerCase();
+										}
+									);
+									tmp = $.inArray(me.val().toLowerCase(), val);
+								} else {
+									tmp = (me.val().toLowerCase() === this.toLowerCase());
+								}
+								if(tmp) {
+									ishidden = true;
+								} else {
+									ishidden = false;
+								}
+							}
+							cont.find('[name*="[' + index + ']"]').each(
+								function () {
+									if(ishidden) {
+										$(this).closest('.launchpad-metabox-field').addClass('launchpad-toggle-hidden');
+									} else {
+										$(this).closest('.launchpad-metabox-field').removeClass('launchpad-toggle-hidden');
+									}
+								}
+							);
+						}
+					);
+				}
+			);
+		}
+		
+		$(document).on(
+			'change keyup',
+			'input, select, textarea',
+			function(e) {
+				handleToggleStates();
+			}
+		);
+		
 		var regenerate_thumbnail_ids = [];
 		
 		makeSortable();
+		handleToggleStates();
 		
 		if($("input.launchpad-date-picker").length) {
 			$("input.launchpad-date-picker").datepicker().unbind('keydown').unbind('keyup').unbind('keypress');

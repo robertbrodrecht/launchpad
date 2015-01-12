@@ -97,13 +97,14 @@ function launchpad_create_select_options($options, $values) {
  * 
  * @param		string $field_output_name The field's "name" attribute.
  * @param		string $field_output_id The field's "id" attribute.
+ * @param		array $args The field arguments
  * @param		bool $val Whether the checkbox is checked.
  * @param		string $class A class to use on the label if this is a subfield.
  * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_checkbox($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_checkbox($field_output_name, $field_output_id = '', $args, $val = false, $class = '', $subfield = false) {
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -122,7 +123,7 @@ function launchpad_render_field_checkbox($field_output_name, $field_output_id = 
 	if($subfield) {
 		echo '<label class="' . $class . '">';
 	}
-	echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . '>';
+	echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '>';
 	if($subfield) {
 		echo ' ' . $subfield . '</label>';
 	}
@@ -175,7 +176,7 @@ function launchpad_render_field_generic($field_output_name, $field_output_id = '
 		$add_class .= ' launchpad-date-picker';
 	}
 	
-	echo '<input type="' . $args['type'] . '" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text' . $add_class . '"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
+	echo '<input type="' . $args['type'] . '" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . htmlentities($val) . '" class="regular-text' . $add_class . '"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -194,7 +195,7 @@ function launchpad_render_field_generic($field_output_name, $field_output_id = '
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_text($field_output_name, $field_output_id = '', $args, $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_text($field_output_name, $field_output_id = '', $args = array(), $val = false, $class = '', $subfield = false) {
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -209,7 +210,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . htmlentities($val) . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>';
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . htmlentities($val) . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -228,7 +229,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_textarea($field_output_name, $field_output_id = '', $args, $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_textarea($field_output_name, $field_output_id = '', $args = array(), $val = false, $class = '', $subfield = false) {
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -243,7 +244,7 @@ function launchpad_render_field_textarea($field_output_name, $field_output_id = 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . '>' . html_entity_decode($val) . '</textarea>';
+	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : ''). (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '>' . html_entity_decode($val) . '</textarea>';
 	if($subfield) {
 		echo '</label>';
 	}
@@ -255,6 +256,7 @@ function launchpad_render_field_textarea($field_output_name, $field_output_id = 
  * 
  * @param		string $field_output_name The field's "name" attribute.
  * @param		string $field_output_id The field's "id" attribute.
+ * @param		array $args The arguments on the field
  * @param		string $options The options to populate.
  * @param		bool $val Whether the checkbox is checked.
  * @param		string $class A class to use on the label if this is a subfield.
@@ -262,7 +264,7 @@ function launchpad_render_field_textarea($field_output_name, $field_output_id = 
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_select($field_output_name, $field_output_id = '', $options = array(), $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_select($field_output_name, $field_output_id = '', $args = array(), $options = array(), $val = false, $class = '', $subfield = false) {
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -279,7 +281,7 @@ function launchpad_render_field_select($field_output_name, $field_output_id = ''
 	}
 	
 	// Create the select.
-	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
+	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '>';
 	echo '<option value="">Select One</option>';
 	echo launchpad_create_select_options($options, $val);
 	echo '</select>';
@@ -294,6 +296,7 @@ function launchpad_render_field_select($field_output_name, $field_output_id = ''
  * 
  * @param		string $field_output_name The field's "name" attribute.
  * @param		string $field_output_id The field's "id" attribute.
+ * @param		array $args The arguments on the field
  * @param		string $options The options to populate.
  * @param		bool $val Whether the checkbox is checked.
  * @param		string $class A class to use on the label if this is a subfield.
@@ -301,7 +304,7 @@ function launchpad_render_field_select($field_output_name, $field_output_id = ''
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_selectmulti($field_output_name, $field_output_id = '', $options = array(), $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_selectmulti($field_output_name, $field_output_id = '', $args = array(), $options = array(), $val = false, $class = '', $subfield = false) {
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -321,7 +324,7 @@ function launchpad_render_field_selectmulti($field_output_name, $field_output_id
 	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
 	
 	// Create the select.
-	echo '<select name="' . $field_output_name . '[]" size="10" multiple="multiple" id="' . $field_output_id . '">';
+	echo '<select name="' . $field_output_name . '[]" size="10" multiple="multiple" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '>';
 	echo launchpad_create_select_options($options, $val);
 	echo '</select>';
 	if($subfield) {
@@ -335,7 +338,7 @@ function launchpad_render_field_selectmulti($field_output_name, $field_output_id
  * 
  * @param		string $field_output_name The field's "name" attribute.
  * @param		string $field_output_id The field's "id" attribute.
-  * @param		array $args Pass any arguments.
+ * @param		array $args Pass any arguments.
  * @param		bool $val Whether the checkbox is checked.
  * @param		string $class A class to use on the label if this is a subfield.
  * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
@@ -378,7 +381,7 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
 	}
 	
 	// The file ID is stored here.
-	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" ' . (array_key_exists('limit', $args) ? 'data-limit="' . html_entity_decode($args['limit']) . '"' : '') . ' class="file-button">Upload File</button>';
+	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" ' . (array_key_exists('limit', $args) ? 'data-limit="' . html_entity_decode($args['limit']) . '"' : '') . ' class="file-button">Upload File</button>';
 	
 	// If there is an existing image, add a "remove" button.
 	if($existing) {
@@ -396,11 +399,12 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
  * 
  * @param		string $field_output_name The field's "name" attribute.
  * @param		string $field_output_id The field's "id" attribute.
+ * @param		array $args The arguments on the field
  * @param		bool $val Whether the checkbox is checked.
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '', $val = false) {
+function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '', $args = array(), $val = false) {
 	// Output a WYSIWYG editor.  Just the base code.
 	wp_editor(
 			$val, 
@@ -422,13 +426,14 @@ function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '
  * 
  * @param		string $field_output_name The field's "name" attribute.
  * @param		string $field_output_id The field's "id" attribute.
+ * @param		array $args The arguments on the field
  * @param		bool $val Whether the checkbox is checked.
  * @param		string $class A class to use on the label if this is a subfield.
  * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_menu($field_output_name, $field_output_id = '', $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_menu($field_output_name, $field_output_id = '', $args = array(), $val = false, $class = '', $subfield = false) {
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -455,7 +460,7 @@ function launchpad_render_field_menu($field_output_name, $field_output_id = '', 
 	}
 	
 	// Create the select.
-	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '">';
+	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '>';
 	echo '<option value="">Select One</option>';
 	echo launchpad_create_select_options($menu_list, $val);
 	echo '</select>';
@@ -914,7 +919,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			launchpad_render_field_generic($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'checkbox':
-			launchpad_render_field_checkbox($field_output_name, $field_output_id, $val, $class, $subfield);
+			launchpad_render_field_checkbox($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'text':
 			launchpad_render_field_text($field_output_name, $field_output_id, $args, $val, $class, $subfield);
@@ -926,6 +931,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			launchpad_render_field_select(
 				$field_output_name, 
 				$field_output_id, 
+				$args,
 				isset($args['options']) ? $args['options'] : array(), 
 				$val, 
 				$class, 
@@ -936,6 +942,7 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			launchpad_render_field_selectmulti(
 				$field_output_name, 
 				$field_output_id, 
+				$args,
 				isset($args['options']) ? $args['options'] : array(), 
 				$val,
 				$class,
@@ -946,10 +953,10 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			launchpad_render_field_file($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'wysiwyg':
-			launchpad_render_field_wysiwyg($field_output_name, $field_output_id, $val);
+			launchpad_render_field_wysiwyg($field_output_name, $field_output_id, $args, $val);
 		break;
 		case 'menu':
-			launchpad_render_field_menu($field_output_name, $field_output_id, $val, $class, $subfield);
+			launchpad_render_field_menu($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'relationship':
 			launchpad_render_field_relationship(

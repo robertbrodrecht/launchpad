@@ -294,6 +294,8 @@ Metaboxes and Flexible Content use the field arrays to define what fields are av
 			<dd>For repeater fields, the label above the repeater. For address fields, the legend of the fieldset containing the address.</dd>
 			<dt>subfields</dt>
 			<dd>For repeater fields, the subfields array is the same as the fields array.</dd>
+			<dt>toggle</dt>
+			<dd>For native controls, you may specify fields to toggle and what values for the current field cause the field to hide.  This is done as an array like: array('input_1' => '', 'input_2' => 'test').  With the previous array, input_1 would be hidden if the current field is empty while input_2 would be shown.  If the user then typed 'test' into the field, input_1 would be shown and input_2 would be hidden.  Toggling is scoped to the current metabox!</dd>
 		</dl>
 	</dd>
 </dl>
