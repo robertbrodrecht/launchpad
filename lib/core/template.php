@@ -67,6 +67,8 @@ add_action('after_setup_theme', 'launchpad_theme_setup');
  * @since		1.3
  */
 function launchpad_enqueue_scripts() {
+	global $site_options;
+	
 	$load_footer = get_option('active_plugins') ? false : true;
 	if(!is_admin()) {
 		wp_deregister_script('jquery');
@@ -74,6 +76,11 @@ function launchpad_enqueue_scripts() {
 		wp_enqueue_script('jquery');
 		wp_register_script('launchpad_main', get_template_directory_uri() . '/js/main-min.js', array('jquery'), null, $load_footer);
 		wp_enqueue_script('launchpad_main');
+		
+		if($site_options['ajax_page_loads']) {
+			wp_register_script('launchpad_ajax', get_template_directory_uri() . '/js/launchpad-ajax.js', array('jquery', 'launchpad_main'), null, $load_footer);
+			wp_enqueue_script('launchpad_ajax');
+		}
 	}
 }
 add_action('wp_enqueue_scripts', 'launchpad_enqueue_scripts', 100);
