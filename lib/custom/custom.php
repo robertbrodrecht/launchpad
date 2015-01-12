@@ -22,38 +22,6 @@ function custom_launchpad_custom_post_types($post_types) {
 					// Use launchpad_modify_default_flexible_modules filter to modify the defaults.
 					'modules' => launchpad_get_default_flexible_modules()
 				)
-			),
-			'metaboxes' => array(
-				'launchpad_sample_side_metabox' => array(
-					'name' => 'Sample Side Metabox',
-					'location' => 'normal',
-					'position' => 'default',
-					'help' => '<p>The sample metabox is designed to help you build your own metaboxes.</p>',
-					'fields' => array(
-						'sample_side_metabox_checkbox_1' => array(
-							'name' => 'I agree',
-							'help' => '<p>This is a checkbox.</p>',
-							'args' => array(
-								'type' => 'select',
-								'options' => array(
-									1 => 1,
-									2 => 2,
-									3 => 3	
-								),
-								'toggle' => array(
-									'sample_side_metabox_checkbox_2' => array(1, 2)
-								)
-							)
-						),
-						'sample_side_metabox_checkbox_2' => array(
-							'name' => 'I agree again',
-							'help' => '<p>This is a checkbox.</p>',
-							'args' => array(
-								'type' => 'checkbox'
-							)
-						),
-					)
-				)
 			)
 		),
 	);
