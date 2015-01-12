@@ -117,7 +117,7 @@ function launchpad_image_setup() {
 	
 	// Add support for opengraph image size and a gallery thumbnail.
 	add_image_size('opengraph', 1200, 1600, false);
-	add_image_size('gallery', 300, 300, false);
+	add_image_size('gallery', 300, 300, true);
 	
 	// Add each of the image sizes that were left after the filters.
 	if($image_sizes) {
