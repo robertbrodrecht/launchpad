@@ -381,7 +381,7 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
 	}
 	
 	// The file ID is stored here.
-	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"' . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" ' . (array_key_exists('limit', $args) ? 'data-limit="' . html_entity_decode($args['limit']) . '"' : '') . ' class="file-button">Upload File</button>';
+	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" ' . (array_key_exists('limit', $args) ? 'data-limit="' . html_entity_decode($args['limit']) . '"' : '') . ' class="file-button">Upload File</button>';
 	
 	// If there is an existing image, add a "remove" button.
 	if($existing) {

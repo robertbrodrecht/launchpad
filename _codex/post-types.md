@@ -46,7 +46,7 @@ The Launchpad post types array uses a key that represents the post type (the fir
 	<dt>single</dt>
 	<dd>The singular name of the post type.</dd>
 	<dt>slug</dt>
-	<dd>The slug of the post type for rewrites.  If you specify false, the post type becomes "private."  That is, no rewrite, not publically query-able, and not public.</dd>
+	<dd>The slug of the post type for rewrites.  If you specify false, the post type becomes "private."  That is, no rewrite, not publicly query-able, and not public.</dd>
 </dl>
 
 The single and plural keys are used to populate the various <code>labels</code> values.  All other values sent to <code>register_post_type</code> will be created from default values.
@@ -295,7 +295,7 @@ Metaboxes and Flexible Content use the field arrays to define what fields are av
 			<dt>subfields</dt>
 			<dd>For repeater fields, the subfields array is the same as the fields array.</dd>
 			<dt>toggle</dt>
-			<dd>For native controls, you may specify fields to toggle and what values for the current field cause the field to hide.  This is done as an array like: array('input_1' => '', 'input_2' => 'test').  With the previous array, input_1 would be hidden if the current field is empty while input_2 would be shown.  If the user then typed 'test' into the field, input_1 would be shown and input_2 would be hidden.  Toggling is scoped to the current metabox!</dd>
+			<dd>For native controls, you may specify fields to toggle and what values for the current field cause the field to hide.  This is done as an array like: array('input_1' => array('show_when' => ''), 'input_2' => array('hide_when' => 'test')).  With the previous array, both input_1 and input_2 would be shown by default.  If the user then typed 't' into the field, input_1 would be hidden and input_2 would be shown.  If the user continued typing until the value was "test", input_1 would remain hidden and input_2 would hide.  Toggling is scoped to the current metabox!</dd>
 		</dl>
 	</dd>
 </dl>

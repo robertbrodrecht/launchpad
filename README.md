@@ -1,3 +1,7 @@
+#DO NOT USE THE TOGGLE FUNCTIONALITY RIGHT NOW#
+
+Everything should be stable except using the meta fields as toggles.
+
 Launchpad
 =========
 

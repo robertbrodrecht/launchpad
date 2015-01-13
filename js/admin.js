@@ -10,7 +10,7 @@
  */
 
 jQuery(document).ready(
-	function($) {
+	function($, undefined) {
 	
 		function makeSortable() {
 			//jQuery('.launchpad-flexible-container, .launchpad-repeater-container').sortable('destroy');
@@ -79,8 +79,24 @@ jQuery(document).ready(
 			$('[data-toggle]').each(
 				function() {
 					var me = $(this),
+						elval = me.val(),
 						cont = me.closest('.launchpad-flexible-metabox-container, .postbox')
 						toggle = me.data('toggle');
+					
+					if(elval === null) {
+						elval = '';
+					}
+					
+					if(!$.isArray(elval)) {
+						elval = [elval];
+					}
+					
+					$.each(
+						elval,
+						function(index) {
+							elval[index] = elval[index].toString().toLowerCase();
+						}
+					);
 					
 					$.each(
 						toggle,
@@ -88,44 +104,67 @@ jQuery(document).ready(
 							var val = this,
 								ishidden = true,
 								tmp;
-							if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
-								if(this === '') {
-									if(me.prop('checked')) {
-										ishidden = false;
-									} else {
+							
+							if(this.hide_when !== undefined) {
+								ishidden = false;
+								val = val.hide_when;
+								if(!$.isArray(val)) {
+									val = [val];
+								}
+								$.each(
+									val,
+									function(index) {
+										val[index] = val[index].toString().toLowerCase();
+									}
+								);
+								if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
+									if(val == 0 && !me.prop('checked')) {
+										ishidden = true;
+									} else if(val != 0 && me.prop('checked')) {
 										ishidden = true;
 									}
 								} else {
-									if(me.prop('checked')) {
-										ishidden = true;
-									} else {
+									ishidden = !$.inArray(elval, val);
+								}
+							} else if(val.show_when !== undefined) {
+								ishidden = true;
+								val = val.show_when;
+								if(!$.isArray(val)) {
+									val = [val];
+								}
+								$.each(
+									val,
+									function(index) {
+										val[index] = val[index].toString().toLowerCase();
+									}
+								);
+								if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
+									if(val == 0 && !me.prop('checked')) {
+										ishidden = false;
+									} else if(val != 0 && me.prop('checked')) {
 										ishidden = false;
 									}
+								} else {
+									ishidden = !!$.inArray(elval, val);
 								}
 							} else {
-								if($.isArray(this)) {
-									$.each(
-										val,
-										function(index) {
-											val[index] = val[index].toString().toLowerCase();
-										}
-									);
-									tmp = $.inArray(me.val().toLowerCase(), val);
-								} else {
-									tmp = (me.val().toLowerCase() === this.toLowerCase());
-								}
-								if(tmp) {
-									ishidden = true;
-								} else {
-									ishidden = false;
-								}
+								return;
 							}
+														
 							cont.find('[name*="[' + index + ']"]').each(
 								function () {
 									if(ishidden) {
-										$(this).closest('.launchpad-metabox-field').addClass('launchpad-toggle-hidden');
+										if($(this).parent().parent().parent().is('.launchpad-repeater-metabox-container')) {
+											$(this).parent().parent().parent().parent().parent().addClass('launchpad-toggle-hidden');
+										} else {
+											$(this).closest('.launchpad-metabox-field').addClass('launchpad-toggle-hidden');
+										}
 									} else {
-										$(this).closest('.launchpad-metabox-field').removeClass('launchpad-toggle-hidden');
+										if($(this).parent().parent().parent().is('.launchpad-repeater-metabox-container')) {
+											$(this).parent().parent().parent().parent().parent().removeClass('launchpad-toggle-hidden');
+										} else {
+											$(this).closest('.launchpad-metabox-field').removeClass('launchpad-toggle-hidden');
+										}
 									}
 								}
 							);
