@@ -417,6 +417,7 @@ jQuery(document).ready(
 				}
 				
 				makeSortable();
+				handleToggleStates()
 			}
 		);
 		
@@ -447,6 +448,7 @@ jQuery(document).ready(
 						}
 						
 						makeSortable();
+						handleToggleStates()
 					}
 				);
 			}
