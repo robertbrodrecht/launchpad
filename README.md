@@ -1,7 +1,3 @@
-#DO NOT USE THE TOGGLE FUNCTIONALITY RIGHT NOW#
-
-Everything should be stable except using the meta fields as toggles.
-
 Launchpad
 =========
 
@@ -17,12 +13,6 @@ A few sites have been developed on top of Launchpad, and more are in the works. 
 For a detailed walk through, check out the [Codex](_codex/index.md).
 
 For the long feature list that was formerly here, see the [Codex Features List](_codex/features.md).
-
-To Do For 1.4
-=============
-
-* Determine feasibility of conditional logic for meta fields.
-  * Need more test cases.
 
 To Do For 1.5
 =============
@@ -40,12 +30,14 @@ To Do For 1.5
   * What other modules should be built-in?
   * Other Field Types?
 * Database and Asset Migration
+* Is the current toggle system for meta/flex fields sufficient?
+* Multiple Options Pages
 
 To Do For 1.6
 =============
 
 * Take another stab at MU Support
-* Metabox and Flexible Content UI
+* UI for creating Metaboxes and Flexible Content
 
 Future Wants
 ============
