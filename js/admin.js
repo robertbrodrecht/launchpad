@@ -94,7 +94,7 @@ jQuery(document).ready(
 					$.each(
 						elval,
 						function(index) {
-							elval[index] = elval[index].toString().toLowerCase();
+							elval[index] = (elval[index] + '').toString().toLowerCase();
 						}
 					);
 					
@@ -114,17 +114,24 @@ jQuery(document).ready(
 								$.each(
 									val,
 									function(index) {
-										val[index] = val[index].toString().toLowerCase();
+										val[index] = (val[index] + '').toString().toLowerCase();
 									}
 								);
 								if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
-									if(val == 0 && !me.prop('checked')) {
+									if(val != 0 && me.prop('checked')) {
 										ishidden = true;
-									} else if(val != 0 && me.prop('checked')) {
+									} else if(val == 0 && !me.prop('checked')) {
 										ishidden = true;
 									}
 								} else {
-									ishidden = !$.inArray(elval, val);
+									$.each(
+										elval,
+										function() {
+											if($.inArray(this + '', val) > -1) {
+												ishidden = true;
+											}
+										}
+									);
 								}
 							} else if(val.show_when !== undefined) {
 								ishidden = true;
@@ -135,17 +142,24 @@ jQuery(document).ready(
 								$.each(
 									val,
 									function(index) {
-										val[index] = val[index].toString().toLowerCase();
+										val[index] = (val[index] + '').toString().toLowerCase();
 									}
 								);
 								if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
-									if(val == 0 && !me.prop('checked')) {
+									if(val != 0 && me.prop('checked')) {
 										ishidden = false;
-									} else if(val != 0 && me.prop('checked')) {
+									} else if(val == 0 && !me.prop('checked')) {
 										ishidden = false;
 									}
 								} else {
-									ishidden = !!$.inArray(elval, val);
+									$.each(
+										elval,
+										function() {
+											if($.inArray(this + '', val) > -1) {
+												ishidden = false;
+											}
+										}
+									);
 								}
 							} else {
 								return;
