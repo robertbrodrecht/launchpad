@@ -11,7 +11,7 @@
 
 jQuery(document).ready(
 	function($, undefined) {
-	
+		
 		function makeSortable() {
 			//jQuery('.launchpad-flexible-container, .launchpad-repeater-container').sortable('destroy');
 			$('.launchpad-flexible-container, .launchpad-repeater-container').sortable(
