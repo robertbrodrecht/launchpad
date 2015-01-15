@@ -274,6 +274,82 @@ function launchpad_mime_types($mimes) {
 add_filter('upload_mimes', 'launchpad_mime_types');
 
 
+/**
+ * Attempt to optimize an image with an available set of programs
+ * 
+ * @attr	string $file The path to the file to optimize
+ * @since	1.5
+ */
+function launchpad_compress_image($file = false) {
+	// Problem with file.
+	if(!$file || !file_exists($file)) {// || !is_writable($path)) {
+		return false;
+	}
+	
+	// Problem with server.
+	if(ini_get('safe_mode') && strpos(ini_get("disable_functions"), "exec") !== false) {
+		return false;
+	}
+	
+	// Check how we can compress.
+	$pathinfo = pathinfo($file);
+	switch(strtolower($pathinfo['extension'])) {
+		case 'jpeg':
+		case 'jpg':
+			// JPEG options.
+			$compressors = array(
+				'mozjpeg 2>&1' => "mozjpeg -copy none -outfile $file.optimized $file 2>&1",
+				'jpegtran 2>&1' => "jpegtran -copy none -optimize -progressive -outfile $file.optimized $file 2>&1",
+				'jpegoptim 2>&1' => "jpegoptim --strip-all --all-progressive --dest=$file.optimized $file 2>&1"
+			);
+		break;
+		case 'png':
+			// PNG options.
+			$compressors = array(
+				'pngout 2>&1' => "pngout $file $file.optimized 2>&1",
+				'optipng 2>&1' => "optipng -nc -nb -o7 -out $file.optimized $file 2>&1",
+				'pngcrush 2>&1' => "pngcrush -reduce -brute $file $file.optimized 2>&1"
+			);
+		break;
+		default:
+			// Unsupported extension.
+			return false;
+		break;
+	}
+	
+	// Loop the available compressors.
+	foreach($compressors as $compressor => $comand) {
+		// Exec to see if the compressor is installed.
+		@exec($compressor, $output, $status);
+		// A missing command should result in a 127 status.
+		// If not, the program can be used.
+		if($status !== 127) {
+			// Exect the command.
+			@exec($comand, $output, $status);
+			// If the optimized file was created, we can move it over.
+			if(file_exists("$file.optimized")) {
+				// Try to copy.
+				if(@copy("$file.optimized", $file)) {
+					// Remove the optimized file.
+					@unlink("$file.optimized");
+					// Return true because it worked.
+					return true;
+				} else {
+					// Removed the optimized file.
+					@unlink("$file.optimized");
+					// Return false because it didn't work.
+					return false;
+				}
+			// The optimized file wasn't created.
+			} else {
+				return false;
+			}
+		}
+	}
+	// No compressor was found.
+	return false;
+}
+
 
 /**
  * Alert the admin if memory gets low.

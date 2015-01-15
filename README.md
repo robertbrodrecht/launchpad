@@ -25,19 +25,25 @@ To Do For 1.5
   * [OptiPNG](http://optipng.sourceforge.net/)
   * [JpegOptim](http://www.kokkonen.net/tjko/projects.html)
   * jpegrescan
-  * jpegtran
+  * jpegtran (!) can save ~9%
+* Database and Asset Migration
+* Toggles on Meta / Flex Fields
+  * Is the current toggle system for meta/flex fields sufficient?
+  * Is the idea of a "watch element" a good idea? e.g. watch post_parent select box.
 * Flexible content modules and field types.
   * What other modules should be built-in?
   * Other Field Types?
-* Database and Asset Migration
-* Is the current toggle system for meta/flex fields sufficient?
-* Multiple Options Pages
 
 To Do For 1.6
 =============
 
 * Take another stab at MU Support
 * UI for creating Metaboxes and Flexible Content
+* Site Options
+  * Multiple options pages?
+  * Tabbed option pages?
+  * Integrate some options into Appearance > Customize?
+  * How can this be done better?
 
 Future Wants
 ============
