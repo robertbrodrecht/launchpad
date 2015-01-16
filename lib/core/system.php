@@ -298,7 +298,7 @@ function launchpad_compress_image($file = false) {
 		case 'jpg':
 			// JPEG options.
 			$compressors = array(
-				'mozjpeg 2>&1' => "mozjpeg -copy none -outfile $file.optimized $file 2>&1",
+				//'mozjpeg 2>&1' => "mozjpeg -copy none -outfile $file.optimized $file 2>&1",
 				'jpegtran 2>&1' => "jpegtran -copy none -optimize -progressive -outfile $file.optimized $file 2>&1",
 				'jpegoptim 2>&1' => "jpegoptim --strip-all --all-progressive --dest=$file.optimized $file 2>&1"
 			);
