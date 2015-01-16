@@ -306,7 +306,7 @@ function launchpad_compress_image($file = false) {
 		case 'png':
 			// PNG options.
 			$compressors = array(
-				'pngout 2>&1' => "pngout $file $file.optimized 2>&1",
+				'pngout 2>&1' => "pngout -s0 -y -kt -ks -k0 $file && cp $file $file.optimized 2>&1",
 				'optipng 2>&1' => "optipng -nc -nb -o7 -out $file.optimized $file 2>&1",
 				'pngcrush 2>&1' => "pngcrush -reduce -brute $file $file.optimized 2>&1"
 			);
