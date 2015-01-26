@@ -92,7 +92,8 @@ add_action('wp_enqueue_scripts', 'launchpad_enqueue_scripts', 100);
  * @since		1.3
  */
 function launchpad_defer_scripts($url) {
-	if(strpos($url, '.js') === false) {
+	global $site_options;
+	if(is_admin() || (isset($site_options['defer_js']) && !$site_options['defer_js']) || strpos($url, '.js') === false) {
 		return $url;
 	}
 	return "$url' defer='defer";

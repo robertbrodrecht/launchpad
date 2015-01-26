@@ -238,22 +238,38 @@ function launchpad_get_setting_fields() {
 					)
 				)
 			),
-			'ajax_page_loads' => array(
-				'name' => 'Ajax Page Loads',
+			'developer' => array(
+				'name' => 'Developer Controls',
 				'args' => array(
-					'small' => 'Attempt to load pages with ajax.',
-					'type' => 'checkbox'
-				)
-			),
-			'html5_bp' => array(
-				'name' => 'HTML 5 Boilerplate',
-				'args' => array(
-					'small' => 'Include HTML5 Boilerplate in .htaccess.',
-					'type' => 'checkbox'
+					'type' => 'subfield',
+					'subfields' => array(
+						'defer_js' => array(
+							'name' => 'Defer JavaScript',
+							'args' => array(
+								'small' => 'Adds the defer attribute. If your plugins act up, try unchecking this.',
+								'type' => 'checkbox',
+								'default' => 'on'
+							)
+						),
+						'ajax_page_loads' => array(
+							'name' => 'Ajax Page Loads',
+							'args' => array(
+								'small' => 'Attempt to load pages with ajax.',
+								'type' => 'checkbox'
+							)
+						),
+						'html5_bp' => array(
+							'name' => 'HTML 5 Boilerplate',
+							'args' => array(
+								'small' => 'Include HTML5 Boilerplate in .htaccess.',
+								'type' => 'checkbox'
+							)
+						),
+					)
 				)
 			),
 			'seo_social' => array(
-				'name' => 'SEO and Social <small class="launchpad-block">Don\'t mess with this unless you know what you are doing.',
+				'name' => 'SEO and Social <small class="launchpad-block">Don\'t mess with this unless you know what you are doing.</small>',
 				'args' => array(
 					'type' => 'subfield',
 					'subfields' => array(
