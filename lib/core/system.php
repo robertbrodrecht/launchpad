@@ -350,6 +350,22 @@ function launchpad_compress_image($file = false) {
 	return false;
 }
 
+function launchpad_handle_uploaded_files($meta) {
+	$file = wp_upload_dir($meta['file']);
+	$orig_file_name = pathinfo($meta['file'], PATHINFO_BASENAME);
+	
+	$upload_folder = $file['path'] . '/';
+	@launchpad_compress_image($upload_folder . $orig_file_name);
+	foreach($meta['sizes'] as $size) {
+		@launchpad_compress_image($upload_folder . $size['file']);
+	}
+	
+	return $meta;
+}
+if(is_admin()) {
+	add_filter('wp_generate_attachment_metadata', 'launchpad_handle_uploaded_files', 900);
+}
+
 
 /**
  * Alert the admin if memory gets low.
