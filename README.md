@@ -17,15 +17,6 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.5
 =============
 
-* Look into image optimization based on ImageOptim workflow:
-  * [PNGOut](http://www.advsys.net/ken/util/pngout.htm)
-  * [Zopfli](http://googledevelopers.blogspot.co.uk/2013/02/compress-data-more-densely-with-zopfli.html)
-  * [Pngcrush](http://pmt.sourceforge.net/pngcrush/)
-  * [AdvPNG](http://advancemame.sourceforge.net/doc-advpng.html)
-  * [OptiPNG](http://optipng.sourceforge.net/)
-  * [JpegOptim](http://www.kokkonen.net/tjko/projects.html)
-  * jpegrescan
-  * jpegtran (!) can save ~9%
 * Database and Asset Migration
 
 To Do For 1.6
