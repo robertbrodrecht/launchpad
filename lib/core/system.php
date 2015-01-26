@@ -350,6 +350,13 @@ function launchpad_compress_image($file = false) {
 	return false;
 }
 
+
+/**
+ * Filter to execute the optimization of each image.
+ *
+ * @param		string $meta The metadata for the attached file.
+ * @since		1.0
+ */
 function launchpad_handle_uploaded_files($meta) {
 	$file = wp_upload_dir($meta['file']);
 	$orig_file_name = pathinfo($meta['file'], PATHINFO_BASENAME);
