@@ -354,7 +354,7 @@ function launchpad_compress_image($file = false) {
 /**
  * Filter to execute the optimization of each image.
  *
- * @param		string $meta The metadata for the attached file.
+ * @param		array $meta The metadata for the attached file.
  * @since		1.0
  */
 function launchpad_handle_uploaded_files($meta) {
