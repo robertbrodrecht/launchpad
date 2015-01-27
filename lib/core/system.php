@@ -578,26 +578,28 @@ function launchpad_generate_database_csv() {
 	$tables = $wpdb->get_results('show tables', ARRAY_A);
 	foreach($tables as $table) {
 		$table = array_pop($table);
-		$cache_file = launchpad_get_cache_file('migration-' . date('Y-m-d-H:i:s') . '-' . $table);
-		
-		$res[preg_replace('/^' . $wpdb->prefix . '/', '', $table)] = $cache_file;
-		
-		$cache_file = fopen($cache_file, 'w');
-		
-		$records = $wpdb->get_results('SELECT count(*) as cnt FROM `' . $table . '`', ARRAY_A);
-		$records = array_pop($records);
-		$records = array_pop($records);
-		
-		$rows_per_page = 100;
-		$max_pages = ceil($records/$rows_per_page);
-		
-		for($current_offet = 0; $current_offet/$rows_per_page < $max_pages; $current_offet = $current_offet + $rows_per_page) {
-			$results = $wpdb->get_results('SELECT * FROM `' . $table . '` LIMIT ' . $current_offet . ', ' . $rows_per_page, ARRAY_A);
-			foreach($results as $result) {
-				fputcsv($cache_file, $result);
+		if(preg_match('/^' . $wpdb->prefix . '/', $table)) {
+			$cache_file = launchpad_get_cache_file('migration-' . date('Y-m-d-H:i:s') . '-' . $table);
+			
+			$res[preg_replace('/^' . $wpdb->prefix . '/', '', $table)] = $cache_file;
+			
+			$cache_file = fopen($cache_file, 'w');
+			
+			$records = $wpdb->get_results('SELECT count(*) as cnt FROM `' . $table . '`', ARRAY_A);
+			$records = array_pop($records);
+			$records = array_pop($records);
+			
+			$rows_per_page = 100;
+			$max_pages = ceil($records/$rows_per_page);
+			
+			for($current_offet = 0; $current_offet/$rows_per_page < $max_pages; $current_offet = $current_offet + $rows_per_page) {
+				$results = $wpdb->get_results('SELECT * FROM `' . $table . '` LIMIT ' . $current_offet . ', ' . $rows_per_page, ARRAY_A);
+				foreach($results as $result) {
+					fputcsv($cache_file, $result);
+				}
 			}
+			fclose($cache_file);
 		}
-		fclose($cache_file);
 	}
 	
 	return $res;
