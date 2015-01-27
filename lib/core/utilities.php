@@ -361,3 +361,63 @@ function launchpad_paginate($url_base = '/', $current_page = 1, $total_pages = 1
 	
 	return $ret;
 }
+
+
+/**
+ * Convert an Array to CSV
+ * 
+ * Piggybacks on temp file and fputcsv to convert an array to CSV.
+ *
+ * @param		array $data An array or array of arrays to convert to CSV.
+ * @param		string $delimiter The character to use as the delimiter.
+ * @param		string $enclosure What to wrap around strings with line breaks.
+ * @since		1.5
+ */
+function array_to_csv($data, $delimiter = ',', $enclosure = '"') {
+	if(!is_array($data)) {
+		return false;
+	}
+	
+	$handle = fopen('php://temp', 'r+');
+	if(is_array($data[0])) {
+		foreach ($data as $line) {
+			fputcsv($handle, $line, $delimiter, $enclosure);
+		}
+	} else {
+		fputcsv($handle, $data, $delimiter, $enclosure);
+	}
+	rewind($handle);
+	
+	$contents = '';
+	while (!feof($handle)) {
+		$contents .= fgets($handle);
+	}
+	fclose($handle);
+	return $contents;
+}
+
+
+/**
+ * Convert an Array to CSV
+ * 
+ * Piggybacks on temp file and fputcsv to convert an array to CSV.
+ *
+ * @param		array $data An array or array of arrays to convert to CSV.
+ * @param		string $delimiter The character to use as the delimiter.
+ * @param		string $enclosure What to wrap around strings with line breaks.
+ * @since		1.5
+ */
+function csv_to_array($data, $delimiter = ',', $enclosure = '"') {
+	$handle = fopen('php://temp', 'r+');
+	fwrite($handle, $data);
+	rewind($handle);
+	$contents = array();
+	while (!feof($handle)) {
+		$contents[] = fgetcsv($handle, 0, $delimiter = ',', $enclosure = '"');
+	}
+	fclose($handle);
+	if(count($contents) == 1) {
+		$contents = $contents[0];
+	}
+	return $contents;
+}

@@ -355,7 +355,7 @@ function launchpad_compress_image($file = false) {
  * Filter to execute the optimization of each image.
  *
  * @param		array $meta The metadata for the attached file.
- * @since		1.0
+ * @since		1.5
  */
 function launchpad_handle_uploaded_files($meta) {
 	$file = wp_upload_dir($meta['file']);
@@ -428,3 +428,457 @@ function launchpad_memory_warning() {
 	}
 }
 register_shutdown_function('launchpad_memory_warning');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Verify Communication Key
+ *
+ * @since		1.0
+ */
+function launchpad_validate_communication_key() {
+	$communication_key = get_transient('launchpad_migration_communication_key');
+	if($communication_key) {
+		header('Access-Control-Allow-Origin: *');
+		set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
+	}
+	echo @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) ? 1 : 0;
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_launchpad_validate_communication_key', 'launchpad_validate_communication_key');
+	add_action('wp_ajax_nopriv_launchpad_validate_communication_key', 'launchpad_validate_communication_key');
+}
+
+
+/**
+ * Truncate a Table
+ *
+ * @since		1.0
+ */
+function launchpad_migrate_truncate_table() {
+	global $wpdb;
+	
+	$communication_key = get_transient('launchpad_migration_communication_key');
+	if(@openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) == false) {
+		echo '0';
+		return;
+	}
+	if($communication_key) {
+		header('Access-Control-Allow-Origin: *');
+		set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
+	}
+	$table = $_GET['table'];
+	$table = @openssl_decrypt($table, 'aes128', $communication_key);
+	if(!$table) {
+		echo '0';
+		return;
+	}
+	echo $wpdb->query('TRUNCATE TABLE ' . $table);	
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_launchpad_migrate_truncate_table', 'launchpad_migrate_truncate_table');
+	add_action('wp_ajax_nopriv_launchpad_migrate_truncate_table', 'launchpad_migrate_truncate_table');
+}
+
+
+/**
+ * Migrate a Table Row
+ *
+ * @since		1.0
+ */
+function launchpad_migrate_table() {
+	global $wpdb;
+	
+	$communication_key = get_transient('launchpad_migration_communication_key');
+	if(@openssl_decrypt($_POST['communication_test'], 'aes128', $communication_key) == false) {
+		echo '0';
+		exit;
+	}
+	if($communication_key) {
+		header('Access-Control-Allow-Origin: *');
+		set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
+	}
+	
+	$_POST['row'] = @openssl_decrypt($_POST['row'], 'aes128', $communication_key);
+	if(!$_POST['row']) {
+		echo '0';
+		exit;
+	}
+	$row = csv_to_array(base64_decode($_POST['row']));
+	$table = @openssl_decrypt($_POST['table'], 'aes128', $communication_key);
+	if(!$table) {
+		echo '0';
+		exit;
+	}
+	
+	$table = $wpdb->prefix . $table;
+	
+	$columns = $wpdb->get_results('SHOW columns FROM ' . $table);
+	
+	$q = '';
+	
+	foreach($columns as $column) {
+		if($q) {
+			$q .= ', ';
+		}
+		$q .= '`' . $column->Field . '` = %s';
+	}
+	
+	$query = false;
+	if($q) {
+		$query = 'REPLACE INTO `' . $table . '` SET ' . $q;
+	}
+	
+	if($query) {
+		$results = $wpdb->query(
+			$wpdb->prepare(
+				$query,
+				$row
+			)
+		);
+	}
+	
+	echo $results;
+	
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_launchpad_migrate_table', 'launchpad_migrate_table');
+	add_action('wp_ajax_nopriv_launchpad_migrate_table', 'launchpad_migrate_table');
+}
+
+
+/**
+ * Generate CSV Data
+ *
+ * @since		1.0
+ */
+function launchpad_generate_database_csv() {
+	global $wpdb;
+
+	$res = array();
+	
+	$tables = $wpdb->get_results('show tables', ARRAY_A);
+	foreach($tables as $table) {
+		$table = array_pop($table);
+		$cache_file = launchpad_get_cache_file('migration-' . date('Y-m-d-H:i:s') . '-' . $table);
+		
+		$res[preg_replace('/^' . $wpdb->prefix . '/', '', $table)] = $cache_file;
+		
+		$cache_file = fopen($cache_file, 'w');
+		
+		$records = $wpdb->get_results('SELECT count(*) as cnt FROM `' . $table . '`', ARRAY_A);
+		$records = array_pop($records);
+		$records = array_pop($records);
+		
+		$rows_per_page = 100;
+		$max_pages = ceil($records/$rows_per_page);
+		
+		for($current_offet = 0; $current_offet/$rows_per_page < $max_pages; $current_offet = $current_offet + $rows_per_page) {
+			$results = $wpdb->get_results('SELECT * FROM `' . $table . '` LIMIT ' . $current_offet . ', ' . $rows_per_page, ARRAY_A);
+			foreach($results as $result) {
+				fputcsv($cache_file, $result);
+			}
+		}
+		fclose($cache_file);
+	}
+	
+	return $res;
+}
+
+
+/**
+ * Add an admin page for migration.
+ *
+ * @since		1.5
+ */
+function launchpad_add_migration_page() {
+	add_submenu_page('tools.php', 'Migrate', 'Migrate', 'update_core', 'launchpad/migrate/', 'launchpad_render_migrate_admin_page', 99);
+}
+if(is_admin() && ($_SERVER['HTTP_HOST'] === 'launchpad.git' || $_SERVER['HTTP_HOST'] === 'launchpad2.git')) {
+	add_action('admin_menu', 'launchpad_add_migration_page');
+}
+
+
+/**
+ * Recursively Replace Hosts
+ * 
+ * @since		1.5
+ */
+function launchpad_migrate_domain_replace($input = '', $local, $remote) {
+	if(is_array($input) || is_object($input)) {
+		foreach($input as &$child) {
+			$child = launchpad_migrate_domain_replace($child, $local, $remote);
+		}
+	} else {
+		$input = str_replace($local, parse_url($remote, PHP_URL_HOST), $input);
+	}
+	return $input;
+}
+
+
+/**
+ * Display the Admin Migration Page
+ * 
+ * Don't try to use this yet.  I'm still researching security implications.
+ * 
+ * @since		1.5
+ * @todo		Delete import files when done.
+ * @todo		Send a message to the remote server to remove the transient.
+ */
+function launchpad_render_migrate_admin_page() {
+	global $wpdb;
+	
+	$form = 'start';
+	
+	$communication_key = get_transient('launchpad_migration_communication_key');
+	if(!$communication_key) {
+		set_transient('launchpad_migration_communication_key', md5(serialize(wp_get_current_user()) . time()), 60 * 10);
+		$communication_key = get_transient('launchpad_migration_communication_key');
+	}
+	if($communication_key) {
+		set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
+	}
+	
+	$errors = array();
+	
+	if(!empty($_POST) && isset($_POST['migrate_action'])) {
+		switch($_POST['migrate_action']) {
+			case 'verify':
+				$local_version = file_get_contents(site_url() . '/api/?action=launchpad_version');
+				if(!isset($_POST['migrate_url']) || empty($_POST['migrate_url'])) {
+					$errors[] = 'You must specify the remote URL.';
+				} else {
+					$remote_version = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_version');
+					if($local_version != $remote_version) {
+						$errors[] = 'The remote site is on Launchpad ' . $remote_version . ' while this site is on ' . $local_version . '. You must upgrade Launchpad on both sites to the same version.';
+					} else {
+						$remote_key_valid = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_validate_communication_key&communication_test=' . @openssl_encrypt('communication', 'aes128', $_POST['communication_key']));
+						if($remote_key_valid == '0') {
+							$errors[] = 'Please verify that your communication key is correct.';
+						}
+					}
+				}
+				if(!$errors) {
+					$form = 'options';
+				}
+			break;
+			case 'migrate':
+				$remote_version = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_version');
+				foreach($_POST['migrate_database'] as $table => $file) {
+					set_time_limit(60*5);
+					if(file_exists($file)) {
+						if($table != 'options') {
+							$truncate_success = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_truncate_table&table=' . @openssl_encrypt($table, 'aes128', $_POST['communication_key']) . '&communication_test=' . @openssl_encrypt('communication', 'aes128', $_POST['communication_key']));
+						}
+						
+						$data = fopen($file, 'r');
+						while(!feof($data)) {
+							$row = fgetcsv($data);
+							if($row) {
+								if($table == 'options') {
+									if(
+										$row[1] == '_transient_launchpad_migration_communication_key' ||
+										$row[1] == '_transient_timeout_launchpad_migration_communication_key'
+									) {
+										break;
+									}
+								}
+								if($table == 'usermeta') {
+									if(
+										$row[2] == 'session_tokens'
+									) {
+										$row[3] = '';
+									}
+								}
+								
+								foreach($row as &$col) {
+									if(is_serialized($col)) {
+										$tmp_col = unserialize($col);
+										$tmp_col = launchpad_migrate_domain_replace($tmp_col, $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
+										$col = serialize($tmp_col);
+									} else {
+										$col = launchpad_migrate_domain_replace($col, $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
+									}
+								}
+								
+								$row = array_to_csv($row);
+								$row = base64_encode($row);
+								
+								$postdata = http_build_query(
+								    array(
+								        'row' => @openssl_encrypt($row, 'aes128', $_POST['communication_key']),
+								        'table' => @openssl_encrypt($row, 'aes128', $table),
+								        'communication_test' => @openssl_encrypt('communication', 'aes128', $_POST['communication_key']),
+								        'action' => 'launchpad_migrate_table'
+								    )
+								);
+								
+								$opts = array('http' =>
+								    array(
+								        'method'  => 'POST',
+								        'header'  => 'Content-type: application/x-www-form-urlencoded',
+								        'content' => $postdata
+								    )
+								);
+								
+								$context = stream_context_create($opts);
+								$result = file_get_contents($_POST['migrate_url'] . '/api/', false, $context);
+							}
+						}
+						fclose($data);
+					}
+				}
+				$form = 'database_complete';
+			break;
+		}
+	}
+	
+	if(isset($_POST['migrate_url'])) {
+		set_transient('launchpad_migration_remote_url', $_POST['migrate_url']);
+	} else {
+		$_POST['migrate_url'] = get_transient('launchpad_migration_remote_url');
+	}
+	
+	if(isset($_POST['communication_key'])) {
+		set_transient('launchpad_migration_remote_communication_key', $_POST['communication_key'], 60 * 60);
+	} else {
+		$_POST['communication_key'] = get_transient('launchpad_migration_remote_communication_key');
+	}
+	
+	?>
+	<div class="wrap">
+		<h2>Database Migration</h2>
+		<div class="error"><p><strong>SUPER BETA!</strong>  You probably shouldn't use this in production.  It's not well tested and almost certainly will break plugins that use serialized data with URLs.</p></div>
+		<?php
+
+			if($errors) {
+				echo '<h3>Errors were encountered!</h3>';
+				foreach($errors as $error) {
+					echo "<li>$error</li>";
+				}
+				echo '</ul>';
+			} else {
+
+		?>
+		<p>If this site is the remote site, the communication key is: <?= $communication_key ?></p>
+		<p>The will be invalid after 10 minutes of inactivity.</p>
+		<?php } ?>
+		<form method="post" id="poststuff">
+			<?php
+			
+			switch($form) {
+				default:
+					?>
+					<div class="postbox">
+						<h3 class="hndle"><span>Setup</span></h3>
+						<div class="inside">
+							<div class="launchpad-metabox-field">
+								<label>
+									Full URL to Remote Site
+									<input type="text" name="migrate_url" value="<?= $_POST['migrate_url'] ?>">
+								</label>
+							</div>
+							<div class="launchpad-metabox-field">
+								<label>
+									Remote Site's Communication Key
+									<input type="text" name="communication_key" value="<?= $_POST['communication_key'] ?>">
+								</label>
+							</div>
+						</div>
+					</div>
+					<div>
+						<input type="hidden" name="migrate_action" value="verify">
+						<input type="submit" class="button button-primary button-large" value="Verify Settings">
+					</div>
+					<?php
+				
+				break;
+				case 'options':
+					
+					?>
+					<div class="postbox">
+						<h3 class="hndle"><span>Actions</span></h3>
+						<div class="inside">
+							<fieldset class="launchpad-metabox-fieldset">
+								<legend>Action to Perform</legend>
+								<div class="launchpad-metabox-field">
+									<label>
+										<input type="radio" name="migrate_direction" value="push"<?= !isset($_POST['migrate_direction']) || $_POST['migrate_direction'] == 'push' ? ' checked="checked"' : '' ?>>
+										Push This Site to Remote
+									</label>
+								</div>
+								<!--
+								<div class="launchpad-metabox-field">
+									<label>
+										<input type="radio" name="migrate_direction" value="pull"<?= isset($_POST['migrate_direction']) && $_POST['migrate_direction'] == 'pull' ? ' checked="checked"' : '' ?>>
+										Pull Remote to This Site
+									</label>
+								</div>
+								-->
+							</fieldset>
+							<fieldset class="launchpad-metabox-fieldset">
+								<legend>Tables to Replace</legend>
+								<?php
+								
+								$tables = launchpad_generate_database_csv();
+								
+								$opts_url = $tables['options'];
+								unset($tables['options']);
+								
+								$tables['options'] = $opts_url;
+								
+								foreach($tables as $table => $file) {
+									?>
+									<div class="launchpad-metabox-field">
+										<label>
+											<input type="checkbox" name="migrate_database[<?= $table ?>]" value="<?= $file ?>"<?= !isset($_POST['migrate_database']) || $_POST['migrate_database'][$table] ? ' checked="checked"' : '' ?>>
+											<?= $table ?>
+										</label>
+									</div>
+									<?php
+								}
+								
+								?>
+							</fieldset>
+						</div>
+					</div>
+					<div>
+						<input type="hidden" name="migrate_action" value="migrate">
+						<input type="hidden" name="migrate_url" value="<?= $_POST['migrate_url'] ?>">
+						<input type="hidden" name="communication_key" value="<?= $_POST['communication_key'] ?>">
+						<input type="submit" class="button button-primary button-large" value="Start Migration">
+					</div>
+					<?php
+						
+				break;
+				case 'database_complete':
+					
+					?>
+					<p><strong>The database import is complete.</strong></p>
+					<?php
+						
+				break;
+			}
+			?>
+		</form>
+	</div>
+	<?php
+}

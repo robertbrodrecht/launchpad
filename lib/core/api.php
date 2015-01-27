@@ -11,6 +11,26 @@
 
 
 /**
+ * Verify Launchpad
+ *
+ * @since		1.0
+ */
+function launchpad_version() {
+	$communication_key = get_transient('launchpad_migration_communication_key');
+	if($communication_key) {
+		header('Access-Control-Allow-Origin: *');
+		set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
+	}
+	echo '1.5';
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_launchpad_version', 'launchpad_version');
+	add_action('wp_ajax_nopriv_launchpad_version', 'launchpad_version');
+}
+
+
+/**
  * Sample API Call
  *
  * @since		1.0

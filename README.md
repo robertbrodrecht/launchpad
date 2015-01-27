@@ -40,22 +40,9 @@ Future Wants
 ============
 
 * Figure out if anything needs to be put in different projects for better sharing.
-* Header Ad Designer.
-  * Create ads as post type.
-  * Design ads in the browser.  Fonts in theme and positioning.
-  * Developer-approved CSS / JS handles how they work.
-  * Skate Integrated (Once Skate is 2.0)
-* Custom Headers
-  * Single Image
-  * Ads
 * Something about widgets.
 * Updates through WP Admin.
 * Security: some way to check MD5 of WP Core files to make sure they weren't modified.
-
-Really Want But Can't Find A Suitable Way
-=========================================
-
-* Optimization: Selectively add_filter( 'jpeg_quality', create_function( '', 'return 100;' ) );
 
 Would Like But Not Sure If Realistic
 ====================================
