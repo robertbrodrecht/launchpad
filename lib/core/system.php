@@ -363,8 +363,10 @@ function launchpad_handle_uploaded_files($meta) {
 	
 	$upload_folder = $file['path'] . '/';
 	@launchpad_compress_image($upload_folder . $orig_file_name);
-	foreach($meta['sizes'] as $size) {
-		@launchpad_compress_image($upload_folder . $size['file']);
+	if($meta['sizes']) {
+		foreach($meta['sizes'] as $size) {
+			@launchpad_compress_image($upload_folder . $size['file']);
+		}
 	}
 	
 	return $meta;
@@ -449,7 +451,7 @@ register_shutdown_function('launchpad_memory_warning');
 /**
  * Verify Communication Key
  *
- * @since		1.0
+ * @since		1.5
  */
 function launchpad_validate_communication_key() {
 	$communication_key = get_transient('launchpad_migration_communication_key');
@@ -467,9 +469,25 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 
 
 /**
+ * Delete Communication Key
+ *
+ * @since		1.5
+ */
+function launchpad_migration_clear_key() {
+	delete_transient('launchpad_migration_communication_key');
+	echo 1;
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_launchpad_migration_clear_key', 'launchpad_migration_clear_key');
+	add_action('wp_ajax_nopriv_launchpad_migration_clear_key', 'launchpad_migration_clear_key');
+}
+
+
+/**
  * Truncate a Table
  *
- * @since		1.0
+ * @since		1.5
  */
 function launchpad_migrate_truncate_table() {
 	global $wpdb;
@@ -501,12 +519,13 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 /**
  * Migrate a Table Row
  *
- * @since		1.0
+ * @since		1.5
  */
 function launchpad_migrate_table() {
 	global $wpdb;
 	
 	$communication_key = get_transient('launchpad_migration_communication_key');
+	
 	if(@openssl_decrypt($_POST['communication_test'], 'aes128', $communication_key) == false) {
 		echo '0';
 		exit;
@@ -555,6 +574,17 @@ function launchpad_migrate_table() {
 		);
 	}
 	
+	if($_POST['file_path'] != '0') {
+		
+		$file_path = get_attached_file($row[0]);
+		
+		$f = fopen($file_path, 'w');
+		fwrite($f, base64_decode($_POST['file']));
+		fclose($f);
+		
+		launchpad_do_regenerate_image($row[0]);
+	}
+	
 	echo $results;
 	
 	exit;
@@ -566,9 +596,101 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 
 
 /**
+ * Generate A Table List
+ *
+ * @since		1.5
+ */
+function launchpad_migrate_get_tables() {
+	$communication_key = get_transient('launchpad_migration_communication_key');
+	
+	if(@openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) == false) {
+		echo '0';
+		exit;
+	}
+	if($communication_key) {
+		header('Access-Control-Allow-Origin: *');
+		set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
+	}
+	
+	$export_files = launchpad_generate_database_csv();
+	echo @openssl_encrypt(json_encode($export_files), 'aes128', $communication_key);
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_launchpad_migrate_get_tables', 'launchpad_migrate_get_tables');
+	add_action('wp_ajax_nopriv_launchpad_migrate_get_tables', 'launchpad_migrate_get_tables');
+}
+
+
+/**
+ * Generate A Table Row
+ *
+ * @since		1.5
+ */
+function launchpad_migrate_get_table_row() {
+	$communication_key = get_transient('launchpad_migration_communication_key');
+	
+	if(@openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) == false) {
+		echo '0';
+		exit;
+	}
+	if($communication_key) {
+		header('Access-Control-Allow-Origin: *');
+		set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
+	}
+	
+	$table_file = @openssl_decrypt($_GET['table'], 'aes128', $communication_key);
+	
+	if(isset($_GET['unlink'])) {
+			echo '';
+			unlink($table_file);
+			exit;
+	}
+	
+	if(file_exists($table_file)) {
+		if(!filesize($table_file)) {
+			echo '';
+			unlink($table_file);
+			exit;
+		}
+		$fin = fopen($table_file, 'r');
+		$fout = fopen($table_file . '.tmp', 'w');
+		$first_line = false;
+		while(!feof($fin)) {
+			$cur_line = fgetcsv($fin);
+			if($cur_line) {
+				if($first_line) {
+					fputcsv($fout, $cur_line);
+				} else {
+					$first_line = $cur_line;
+				}
+			}
+		}
+		fclose($fin);
+		fclose($fout);
+		rename($table_file . '.tmp', $table_file);
+		if(!filesize($table_file)) {
+			echo '';
+			unlink($table_file);
+			exit;
+		}
+		echo @openssl_encrypt(json_encode($first_line), 'aes128', $communication_key);
+	} else {
+		echo '';
+	}
+	
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_launchpad_migrate_get_table_row', 'launchpad_migrate_get_table_row');
+	add_action('wp_ajax_nopriv_launchpad_migrate_get_table_row', 'launchpad_migrate_get_table_row');
+}
+
+
+/**
  * Generate CSV Data
  *
- * @since		1.0
+ * @since		1.5
  */
 function launchpad_generate_database_csv() {
 	global $wpdb;
@@ -642,8 +764,7 @@ function launchpad_migrate_domain_replace($input = '', $local, $remote) {
  * Don't try to use this yet.  I'm still researching security implications.
  * 
  * @since		1.5
- * @todo		Delete import files when done.
- * @todo		Send a message to the remote server to remove the transient.
+ * @todo		Improve errors.
  */
 function launchpad_render_migrate_admin_page() {
 	global $wpdb;
@@ -672,7 +793,8 @@ function launchpad_render_migrate_admin_page() {
 					if($local_version != $remote_version) {
 						$errors[] = 'The remote site is on Launchpad ' . $remote_version . ' while this site is on ' . $local_version . '. You must upgrade Launchpad on both sites to the same version.';
 					} else {
-						$remote_key_valid = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_validate_communication_key&communication_test=' . @openssl_encrypt('communication', 'aes128', $_POST['communication_key']));
+						$remote_key_valid = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_validate_communication_key&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
+						
 						if($remote_key_valid == '0') {
 							$errors[] = 'Please verify that your communication key is correct.';
 						}
@@ -683,72 +805,129 @@ function launchpad_render_migrate_admin_page() {
 				}
 			break;
 			case 'migrate':
-				$remote_version = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_version');
-				foreach($_POST['migrate_database'] as $table => $file) {
-					set_time_limit(60*5);
-					if(file_exists($file)) {
-						if($table != 'options') {
-							$truncate_success = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_truncate_table&table=' . @openssl_encrypt($table, 'aes128', $_POST['communication_key']) . '&communication_test=' . @openssl_encrypt('communication', 'aes128', $_POST['communication_key']));
-						}
-						
-						$data = fopen($file, 'r');
-						while(!feof($data)) {
-							$row = fgetcsv($data);
-							if($row) {
-								if($table == 'options') {
-									if(
-										$row[1] == '_transient_launchpad_migration_communication_key' ||
-										$row[1] == '_transient_timeout_launchpad_migration_communication_key'
-									) {
-										break;
-									}
-								}
-								if($table == 'usermeta') {
-									if(
-										$row[2] == 'session_tokens'
-									) {
-										$row[3] = '';
-									}
+				$remote_key_valid = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_validate_communication_key&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
+				if($remote_key_valid) {
+					if($_POST['migrate_direction'] === 'push') {
+						foreach($_POST['migrate_database'] as $table => $file) {
+							set_time_limit(60*5);
+							if(file_exists($file)) {
+								if($table != 'options') {
+									$truncate_success = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_truncate_table&table=' . @openssl_encrypt($table, 'aes128', $_POST['communication_key']) . '&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
 								}
 								
-								foreach($row as &$col) {
-									if(is_serialized($col)) {
-										$tmp_col = unserialize($col);
-										$tmp_col = launchpad_migrate_domain_replace($tmp_col, $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
-										$col = serialize($tmp_col);
-									} else {
-										$col = launchpad_migrate_domain_replace($col, $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
+								$data = fopen($file, 'r');
+								while(!feof($data)) {
+									$row = fgetcsv($data);
+									if($row) {
+										if($table == 'options') {
+											if(
+												$row[1] == '_transient_launchpad_migration_communication_key' ||
+												$row[1] == '_transient_timeout_launchpad_migration_communication_key'
+											) {
+												break;
+											}
+										}
+										if($table == 'usermeta') {
+											if(
+												$row[2] == 'session_tokens'
+											) {
+												$row[3] = '';
+											}
+										}
+										
+										$att_file = false;
+										if(isset($_POST['migrate_attached_files'])) {
+											if($table == 'posts' && $row[20] === 'attachment') {
+												$att_file = wp_get_attachment_url($row[0]);
+												$att_file =  $att_file;
+											}
+										}
+										
+										foreach($row as &$col) {
+											if(is_serialized($col)) {
+												$tmp_col = unserialize($col);
+												$tmp_col = launchpad_migrate_domain_replace($tmp_col, $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
+												$col = serialize($tmp_col);
+											} else {
+												$col = launchpad_migrate_domain_replace($col, $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
+											}
+										}
+										
+										$row = array_to_csv($row);
+										$row = base64_encode($row);
+										
+										$postdata = http_build_query(
+										    array(
+										        'row' => @openssl_encrypt($row, 'aes128', $_POST['communication_key']),
+										        'table' => @openssl_encrypt($table, 'aes128', $_POST['communication_key']),
+										        'communication_test' => @openssl_encrypt('communication', 'aes128', $_POST['communication_key']),
+										        'action' => 'launchpad_migrate_table',
+										        'file' => $att_file ? base64_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . $att_file)) : '0',
+										        'file_path' => $att_file ? $att_file : '0'
+										    )
+										);
+										
+										$opts = array('http' =>
+										    array(
+										        'method'  => 'POST',
+										        'header'  => 'Content-type: application/x-www-form-urlencoded',
+										        'content' => $postdata
+										    )
+										);
+										
+										$context = stream_context_create($opts);
+										$result = file_get_contents($_POST['migrate_url'] . '/api/', false, $context);
 									}
 								}
-								
-								$row = array_to_csv($row);
-								$row = base64_encode($row);
-								
-								$postdata = http_build_query(
-								    array(
-								        'row' => @openssl_encrypt($row, 'aes128', $_POST['communication_key']),
-								        'table' => @openssl_encrypt($row, 'aes128', $table),
-								        'communication_test' => @openssl_encrypt('communication', 'aes128', $_POST['communication_key']),
-								        'action' => 'launchpad_migrate_table'
-								    )
-								);
-								
-								$opts = array('http' =>
-								    array(
-								        'method'  => 'POST',
-								        'header'  => 'Content-type: application/x-www-form-urlencoded',
-								        'content' => $postdata
-								    )
-								);
-								
-								$context = stream_context_create($opts);
-								$result = file_get_contents($_POST['migrate_url'] . '/api/', false, $context);
+								fclose($data);
+								unlink($file);
 							}
 						}
-						fclose($data);
+						$remote_version = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migration_clear_key');
+						$form = 'database_complete';
+					} else if($_POST['migrate_direction'] === 'pull') {
+						foreach($_POST['migrate_database'] as $table => $file) {
+							set_time_limit(60*5);
+							@unlink($file);
+						}
+						
+						$table_list = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_tables&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
+						
+						if(!$table_list) {
+							$errors[] = 'The remote key is no longer valid.';
+							break;
+						} else {
+							$table_list = openssl_decrypt($table_list, 'aes128', $_POST['communication_key']);
+							
+							if(!$table_list) {
+								$errors[] = 'Could not decrypt table list.';
+								break;
+							} else {
+								$table_list = json_decode($table_list);
+								foreach($table_list as $table => $file) {
+									if(isset($_POST['migrate_database'][$table])) {
+										do {
+											set_time_limit(60*5);
+											$rows = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
+											
+											if($rows) {
+												$rows = openssl_decrypt($rows, 'aes128', $_POST['communication_key']);
+												if($rows) {
+													$rows = json_decode($rows);
+													die(__FILE__);
+												}
+											}
+										} while($rows);
+									}
+									file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])) . '&unlink=true');
+								}
+								exit;
+							}
+						}
 					}
+				} else {
+					$errors[] = 'The remote key is no longer valid.';
 				}
-				$form = 'database_complete';
 			break;
 		}
 	}
@@ -827,14 +1006,21 @@ function launchpad_render_migrate_admin_page() {
 										Push This Site to Remote
 									</label>
 								</div>
-								<!--
 								<div class="launchpad-metabox-field">
 									<label>
 										<input type="radio" name="migrate_direction" value="pull"<?= isset($_POST['migrate_direction']) && $_POST['migrate_direction'] == 'pull' ? ' checked="checked"' : '' ?>>
 										Pull Remote to This Site
 									</label>
 								</div>
-								-->
+							</fieldset>
+							<fieldset class="launchpad-metabox-fieldset">
+								<legend>Options</legend>
+								<div class="launchpad-metabox-field">
+									<label>
+										<input type="checkbox" name="migrate_attached_files" value="yes"<?= !isset($_POST['migrate_attached_files']) || $_POST['migrate_attached_files'] == 'yes' ? ' checked="checked"' : '' ?>>
+										Update Attached Files (Slower)
+									</label>
+								</div>
 							</fieldset>
 							<fieldset class="launchpad-metabox-fieldset">
 								<legend>Tables to Replace</legend>

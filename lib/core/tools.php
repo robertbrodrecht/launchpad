@@ -149,11 +149,16 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
  * 
  * @since		1.3
  */
-function launchpad_do_regenerate_image() {
-	header('Content-type: application/json');
-	check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
+function launchpad_do_regenerate_image($att_id = false) {
+	$internal = false;
 	
-	$att_id = $_GET['attachment_id'];
+	if(!$att_id) {
+		header('Content-type: application/json');
+		check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
+		$att_id = $_GET['attachment_id'];
+	} else {
+		$internal = true;
+	}
 	
 	$assets = wp_upload_dir();
 	
@@ -171,14 +176,28 @@ function launchpad_do_regenerate_image() {
 		wp_update_attachment_metadata($att_id, $metadata);
 		
 	} else {
+		if($internal) {
+			return array(
+					'attachment_id' => $att_id, 
+					'status' => 0, 
+					'message' => 'Could not find original source file.'
+				);
+		}
 		echo json_encode(
 			array(
-				'attachment_id' => $_GET['attachment_id'], 
+				'attachment_id' => $att_id, 
 				'status' => 0, 
 				'message' => 'Could not find original source file.'
 			)
 		);
 		exit;
+	}
+	if($internal) {
+		return array(
+			'attachment_id' => $att_id, 
+			'status' => 1, 
+			'fullsrc' => $original_source
+		);
 	}
 	
 	echo json_encode(
