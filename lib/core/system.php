@@ -358,12 +358,16 @@ function launchpad_compress_image($file = false) {
  * @since		1.5
  */
 function launchpad_handle_uploaded_files($meta) {
+	if(!$meta) {
+		return;
+	}
+	
 	$file = wp_upload_dir($meta['file']);
 	$orig_file_name = pathinfo($meta['file'], PATHINFO_BASENAME);
 	
 	$upload_folder = $file['path'] . '/';
 	@launchpad_compress_image($upload_folder . $orig_file_name);
-	if($meta['sizes']) {
+	if(isset($meta['sizes'])) {
 		foreach($meta['sizes'] as $size) {
 			@launchpad_compress_image($upload_folder . $size['file']);
 		}
@@ -906,6 +910,8 @@ function launchpad_render_migrate_admin_page() {
 								$table_list = json_decode($table_list);
 								foreach($table_list as $table => $file) {
 									if(isset($_POST['migrate_database'][$table])) {
+										$wpdb->query('TRUNCATE TABLE ' . $wpdb->prefix . $table);
+										
 										do {
 											set_time_limit(60*5);
 											$rows = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
@@ -913,8 +919,62 @@ function launchpad_render_migrate_admin_page() {
 											if($rows) {
 												$rows = openssl_decrypt($rows, 'aes128', $_POST['communication_key']);
 												if($rows) {
-													$rows = json_decode($rows);
-													die(__FILE__);
+													$row = json_decode($rows);
+
+
+
+
+
+if($row) {
+	$columns = $wpdb->get_results('SHOW columns FROM ' . $wpdb->prefix . $table);
+	
+	$q = '';
+	
+	foreach($columns as $column) {
+		if($q) {
+			$q .= ', ';
+		}
+		$q .= '`' . $column->Field . '` = %s';
+	}
+	
+	$query = false;
+	if($q) {
+		$query = 'REPLACE INTO `' . $wpdb->prefix . $table . '` SET ' . $q;
+	}
+	
+	if($query) {
+		$results = $wpdb->query(
+			$wpdb->prepare(
+				$query,
+				$row
+			)
+		);
+	}
+	
+	$att_file = false;
+	if(isset($_POST['migrate_attached_files'])) {
+		if($table == 'posts' && $row[20] === 'attachment') {
+			$file_path = get_attached_file($row[0]);
+			$remote_file_path = wp_get_attachment_image_src($row[0]);
+			$remote_file_path = $_POST['migrate_url'] . $remote_file_path[0];
+			
+			$f = fopen($file_path, 'w');
+			fwrite($f, file_get_contents($remote_file_path));
+			fclose($f);
+			
+			//http://codex.wordpress.org/Function_Reference/wp_insert_attachment
+			//$attach_data = wp_generate_attachment_metadata($row[0], $file_path);
+			//wp_update_attachment_metadata($row[0],  $attach_data);
+			//launchpad_do_regenerate_image($row[0]);
+			//apply_filters('wp_generate_attachment_metadata', wp_get_attachment_metadata($row[0]));
+		}
+	}
+}
+
+
+
+
+
 												}
 											}
 										} while($rows);
