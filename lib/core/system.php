@@ -673,11 +673,6 @@ function launchpad_migrate_get_table_row() {
 		fclose($fin);
 		fclose($fout);
 		rename($table_file . '.tmp', $table_file);
-		if(!filesize($table_file)) {
-			echo '';
-			unlink($table_file);
-			exit;
-		}
 		echo @openssl_encrypt(json_encode($first_line), 'aes128', $communication_key);
 	} else {
 		echo '';
@@ -756,7 +751,7 @@ function launchpad_migrate_domain_replace($input = '', $local, $remote) {
 			$child = launchpad_migrate_domain_replace($child, $local, $remote);
 		}
 	} else {
-		$input = str_replace($local, parse_url($remote, PHP_URL_HOST), $input);
+		$input = str_replace(parse_url($local, PHP_URL_HOST), parse_url($remote, PHP_URL_HOST), $input);
 	}
 	return $input;
 }
@@ -850,10 +845,10 @@ function launchpad_render_migrate_admin_page() {
 										foreach($row as &$col) {
 											if(is_serialized($col)) {
 												$tmp_col = unserialize($col);
-												$tmp_col = launchpad_migrate_domain_replace($tmp_col, $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
+												$tmp_col = launchpad_migrate_domain_replace($tmp_col, 'http://' . $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
 												$col = serialize($tmp_col);
 											} else {
-												$col = launchpad_migrate_domain_replace($col, $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
+												$col = launchpad_migrate_domain_replace($col, 'http://' . $_SERVER['HTTP_HOST'], $_POST['migrate_url']);
 											}
 										}
 										
@@ -915,73 +910,70 @@ function launchpad_render_migrate_admin_page() {
 										do {
 											set_time_limit(60*5);
 											$rows = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
-											
 											if($rows) {
 												$rows = openssl_decrypt($rows, 'aes128', $_POST['communication_key']);
 												if($rows) {
 													$row = json_decode($rows);
-
-
-
-
-
-if($row) {
-	$columns = $wpdb->get_results('SHOW columns FROM ' . $wpdb->prefix . $table);
-	
-	$q = '';
-	
-	foreach($columns as $column) {
-		if($q) {
-			$q .= ', ';
-		}
-		$q .= '`' . $column->Field . '` = %s';
-	}
-	
-	$query = false;
-	if($q) {
-		$query = 'REPLACE INTO `' . $wpdb->prefix . $table . '` SET ' . $q;
-	}
-	
-	if($query) {
-		$results = $wpdb->query(
-			$wpdb->prepare(
-				$query,
-				$row
-			)
-		);
-	}
-	
-	$att_file = false;
-	if(isset($_POST['migrate_attached_files'])) {
-		if($table == 'posts' && $row[20] === 'attachment') {
-			$file_path = get_attached_file($row[0]);
-			$remote_file_path = wp_get_attachment_image_src($row[0]);
-			$remote_file_path = $_POST['migrate_url'] . $remote_file_path[0];
-			
-			$f = fopen($file_path, 'w');
-			fwrite($f, file_get_contents($remote_file_path));
-			fclose($f);
-			
-			//http://codex.wordpress.org/Function_Reference/wp_insert_attachment
-			//$attach_data = wp_generate_attachment_metadata($row[0], $file_path);
-			//wp_update_attachment_metadata($row[0],  $attach_data);
-			//launchpad_do_regenerate_image($row[0]);
-			//apply_filters('wp_generate_attachment_metadata', wp_get_attachment_metadata($row[0]));
-		}
-	}
-}
-
-
-
-
-
+													if($row) {
+														$columns = $wpdb->get_results('SHOW columns FROM ' . $wpdb->prefix . $table);
+														
+														$q = '';
+														
+														foreach($columns as $column) {
+															if($q) {
+																$q .= ', ';
+															}
+															$q .= '`' . $column->Field . '` = %s';
+														}
+														
+														$query = false;
+														if($q) {
+															$query = 'REPLACE INTO `' . $wpdb->prefix . $table . '` SET ' . $q;
+														}
+														
+														foreach($row as &$col) {
+															if(is_serialized($col)) {
+																$tmp_col = unserialize($col);
+																$tmp_col = launchpad_migrate_domain_replace($tmp_col, $_POST['migrate_url'], 'http://' .$_SERVER['HTTP_HOST']);
+																$col = serialize($tmp_col);
+															} else {
+																$col = launchpad_migrate_domain_replace($col, $_POST['migrate_url'], 'http://' . $_SERVER['HTTP_HOST']);
+															}
+														}
+														
+														if($query) {
+															$results = $wpdb->query(
+																$wpdb->prepare(
+																	$query,
+																	$row
+																)
+															);
+														}
+														
+														$att_file = false;
+														if(isset($_POST['migrate_attached_files'])) {
+															if($table == 'posts' && $row[20] === 'attachment') {
+																$file_path = get_attached_file($row[0]);
+																$remote_file_path = wp_get_attachment_image_src($row[0], 'full');
+																$remote_file_path = $_POST['migrate_url'] . $remote_file_path[0];
+																
+																$f = fopen($file_path, 'w');
+																if($f) {
+																	fwrite($f, file_get_contents($remote_file_path));
+																	fclose($f);
+																}
+																launchpad_do_regenerate_image($row[0]);
+															}
+														}
+													}
 												}
 											}
 										} while($rows);
 									}
 									file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])) . '&unlink=true');
 								}
-								exit;
+								$remote_version = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migration_clear_key');
+								$form = 'database_complete';
 							}
 						}
 					}
@@ -1118,9 +1110,10 @@ if($row) {
 						
 				break;
 				case 'database_complete':
+					delete_transient('launchpad_migration_remote_communication_key');
 					
 					?>
-					<p><strong>The database import is complete.</strong></p>
+					<p><strong>The database import is complete. The remote key has been forcibly expired.</strong></p>
 					<?php
 						
 				break;
