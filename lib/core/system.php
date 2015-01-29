@@ -999,7 +999,7 @@ function launchpad_render_migrate_admin_page() {
 	?>
 	<div class="wrap">
 		<h2>Database Migration</h2>
-		<div class="error"><p><strong>SUPER BETA!</strong>  You probably shouldn't use this in production.  It's not well tested and almost certainly will break plugins that use serialized data with URLs.</p></div>
+		<div class="error"><p><strong>SUPER BETA!</strong>  You probably shouldn't use this in production. Make a backup of your database before you migrate!</p></div>
 		<?php
 
 			if($errors) {
@@ -1009,10 +1009,10 @@ function launchpad_render_migrate_admin_page() {
 				}
 				echo '</ul>';
 			} else {
-
+			
 		?>
-		<p>If this site is the remote site, the communication key is: <?= $communication_key ?></p>
-		<p>The will be invalid after 10 minutes of inactivity.</p>
+		<p>This tool is meant to be used to migrate data between dev and live sites that are built on Launchpad and installed at the root-level of a domain.  <strong style="color:#dd3d36">Data is replaced, NOT merged, with the domain names swapped out.</strong>  Serialized data should be unserialized before the domain names are replaced, so it should not break metadata and plugins.  That said, this tool is not well tested.  Use at your own risk and, for the love of all that is good, <strong style="color:#dd3d36">make a backup of your database and assets before you pull the trigger!</strong></p>
+		<p>If this site is the remote site, this communication key is valid for 10 minutes: <strong><?= $communication_key ?></strong></p>
 		<?php } ?>
 		<form method="post" id="poststuff">
 			<?php
