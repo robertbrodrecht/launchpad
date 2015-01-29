@@ -764,6 +764,7 @@ function launchpad_migrate_domain_replace($input = '', $local, $remote) {
  * 
  * @since		1.5
  * @todo		Improve errors.
+ * @todo		Refactor and create functions where needed.
  */
 function launchpad_render_migrate_admin_page() {
 	global $wpdb;
