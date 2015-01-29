@@ -652,5 +652,30 @@ jQuery(document).ready(
 				}
 			}
 		);
+		
+		$('.launchpad-checkbox-toggle').each(
+			function() {
+				var me = $(this),
+					toggle = $('<div class="launchpad-metabox-field launchpad-metabox-toggle-all"><label><input type="checkbox"> Toggle All</label></div>');
+				
+				if(me.find('[type=checkbox]').length == me.find('[type=checkbox]:checked').length) {
+					toggle.find('[type=checkbox]').attr('checked', 'checked');
+				}
+				
+				$('legend', me).after(toggle);
+				
+				toggle.find('[type=checkbox]').on(
+					'change',
+					function() {
+						me = $(this);
+						if(me.is(':checked')) {
+							me.closest('.launchpad-checkbox-toggle').find('[type=checkbox]').attr('checked', 'checked');
+						} else {
+							me.closest('.launchpad-checkbox-toggle').find('[type=checkbox]').removeAttr('checked');
+						}
+					}
+				);
+			}
+		);
 	}
 );
