@@ -17,8 +17,7 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.5
 =============
 
-* Database and Asset Migration
-* Fix the "missing image breaks resize" bug
+* Database and Asset Migration Refactor
 * Add section in the codex for tools / utilities
 
 To Do For 1.6

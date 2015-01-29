@@ -164,7 +164,7 @@ function launchpad_do_regenerate_image($att_id = false) {
 	
 	$original_source = get_attached_file($att_id);
 	
-	if($original_source) {
+	if($original_source && file_exists($original_source)) {
 		$imginfo = pathinfo($original_source);
 		$all_files = scandir($imginfo['dirname']);
 		foreach($all_files as $all_file) {
