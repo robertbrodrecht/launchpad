@@ -18,11 +18,14 @@ To Do For 1.5
 =============
 
 * Database and Asset Migration
+* Fix the "missing image breaks resize" bug
+* Add section in the codex for tools / utilities
 
 To Do For 1.6
 =============
 
 * Take another stab at MU Support
+* HTML5-based Caption Shortcode Override
 * UI for creating Metaboxes and Flexible Content
 * Site Options
   * Multiple options pages?
