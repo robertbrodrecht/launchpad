@@ -632,6 +632,7 @@ function launchpad_migrate_domain_replace($input = '', $local, $remote) {
  * @uses		launchpad_migrate_domain_replace
  * @todo		Improve errors.
  * @todo		Refactor and create functions where needed.
+ * @todo		What about databases that were created on remote? Auto-import?
  */
 function launchpad_render_migrate_admin_page() {
 	global $wpdb;
