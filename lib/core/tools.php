@@ -891,6 +891,10 @@ function launchpad_render_migrate_admin_page() {
 					// If the user requested to push, we need to handle pushing the data.
 					if($_POST['migrate_direction'] === 'push') {
 						
+						if(!isset($_POST['migrate_database'])) {
+							$_POST['migrate_database'] = array();
+						}
+						
 						// Loop over the tables the user wanted to migrate.
 						foreach($_POST['migrate_database'] as $table => $file) {
 							
