@@ -17,11 +17,16 @@
  */
 function launchpad_version() {
 	$communication_key = get_transient('launchpad_migration_communication_key');
-	if($communication_key) {
+	if($communication_key && @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) === 'initialize') {
 		header('Access-Control-Allow-Origin: *');
 		set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
+		
+		$nonce = wp_create_nonce('migration');
+		
+		echo json_encode(array('version' => '1.5', 'nonce' => $nonce));
+		exit;
 	}
-	echo '1.5';
+	echo json_encode(array('version' => '1.5'));
 	exit;
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {

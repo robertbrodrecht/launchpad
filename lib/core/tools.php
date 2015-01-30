@@ -223,22 +223,40 @@ function launchpad_validate_communication_key() {
 	// Get the communication key.
 	$communication_key = get_transient('launchpad_migration_communication_key');
 	
+	// Get the migration nonce.
+	$nonce = wp_create_nonce('migration');
+	
 	// If it exists, we can try to decrypt the key.
 	if($communication_key) {
 		$decrypt_status = @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key);
 		
 		// If the decrypt is successful, allow cross-origin and
 		// set pushe the key expiratin out 10 minutes.
-		if($decrypt_status) {
+		if($decrypt_status === $nonce) {
 			header('Access-Control-Allow-Origin: *');
 			set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
-			echo 1;
+			echo json_encode(
+				array(
+					'status' => true,
+					'message' => 'Communication key and nonce are valid.'
+				)
+			);
 		} else {
-			echo 0;
+			echo json_encode(
+				array(
+					'status' => false,
+					'message' => 'Communication key or nonce are invalid.  Please go to the remote site and verify the communication key.'
+				)
+			);
 		}
 		exit;
 	} else {
-		echo 0;
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Communication key has not been generated.'
+			)
+		);
 		exit;
 	}
 }
@@ -254,6 +272,18 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
  * @since		1.5
  */
 function launchpad_migration_clear_key() {
+	// Get the communication key.
+	$communication_key = get_transient('launchpad_migration_communication_key');
+	
+	// Get the migration nonce.
+	$nonce = wp_create_nonce('migration');
+	
+	// Try to decrypt the key.  If it fails or there is no key, just quit there.
+	if(!$communication_key || @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) !== $nonce) {
+		echo '0';
+		return;
+	}
+	
 	delete_transient('launchpad_migration_communication_key');
 	echo 1;
 	exit;
@@ -275,10 +305,18 @@ function launchpad_migrate_truncate_table() {
 	// Get the communication key.
 	$communication_key = get_transient('launchpad_migration_communication_key');
 	
+	// Get the migration nonce.
+	$nonce = wp_create_nonce('migration');
+	
 	// Try to decrypt the key.  If it fails or there is no key, just quit there.
-	if(!$communication_key || @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) == false) {
-		echo '0';
-		return;
+	if(!$communication_key || @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) !== $nonce) {
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Communication key or nonce are invalid.  Please go to the remote site and verify the communication key.'
+			)
+		);
+		exit;
 	}
 	
 	// Allow CORs and extend the key by 10 minutes.
@@ -287,16 +325,47 @@ function launchpad_migrate_truncate_table() {
 	
 	// Get the table and decrypt it.
 	$table = $_GET['table'];
+	$table_tmp = $table;
 	$table = @openssl_decrypt($table, 'aes128', $communication_key);
 	
 	// If it fails to decrypt, quit.
+	if($table === false) {
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Failed to decrypt table.  Please go to the remote site and verify the communication key.'
+			)
+		);
+		exit;
+	}
+	
 	if(!$table) {
-		echo '0';
-		return;
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Missing table name. No operation executed.'
+			)
+		);
+		exit;
 	}
 	
 	// Truncate the table.
-	echo $wpdb->query('TRUNCATE TABLE ' . $table);	
+	$truncate = $wpdb->query('TRUNCATE TABLE ' . $wpdb->prefix . $table);
+	if($truncate) {
+		echo json_encode(
+			array(
+				'status' => true,
+				'message' => 'Table truncated successfully.'
+			)
+		);
+	} else {
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Table failed to truncate. This error is not detrimental, but could lead to unexpected results.'
+			)
+		);
+	}
 	exit;
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
@@ -313,11 +382,20 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 function launchpad_migrate_table() {
 	global $wpdb;
 	
+	// Get the communication key.
 	$communication_key = get_transient('launchpad_migration_communication_key');
 	
+	// Get the migration nonce.
+	$nonce = wp_create_nonce('migration');
+	
 	// Try to decrypt the key.  If it fails or there is no key, just quit there.
-	if(!$communication_key || @openssl_decrypt($_POST['communication_test'], 'aes128', $communication_key) == false) {
-		echo '0';
+	if(!$communication_key || @openssl_decrypt($_POST['communication_test'], 'aes128', $communication_key) !== $nonce) {
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Communication key or nonce are invalid.  Please go to the remote site and verify the communication key.'
+			)
+		);
 		exit;
 	}
 	
@@ -330,7 +408,12 @@ function launchpad_migrate_table() {
 	
 	// If it fails, quit here.
 	if(!$_POST['row']) {
-		echo '0';
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Could not decrypt row data.  Please go to the remote site and verify the communication key.'
+			)
+		);
 		exit;
 	}
 	
@@ -377,6 +460,16 @@ function launchpad_migrate_table() {
 				$row
 			)
 		);
+		
+		if(!$results) {
+			echo json_encode(
+				array(
+					'status' => false,
+					'message' => 'Could not add record #' . $row[0] . ' to ' . $table . '.' . ($_POST['file_path'] != '0' ? ' Additionally, the attached file was not uploaded.' : '')
+				)
+			);
+			exit;
+		}
 	}
 	
 	// If a file path was sent, we need to pull the file.
@@ -387,17 +480,32 @@ function launchpad_migrate_table() {
 		
 		// Open the file on this machine for writing..
 		$f = fopen($file_path, 'w');
-		// Input the file data.
-		fwrite($f, base64_decode($_POST['file']));
-		// Close the file.
-		fclose($f);
+		if($f) {
+			// Input the file data.
+			fwrite($f, base64_decode($_POST['file']));
+			// Close the file.
+			fclose($f);
 		
-		// Re-generate the images for the file.
-		launchpad_do_regenerate_image($row[0]);
+			// Re-generate the images for the file.
+			launchpad_do_regenerate_image($row[0]);
+		} else {
+			echo json_encode(
+				array(
+					'status' => false,
+					'message' => 'Could not write file attachment for record #' . $row[0] . ' on ' . $table . '.' . (file_exists($file_path) ? ' The old file still exists unmodified.' : ' Either this is a new file or the old file has been removed.  A link to this file will produce a 404.')
+				)
+			);
+			exit;
+		}
 	}
 	
 	// Show the results.
-	echo $results;
+	echo json_encode(
+		array(
+			'status' => true,
+			'message' => 'The record and any attachments were successfully imported.'
+		)
+	);
 	
 	exit;
 }
@@ -416,9 +524,17 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 function launchpad_migrate_get_tables() {
 	$communication_key = get_transient('launchpad_migration_communication_key');
 	
+	// Get the migration nonce.
+	$nonce = wp_create_nonce('migration');
+	
 	// Try to decrypt the key.  If it fails or there is no key, just quit there.
-	if(!$communication_key || @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) == false) {
-		echo '0';
+	if(!$communication_key || @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) !== $nonce) {
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Could not decrypt row data.  Please go to the remote site and verify the communication key.'
+			)
+		);
 		exit;
 	}
 	
@@ -430,7 +546,13 @@ function launchpad_migrate_get_tables() {
 	$export_files = launchpad_generate_database_csv();
 	
 	// Encrypt and output the results.
-	echo @openssl_encrypt(json_encode($export_files), 'aes128', $communication_key);
+	echo json_encode(
+		array(
+			'status' => true,
+			'message' => 'Tables exported successfully.',
+			'data' => @openssl_encrypt(json_encode($export_files), 'aes128', $communication_key)
+		)
+	);
 	exit;
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
@@ -447,9 +569,17 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 function launchpad_migrate_get_table_row() {
 	$communication_key = get_transient('launchpad_migration_communication_key');
 	
+	// Get the migration nonce.
+	$nonce = wp_create_nonce('migration');
+	
 	// Try to decrypt the key.  If it fails or there is no key, just quit there.
-	if(!$communication_key || @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) == false) {
-		echo '0';
+	if(!$communication_key || @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) !== $nonce) {
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Could not decrypt row data.  Please go to the remote site and verify the communication key.'
+			)
+		);
 		exit;
 	}
 	// Allow CORs and extend the key by 10 minutes.
@@ -458,15 +588,36 @@ function launchpad_migrate_get_table_row() {
 	
 	// Try to decrypt the table file path.
 	$table_file = @openssl_decrypt($_GET['table'], 'aes128', $communication_key);
+	if(!$table_file) {
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Could not decrypt table data file name.  Please go to the remote site and verify the communication key.'
+			)
+		);
+		exit;
+	}
 	
 	// If unlink is set and there is a table file and the table file is an HTML file
 	if(isset($_GET['unlink']) && $table_file && pathinfo($table_file, PATHINFO_EXTENSION) === 'html') {
-		echo '';
-		unlink($table_file);
+		echo json_encode(
+			array(
+				'status' => true,
+				'message' => 'Table export file deleted.',
+				'data' => ''
+			)
+		);
+		@unlink($table_file);
 		exit;
 	// Otherwise, report an error if this is an unlink request.
 	} else if(isset($_GET['unlink'])) {
-		echo 0;
+		echo json_encode(
+			array(
+				'status' => true,
+				'message' => 'Table export file already deleted.',
+				'data' => ''
+			)
+		);
 		exit;
 	}
 	
@@ -475,8 +626,14 @@ function launchpad_migrate_get_table_row() {
 		
 		// If the file is empty, delete it.
 		if(!filesize($table_file)) {
-			echo '';
-			unlink($table_file);
+			echo json_encode(
+				array(
+					'status' => true,
+					'message' => 'Table export file deleted.',
+					'data' => ''
+				)
+			);
+			@unlink($table_file);
 			exit;
 		}
 		
@@ -514,9 +671,23 @@ function launchpad_migrate_get_table_row() {
 		rename($table_file . '.tmp', $table_file);
 		
 		// Encrypt the first line and send it out.
-		echo @openssl_encrypt(json_encode($first_line), 'aes128', $communication_key);
+		echo json_encode(
+			array(
+				'status' => true,
+				'message' => 'Row data found.',
+				'data' => @openssl_encrypt(json_encode($first_line), 'aes128', $communication_key)
+			)
+		);
+		exit;
 	} else {
-		echo '';
+		echo json_encode(
+			array(
+				'status' => false,
+				'message' => 'Could not find the table export file.  It may have been deleted.',
+				'data' => ''
+			)
+		);
+		exit;
 	}
 	
 	exit;
@@ -630,9 +801,6 @@ function launchpad_migrate_domain_replace($input = '', $local, $remote) {
  * 
  * @since		1.5
  * @uses		launchpad_migrate_domain_replace
- * @todo		Improve errors.
- * @todo		Refactor and create functions where needed.
- * @todo		What about databases that were created on remote? Auto-import?
  */
 function launchpad_render_migrate_admin_page() {
 	global $wpdb;
@@ -666,7 +834,8 @@ function launchpad_render_migrate_admin_page() {
 			// Verify the correctness of the remote details.
 			case 'verify':
 				// Get the current site's launchpad version.
-				$local_version = file_get_contents(site_url() . '/api/?action=launchpad_version');
+				$local_version = json_decode(file_get_contents(site_url() . '/api/?action=launchpad_version'));
+				$local_version = $local_version->version;
 				
 				// If there is no migrate url, we can't do anything.
 				if(!isset($_POST['migrate_url']) || empty($_POST['migrate_url'])) {
@@ -676,21 +845,21 @@ function launchpad_render_migrate_admin_page() {
 				} else {
 					
 					// Get the remote site's launchpad version.
-					$remote_version = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_version');
+					$remote_version = json_decode(file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_version&communication_test=' . urlencode(@openssl_encrypt('initialize', 'aes128', $_POST['communication_key']))));
 					
 					// To avoid any inconsistencies in migration, only allow migration between
 					// the same Launchpad versions.
-					if($local_version != $remote_version) {
+					if($local_version != $remote_version->version) {
 						$errors[] = 'The remote site is on Launchpad ' . $remote_version . ' while this site is on ' . $local_version . '. You must upgrade Launchpad on both sites to the same version.';
 					
 					// Versions are the same.
 					} else {
 						// Send a test to see if the communication key is correct.
-						$remote_key_valid = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_validate_communication_key&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
+						$remote_key_valid = json_decode(file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_validate_communication_key&communication_test=' . urlencode(@openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key']))));
 						
 						// If not, we need an error.
-						if($remote_key_valid == '0') {
-							$errors[] = 'Please verify that your communication key is correct.';
+						if(!$remote_key_valid || $remote_key_valid->status === false) {
+							$errors[] = $remote_key_valid->message;
 						}
 					}
 				}
@@ -704,11 +873,20 @@ function launchpad_render_migrate_admin_page() {
 			// We need to migrate data from one site to the other.
 			case 'migrate':
 				
-				// Do a quick ping to make sure the key has not expired.
-				$remote_key_valid = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_validate_communication_key&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
+				// Get the remote site's launchpad version.
+				$remote_version = json_decode(file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_version&communication_test=' . urlencode(@openssl_encrypt('initialize', 'aes128', $_POST['communication_key']))));
+				
+				
+				if(isset($remote_version->nonce)) {
+					// Do a quick ping to make sure the key has not expired.
+					$remote_key_valid = json_decode(file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_validate_communication_key&communication_test=' . urlencode(@openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key']))));
+				} else {
+					$remote_key_valid = (object) array('status' => false, 'message' => 'Remote server did not reply with the correct information.  Please verify that the communication key is correct.');
+				}
 				
 				// If not, we can start migrating.
-				if($remote_key_valid) {
+				if($remote_key_valid->status === true) {
+					echo '<div id="migrate-status" class="wrap">Starting migration.</div>';
 					
 					// If the user requested to push, we need to handle pushing the data.
 					if($_POST['migrate_direction'] === 'push') {
@@ -725,24 +903,37 @@ function launchpad_render_migrate_admin_page() {
 								// We don't truncate options because it might cause the site to 
 								// freak out if someone hits a page during import.
 								if($table != 'options') {
-									$truncate_success = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_truncate_table&table=' . @openssl_encrypt($table, 'aes128', $_POST['communication_key']) . '&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
+									$truncate_success = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_truncate_table&table=' . urlencode(@openssl_encrypt($table, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key'])));
+									
+									$truncate_success = json_decode($truncate_success);
+									
+									if($truncate_success->status === false) {
+										$errors[] = $truncate_success->message;
+									}
 								}
 								
 								// Open the data file.
 								$data = fopen($file, 'r');
+								
+								$row_count = 0;
+								
 								// While there is data to be read, loop the file.
 								while(!feof($data)) {
 									// Get the current row of CSV.
 									$row = fgetcsv($data);
 									
+									$row_count++;
+									
 									// If there is a row (e.g. it wasn't an empty line), act on it.
 									if($row) {
+										echo '<script>document.getElementById("migrate-status").innerHTML = "Exporting row ' . $row_count . ' of ' . $table . '."</script>';
+										flush();
+										
 										// For options tables, we don't want to replace the migration keys
 										// since that would break migration when the decrypt check runs.
 										if($table == 'options') {
 											if(
-												$row[1] == '_transient_launchpad_migration_communication_key' ||
-												$row[1] == '_transient_timeout_launchpad_migration_communication_key'
+												preg_match('/^_transient_launchpad_/', $row[1])
 											) {
 												break;
 											}
@@ -799,13 +990,13 @@ function launchpad_render_migrate_admin_page() {
 										        // Encrypted table name.
 										        'table' => @openssl_encrypt($table, 'aes128', $_POST['communication_key']),
 										        // Communication test.
-										        'communication_test' => @openssl_encrypt('communication', 'aes128', $_POST['communication_key']),
+										        'communication_test' => @openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key']),
 										        // The action to perform.
 										        'action' => 'launchpad_migrate_table',
 										        // If there is a file, the base64 encoded content of the file.
 										        'file' => $att_file ? base64_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . $att_file)) : '0',
 										        // If there is a file, the path to the file.
-										        'file_path' => $att_file ? $att_file : '0'
+										        'file_path' => $att_file ? $att_file : '0',
 										    )
 										);
 										
@@ -821,7 +1012,14 @@ function launchpad_render_migrate_admin_page() {
 										$context = stream_context_create($opts);
 										
 										// Post to the remote API.
-										$result = file_get_contents($_POST['migrate_url'] . '/api/', false, $context);
+										$result = json_decode(file_get_contents($_POST['migrate_url'] . '/api/', false, $context));
+										if($result->status === false) {
+											$errors[] = $result->message;
+											if(count($errors) > 20) {
+												$errors[] = 'Quit import due to excessive import errors.  This can indicate that the remote communication key has expired.';
+												break 2;
+											}
+										}
 									}
 								}
 								
@@ -833,10 +1031,12 @@ function launchpad_render_migrate_admin_page() {
 						
 						// Since we're done with the import, clear the migration key.
 						// That avoids any chance of the key sticking around too long.
-						$remote_version = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migration_clear_key');
+						$key_cleared = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migration_clear_key&communication_test=' . urlencode(@openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key'])));
 						
 						// Set the form to the database complete message.
 						$form = 'database_complete';
+						echo '<script>document.getElementById("migrate-status").innerHTML = ""; document.getElementById("migrate-status").style.display="none";</script>';
+						flush();
 					
 					// The user specified to pull remote data.
 					} else if($_POST['migrate_direction'] === 'pull') {
@@ -847,28 +1047,31 @@ function launchpad_render_migrate_admin_page() {
 						launchpad_clear_all_cache();
 						
 						// Send a request to get a list of tables on the remote install.
-						$table_list = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_tables&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
+						$table_list = json_decode(file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_tables&communication_test=' . urlencode(@openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key']))));
 						
 						// If we didn't get a table list, error out.
-						if(!$table_list) {
-							$errors[] = 'The remote key is no longer valid.';
+						if($table_list->status === false) {
+							$errors[] = $table_list->message;
 							break;
 						
 						// Otherwise, try to decrypt.
 						} else {
-							$table_list = openssl_decrypt($table_list, 'aes128', $_POST['communication_key']);
+							$table_list = openssl_decrypt($table_list->data, 'aes128', $_POST['communication_key']);
 							
 							// If the list doesn't decrypt, error out.
 							if(!$table_list) {
-								$errors[] = 'Could not decrypt table list.';
+								$errors[] = 'Could not decrypt table list.  Please verify the communication key.';
 								break;
 							// Otherwise, start importing.
 							} else {
 								
 								// The list is JSON encoded, so decode it.
 								$table_list = json_decode($table_list);
+								
 								// Loop each table.
 								foreach($table_list as $table => $file) {
+									$row_count = 0;
+									
 									// If the table was checked, we can import it.
 									if(isset($_POST['migrate_database'][$table])) {
 										
@@ -882,14 +1085,15 @@ function launchpad_render_migrate_admin_page() {
 											
 											// Re-up the time limit in case something gets slow.
 											set_time_limit(60*5);
+											$row_count++;
 											
 											// We're importing one row at a time, so call to get a row.
-											$rows = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])));
+											$rows = json_decode(file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key']))));
 											
 											// If there is a row, not an empty value, indicating the file has been imported...
-											if($rows) {
+											if($rows->status === true && $rows->data) {
 												// Try to decrypt.
-												$rows = openssl_decrypt($rows, 'aes128', $_POST['communication_key']);
+												$rows = openssl_decrypt($rows->data, 'aes128', $_POST['communication_key']);
 												
 												// If the row decrypted...
 												if($rows) {
@@ -898,6 +1102,9 @@ function launchpad_render_migrate_admin_page() {
 													
 													// If we made it this far, we can start importing.
 													if($row) {
+														
+														echo '<script>document.getElementById("migrate-status").innerHTML = "Importing row ' . $row_count . ' of ' . $table . '."</script>';
+														flush();
 														
 														// For options tables, we don't want to replace the migration keys
 														// since that would break migration when the decrypt check runs.
@@ -972,6 +1179,9 @@ function launchpad_render_migrate_admin_page() {
 															// If we're on the posts table and the current is an attachment,
 															// we need to get the remote file.
 															if($table == 'posts' && $row[20] === 'attachment') {
+																echo '<script>document.getElementById("migrate-status").innerHTML = "Importing file for row ' . $row_count . ' of ' . $table . '."</script>';
+																flush();
+														
 																// Get the file details.
 																$file_path = get_attached_file($row[0]);
 																
@@ -1001,29 +1211,49 @@ function launchpad_render_migrate_admin_page() {
 															}
 														}
 													}
+												} else {
+													$errors[] = 'Could not decrypt a row of data for ' . $table . '.  Please verify the communication key and try to import again.';
+													if(count($errors) > 20) {
+														$errors[] = 'Quit import due to excessive import errors.  This can indicate that the remote communication key has expired.';
+														break 2;
+													}
 												}
+											} else if($rows->status === false) {
+												$errors[] = $rows->message;
+												if(count($errors) > 20) {
+													$errors[] = 'Quit import due to excessive import errors.  This can indicate that the remote communication key has expired.';
+													break 2;
+												}
+											} else {
+												$row = false;
 											}
 										
 										// Loop while there are rows.
-										} while($rows);
+										} while($row);
 									}
 									
 									// The file is complete, so delete the remote import file.
-									file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt('communication', 'aes128', $_POST['communication_key'])) . '&unlink=true');
+									$table_unlink = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key'])) . '&unlink=true');
+									$table_unlink = json_decode($table_unlink);
+									if($table_unlink->status === false) {
+										$errors[] = $table_unlink->message;
+									}
 								}
 								
 								// The import is complete, so clear the remote migration key.
-								$remote_version = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migration_clear_key');
+								$key_cleared = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migration_clear_key&communication_test=' . urlencode(@openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key'])));
 								
 								// Show the database complete message.
 								$form = 'database_complete';
+								echo '<script>document.getElementById("migrate-status").innerHTML = ""; document.getElementById("migrate-status").style.display="none";</script>';
+								flush();
 							}
 						}
 					}
 				
 				// The remote key is bad, so error.
 				} else {
-					$errors[] = 'The remote key is no longer valid.';
+					$errors[] = $remote_key_valid->message;
 				}
 			break;
 		}
@@ -1167,7 +1397,7 @@ function launchpad_render_migrate_admin_page() {
 					delete_transient('launchpad_migration_remote_communication_key');
 					
 					?>
-					<p><strong>The database import is complete. The remote key has been forcibly expired.</strong></p>
+					<p><strong>The database import is complete<?= $errors ? ', though some errors were encountered' : '' ?>. The remote key has been forcibly expired.  You must get a new key from the remote server.</strong></p>
 					<?php
 						
 				break;

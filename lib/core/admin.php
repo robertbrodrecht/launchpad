@@ -962,6 +962,9 @@ function launchpad_auto_help_tab() {
 					
 					// If there is generic help, add it to the field's help text.
 					if($generic_help) {
+						if(!isset($field_content[$field['name']])) {
+							$field_content[$field['name']] = '';
+						}
 						$field_content[$field['name']] .= $generic_help;
 					}
 				}

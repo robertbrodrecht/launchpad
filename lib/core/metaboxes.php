@@ -812,6 +812,18 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
 		}
 	}
 	
+	if(!is_array($val)) {
+		$val = array(
+			'street' => '',
+			'number' => '',
+			'city' => '',
+			'state' => '',
+			'zip' => '',
+			'latitude' => '',
+			'longitude' => ''
+		);
+	}
+	
 	echo '<fieldset class="launchpad-address launchpad-metabox-fieldset"><legend>' . ($args['label'] ? $args['label'] : 'Address Details') . '</legend>';
 	
 	echo '<div class="launchpad-google-map-embed">';
