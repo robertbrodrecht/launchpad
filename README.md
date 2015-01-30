@@ -34,6 +34,11 @@ To Do For 1.6
   * What other modules should be built-in?
   * Other Field Types?
 
+To Do For 1.7
+=============
+
+* Designer feedback.
+
 Future Wants
 ============
 
