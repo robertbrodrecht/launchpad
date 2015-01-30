@@ -801,6 +801,8 @@ function launchpad_migrate_domain_replace($input = '', $local, $remote) {
  * 
  * @since		1.5
  * @uses		launchpad_migrate_domain_replace
+ * @todo		Add a row counter.
+ * @todo		Generally, make progress indicator not suck.  So you aren't casting an object to an array every row...
  */
 function launchpad_render_migrate_admin_page() {
 	global $wpdb;
@@ -895,6 +897,8 @@ function launchpad_render_migrate_admin_page() {
 							$_POST['migrate_database'] = array();
 						}
 						
+						$table_counter = 0;
+						
 						// Loop over the tables the user wanted to migrate.
 						foreach($_POST['migrate_database'] as $table => $file) {
 							
@@ -930,7 +934,7 @@ function launchpad_render_migrate_admin_page() {
 									
 									// If there is a row (e.g. it wasn't an empty line), act on it.
 									if($row) {
-										echo '<script>document.getElementById("migrate-status").innerHTML = "Exporting row ' . $row_count . ' of ' . $table . '."</script>';
+										echo '<script>document.getElementById("migrate-status").innerHTML = "Exporting row ' . $row_count . ' of ' . $table . '.  ' . round($table_counter/count($_POST['migrate_database'])*100) . '% Complete."</script>';
 										flush();
 										
 										// For options tables, we don't want to replace the migration keys
@@ -1031,6 +1035,8 @@ function launchpad_render_migrate_admin_page() {
 								fclose($data);
 								unlink($file);
 							}
+							
+							$table_counter++;
 						}
 						
 						// Since we're done with the import, clear the migration key.
@@ -1072,6 +1078,8 @@ function launchpad_render_migrate_admin_page() {
 								// The list is JSON encoded, so decode it.
 								$table_list = json_decode($table_list);
 								
+								$table_counter = 0;
+								
 								// Loop each table.
 								foreach($table_list as $table => $file) {
 									$row_count = 0;
@@ -1107,7 +1115,7 @@ function launchpad_render_migrate_admin_page() {
 													// If we made it this far, we can start importing.
 													if($row) {
 														
-														echo '<script>document.getElementById("migrate-status").innerHTML = "Importing row ' . $row_count . ' of ' . $table . '."</script>';
+														echo '<script>document.getElementById("migrate-status").innerHTML = "Importing row ' . $row_count . ' of ' . $table . '. ' . round($table_counter/count((array) $table_list)*100) . '% Complete."</script>';
 														flush();
 														
 														// For options tables, we don't want to replace the migration keys
@@ -1183,7 +1191,7 @@ function launchpad_render_migrate_admin_page() {
 															// If we're on the posts table and the current is an attachment,
 															// we need to get the remote file.
 															if($table == 'posts' && $row[20] === 'attachment') {
-																echo '<script>document.getElementById("migrate-status").innerHTML = "Importing file for row ' . $row_count . ' of ' . $table . '."</script>';
+																echo '<script>document.getElementById("migrate-status").innerHTML = "Importing file for row ' . $row_count . ' of ' . $table . '.  ' . round($table_counter/count((array) $table_list)*100) . '% Complete."</script>';
 																flush();
 														
 																// Get the file details.
@@ -1236,6 +1244,8 @@ function launchpad_render_migrate_admin_page() {
 										} while($row);
 									}
 									
+									$table_counter++;
+									
 									// The file is complete, so delete the remote import file.
 									$table_unlink = file_get_contents($_POST['migrate_url'] . '/api/?action=launchpad_migrate_get_table_row&table=' . urlencode(@openssl_encrypt($file, 'aes128', $_POST['communication_key'])) . '&communication_test=' . urlencode(@openssl_encrypt($remote_version->nonce, 'aes128', $_POST['communication_key'])) . '&unlink=true');
 									$table_unlink = json_decode($table_unlink);
@@ -1285,7 +1295,6 @@ function launchpad_render_migrate_admin_page() {
 	?>
 	<div class="wrap">
 		<h2>Database Migration</h2>
-		<div class="error"><p><strong>SUPER BETA!</strong>  You probably shouldn't use this in production. Make a backup of your database before you migrate!</p></div>
 		<?php
 
 			if($errors) {
@@ -1297,8 +1306,7 @@ function launchpad_render_migrate_admin_page() {
 			} else {
 			
 		?>
-		<p>This tool is meant to be used to migrate data between dev and live sites that are built on Launchpad and installed at the root-level of a domain.  <strong style="color:#dd3d36">Data is replaced, NOT merged, with the domain names swapped out.</strong>  Serialized data should be unserialized before the domain names are replaced, so it should not break metadata and plugins.  That said, this tool is not well tested.  Use at your own risk and, for the love of all that is good, <strong style="color:#dd3d36">make a backup of your database and assets before you pull the trigger!</strong></p>
-		<p>If this site is the remote site, this communication key is valid for 10 minutes: <strong><?= $communication_key ?></strong></p>
+		<p><strong>THIS IS ALPHA SOFTWARE!!! USE AT YOUR OWN RISK.</strong> This tool is meant to be used to migrate data between dev and live sites that are built on Launchpad and installed at the root-level of a domain.  <strong style="color:#dd3d36">Data is replaced, NOT merged, with the domain names swapped out.</strong>  Serialized data should be unserialized before the domain names are replaced, so it should not break metadata and plugins.  That said, this tool is not well tested.  Use at your own risk and, for the love of all that is good, <strong style="color:#dd3d36">make a backup of your database and assets before you pull the trigger!</strong></p>
 		<?php } ?>
 		<form method="post" id="poststuff">
 			<?php
@@ -1307,7 +1315,19 @@ function launchpad_render_migrate_admin_page() {
 				default:
 					?>
 					<div class="postbox">
-						<h3 class="hndle"><span>Setup</span></h3>
+						<h3 class="hndle"><span>Communication Key</span></h3>
+						<div class="inside">
+							<div class="launchpad-metabox-field">
+								<label>
+									If this site is the remote site, this communication key:
+									<input type="text" value="<?= $communication_key ?>" readonly="readonly">
+									<small>Valid for 10 minutes.</small>
+								</label>
+							</div>
+						</div>	
+					</div>
+					<div class="postbox">
+						<h3 class="hndle"><span>Migration Setup</span></h3>
 						<div class="inside">
 							<div class="launchpad-metabox-field">
 								<label>
@@ -1401,7 +1421,7 @@ function launchpad_render_migrate_admin_page() {
 					delete_transient('launchpad_migration_remote_communication_key');
 					
 					?>
-					<p><strong>The database import is complete<?= $errors ? ', though some errors were encountered' : '' ?>. The remote key has been forcibly expired.  You must get a new key from the remote server.</strong></p>
+					<div class="updated"><p>The database import is complete<?= $errors ? ', though some errors were encountered' : '' ?>. The remote key has been forcibly expired.  You must get a new key from the remote server.</p></div>
 					<?php
 						
 				break;

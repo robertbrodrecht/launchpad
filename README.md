@@ -17,6 +17,8 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.6
 =============
 
+* Improve progress indicator for migration.
+* Do a live test of migration and consider adding an e-mail when complete option.
 * Take another stab at MU Support
 * HTML5-based Caption Shortcode Override
 * UI for creating Metaboxes and Flexible Content
