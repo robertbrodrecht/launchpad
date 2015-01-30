@@ -769,7 +769,7 @@ function launchpad_generate_database_csv() {
 function launchpad_add_migration_page() {
 	add_submenu_page('tools.php', 'Migrate', 'Migrate', 'update_core', 'launchpad/migrate/', 'launchpad_render_migrate_admin_page', 99);
 }
-if(is_admin() && ($_SERVER['HTTP_HOST'] === 'launchpad.git' || $_SERVER['HTTP_HOST'] === 'launchpad2.git')) {
+if(is_admin()) {
 	add_action('admin_menu', 'launchpad_add_migration_page');
 }
 
@@ -1308,7 +1308,7 @@ function launchpad_render_migrate_admin_page() {
 							<div class="launchpad-metabox-field">
 								<label>
 									Full URL to Remote Site
-									<input type="text" name="migrate_url" value="<?= $_POST['migrate_url'] ?>">
+									<input type="text" name="migrate_url" value="<?= $_POST['migrate_url'] ?>" placeholder="http://domain.com/">
 								</label>
 							</div>
 							<div class="launchpad-metabox-field">

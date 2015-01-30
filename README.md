@@ -14,12 +14,6 @@ For a detailed walk through, check out the [Codex](_codex/index.md).
 
 For the long feature list that was formerly here, see the [Codex Features List](_codex/features.md).
 
-To Do For 1.5
-=============
-
-* Database and Asset Migration Refactor
-* Add section in the codex for tools / utilities
-
 To Do For 1.6
 =============
 

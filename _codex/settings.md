@@ -1,4 +1,4 @@
-<center>[Previous](install.md) | [Home](index.md) | [Next](site-images.md)</center>
+<center>[Previous](install.md) | [Home](index.md) | [Next](tools.md)</center>
 
 Launchpad Settings
 ==================
