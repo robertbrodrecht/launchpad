@@ -23,6 +23,7 @@ This is a quick outline of documentation goals:
 * [Caveats and Browser Support](caveats.md)
 * [Installation](install.md)
 * [Settings](settings.md)
+* [Tools](tools.md)
 * [Site Images](site-images.md)
 * [Custom Post Types, Taxonomies, Metaboxes, and Flexible Content](post-types.md)
 * [Basic Template Editing](basic-template.md)
