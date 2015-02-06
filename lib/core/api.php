@@ -17,16 +17,34 @@
  */
 function launchpad_version() {
 	$communication_key = get_transient('launchpad_migration_communication_key');
-	if($communication_key && @openssl_decrypt($_GET['communication_test'], 'aes128', $communication_key) === 'initialize') {
+	if($communication_key && @openssl_decrypt($_POST['communication_message'], 'aes128', $communication_key) === 'initialize') {
 		header('Access-Control-Allow-Origin: *');
 		set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
 		
 		$nonce = wp_create_nonce('migration');
 		
-		echo json_encode(array('version' => '1.5', 'nonce' => $nonce));
+		echo json_encode(
+			array(
+				'status' => true,
+				'message' => 'Full connection information provided.',
+				'data' => array(
+					'version' => LAUNCHPAD_VERSION, 
+					'nonce' => $nonce, 
+					'max_upload' => parse_size(ini_get('post_max_size'))
+				)
+			)
+		);
 		exit;
 	}
-	echo json_encode(array('version' => '1.5'));
+	echo json_encode(
+		array(
+			'status' => true,
+			'message' => 'Version information provided.',
+			'data' => array(
+				'version' => LAUNCHPAD_VERSION, 
+			)
+		)
+	);
 	exit;
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {

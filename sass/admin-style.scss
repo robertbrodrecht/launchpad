@@ -663,17 +663,26 @@ dl.launchpad-inline-listing {
 	text-align: left;
 	
 	dt {
-		display: run-in;
+		//display: run-in;
+		float: left;
 		font-weight: 900;
 		
 		&:after {
 			content: ': ';
+			display: inline-block;
+			margin-right: .5em;
 		}
 	}
 	
 	dd {
 		margin-bottom: 1em;
 		margin-left: 0;
+		clear: right;
+		
+		p {
+			clear: both;
+			margin-top: .5em;
+		}
 	}
 }
 
@@ -948,9 +957,16 @@ body.login {
 
 #migrate-status {
 	background: #FFF;
-	font-size: 2em;
-	font-weight: bold;
 	margin-top: 1.5em;
-	padding: 1.5em;
+	padding: 3em;
 	text-align: center;
+	
+	strong {
+		display: block;
+		font-size: 4em;
+		font-weight: bold;
+		margin: auto;
+		margin-bottom: .25em;
+		text-align: center;
+	}
 }

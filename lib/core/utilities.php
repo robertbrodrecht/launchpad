@@ -421,3 +421,28 @@ function csv_to_array($data, $delimiter = ',', $enclosure = '"') {
 	}
 	return $contents;
 }
+
+
+/**
+ * Convert an PHP.ini Size to Bytes
+ * 
+ * Takes input like 1M and converts it to 1024.
+ *
+ * @param		array $data An array or array of arrays to convert to CSV.
+ * @param		string $delimiter The character to use as the delimiter.
+ * @param		string $enclosure What to wrap around strings with line breaks.
+ * @since		1.5
+ */
+function parse_size($size) {
+	// Remove the non-unit characters from the size.
+	$unit = preg_replace('/[^bkmgtpezy]/i', '', $size);
+	
+	// Remove the non-numeric characters from the size.
+	$size = preg_replace('/[^0-9\.]/', '', $size);
+	if ($unit) {
+		// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
+		return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+	} else {
+		return round($size);
+	}
+}

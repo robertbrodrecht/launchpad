@@ -677,5 +677,35 @@ jQuery(document).ready(
 				);
 			}
 		);
+		
+		$('#migrate-table-checkbox, [name=migrate_attached_files]').on(
+			'change',
+			function() {
+				setTimeout(
+					function() {
+						var total_rows = 0,
+							total_files = 0,
+							count_rows = $('[name=migrate_attached_files]').is(':checked');
+						
+						$('#migrate-table-checkbox :checked').each(
+							function() {
+								var me = $(this);
+								if(me.data('rows')) {
+									total_rows += (+me.data('rows'));
+								}
+								if(count_rows) {
+									if(me.data('files')) {
+										total_files += (+me.data('files'));
+									}
+								}
+							}
+						);
+						
+						$('#migrate-rows-total').html(total_rows);
+						$('#migrate-files-total').html(total_files);
+					}
+				, 250);
+			}
+		);
 	}
 );

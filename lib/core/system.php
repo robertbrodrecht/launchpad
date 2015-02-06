@@ -15,6 +15,10 @@ define('THEME_PATH', '/' . str_replace($_SERVER['DOCUMENT_ROOT'] . '/', '', get_
 /** Root-relative child theme path. */
 define('CHILD_THEME_PATH', '/' . str_replace($_SERVER['DOCUMENT_ROOT'] . '/', '', get_stylesheet_directory()));
 
+if(!defined('LAUNCHPAD_VERSION')) {
+	define('LAUNCHPAD_VERSION', '1.5');
+}
+
 
 /**
  * Set up the pages and posts required for this theme

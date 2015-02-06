@@ -496,7 +496,7 @@ function launchpad_seo_meta_box_handler($post, $args) {
 					
 					?>
 					<dt><span class="dashicons <?php echo $pass ? 'dashicons-yes' : 'dashicons-visibility' ?>"></span> Content</dt>
-					<dd><?php echo $test_results ?></dd>
+					<dd><p><?php echo $test_results ?></p></dd>
 				</dl>
 			</div>
 		</div>
