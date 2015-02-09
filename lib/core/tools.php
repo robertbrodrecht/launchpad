@@ -951,8 +951,6 @@ function launchpad_migrate_api_call($url = false, $action = false, $communicatio
 	
 	$result_decode = json_decode($result);
 	
-	//echo '<pre style="line-height: 2">'; var_dump($result); echo '</pre>';
-	
 	if($result_decode === false) {
 		return (object) array(
 			'status' => false,
@@ -1179,8 +1177,8 @@ function launchpad_migrate_handle_import($local_server = false, $remote_server =
 						$table_has_rows_array = array_values($table_has_rows);
 						
 						if($table_has_rows) {
-							foreach($table_has_rows as $row) {
-								if($show_updates) {
+							foreach($table_has_rows as $row_counter => $row) {
+								if($show_updates && $actions_complete%10 === 0) {
 									$complete = floor($actions_complete/$total_actions*100);
 									$current_row_sum = $current_row + $rows_offset;
 									echo "<script>document.getElementById('migrate-status').innerHTML = '<strong>$complete%</strong><br>Processing row {$current_row_sum} of {$rows_in_table} in {$details->table}';</script>";
@@ -1191,9 +1189,10 @@ function launchpad_migrate_handle_import($local_server = false, $remote_server =
 								// since that would break migration when the decrypt check runs.
 								if($details->table_base == 'options') {
 									if(
-										preg_match('/^_transient_launchpad_/', $row['option_name'])
+										preg_match('/^_transient/', $row['option_name'])
 									) {
-										break;
+										unset($table_has_rows[$row_counter], $table_has_rows_array[$row_counter]);
+										$total_records--;
 									}
 								}
 								
@@ -1264,7 +1263,7 @@ function launchpad_migrate_handle_import($local_server = false, $remote_server =
 				'files' => $files,
 				'success' => $success,
 				'fail' => $fail,
-				'total' => $total
+				'total' => $total_records
 			)
 		);
 	}
@@ -1494,6 +1493,7 @@ function launchpad_migrate_render_admin_page() {
 					}
 					
 					$migrate_results = launchpad_migrate_handle_import($local_server, $remote_server, $_POST['migrate_database'], true);
+					
 					if(!$migrate_results->status) {
 						$errors[] = $migrate_results->message;
 					}
