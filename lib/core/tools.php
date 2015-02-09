@@ -97,7 +97,7 @@ function launchpad_register_tools() {
 	);	
 }
 
-if(is_admin() && $_SERVER['HTTP_HOST'] === 'launchpad.git') {
+if(is_admin()) {
 	add_action('admin_menu', 'launchpad_register_tools');
 }
 
@@ -965,7 +965,7 @@ function launchpad_migrate_api_call($url = false, $action = false, $communicatio
 function launchpad_migrate_add_admin_page() {
 	add_submenu_page('tools.php', 'Migrate', 'Migrate', 'update_core', 'launchpad/migrate/', 'launchpad_migrate_render_admin_page', 99);
 }
-if(is_admin()) {
+if(is_admin() && ($_SERVER['HTTP_HOST'] === 'launchpad.git' || $_SERVER['HTTP_HOST'] === 'launchpad2.git')) {
 	add_action('admin_menu', 'launchpad_migrate_add_admin_page');
 }
 
