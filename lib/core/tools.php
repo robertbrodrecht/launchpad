@@ -271,7 +271,7 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
  *
  * @since		1.5
  */
-function launchpad_migrate_clear_key() {
+function launchpad_migration_clear_key() {
 	// Get the communication key.
 	$communication_key = get_transient('launchpad_migration_communication_key');
 	
@@ -289,8 +289,8 @@ function launchpad_migrate_clear_key() {
 	exit;
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
-	add_action('wp_ajax_launchpad_migrate_clear_key', 'launchpad_migrate_clear_key');
-	add_action('wp_ajax_nopriv_launchpad_migrate_clear_key', 'launchpad_migrate_clear_key');
+	add_action('wp_ajax_launchpad_migration_clear_key', 'launchpad_migration_clear_key');
+	add_action('wp_ajax_nopriv_launchpad_migration_clear_key', 'launchpad_migration_clear_key');
 }
 
 
@@ -299,7 +299,7 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
  *
  * @since		1.5
  */
-function launchpad_migrate_truncate_table() {
+function launchpad_migration_truncate_table() {
 	global $wpdb;
 	
 	// Get the communication key.
@@ -325,6 +325,7 @@ function launchpad_migrate_truncate_table() {
 	
 	// Get the table and decrypt it.
 	$table = @openssl_decrypt($_POST['table'], 'aes128', $communication_key);
+	$prefix = @openssl_decrypt($_POST['requires_prefix'], 'aes128', $communication_key);
 	
 	// If it fails to decrypt, quit.
 	if($table === false) {
@@ -348,8 +349,20 @@ function launchpad_migrate_truncate_table() {
 		exit;
 	}
 	
-	// Truncate the table.
-	$truncate = $wpdb->query('TRUNCATE TABLE ' . $wpdb->prefix . $table);
+	$has_table = $wpdb->get_results('SHOW TABLES LIKE "' . ($prefix ? $wpdb->prefix : '') . $table . '"');
+	
+	if($has_table) {	
+		// Truncate the table.
+		$truncate = $wpdb->query('TRUNCATE TABLE ' . ($prefix ? $wpdb->prefix : '') . $table);
+	} else {
+		echo json_encode(
+			array(
+				'status' => true,
+				'message' => 'Table does not exist.  No truncate required.'
+			)
+		);
+		exit;
+	}
 	
 	if($truncate) {
 		echo json_encode(
@@ -369,28 +382,9 @@ function launchpad_migrate_truncate_table() {
 	exit;
 }
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
-	add_action('wp_ajax_launchpad_migrate_truncate_table', 'launchpad_migrate_truncate_table');
-	add_action('wp_ajax_nopriv_launchpad_migrate_truncate_table', 'launchpad_migrate_truncate_table');
+	add_action('wp_ajax_launchpad_migration_truncate_table', 'launchpad_migration_truncate_table');
+	add_action('wp_ajax_nopriv_launchpad_migration_truncate_table', 'launchpad_migration_truncate_table');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -545,6 +539,8 @@ function launchpad_migrate_put_rows() {
 	header('Access-Control-Allow-Origin: *');
 	set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
 	
+	$prefix = @openssl_decrypt($_POST['requires_prefix'], 'aes128', $communication_key);
+	
 	$table = @openssl_decrypt($_POST['table'], 'aes128', $communication_key);
 	if($table === false) {
 		echo json_encode(
@@ -584,10 +580,15 @@ function launchpad_migrate_put_rows() {
 	$success = 0;
 	$fail = 0;
 	
-	$has_table = $wpdb->get_results('SHOW TABLES LIKE "' . $wpdb->prefix . $table . '"');
+	$table_with_prefix = $table;
+	if($prefix) {
+		$table_with_prefix = $wpdb->prefix . $table_with_prefix;
+	}
+	
+	$has_table = $wpdb->get_results('SHOW TABLES LIKE "' . $table_with_prefix . '"');
 	if(!$has_table) {
 		$create_query = $create['Create Table'];
-		$create_query = str_replace('`' . $create['Table'] . '`', '`' . $wpdb->prefix . $table . '`', $create_query);
+		$create_query = str_replace('`' . $create['Table'] . '`', '`' . $table_with_prefix . '`', $create_query);
 		
 		$create_results = $wpdb->query($create_query);
 		if(!$create_results) {
@@ -602,7 +603,7 @@ function launchpad_migrate_put_rows() {
 	}
 	
 	// Prefix the table so it is easier to work with.
-	$local_table = $wpdb->prefix . $table;
+	$local_table = $table_with_prefix;
 	
 	// Get the table's columns to build the query.
 	$columns = $wpdb->get_results('SHOW columns FROM ' . $local_table);
@@ -709,6 +710,8 @@ function launchpad_migrate_get_rows() {
 	// Allow CORs and extend the key by 10 minutes.
 	header('Access-Control-Allow-Origin: *');
 	set_transient('launchpad_migration_communication_key', $communication_key, 60 * 10);
+
+	$prefix = @openssl_decrypt($_POST['requires_prefix'], 'aes128', $communication_key);
 	
 	$table = @openssl_decrypt($_POST['table'], 'aes128', $communication_key);
 	if($table === false) {
@@ -734,7 +737,7 @@ function launchpad_migrate_get_rows() {
 	
 	$offset = (int) $offset;
 	
-	$results = $wpdb->get_results('SELECT * FROM `' . $wpdb->prefix . $table . '` LIMIT ' . ($offset * $rows_per_page) . ', ' . $rows_per_page);
+	$results = $wpdb->get_results('SELECT * FROM `' . ($prefix ? $wpdb->prefix : '') . $table . '` LIMIT ' . ($offset * $rows_per_page) . ', ' . $rows_per_page);
 	
 	echo json_encode(
 		array(
@@ -790,6 +793,7 @@ function launchpad_migrate_get_tables() {
 	foreach($table_list as $table) {
 		$table = (array) $table;
 		$table = array_pop($table);
+		$requires_prefix = preg_match('/^' . $wpdb->prefix . '/', $table) ? true : false;
 		$table_base_name = preg_replace('/^' . $wpdb->prefix . '/', '', $table);
 		
 		$total_rows = $wpdb->get_results('SELECT count(*) as total FROM `' . $table . '`');
@@ -809,6 +813,7 @@ function launchpad_migrate_get_tables() {
 		$return['data'][$table] = array(
 			'table' => $table,
 			'table_base' => $table_base_name,
+			'requires_prefix' => $requires_prefix,
 			'rows' => $total_rows,
 			'files' => $total_files,
 			'create' => $create_table
@@ -946,6 +951,8 @@ function launchpad_migrate_api_call($url = false, $action = false, $communicatio
 	
 	$result_decode = json_decode($result);
 	
+	//echo '<pre style="line-height: 2">'; var_dump($result); echo '</pre>';
+	
 	if($result_decode === false) {
 		return (object) array(
 			'status' => false,
@@ -965,7 +972,7 @@ function launchpad_migrate_api_call($url = false, $action = false, $communicatio
 function launchpad_migrate_add_admin_page() {
 	add_submenu_page('tools.php', 'Migrate', 'Migrate', 'update_core', 'launchpad/migrate/', 'launchpad_migrate_render_admin_page', 99);
 }
-if(is_admin() && ($_SERVER['HTTP_HOST'] === 'launchpad.git' || $_SERVER['HTTP_HOST'] === 'launchpad2.git')) {
+if(is_admin()) {
 	add_action('admin_menu', 'launchpad_migrate_add_admin_page');
 }
 
@@ -1118,11 +1125,12 @@ function launchpad_migrate_handle_import($local_server = false, $remote_server =
 						
 				$truncate_results = launchpad_migrate_api_call(
 					$remote_server->url, 
-					'launchpad_migrate_truncate_table', 
+					'launchpad_migration_truncate_table', 
 					$remote_server->communication_key,
 					$remote_server->nonce,
 					array(
 						'table' => $details->table_base,
+						'requires_prefix' => $details->requires_prefix,
 					)
 				);
 				
@@ -1135,7 +1143,7 @@ function launchpad_migrate_handle_import($local_server = false, $remote_server =
 				if($show_updates) {
 					$complete = floor($actions_complete/$total_actions*100);
 					$rows_offset_human = $rows_offset+1;
-					echo "<script>console.log(document.getElementById('migrate-status')); document.getElementById('migrate-status').innerHTML = '<strong>$complete%</strong><br>Getting page {$rows_offset_human} of {$details->table}';</script>";
+					echo "<script>document.getElementById('migrate-status').innerHTML = '<strong>$complete%</strong><br>Getting page {$rows_offset_human} of {$details->table}';</script>";
 					flush();
 				}
 				
@@ -1147,6 +1155,7 @@ function launchpad_migrate_handle_import($local_server = false, $remote_server =
 					$local_server->nonce,
 					array(
 						'table' => $details->table_base,
+						'requires_prefix' => $details->requires_prefix,
 						'offset' => $rows_offset
 					)
 				);
@@ -1174,7 +1183,7 @@ function launchpad_migrate_handle_import($local_server = false, $remote_server =
 								if($show_updates) {
 									$complete = floor($actions_complete/$total_actions*100);
 									$current_row_sum = $current_row + $rows_offset;
-									echo "<script>console.log(document.getElementById('migrate-status')); document.getElementById('migrate-status').innerHTML = '<strong>$complete%</strong><br>Processing row {$current_row_sum} of {$rows_in_table} in {$details->table}';</script>";
+									echo "<script>document.getElementById('migrate-status').innerHTML = '<strong>$complete%</strong><br>Processing row {$current_row_sum} of {$rows_in_table} in {$details->table}';</script>";
 									flush();
 								}
 								
@@ -1224,6 +1233,7 @@ function launchpad_migrate_handle_import($local_server = false, $remote_server =
 								$remote_server->nonce,
 								array(
 									'table' => $details->table_base,
+									'requires_prefix' => $details->requires_prefix,
 									'create' => $details->create,
 									'rows' => $table_has_rows
 								)
@@ -1311,10 +1321,8 @@ function launchpad_migrate_handle_import_files($local_server = false, $remote_se
 			$file_path = wp_get_attachment_url($row['ID']);
 			if(!$file_path || !file_exists($_SERVER['DOCUMENT_ROOT'] . $file_path)) {
 				$errors[] = 'Could not upload ' . $file_path . ' because the file is missing.';
-				$total_actions--;
 			} else if(filesize($_SERVER['DOCUMENT_ROOT'] . $file_path) > $remote_server->max_upload) {
 				$errors[] = 'Could not upload ' . $file_path . ' because the file is too big.';
-				$total_actions--;
 			} else {
 				$file_path = $_SERVER['DOCUMENT_ROOT'] . $file_path;
 			}
@@ -1375,8 +1383,6 @@ function launchpad_migrate_handle_import_files($local_server = false, $remote_se
  * 
  * @since		1.5
  * @uses		launchpad_migrate_domain_replace
- * @todo		Need to expire remote and local key
- * @todo		Figure out prefixing so non wp_ stuff doesn't get prefixed
  */
 function launchpad_migrate_render_admin_page() {
 	global $wpdb;
@@ -1505,10 +1511,11 @@ function launchpad_migrate_render_admin_page() {
 							$migrate_results->data->files,
 							true
 						);
-						if(isset($migrate_file_results->total)) {
-							$results['files'] = $migrate_file_results->total;
-							$results['success_files'] = $migrate_file_results->success;
-							$results['fail_files'] = $migrate_file_results->fail;
+						
+						if(isset($migrate_file_results->data->total)) {
+							$results['files'] = $migrate_file_results->data->total;
+							$results['success_files'] = $migrate_file_results->data->success;
+							$results['fail_files'] = $migrate_file_results->data->fail;
 						} else {
 							$results['files'] = count($migrate_results->data->files);
 							$results['fail_files'] = count($migrate_results->data->files);
@@ -1518,6 +1525,16 @@ function launchpad_migrate_render_admin_page() {
 						}
 					}
 				}
+				
+				
+				// Since we're done with the import, clear the migration key.
+				// That avoids any chance of the key sticking around too long.
+				$clear_key_results = launchpad_migrate_api_call(
+					$remote_server->url, 
+					'launchpad_migration_clear_key', 
+					$remote_server->communication_key,
+					$remote_server->nonce
+				);
 				
 				$form = 'complete';
 			break;
