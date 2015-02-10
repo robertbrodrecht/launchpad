@@ -1000,14 +1000,14 @@ function launchpad_migrate_validate_credentials($remote_url = false, $communicat
 		$return['status'] = false;
 		$return['message'] = 'No remote URL provided.';
 		
-		return $return;
+		return (object) $return;
 	}
 	
 	if(!$communication_key) {
 		$return['status'] = false;
 		$return['message'] = 'No remote communication key provided.';
 		
-		return $return;
+		return (object) $return;
 	}
 	
 	$local = launchpad_migrate_api_call(

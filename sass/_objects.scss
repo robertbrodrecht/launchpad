@@ -114,21 +114,28 @@ img.aligncenter {
 	max-width: 100%;
 	padding: 0;
 	
-	@media (min-width: 34em) {
-		width: 100%;
+	&.aligncenter {
+		margin: auto;
 	}
 	
-	img {
-		max-width: 100%;
-	}
-	
-	p.wp-caption-text {
-		font-size: .75em;
+	figcaption {
+		padding-top: .5em;
+		font-size: .8em;
 		line-height: 1.5;
+		text-align: left;
 		
 		&:last-child {
 			margin-bottom: 0;
 		}
+	}
+	
+	@media (max-width: 34em) {
+		float: none !important;
+		width: 100% !important;
+	}
+	
+	img {
+		max-width: 100%;
 	}
 }
 

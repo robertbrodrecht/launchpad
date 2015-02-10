@@ -17,9 +17,7 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.6
 =============
 
-* Do a live test of migration and consider adding an e-mail when complete option.
 * Take another stab at MU Support
-* HTML5-based Caption Shortcode Override
 * UI for creating Metaboxes and Flexible Content
 * Site Options
   * Multiple options pages?
@@ -36,6 +34,12 @@ To Do For 1.6
 To Do For 1.7
 =============
 
+* Migration
+  * Select Post Types
+  * Investigate syncing
+  * Consider adding an e-mail when complete option.
+* Revisit SEO
+  * Only pulls post_content for SEO checks
 * Designer feedback.
 
 Future Wants

@@ -523,6 +523,53 @@ add_shortcode('gallery', 'launchpad_gallery_shortcode');
 
 
 /**
+ * A More Semantic Caption Shortcode Handler
+ *
+ * @param		array $attr The attributes from the shortcode.
+ * @param		string $content The content of the shortcode.
+ * @since		1.0
+ */
+function launchpad_caption_shortcode($attr, $content) {
+	preg_match_all('/<img.*?src="(.*?)".*?>/', $content, $imgs);
+	preg_match_all('/<a.*?href="(.*?)".*?>/', $content, $links);
+	
+	$content = preg_replace('/^.*?</', '<', $content);
+	if(preg_match('/^<a/', $content)) {
+		$content = preg_replace('/^<a.*?>.*?<\/a>/', '', $content);
+	} else {
+		$content = preg_replace('/^<img.*?>/', '', $content);
+	}
+	
+	$return = '<figure class="wp-caption';
+	if($attr['align']) {
+		$return .= ' ' . $attr['align'];
+	}
+	$return .= '"';
+	if($attr['width']) {
+		$return .= ' style="width: ' . $attr['width'] . 'px;"';
+	}
+	$return .= '>';
+	if(isset($links[0][0])) {
+		$return .= $links[0][0];
+	}
+	if(isset($imgs[0][0])) {
+		$return .= $imgs[0][0];
+	}
+	if(isset($links[0][0])) {
+		$return .= '</a>';
+	}
+	$return .= '<figcaption>' . $content . '</figcaption>';
+	$return .= '</figure>';
+	
+	return $return;
+}
+remove_shortcode('caption', 'img_caption_shortcode');
+remove_shortcode('wp_caption', 'img_caption_shortcode');
+add_shortcode('caption', 'launchpad_caption_shortcode');
+add_shortcode('wp_caption', 'launchpad_caption_shortcode');
+
+
+/**
  * Modify Search Join Query To Include Flexible Content
  *
  * @param		string $q The query.
