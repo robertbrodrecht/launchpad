@@ -34,6 +34,9 @@ To Do For 1.6
 To Do For 1.7
 =============
 
+* CSS Review
+  * Use the <code>* + *</code> selector for margin-top.
+  * Can the CSS reset be smaller?
 * Migration
   * Select Post Types
   * Investigate syncing
