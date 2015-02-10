@@ -514,6 +514,32 @@ function launchpad_site_options_validate($input) {
 					$input[$key] = true;
 				}
 			break;
+			case 'subfield':
+				foreach($setting['args']['subfields'] as $sub_key => $sub_setting) {
+					switch($sub_setting['args']['type']) {
+						case 'date':
+							if($input[$sub_key] != '') {
+								$input[$sub_key] = date('m/d/Y', strtotime($input[$sub_key]));
+							}
+						break;
+						case 'datetime':
+							if($input[$sub_key] != '') {
+								$input[$sub_key] = date('m/d/Y g:i a', strtotime($input[$sub_key]));
+							}
+						break;
+						case 'checkbox':
+							if($input[$sub_key] == '') {
+								$input[$sub_key] = false;
+							} else {
+								$input[$sub_key] = true;
+							}
+						break;
+					}
+					if(isset($input[$sub_key])) {
+						$site_options[$sub_key] = $input[$sub_key];
+					}
+				}
+			break;
 		}
 		if(isset($input[$key])) {
 			$site_options[$key] = $input[$key];

@@ -18,6 +18,8 @@ To Do For 1.6
 =============
 
 * Take another stab at MU Support
+  * Can I make MU write its own .htaccess?
+  * Are there any problems with MU+Child Themes?
 * UI for creating Metaboxes and Flexible Content
 * Site Options
   * Multiple options pages?
