@@ -685,6 +685,14 @@ function launchpad_theme_options_render_page() {
 		wp_die('You do not have sufficient permissions to access this page.');
 	}
 	
+	if(is_multisite()) {
+		?>
+		<div class="updated">
+			<p><strong>If you've recently changed themes on this site, you MUST update the .htaccess file to use pretty URLs for images, JavaScript, and CSS.  This is done by going to the Network Admin, then going to Settings &gt; Network Setup.  If you do not have access to this area, please contact your network administrator.</strong></p>
+		</div>
+		<?php
+	}
+	
 	// Otherwise, render the options page wrapper.
 	?>
 	<div class="wrap">

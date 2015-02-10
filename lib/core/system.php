@@ -385,6 +385,93 @@ if(is_admin()) {
 
 
 /**
+ * Adds Launchpad Specific Rewrites to Network Setup
+ *
+ * @param		string $content The content of the rewrite information field.  At least that is what we're looking for.
+ * @since		1.5
+ */
+function launchpad_modify_mu_rewrites($content) {
+	global $wpdb;
+	
+	if(preg_match('/^RewriteEngine On/', $content)) {
+		$content_split = preg_split('/(\r\n|\r|\n)/', $content);
+		$content_split[3] .= <<<EOF
+
+# Launchpad Specific Rewrites
+
+RewriteRule ^support/(.*) /wp-content/themes/launchpad/support/$1 [QSA,L]
+RewriteRule ^api/(.*) /wp-admin/admin-ajax.php [QSA,L]
+RewriteRule ^download/(.*) /wp-admin/admin-ajax.php?action=download&file=$1 [QSA,L]
+RewriteRule (.*)/pdf/ wp-admin/admin-ajax.php?action=generate_pdf&file=$1 [QSA,L]
+RewriteRule ^manifest.appcache /wp-admin/admin-ajax.php?action=cache_manifest [QSA,L]
+RewriteRule ^manifest.obsolete.appcache /wp-admin/admin-ajax.php?action=cache_manifest_obsolete [QSA,L]
+RewriteRule ^sitemap-(\d*).xml/? /wp-admin/admin-ajax.php?action=sitemap&sitemap=$1 [QSA,L]
+RewriteRule ^sitemap-index\.xml/? /wp-admin/admin-ajax.php?action=sitemap [QSA,L]
+
+# Site-specific Rewrites
+
+EOF;
+		
+		$all_blogs = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'blogs');
+		foreach($all_blogs as $blog) {
+			$blog_options = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . ($blog->blog_id > 1 ? $blog->blog_id . '_' : '') . 'options WHERE option_name = "stylesheet"');
+			$blog_options = array_pop($blog_options);
+			$content_split[3] .= "\nRewriteCond %{HTTP_HOST} ^{$blog->domain} [NC]\n";
+			$content_split[3] .= "RewriteRule ^favicon.ico /wp-content/themes/{$blog_options->option_value}/favicon.ico [QSA,L]\n";
+			$content_split[3] .= "RewriteCond %{HTTP_HOST} ^{$blog->domain} [NC]\n";
+			$content_split[3] .= "RewriteRule ^css/(.*) /wp-content/themes/{$blog_options->option_value}/css/$1 [QSA,L]\n";
+			$content_split[3] .= "RewriteCond %{HTTP_HOST} ^{$blog->domain} [NC]\n";
+			$content_split[3] .= "RewriteRule ^js/(.*) /wp-content/themes/{$blog_options->option_value}/js/$1 [QSA,L]\n";
+			$content_split[3] .= "RewriteCond %{HTTP_HOST} ^{$blog->domain} [NC]\n";
+			$content_split[3] .= "RewriteRule ^images/(.*) /wp-content/themes/{$blog_options->option_value}/images/$1 [QSA,L]\n";
+		}
+		
+		$content = implode("\n", $content_split);
+		
+		$content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . THEME_PATH . '/support/H5BPv4.3_htaccess') . "\n\n" . $content;
+	}
+	return $content;
+}
+if(is_admin() && ($GLOBALS['pagenow'] === 'network.php' || $GLOBALS['pagenow'] === 'setup.php')) {
+	add_filter('esc_textarea', 'launchpad_modify_mu_rewrites');
+}
+
+
+/**
+ * Present a Message to Update .htaccess
+ *
+ * @param		string $text The contents of the message that we want to update.
+ * @since		1.5
+ */
+function launchpad_add_htaccess_message($text) {
+	if(preg_match('/^Site added\./', $text)) {
+		$text .= '.<br><br><strong>Don\'t forget to <a href="setup.php">update your .htaccess with settings for this site</a>!</strong>';
+	}
+	return $text;
+}
+if(is_admin() && $GLOBALS['pagenow'] === 'site-new.php' && $_GET['update']) {
+	add_filter('gettext', 'launchpad_add_htaccess_message');
+}
+
+
+/**
+ * Present a note about Updating .htaccess on theme change
+ *
+ * @param		string $text The contents of the message that we want to update.
+ * @since		1.5
+ */
+function launchpad_add_htaccess_update_note($text) {
+	if(preg_match('/^Add the following to your.*?other WordPress rules/', $text)) {
+		$text .= '.<br><br><strong style="display: block; padding: .5em 1em; background: #FFF; border: 1px solid gray;">Note: Any time you change a site\'s theme, you MUST update the .htaccess to gain pretty rewrites to images, javascript, and CSS!</strong>';
+	}
+	return $text;
+}
+if(is_admin() && ($GLOBALS['pagenow'] === 'network.php' || $GLOBALS['pagenow'] === 'setup.php')) {
+	add_filter('gettext', 'launchpad_add_htaccess_update_note');
+}
+
+
+/**
  * Alert the admin if memory gets low.
  *
  * @since		1.0
