@@ -17,15 +17,7 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.6
 =============
 
-* Take another stab at MU Support
-  * Can I make MU write its own .htaccess?
-  * Are there any problems with MU+Child Themes?
 * UI for creating Metaboxes and Flexible Content
-* Site Options
-  * Multiple options pages?
-  * Tabbed option pages?
-  * Integrate some options into Appearance > Customize?
-  * How can this be done better?
 * Toggles on Meta / Flex Fields
   * Is the current toggle system for meta/flex fields sufficient?
   * Is the idea of a "watch element" a good idea? e.g. watch post_parent select box.
@@ -45,6 +37,7 @@ To Do For 1.7
   * Consider adding an e-mail when complete option.
 * Revisit SEO
   * Only pulls post_content for SEO checks
+* Review Child Theme and MU support
 * Designer feedback.
 
 Future Wants

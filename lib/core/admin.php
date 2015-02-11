@@ -165,162 +165,19 @@ function launchpad_get_setting_fields() {
 	}
 	
 	// Default Launchpad site options.
-	$opts = array(
-			'security' => array(
-				'name' => 'Security Settings <small class="launchpad-block">Save settings to clear all lockouts.<br><br><strong>Current Lockouts:</strong><br>' . $lockouts . '</small>',
-				'args' => array(
-					'type' => 'subfield',
-					'subfields' => array(	
-						'allowed_failures' => array(
-							'name' => 'Failures Before Lockout',
-							'args' => array(
-								'type' => 'select',
-								'options' => array(
-										'5' => '5',
-										'10' => '10',
-										'25' => '25',
-										'50' => '50',
-										'100' => '100'
-									),
-								'default' => '10'
-							)
-						),
-						'lockout_time' => array(
-							'name' => 'Lockout Time',
-							'args' => array(
-								'type' => 'select',
-								'options' => array(
-										'1' => '1',
-										'2' => '2',
-										'4' => '4',
-										'6' => '6',
-										'8' => '8',
-										'12' => '12',
-										'24' => '24',
-										'48' => '48'
-									),
-								'default' => '1'
-							)
-						),
-					)
-				)
-			),
-			'cache_options' => array(
-				'name' => 'Caching <small class="launchpad-block">Save settings to clear all caches. Save page to clear related caches.</small>',
-				'args' => array(
-					'type' => 'subfield',
-					'subfields' => array(	
-						'cache_timeout' => array(
-							'name' => 'Cache Duration',
-							'args' => array(
-								'type' => 'select',
-								'options' => array(
-										'0' => 'Do Not Cache', 
-										'300' => '5 Minutes',
-										'600' => '10 Minutes',
-										'900' => '15 Minutes',
-										'1800' => '30 Minutes',
-										'3600' => '1 Hour',
-										'10800' => '3 Hours',
-										'21600' => '6 Hours',
-										'43200' => '12 Hours',
-										'86400' => '1 Day',
-									)
-							)
-						),
-						'cache_debug_comments' => array(
-							'name' => 'Show HTML comments with debug messages.',
-							'args' => array(
-								'small' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO NOT USE IN PRODUCTION!',
-								'type' => 'checkbox'
-							)
-						),
-					)
-				)
-			),
-			'developer' => array(
-				'name' => 'Developer Controls',
-				'args' => array(
-					'type' => 'subfield',
-					'subfields' => array(
-						'defer_js' => array(
-							'name' => 'Defer JavaScript',
-							'args' => array(
-								'small' => 'Adds the defer attribute. If your plugins act up, try unchecking this.',
-								'type' => 'checkbox',
-								'default' => 'on'
-							)
-						),
-						'ajax_page_loads' => array(
-							'name' => 'Ajax Page Loads',
-							'args' => array(
-								'small' => 'Attempt to load pages with ajax.',
-								'type' => 'checkbox'
-							)
-						),
-						'html5_bp' => array(
-							'name' => 'HTML 5 Boilerplate',
-							'args' => array(
-								'small' => 'Include HTML5 Boilerplate in .htaccess.',
-								'type' => 'checkbox'
-							)
-						),
-					)
-				)
-			),
-			'seo_social' => array(
-				'name' => 'SEO and Social <small class="launchpad-block">Don\'t mess with this unless you know what you are doing.</small>',
-				'args' => array(
-					'type' => 'subfield',
-					'subfields' => array(
-						'google_analytics_id' => array(
-							'name' => 'Google Analytics ID',
-							'args' => array(
-								'small' => 'A code like "UA-XXXXXX-X" provided in the <a href="http://google.com/analytics/" target="_blank">Google Analytics</a> Admin area.',
-								'type' => 'text'
-							)
-						),
-						'fb_app_id' => array(
-							'name' => 'Facebook App ID',
-							'args' => array(
-								'type' => 'text'
-							)
-						),
-						'fb_admin_id' => array(
-							'name' => 'Facebook Admin IDs',
-							'args' => array(
-								'small' => 'Separate each ID by a comma without any spaces.',
-								'type' => 'text'
-							)
-						),
-						'twitter_card_username' => array(
-							'name' => 'Twitter Card Username',
-							'args' => array(
-								'small' => 'DO NOT include the @.',
-								'type' => 'text'
-							)
-						),
-						'add_this_id' => array(
-							'name' => 'Add This ID',
-							'args' => array(
-								'type' => 'text'
-							)
-						)
-					)
-				),
-			),
-			'google_maps_api' => array(
-				'name' => 'Google Maps API Key',
-				'args' => array(
-					'small' => 'Required to perform geocoding on address fields, but you may not need it.',
-					'type' => 'text'
-				)
-			),
-			'organization_contact_info' => array(
-				'name' => 'Organization Contact Info',
-				'args' => array(
-					'type' => 'subfield',
-					'subfields' => array(
+	$opts = array(		
+		'launchpad_options' => array(
+			'parent_page' => 'options-general.php',
+			'page_name' => 'Launchpad Management',
+			'menu_name' => 'Launchpad',
+			'menu_icon' => null,
+			'menu_position' => null,
+			'section_tabs' => true,
+			'sections' => array(
+				'organization_contact_info' => array(
+					'section_name' => 'Contact Info',
+					'description' => '',
+					'fields' => array(
 						'organization_name' => array(
 							'name' => 'Organization Name',
 							'args' => array(
@@ -364,14 +221,11 @@ function launchpad_get_setting_fields() {
 							)
 						),
 					)
-				)
-				
-			),
-			'organization_social' => array(
-				'name' => 'Social Media <small class="launchpad-block">Use Full URLs to profile.</small>',
-				'args' => array(
-					'type' => 'subfield',
-					'subfields' => array(					
+				),
+				'organization_social' => array(
+					'section_name' => 'Social Media',
+					'description' => 'Use full URLs to profiles.',
+					'fields' => array(
 						'organization_facebook' => array(
 							'name' => 'Facebook',
 							'args' => array(
@@ -409,13 +263,141 @@ function launchpad_get_setting_fields() {
 							)
 						),
 					)
-				)
-			),
-			'customizations' => array(
-				'name' => 'Login Customizations',
-				'args' => array(
-					'type' => 'subfield',
-					'subfields' => array(					
+				),
+				'security' => array(
+					'section_name' => 'Security',
+					'description' => 'Save settings to clear all lockouts.<br><br><strong>Current Lockouts:</strong><br>' . $lockouts,
+					'fields' => array(
+						'allowed_failures' => array(
+							'name' => 'Failures Before Lockout',
+							'args' => array(
+								'type' => 'select',
+								'options' => array(
+										'5' => '5',
+										'10' => '10',
+										'25' => '25',
+										'50' => '50',
+										'100' => '100'
+									),
+								'default' => '10'
+							)
+						),
+						'lockout_time' => array(
+							'name' => 'Lockout Time',
+							'args' => array(
+								'type' => 'select',
+								'options' => array(
+										'1' => '1',
+										'2' => '2',
+										'4' => '4',
+										'6' => '6',
+										'8' => '8',
+										'12' => '12',
+										'24' => '24',
+										'48' => '48'
+									),
+								'default' => '1'
+							)
+						),
+					)
+				),
+				'cache_options' => array(
+					'section_name' => 'Caching',
+					'description' => 'Save settings to clear all caches. Save page to clear related caches.',
+					'fields' => array(
+						'cache_timeout' => array(
+							'name' => 'Cache Duration',
+							'args' => array(
+								'type' => 'select',
+								'options' => array(
+										'0' => 'Do Not Cache', 
+										'300' => '5 Minutes',
+										'600' => '10 Minutes',
+										'900' => '15 Minutes',
+										'1800' => '30 Minutes',
+										'3600' => '1 Hour',
+										'10800' => '3 Hours',
+										'21600' => '6 Hours',
+										'43200' => '12 Hours',
+										'86400' => '1 Day',
+									)
+							)
+						),
+						'cache_debug_comments' => array(
+							'name' => 'Show HTML comments with debug messages.',
+							'args' => array(
+								'small' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO NOT USE IN PRODUCTION!',
+								'type' => 'checkbox'
+							)
+						),
+					)
+				),
+				'developer' => array(
+					'section_name' => 'Developer',
+					'description' => '',
+					'fields' => array(
+						'defer_js' => array(
+							'name' => 'Defer JavaScript',
+							'args' => array(
+								'small' => 'Adds the defer attribute. If your plugins act up, try unchecking this.',
+								'type' => 'checkbox',
+								'default' => 'on'
+							)
+						),
+						'ajax_page_loads' => array(
+							'name' => 'Ajax Page Loads',
+							'args' => array(
+								'small' => 'Attempt to load pages with ajax.',
+								'type' => 'checkbox'
+							)
+						),
+						'html5_bp' => array(
+							'name' => 'HTML 5 Boilerplate',
+							'args' => array(
+								'small' => 'Include HTML5 Boilerplate in .htaccess.',
+								'type' => 'checkbox'
+							)
+						),
+						'google_analytics_id' => array(
+							'name' => 'Google Analytics ID',
+							'args' => array(
+								'small' => 'A code like "UA-XXXXXX-X" provided in the <a href="http://google.com/analytics/" target="_blank">Google Analytics</a> Admin area.',
+								'type' => 'text'
+							)
+						),
+						'fb_app_id' => array(
+							'name' => 'Facebook App ID',
+							'args' => array(
+								'type' => 'text'
+							)
+						),
+						'fb_admin_id' => array(
+							'name' => 'Facebook Admin IDs',
+							'args' => array(
+								'small' => 'Separate each ID by a comma without any spaces.',
+								'type' => 'text'
+							)
+						),
+						'twitter_card_username' => array(
+							'name' => 'Twitter Card Username',
+							'args' => array(
+								'small' => 'DO NOT include the @.',
+								'type' => 'text'
+							)
+						),
+						'add_this_id' => array(
+							'name' => 'Add This ID',
+							'args' => array(
+								'type' => 'text'
+							)
+						),
+						'google_maps_api' => array(
+							'name' => 'Google Maps API Key',
+							'args' => array(
+								'small' => 'Required to perform geocoding on address fields, but you may not need it.',
+								'type' => 'text'
+							)
+						),
 						'primary_color' => array(
 							'name' => 'Primary Hex Color',
 							'args' => array(
@@ -435,24 +417,10 @@ function launchpad_get_setting_fields() {
 							)
 						)
 					)
-				)
+				),
 			)
-/*
-			'sample_textarea' => array(
-				'name' => 'Sample Textarea',
-				'args' => array(
-					'type' => 'textarea'
-				)
-			),
-			'sample_selectmulti' => array(
-				'name' => 'Sample Select Multi',
-				'args' => array(
-					'type' => 'selectmulti',
-					'options' => array('key' => 'value')
-				)
-			)
-*/
-		);
+		)
+	);
 		
 
 	// Apply filters so the developer can change it.
@@ -460,19 +428,23 @@ function launchpad_get_setting_fields() {
 	
 	// Add the ID as the name for each item.
 	// This is to save the developer some typing and duplication of key/values.
-	foreach($opts as $k => $v) {
-		$v['args']['name'] = $k;
-		if($v['args']['type'] === 'subfield') {
-			foreach($v['args']['subfields'] as $sf_key => $sf_val) {
-				if(!isset($v['args']['label_for'])) {
-					$v['args']['label_for'] = $sf_key;
+	foreach($opts as $page_id => $page_details) {
+		foreach($page_details['sections'] as $section_id => $section_details) {
+			foreach($section_details['fields'] as $field_id => $field_details) {
+				$field_details['args']['name'] = $field_id;
+				if($field_details['args']['type'] === 'subfield') {
+					foreach($field_details['args']['subfields'] as $sf_key => $sf_val) {
+						if(!isset($field_details['args']['label_for'])) {
+							$field_details['args']['label_for'] = $sf_key;
+						}
+						$field_details['args']['subfields'][$sf_key]['args']['name'] = $sf_key;
+					}
+				} else {
+					$field_details['args']['label_for'] = $field_id;
 				}
-				$v['args']['subfields'][$sf_key]['args']['name'] = $sf_key;
+				$opts[$page_id]['sections'][$section_id]['fields'][$field_id] = $field_details;
 			}
-		} else {
-			$v['args']['label_for'] = $k;
 		}
-		$opts[$k] = $v;
 	}
 	return $opts;
 }
@@ -485,66 +457,11 @@ function launchpad_get_setting_fields() {
  * @param		array $input The array of options to validate
  * @since		1.0
  */
-function launchpad_site_options_validate($input) {
+function launchpad_site_options_validate($input = true) {
 	global $site_options;
 	
 	// Clear all cached files when the settings are saved.
 	launchpad_clear_all_cache();
-	
-	// Get all settings fields.
-	$settings = launchpad_get_setting_fields();
-	
-	// Loop them, applying any needed validation to the POST'd values.
-	foreach($settings as $key => $setting) {
-		switch($setting['args']['type']) {
-			case 'date':
-				if($input[$key] != '') {
-					$input[$key] = date('m/d/Y', strtotime($input[$key]));
-				}
-			break;
-			case 'datetime':
-				if($input[$key] != '') {
-					$input[$key] = date('m/d/Y g:i a', strtotime($input[$key]));
-				}
-			break;
-			case 'checkbox':
-				if($input[$key] == '') {
-					$input[$key] = false;
-				} else {
-					$input[$key] = true;
-				}
-			break;
-			case 'subfield':
-				foreach($setting['args']['subfields'] as $sub_key => $sub_setting) {
-					switch($sub_setting['args']['type']) {
-						case 'date':
-							if($input[$sub_key] != '') {
-								$input[$sub_key] = date('m/d/Y', strtotime($input[$sub_key]));
-							}
-						break;
-						case 'datetime':
-							if($input[$sub_key] != '') {
-								$input[$sub_key] = date('m/d/Y g:i a', strtotime($input[$sub_key]));
-							}
-						break;
-						case 'checkbox':
-							if($input[$sub_key] == '') {
-								$input[$sub_key] = false;
-							} else {
-								$input[$sub_key] = true;
-							}
-						break;
-					}
-					if(isset($input[$sub_key])) {
-						$site_options[$sub_key] = $input[$sub_key];
-					}
-				}
-			break;
-		}
-		if(isset($input[$key])) {
-			$site_options[$key] = $input[$key];
-		}
-	}
 	
 	// Flush rewrite rules when settings are saved.
 	flush_rewrite_rules(true);
@@ -571,7 +488,7 @@ function launchpad_site_options_validate($input) {
 	// Touching it helps avoid confusing issues with time zones (that's what she said).
 	touch($cache_folder, time(), time());
 	
-	if((int) $input['cache_timeout'] > 0) {
+	if((int) $site_options['cache_timeout'] > 0) {
 		$db_conts = file_get_contents(dirname(__FILE__) . '/db.php');
 	} else {
 		$db_conts = '';
@@ -587,7 +504,6 @@ function launchpad_site_options_validate($input) {
 	}
 	
 	do_action('launchpad_site_options_validate');
-	
 	return $input;
 }
  
@@ -599,102 +515,105 @@ function launchpad_site_options_validate($input) {
  */
 function launchpad_site_options_init() {
 	// Add support for an options page.
-	register_setting('launchpad_options', 'launchpad_site_options', 'launchpad_site_options_validate');
-	add_settings_section('launchpad_settings', 'General Options', '__return_false', 'launchpad_settings');
+	//register_setting('launchpad_options', 'launchpad_site_options', 'launchpad_site_options_validate');
+	//add_settings_section('launchpad_settings', 'General Options', '__return_false', 'launchpad_settings');
+	
+	if(isset($_GET['settings-updated']) && $_GET['settings-updated']) {
+		launchpad_site_options_validate();
+	}
 	
 	// Get the settings fields.
 	$launchpad_options = launchpad_get_setting_fields();
 	
-	// Loop all the settings and add support for them.
-	foreach($launchpad_options as $launchpad_option_id => $launchpad_option_details) {
-		add_settings_field(
-				$launchpad_option_id,
-				$launchpad_option_details['name'],
-				'launchpad_render_form_field',
-				'launchpad_settings',
-				'launchpad_settings',
-				$launchpad_option_details['args']
-			);
-	}
-}
-if(is_admin()) {
-	add_action('admin_init', 'launchpad_site_options_init');
-}
- 
-
-/**
- * Initialize theme options
- *
- * @since		1.0
- */
-function launchpad_theme_options_add_page() {
-	// Set some defaults.  This is an example and not actually used unless modified.
-	$opts = array(
-			'parent_page' => false,
-			'page_name' => 'Theme Options',
-			'menu_name' => 'Special',
-			'menu_icon' => 'dashicons-yes',
-			'menu_position' => 999
-		);
-		
-	$opts_orig = $opts;
 	
-	// Apply filters so the developer can change them.
-	$opts = apply_filters('launchpad_theme_options_page', $opts);
-	
-	// If the options have changed, use the values the developer set.
-	if($opts != $opts_orig) {
-		// If there is no parent page, the registration method is different.
-		// So, handle it accordingly.
-		if($opts['parent_page'] === false) {
-			add_menu_page(
-				$opts['page_name'],
-				$opts['menu_name'],
+	// Loop pages and add menus
+	foreach($launchpad_options as $page_id => $page_details) {
+		if($page_details['parent_page']) {
+			add_submenu_page(
+				$page_details['parent_page'],
+				$page_details['page_name'],
+				$page_details['menu_name'],
 				'edit_theme_options',
-				'launchpad_settings',
-				'launchpad_theme_options_render_page',
-				$opts['menu_icon'],
-				$opts['menu_position']
+				$page_id,
+				'launchpad_theme_options_render_page'
 			);
 		} else {
-			add_submenu_page(
-				$opts['parent_page'],
-				$opts['page_name'],
-				$opts['menu_name'],
+			add_menu_page(
+				$page_details['page_name'],
+				$page_details['menu_name'],
 				'edit_theme_options',
-				'launchpad_settings',
-				'launchpad_theme_options_render_page'
+				$page_id,
+				'launchpad_theme_options_render_page',
+				$page_details['menu_icon'],
+				$page_details['menu_position']
 			);
 		}
 		
-	// If the options have not changed, use the defaults.
-	} else {
-		add_submenu_page(
-			'options-general.php',
-			'Launchpad Management',
-			'Launchpad',
-			'edit_theme_options',
-			'launchpad_settings',
-			'launchpad_theme_options_render_page'
-		);
+		// Loop sections and add section support.
+		foreach($page_details['sections'] as $section_id => $section_details) {
+			if($page_details['section_tabs']) {
+				add_settings_section(
+					$section_id, 
+					$section_details['section_name'], 
+					'launchpad_render_form_section', 
+					$section_id
+				);
+			} else {
+				add_settings_section(
+					$section_id, 
+					$section_details['section_name'], 
+					'launchpad_render_form_section', 
+					$page_id
+				);
+			}
+			
+			// Loop fields and register the fiels.
+			foreach($section_details['fields'] as $launchpad_option_id => $launchpad_option_details) {
+				if($page_details['section_tabs']) {
+					register_setting($section_id, $launchpad_option_id);
+					add_settings_field(
+						$launchpad_option_id,
+						$launchpad_option_details['name'],
+						'launchpad_render_form_field',
+						$section_id,
+						$section_id,
+						$launchpad_option_details['args']
+					);					
+				} else {
+					register_setting($page_id, $launchpad_option_id);
+					add_settings_field(
+						$launchpad_option_id,
+						$launchpad_option_details['name'],
+						'launchpad_render_form_field',
+						$page_id,
+						$section_id,
+						$launchpad_option_details['args']
+					);
+				}
+			}
+		}
 	}
 }
 if(is_admin()) {
-	add_action('admin_menu', 'launchpad_theme_options_add_page');
+	add_action('admin_menu', 'launchpad_site_options_init');
 }
- 
+
 
 /**
- * Add theme options capability to theme
+ * Renders the Form Section
  *
- * @param		string $capability
  * @since		1.0
  */
-function launchpad_option_page_capability($capability) {
-	return 'edit_theme_options';
-}
-if(is_admin()) {
-	add_filter('option_page_capability_launchpad_options', 'launchpad_option_page_capability');
+function launchpad_render_form_section($section) {
+	global $wp_settings_fields;
+	
+	$settings = launchpad_get_setting_fields();
+	$page_settings = $settings[$_GET['page']];
+	$section_settings = $page_settings['sections'][$section['id']];
+	
+	if(isset($section_settings['description']) && $section_settings['description']) {
+		echo wpautop('<small>' . $section_settings['description'] . '</small>');
+	}
 }
  
 
@@ -711,6 +630,9 @@ function launchpad_theme_options_render_page() {
 		wp_die('You do not have sufficient permissions to access this page.');
 	}
 	
+	$settings = launchpad_get_setting_fields();
+	$settings = $settings[$_GET['page']];
+	
 	if(is_multisite()) {
 		?>
 		<div class="updated">
@@ -723,7 +645,7 @@ function launchpad_theme_options_render_page() {
 	?>
 	<div class="wrap">
 		<?php screen_icon(); ?>
-		<h2><?php echo function_exists( 'wp_get_theme' ) ? wp_get_theme() : get_current_theme() ?> Settings</h2>
+		<h2><?php echo $settings['page_name'] ?></h2>
 		<?php
 		
 		if(
@@ -760,12 +682,39 @@ function launchpad_theme_options_render_page() {
 			echo '<div class="error"><p><strong>Change Your Table Prefix!</strong>  Open wp-config.php and change your table prefix from "wp_" to anything else.  Unfortunately, since you didn\'t do this when you were setting up WordPress, you will probably have to reinstall WordPress to make this warning go away.</p></div>';
 		}
 		
+		settings_errors();
+		
+		if(!isset($_GET['tab'])) {
+			reset($settings['sections']);
+			$_GET['tab'] = key($settings['sections']);
+		}
+		
+		if($settings['section_tabs']) {
+			echo '<h2 class="nav-tab-wrapper">';
+			foreach($settings['sections'] as $section_id => $section_details) {
+				?>
+				<a href="?page=<?= $_GET['page'] ?>&tab=<?= $section_id ?>" class="nav-tab<?= $_GET['tab'] === $section_id ? ' nav-tab-active' : '' ?>"><?= $section_details['section_name'] ?></a>
+				<?php
+			}
+			echo '</h2>';
+		}
+		
 		?> 
 		<form method="post" action="options.php">
 			<?php
 				
-				settings_fields('launchpad_options');
-				do_settings_sections('launchpad_settings');
+				if($settings['section_tabs']) {
+					foreach($settings['sections'] as $section_id => $section_details) {
+						if($_GET['tab'] === $section_id) {
+							settings_fields($section_id);
+							do_settings_sections($section_id);
+						}
+					}
+				} else {
+					settings_fields($_GET['page']);
+					do_settings_sections($_GET['page']);
+				}
+				
 				submit_button();
 				
 			?>

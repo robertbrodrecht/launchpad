@@ -10,7 +10,7 @@
 
 global $site_options;
 
-$site_options = get_option('launchpad_site_options', '');
+$site_options = array();
 
 /** YOUR FUNCTIONS GO IN HERE.  */
 locate_template('lib/custom/custom.php', true, true);
@@ -40,3 +40,14 @@ locate_template('lib/core/utilities.php', true, true);
 locate_template('lib/core/api.php', true, true);
 /** Code for tools like regen thumbnails. */
 locate_template('lib/core/tools.php', true, true);
+
+$launchpad_options = launchpad_get_setting_fields();
+
+// Loop all the settings and add support for them.
+foreach($launchpad_options as $page_id => $page_details) {
+	foreach($page_details['sections'] as $section_id => $section_details) {
+		foreach($section_details['fields'] as $launchpad_option_id => $launchpad_option_details) {
+			$site_options[$launchpad_option_id] = get_option($launchpad_option_id, '');
+		}
+	}
+}

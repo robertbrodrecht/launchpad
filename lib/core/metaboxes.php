@@ -867,14 +867,18 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
  * @since		1.0
  */
 function launchpad_render_form_field($args, $subfield = false, $field_prefix = 'launchpad_site_options') {
-				
+	
 	// If we're dealing with site options, handle the set up.
 	if($field_prefix === 'launchpad_site_options') {
 		// Get the site options.
-		$vals = get_option('launchpad_site_options', '');
+		if($args['label_for']) {
+			$vals = get_option($args['label_for'], '');
+		} else {
+			$vals = get_option('launchpad_site_options', '');
+		}
 		// If an option value exists for the current field, set it as $val.
-		if(isset($vals[$args['name']]))  {
-			$val = $vals[$args['name']];
+		if($vals)  {
+			$val = $vals;
 		// Otherwise, see if there is a default value to set as $val.
 		} else {
 			$val = isset($args['default']) ? $args['default'] : '';
@@ -901,15 +905,17 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	// If we're dealing with flexible content, the field's @name needs to be sandboxed into an array.
 	if(
 		$field_prefix !== 'launchpad_flexible' && 
+		$field_prefix !== 'launchpad_site_options' && 
 		stristr($args['name'], 'launchpad_meta') === false &&
 		!preg_match('/^' . $field_prefix . '/', $args['name'])
 	) {
-		$field_output_name = $field_prefix . '[' . $args['name'] . ']';
-		
+		$field_output_name = $field_prefix . '[' . $args['name'] . ']';		
 	// Otherwise, it can be whatever the developer wanted it to be.
 	} else {
 		$field_output_name = $args['name'];
 	}
+	
+	//$field_output_name = $args['name'];
 	
 	// If there is an ID specified for a field, set it as the @id for the field.
 	if(isset($args['id'])) {
