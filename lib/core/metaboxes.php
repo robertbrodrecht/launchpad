@@ -210,7 +210,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '">' . $subfield . ' ';
 	}
-	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . htmlentities($val) . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '>';
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . ($val ? htmlentities($val) : '') . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . '>';
 	if($subfield) {
 		echo '</label>';
 	}
