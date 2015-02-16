@@ -296,6 +296,8 @@ Metaboxes and Flexible Content use the field arrays to define what fields are av
 			<dd>For repeater fields, the subfields array is the same as the fields array.</dd>
 			<dt>toggle</dt>
 			<dd>For native controls, you may specify fields to toggle and what values for the current field cause the field to hide.  This is done as an array like: array('input_1' => array('show_when' => ''), 'input_2' => array('hide_when' => 'test')).  With the previous array, both input_1 and input_2 would be shown by default.  If the user then typed 't' into the field, input_1 would be hidden and input_2 would be shown.  If the user continued typing until the value was "test", input_1 would remain hidden and input_2 would hide.  Toggling is scoped to the current metabox!</dd>
+			<dt>watch</dt>
+			<dd>Where <code>toggle</code> is for controlling other elements, <code>watch</code> is for controlling the current element. The <code>watch</code> syntax is the same as <code>toggle</code> EXCEPT the key is a jQuery-compatible selector of the element to watch.  This means that the element being watched is not limited to the current metabox.  For example, if you only want a field to appear when a post is a child post, you can add a watch on <code>#parent_id</code>.</dd>
 		</dl>
 	</dd>
 </dl>

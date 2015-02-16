@@ -17,9 +17,6 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.6
 =============
 
-* Toggles on Meta / Flex Fields
-  * Is the current toggle system for meta/flex fields sufficient?
-  * Is the idea of a "watch element" a good idea? e.g. watch post_parent select box.
 * Flexible content modules and field types.
   * What other modules should be built-in?
   * Other Field Types?

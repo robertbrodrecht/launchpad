@@ -119,6 +119,7 @@ In case I forgot anything in the previous sections...
 * Regenerate Thumbnails.  If you add or change an image size, regenerate thumbnails under Tools > Regen Thumbnails.
 * Media Replace.  If you have a file that needs to be updated in place with a new version, go to Media Library, edit the file, then use the Media Replace feature on the right sidebar.
 * If your server supports exec() and your server has jpegtran or jpegoptim for jpegs or pngout, optipng, or pngcrush for pngs, Launchpad will losslessly optimize your images.
+* Database and Asset Migration similar to WP Migrate DB Pro
 
 
 ## Security Features

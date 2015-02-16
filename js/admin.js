@@ -105,64 +105,66 @@ jQuery(document).ready(
 								ishidden = true,
 								tmp;
 							
-							if(this.hide_when !== undefined) {
-								ishidden = false;
-								val = val.hide_when;
-								if(!$.isArray(val)) {
-									val = [val];
-								}
-								$.each(
-									val,
-									function(index) {
-										val[index] = (val[index] + '').toString().toLowerCase();
+							if(me.parent().parent().css('display') !== 'none') {							
+								if(this.hide_when !== undefined) {
+									ishidden = false;
+									val = val.hide_when;
+									if(!$.isArray(val)) {
+										val = [val];
 									}
-								);
-								if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
-									if(val != 0 && me.prop('checked')) {
-										ishidden = true;
-									} else if(val == 0 && !me.prop('checked')) {
-										ishidden = true;
-									}
-								} else {
 									$.each(
-										elval,
-										function() {
-											if($.inArray(this + '', val) > -1) {
-												ishidden = true;
-											}
+										val,
+										function(index) {
+											val[index] = (val[index] + '').toString().toLowerCase();
 										}
 									);
-								}
-							} else if(val.show_when !== undefined) {
-								ishidden = true;
-								val = val.show_when;
-								if(!$.isArray(val)) {
-									val = [val];
-								}
-								$.each(
-									val,
-									function(index) {
-										val[index] = (val[index] + '').toString().toLowerCase();
-									}
-								);
-								if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
-									if(val != 0 && me.prop('checked')) {
-										ishidden = false;
-									} else if(val == 0 && !me.prop('checked')) {
-										ishidden = false;
-									}
-								} else {
-									$.each(
-										elval,
-										function() {
-											if($.inArray(this + '', val) > -1) {
-												ishidden = false;
+									if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
+										if(val != 0 && me.prop('checked')) {
+											ishidden = true;
+										} else if(val == 0 && !me.prop('checked')) {
+											ishidden = true;
+										}
+									} else {
+										$.each(
+											elval,
+											function() {
+												if($.inArray(this + '', val) > -1) {
+													ishidden = true;
+												}
 											}
+										);
+									}
+								} else if(val.show_when !== undefined) {
+									ishidden = true;
+									val = val.show_when;
+									if(!$.isArray(val)) {
+										val = [val];
+									}
+									$.each(
+										val,
+										function(index) {
+											val[index] = (val[index] + '').toString().toLowerCase();
 										}
 									);
+									if(me.is('[type=radio]') || me.is('[type=checkbox]')) {
+										if(val != 0 && me.prop('checked')) {
+											ishidden = false;
+										} else if(val == 0 && !me.prop('checked')) {
+											ishidden = false;
+										}
+									} else {
+										$.each(
+											elval,
+											function() {
+												if($.inArray(this + '', val) > -1) {
+													ishidden = false;
+												}
+											}
+										);
+									}
+								} else {
+									return;
 								}
-							} else {
-								return;
 							}
 														
 							cont.find('[name*="[' + index + ']"]').each(
@@ -188,10 +190,44 @@ jQuery(document).ready(
 			);
 		}
 		
+		function handleWatchStates() {
+			$('[data-watch]').each(
+				function() {
+					var me = $(this),
+						watch = me.data('watch'),
+						show_me = true;
+						
+					$.each(
+						watch,
+						function(index) {
+							val = $(index).val();
+							
+							if(this.hide_when !== undefined) {
+								if(val == this.hide_when) {
+									show_me = false;
+								} else {
+									show_me = true;
+								}
+							} else if(this.show_when !== undefined) {
+								if(val == this.show_when) {
+									show_me = true;
+								} else {
+									show_me = false;
+								}
+							}
+						}
+					);
+					
+					me.parent().parent().css('display', show_me ? 'block' : 'none');
+				}
+			);
+		}
+		
 		$(document).on(
 			'change keyup',
 			'input, select, textarea',
 			function(e) {
+				handleWatchStates();
 				handleToggleStates();
 			}
 		);
@@ -199,6 +235,7 @@ jQuery(document).ready(
 		var regenerate_thumbnail_ids = [];
 		
 		makeSortable();
+		handleWatchStates();
 		handleToggleStates();
 		
 		if($("input.launchpad-date-picker").length) {
