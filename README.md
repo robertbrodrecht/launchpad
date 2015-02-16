@@ -17,7 +17,6 @@ For the long feature list that was formerly here, see the [Codex Features List](
 To Do For 1.6
 =============
 
-* UI for creating Metaboxes and Flexible Content
 * Toggles on Meta / Flex Fields
   * Is the current toggle system for meta/flex fields sufficient?
   * Is the idea of a "watch element" a good idea? e.g. watch post_parent select box.
@@ -47,6 +46,7 @@ Future Wants
 * Something about widgets.
 * Updates through WP Admin.
 * Security: some way to check MD5 of WP Core files to make sure they weren't modified.
+* Maybe some UI for creating Metaboxes and Flexible Content
 
 Would Like But Not Sure If Realistic
 ====================================

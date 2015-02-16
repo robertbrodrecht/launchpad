@@ -1337,8 +1337,13 @@ function launchpad_meta_box_handler($post, $args) {
  */
 function launchpad_flexible_handler($post, $args) {
 	
+	
 	// Get the current post's post meta for the current field.
-	$current_meta = get_post_meta($post->ID, $args['id'], true);
+	if($post) {
+		$current_meta = get_post_meta($post->ID, $args['id'], true);
+	} else {
+		$current_meta = array();
+	}
 	
 	// Render the flexible container.
 	?>
@@ -1381,7 +1386,7 @@ function launchpad_flexible_handler($post, $args) {
 							}
 						}
 						if($add_metabox) {
-							echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . $post->ID . '" title="' . (isset($v['help']) ? sanitize_text_field($v['help']) : '') . '"><span class="' . (isset($v['icon']) && $v['icon'] ? $v['icon'] : 'dashicons dashicons-plus-alt') . '"></span> ' . $v['name'] . '</a></li>';
+							echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $args['id'] . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . ($post ? $post->ID : $post) . '" title="' . (isset($v['help']) ? sanitize_text_field($v['help']) : '') . '"><span class="' . (isset($v['icon']) && $v['icon'] ? $v['icon'] : 'dashicons dashicons-plus-alt') . '"></span> ' . $v['name'] . '</a></li>';
 						}
 					}
 					
