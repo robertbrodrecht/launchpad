@@ -319,6 +319,5 @@
 // Make a list not-a-list
 @mixin unlist {
 	list-style: none;
-	margin-bottom: 0;
 	padding: 0;
 }

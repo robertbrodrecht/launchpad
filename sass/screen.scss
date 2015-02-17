@@ -1,8 +1,8 @@
 @import "variables";		// Custom variables.
 @import "mixins";			// Custom mixins.
+@import "reset";			// Reset with user-configured baseline grid.
 @import "grid";				// Generate the grid.
 @import "objects";			// OOCSS stuff. Generates vertical grids from variables.
-@import "reset";			// Reset with user-configured baseline grid.
 @import "typography";		// Typography gets included in print and editor styles, too.
 
 // Most of your stuff should go here, except:
