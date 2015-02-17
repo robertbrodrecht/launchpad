@@ -14,23 +14,18 @@ For a detailed walk through, check out the [Codex](_codex/index.md).
 
 For the long feature list that was formerly here, see the [Codex Features List](_codex/features.md).
 
-To Do For 1.6
-=============
-
-* Flexible content modules and field types.
-  * What other modules should be built-in?
-  * Other Field Types?
-
 To Do For 1.7
 =============
 
-* CSS Review
-  * Use the <code>* + *</code> selector for margin-top.
-  * Can the CSS reset be smaller?
+While I may pop back in for compatibility updates, I'm taking a break on LaunchPad to work on a child theme.
+
 * Migration
   * Select Post Types
   * Investigate syncing
   * Consider adding an e-mail when complete option.
+* Flexible content modules and field types.
+  * What other modules should be built-in?
+  * Other Field Types?
 * Revisit SEO
   * Only pulls post_content for SEO checks
 * Review Child Theme and MU support

@@ -16,7 +16,7 @@ define('THEME_PATH', '/' . str_replace($_SERVER['DOCUMENT_ROOT'] . '/', '', get_
 define('CHILD_THEME_PATH', '/' . str_replace($_SERVER['DOCUMENT_ROOT'] . '/', '', get_stylesheet_directory()));
 
 if(!defined('LAUNCHPAD_VERSION')) {
-	define('LAUNCHPAD_VERSION', '1.5');
+	define('LAUNCHPAD_VERSION', '1.6');
 }
 
 
