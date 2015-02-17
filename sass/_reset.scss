@@ -85,7 +85,7 @@ audio:not([controls]) {
 }
 
 html {
-    font-family: sans-serif;
+    font-family: $font-copy;
 	font-size: rootRemPercent($root-font-px);
 	text-size-adjust: none;
 }
@@ -174,7 +174,7 @@ code,
 kbd,
 pre,
 samp {
-    font-family: monospace, serif;
+    font-family: $font-mono;
     font-size: 1em;
 }
 
@@ -209,6 +209,11 @@ sub {
 
 img {
     border: 0;
+}
+
+.main img {
+	height: auto;
+	max-width: 100%;
 }
 
 svg:not(:root) {

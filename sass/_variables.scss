@@ -13,3 +13,8 @@ $column-count: 100; // The number of columns in the grid.
 // This is used for media queries if you use the mixins @media-max, @media-min, @media-range, and @media-outer-range.
 // You can add your own, like xlarge: 1200px.
 $break-points: (large: 1024px, medium: 768px, small: 568px);
+
+// Some default fonts
+$font-copy: sans-serif;
+$font-headers: serif;
+$font-mono: monospace, serif;
