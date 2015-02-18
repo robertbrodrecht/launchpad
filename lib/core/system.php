@@ -32,8 +32,8 @@ if(!defined('LAUNCHPAD_VERSION')) {
 function launchpad_theme_activation_action() {
 	// Default values.
 	$home_page_name = 'Home';
-	$articles_page_name = 'Articles';
-	$articles_path = '/articles/%postname%/';
+	$articles_page_name = 'News';
+	$articles_path = '/news/%postname%/';
 	$uploads_path = 'assets';
 	
 	// Apply filters so the developer can change the locations.

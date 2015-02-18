@@ -269,3 +269,16 @@ div.nav-header {
 		}
 	}
 }
+
+.content-with-sidebar {
+	overflow: hidden;
+	@include row();
+	
+	.main-content {
+		@include col(100/$column-count * 75);
+	}
+	
+	.sidebar-content {
+		@include col(100/$column-count * 25);
+	}
+}

@@ -1739,7 +1739,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 			}
 			
 			// If any values were passed, set them as an argument so they will be populated.
-			if($values) {
+			if($values && isset($values[$sub_field_name])) {
 				$field['args']['value'] = $values[$sub_field_name];
 			}
 			

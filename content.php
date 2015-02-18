@@ -10,6 +10,27 @@
  * @since		1.0
  */
 
+global $wp_query;
+$launchpad_use_sidebar = ($post->post_type === 'post');
+$launchpad_use_sidebar = apply_filters('launchpad_use_sidebar', $launchpad_use_sidebar, $post);
+
+if($launchpad_use_sidebar && $launchpad_use_sidebar !== 'left') {
+	$launchpad_use_sidebar = 'right';
+}
+
+if($launchpad_use_sidebar) {
+?>
+
+		<div class="content-with-sidebar">
+			<?php if($launchpad_use_sidebar === 'left') { ?>
+			<aside class="sidebar-content">
+				<?php do_action('launchpad_sidebar', $post); ?>
+			</aside>
+			<?php } ?>
+			<section class="main-content">
+<?php
+}
+
 if(!have_posts()) {
 
 ?>
@@ -28,18 +49,10 @@ if(!have_posts()) {
 ?>
 			<article>
 				<header>
-					<?php if(has_post_thumbnail()) { ?>
-
-					<figure>
-						<?php the_post_thumbnail(); ?>
-
-					</figure>
-					<?php } ?>
-
-					<h1><a href="<?php echo the_permalink() ?>"><?php the_title(); ?></a></h1>
+					<?php do_action('launchpad_post_header', $post);  ?>
 				</header>
 				<section>
-					<?php the_content(); ?>
+					<?php do_action('launchpad_post_content', $post);  ?>
 					<?php edit_post_link('Edit', '<p class="edit-link-container">', '</p>'); ?>
 				
 				</section>
@@ -115,4 +128,16 @@ if(!have_posts()) {
 // Add pagination.
 launchpad_auto_paginate();
 
-?>
+if($launchpad_use_sidebar) {
+	
+	?>
+	
+			</section>
+			<?php if($launchpad_use_sidebar === 'right') { ?>
+			<aside class="sidebar-content">
+				<?php do_action('launchpad_sidebar', $post); ?>
+			</aside>
+			<?php } ?>
+		</div>
+	<?php
+}

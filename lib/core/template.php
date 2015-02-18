@@ -874,3 +874,139 @@ function launchpad_find_flexible_content($type = '') {
 		return locate_template('flexible/core/' . $type);
 	}
 }
+
+
+/**
+ * Determine and ouput post header content
+ *
+ * @param		object $post The current post object to modify.
+ * @since		1.6
+ */
+function launchpad_post_header($post) {
+	$post_header = array();
+	$post_header['image'] = '';
+	if(has_post_thumbnail($post->ID)) {
+		$post_header['image'] = get_the_post_thumbnail($post->ID, 'large');
+	}
+	$post_header['title'] = $post->post_title;
+	$post_header['permalink'] = get_permalink($post->ID);
+	
+	$post_header_tmp = apply_filters('launchpad_post_header_fields', $post_header, $post);
+	if($post_header_tmp) {
+		$post_header = $post_header_tmp;
+	}
+	foreach($post_header as $field => $value) {
+		switch($field) {
+			case 'permalink':
+			break;
+			case 'image':
+				if($value) {
+					$post_image = '<figure>' . $value . '</figure>';
+					$post_image = apply_filters('launchpad_header_image', $post_image, $value);
+					echo $post_image;
+				}
+			break;
+			case 'title':
+				if($value) {
+					$post_title = '<h1><a href="' . $post_header['permalink']  . '">' . $value . '</a></h1>';
+					$post_title = apply_filters('launchpad_header_title', $post_title, $post_header['title'], $post_header['permalink']);
+					echo $post_title;
+				}
+			break;
+			default:
+				if($value) {
+					$value = apply_filters('launchpad_header_title-' . $field, $value);
+					echo $value;
+				}
+			break;
+		}
+	}
+}
+add_action('launchpad_post_header', 'launchpad_post_header', 1);
+
+
+/**
+ * Determine and ouput post content
+ *
+ * @param		object $post The current post object to modify.
+ * @since		1.6
+ */
+function launchpad_post_content($post) {
+	$content = '';
+	$is_excerpt = true;
+	if(is_home() || is_archive()) {
+		if(has_excerpt($post->ID)) {
+			$excerpt = $post->post_excerpt;
+		} else {
+			$excerpt = apply_filters('the_content', $post->post_content);
+			$excerpt = str_replace('&nbsp;', '', $excerpt);
+			$excerpt = preg_replace('/<div.*?class="wp-caption.*?>.*?<\/div>/', '', $excerpt);
+			$excerpt = trim(strip_tags($excerpt));
+			$excerpt = explode('<!--more-->', $excerpt);
+			if(count($excerpt) > 1) {
+				$excerpt = $excerpt[0];
+			} else {
+				$excerpt = explode("\n", $excerpt[0]);
+				
+				if(strlen($excerpt[0]) < 140) {
+					$excerpt = array(implode(' ', $excerpt));
+				}
+				
+				if(count($excerpt) == 1) {	
+					$excerpt[0] = preg_replace('/(.*?\.\s.*?\.).*/', '$1', $excerpt[0]);
+				}
+				
+				$excerpt = $excerpt[0];
+			}
+			if(is_array($excerpt)) {
+				$excerpt = $excerpt[0];
+			}
+			if($excerpt) {
+				$excerpt = apply_filters('the_content', $excerpt);
+			}
+			
+		}
+		$content = $excerpt;
+	} else {
+		$content = apply_filters('the_content', $post->post_content);
+		$is_excerpt = false;
+	}
+	$content = apply_filters('launchpad_post_content_string', $content, $post, $is_excerpt);
+	echo $content;
+}
+add_action('launchpad_post_content', 'launchpad_post_content', 1);
+
+
+/**
+ * Create a sidebar
+ *
+ * @param		object $post The current post object to modify.
+ * @since		1.6
+ */
+function launchpad_sidebar($post) {
+	$sidebar_content = '';
+	$posts_page = get_option('page_for_posts');
+	
+	if($post->post_type === 'post') {
+		
+		$posts_page = get_permalink($posts_page);
+		
+		$cats = get_categories();
+		
+		foreach($cats as $cat) {
+			$sidebar_content .= '<li>';
+			$sidebar_content .= '<a href="' . $posts_page . 'category/' . $cat->slug . '/">' . $cat->name . '</a>';
+			$sidebar_content .= '</li>';
+		}
+		
+		if($sidebar_content) {
+			$sidebar_content = '<h1>Categories</h1><nav><ul>' . $sidebar_content . '</ul></nav>';
+		}
+
+	}
+	
+	$sidebar_content = apply_filters('launchpad_sidebar_content', $sidebar_content, $post);
+	
+	echo $sidebar_content;
+}
+add_action('launchpad_sidebar', 'launchpad_sidebar', 1);

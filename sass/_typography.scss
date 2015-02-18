@@ -8,7 +8,7 @@ h6 {
 }
 
 h1 {
-	@include rem('font-size', $body-font-size-px*3);
+	@include rem('font-size', $body-font-size-px*2.5);
 	@include rem('line-height', $body-line-height-px*3);
 }
 
