@@ -168,6 +168,8 @@ Flexible Content allows the WordPress user to easily create varying layouts with
 	<dd>The location (or context, as WP calls it) of the metabox.  WordPress allows: 'normal', 'advanced', or 'side'</dd>
 	<dt>position</dt>
 	<dd>The position within the position (or priority, as WP calls it): 'high', 'core', 'default' or 'low'</dd>
+	<dt>display</dt>
+	<dd>Set where this flexible content displays: main or sidebar.  The default is "main."</dd>
 	<dt>help</dt>
 	<dd>A description of what the flexible content area is used for.</dd>
 	<dt>limit</dt>

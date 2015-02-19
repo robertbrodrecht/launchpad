@@ -1228,6 +1228,10 @@ if(is_admin()) {
  */
 function launchpad_meta_box_handler($post, $args) {
 	
+	if(isset($args['args']['watch'])) {
+		echo '<div data-watch="' . htmlentities(json_encode($args['args']['watch'])) . '"></div>';
+	}
+	
 	// Loop the fields that go into the metabox.
 	foreach($args['args']['fields'] as $k => $v) {
 		
@@ -1345,9 +1349,14 @@ function launchpad_flexible_handler($post, $args) {
 		$current_meta = array();
 	}
 	
+	$watch = '';
+	if(isset($args['args']['watch'])) {
+		$watch = ' data-watch="' . htmlentities(json_encode($args['args']['watch'])) . '"';
+	}
+	
 	// Render the flexible container.
 	?>
-		<div id="launchpad-flexible-container-<?php echo $args['id'] ?>" class="launchpad-flexible-container">
+		<div id="launchpad-flexible-container-<?php echo $args['id'] ?>" class="launchpad-flexible-container"<?= $watch ?>>
 			<input type="hidden" name="launchpad_meta[<?php echo $args['id'] ?>]">
 			<?php
 			

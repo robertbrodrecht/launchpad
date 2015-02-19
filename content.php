@@ -11,18 +11,41 @@
  */
 
 global $wp_query;
-$launchpad_use_sidebar = ($post->post_type === 'post');
+
+// Figure out the appropriate content-main template to use.
+$content_type = launchpad_determine_best_template_file($post, 'main');
+
+// Whether to use a sidebar.
+$launchpad_use_sidebar = ($post->post_type === 'post' && is_active_sidebar('blog_sidebar'));
 $launchpad_use_sidebar = apply_filters('launchpad_use_sidebar', $launchpad_use_sidebar, $post);
 
-if($launchpad_use_sidebar && $launchpad_use_sidebar !== 'left') {
-	$launchpad_use_sidebar = 'right';
+// If the sidebar position is not explicitly above, it goes below.
+if($launchpad_use_sidebar && $launchpad_use_sidebar !== 'above') {
+	$launchpad_use_sidebar = 'below';
 }
 
+// Whether to add classes to push/pull so the desktop look doesn't match source order.
+$launchpad_sidebar_coerce = $post->sidebar_coerce;
+$launchpad_sidebar_coerce = apply_filters('launchpad_coerce_sidebar', $launchpad_sidebar_coerce, $post);
+
+// By default, we're not coercing.  So, left + above or right + below result in no additional class.
+$launchpad_add_sidebar_class = '';
+
+// If the user wants a left sidebar with the sidebar last in source, coerce it to the left.
+if($launchpad_sidebar_coerce === 'left' && $launchpad_use_sidebar === 'below') {
+	$launchpad_add_sidebar_class = 'sidebar-left';
+
+// If the user wants a right sidebar with the sidebar first in source, coerce it to the right.
+} else if($launchpad_sidebar_coerce === 'right' && $launchpad_use_sidebar === 'above') {
+	$launchpad_add_sidebar_class = 'sidebar-right';
+}
+
+// If we're using a sidebar, output the container.
 if($launchpad_use_sidebar) {
 ?>
 
-		<div class="content-with-sidebar">
-			<?php if($launchpad_use_sidebar === 'left') { ?>
+		<div class="content-with-sidebar <?= $launchpad_add_sidebar_class ?>">
+			<?php if($launchpad_use_sidebar === 'above') { ?>
 			<aside class="sidebar-content">
 				<?php do_action('launchpad_sidebar', $post); ?>
 			</aside>
@@ -42,98 +65,103 @@ if(!have_posts()) {
 <?php
 
 } else {
-
+	
+	$use_template = locate_template('content-main' . ($content_type ? '-' . $content_type : '') . '.php', false, false);
+	
 	while(have_posts()) {
 		the_post();
-
+		
+		if($use_template) {
+			get_template_part('content-main', $content_type);
+		} else {
 ?>
 			<article>
 				<header>
-					<?php do_action('launchpad_post_header', $post);  ?>
+					<?php 
+						
+						$header = '';
+						
+						if(has_post_thumbnail()) {
+							$header .= '<figure><a href="' . get_the_permalink($post->ID) . '">' . get_the_post_thumbnail($post->ID, (is_single() || is_singular() ? 'large' : 'medium')) . '</a></figure>';
+						}
+						
+						$header .= '<h1><a href="' . get_the_permalink($post->ID) . '">' . $post->post_title . '</a></h1>';
+						
+						$header = apply_filters('launchpad_post_header_string', $header, $post);
+						echo $header;
+						
+					?>
 				</header>
 				<section>
-					<?php do_action('launchpad_post_content', $post);  ?>
+					<?php
+						
+						$content = '';
+						$is_excerpt = true;
+						if(is_home() || is_archive()) {
+							if(has_excerpt($post->ID)) {
+								$excerpt = $post->post_excerpt;
+							} else {
+								$excerpt = apply_filters('the_content', $post->post_content);
+								$excerpt = str_replace('&nbsp;', '', $excerpt);
+								$excerpt = preg_replace('/<div.*?class="wp-caption.*?>.*?<\/div>/', '', $excerpt);
+								$excerpt = trim(strip_tags($excerpt));
+								$excerpt = explode('<!--more-->', $excerpt);
+								if(count($excerpt) > 1) {
+									$excerpt = $excerpt[0];
+								} else {
+									$excerpt = explode("\n", $excerpt[0]);
+									
+									if(strlen($excerpt[0]) < 140) {
+										$excerpt = array(implode(' ', $excerpt));
+									}
+									
+									if(count($excerpt) == 1) {	
+										$excerpt[0] = preg_replace('/(.*?\.\s.*?\.).*/', '$1', $excerpt[0]);
+									}
+									
+									$excerpt = $excerpt[0];
+								}
+								if(is_array($excerpt)) {
+									$excerpt = $excerpt[0];
+								}
+								if($excerpt) {
+									$excerpt = apply_filters('the_content', $excerpt);
+								}
+								
+							}
+							$content = $excerpt;
+						} else {
+							$content = apply_filters('the_content', $post->post_content);
+							$is_excerpt = false;
+						}
+						$content = apply_filters('launchpad_post_content_string', $content, $post, $is_excerpt);
+						echo $content;
+						
+					?>
 					<?php edit_post_link('Edit', '<p class="edit-link-container">', '</p>'); ?>
 				
 				</section>
-				<?php
-				
-				// Handle the flexible content.
-				// Get the post types.
-				$post_types = launchpad_get_post_types();
-				
-				// If there is flexible content for our current post type, render the flexible content.
-				if(isset($post_types) && isset($post_types[$post->post_type]['flexible'])) {
+				<?php 
 					
-					// Loop the flexible types.
-					foreach($post_types[$post->post_type]['flexible'] as $flexible_type => $flexible_details) {
-						
-						// This is using the WordPress location as a signal for where the content will go.
-						// I'm not entirely sure this is "good" or "smart," but I'm doing it anyway.
-						if($flexible_details['location'] !== 'sidebar') {
-							
-							// Get the post meta value for the current flexible type.
-							$flexible = get_post_meta($post->ID, $flexible_type, true);
-							
-							// If there is any matching post meta, we need to render a field.
-							if($flexible) {
-								
-								// Loop the values of the flexible content.
-								foreach($flexible as $flex) {
-									
-									// Pull out key information from the flexible type.
-									list($flex_type, $flex_values) = each($flex);
-									$flexible_prototype = $flexible_details['modules'][$flex_type];
-									
-									// Use "include locate_template" so that variables are still in scope.
-									switch($flex_type) {
-										case 'accordion':
-											include launchpad_find_flexible_content('accordion.php');
-										break;
-										case 'gallery':
-											include launchpad_find_flexible_content('gallery.php');
-										break;
-										case 'link_list':
-											include launchpad_find_flexible_content('link_list.php');
-										break;
-										case 'section_navigation':
-											include launchpad_find_flexible_content('section_navigation.php');
-										break;
-										case 'simple_content':
-											include launchpad_find_flexible_content('simple_content.php');
-										break;
-										default:
-											$path = launchpad_find_flexible_content($flex_type . '.php');
-											if($path) {
-												include $path;
-											} else {
-												trigger_error('Could not find template for ' . $flex_type . ' flexible content.');
-											}
-										break;
-									}
-								}
-							}
-						}
-					}
-				}
-				
+					launchpad_flexible_content($post, 'main'); 
+					
 				?>
-
 			</article>
 <?php 
-	
+		}
 	}
 }
 
 // Add pagination.
 launchpad_auto_paginate();
 
+// If we are using a sidebar, close out the container.
 if($launchpad_use_sidebar) {
 	
 	?>
 	
 			</section>
-			<?php if($launchpad_use_sidebar === 'right') { ?>
+			<?php if($launchpad_use_sidebar === 'below') { ?>
 			<aside class="sidebar-content">
 				<?php do_action('launchpad_sidebar', $post); ?>
 			</aside>

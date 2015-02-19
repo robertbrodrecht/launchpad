@@ -271,14 +271,95 @@ div.nav-header {
 }
 
 .content-with-sidebar {
-	overflow: hidden;
 	@include row();
 	
 	.main-content {
 		@include col(100/$column-count * 75);
+		margin-top: 0;
+		
+		@include media-max(medium) {
+			@include col(100/$column-count * 66);
+		}
+		
+		@include media-max(small) {
+			@include col(100/$column-count * 100);
+		}
 	}
 	
 	.sidebar-content {
 		@include col(100/$column-count * 25);
+		margin-top: 0;
+		
+		@include media-max(medium) {
+			@include col(100/$column-count * 33);
+		}
+		
+		@include media-max(small) {
+			@include col(100/$column-count * 100);
+		}
+	}
+	
+	@include media-max(small) {
+		.main-content + .sidebar-content,
+		.sidebar-content + .main-content {
+			@include rem('margin', $body-line-height-px 0 0 0);
+		}
+	}
+	
+	
+	&.sidebar-left {
+		.main-content {
+			@include push(100/$column-count * 25);
+			
+			@include media-max(medium) {
+				@include push(100/$column-count * 33);
+			}
+			
+			@include media-max(small) {
+				left: auto;
+				right: auto;
+			}
+		}
+		
+		.sidebar-content {
+			@include pull(100/$column-count * 75);
+			
+			@include media-max(medium) {
+				@include pull(100/$column-count * 66);
+			}
+			
+			@include media-max(small) {
+				left: auto;
+				right: auto;
+			}
+		}
+	}
+	
+	&.sidebar-right {
+		.main-content {
+			@include pull(100/$column-count * 25);
+			
+			@include media-max(medium) {
+				@include pull(100/$column-count * 33);
+			}
+			
+			@include media-max(small) {
+				left: auto;
+				right: auto;
+			}
+		}
+		
+		.sidebar-content {
+			@include push(100/$column-count * 75);
+			
+			@include media-max(medium) {
+				@include push(100/$column-count * 66);
+			}
+			
+			@include media-max(small) {
+				left: auto;
+				right: auto;
+			}
+		}
 	}
 }

@@ -4,6 +4,10 @@
  *
  * Custom filters:
  * 
+ * * launchpad_sidebar_content: A filter to modify sidebar content.
+ * * launchpad_determine_best_template_file: A filter to modify the template used for a certain page.
+ * * launchpad_post_content_string: A filter to control the content of the article if you don't want to make a template file.
+ * * launchpad_post_header_string: A filter to control the <header> of the article if you don't want to make a template file.
  * * launchpad_modify_default_flexible_modules: Allows changing default flexible content modules.
  * * launchpad_image_sizes: array of image sizes.  See example.
  * * launchpad_post_types: array of post types.  See example.

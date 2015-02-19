@@ -580,6 +580,59 @@ add_action('template_redirect', 'launchpad_set_page_defines');
 
 
 /**
+ * Register Widget Area
+ *
+ * @since		1.4
+ */
+function launchpad_register_widget() {
+	register_sidebar(
+		array(
+			'name' => 'Blog Sidebar',
+			'id' => 'blog_sidebar',
+			'before_widget' => '<section id="flexible-widget">',
+			'after_widget' => '</section>',
+			'before_title' => '<h1>',
+			'after_title' => '</h1>',
+		)
+	);
+	
+	$query = new WP_Query(
+		array(
+			'posts_per_page' => -1,
+			'post_type' => 'any',
+			'post_status' => 'any',
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key' => '_wp_page_template',
+					'compare' => 'LIKE',
+					'value' => 'sidebar'
+				)
+			),
+			'fields' => 'ids'
+		)
+	);
+	
+	foreach($query->posts as $post) {
+		$post = get_post($post);
+		if($post->post_parent === 0 || !$post->sidebar_flexible_inherit_from_parent) {
+			register_sidebar(
+				array(
+					'name' => $post->post_title . ' Sidebar',
+					'id' => 'page_' . $post->ID . '_sidebar',
+					'before_widget' => '<section id="flexible-widget">',
+					'after_widget' => '</section>',
+					'before_title' => '<h1>',
+					'after_title' => '</h1>',
+				)
+			);
+		}
+	}
+}
+add_action('widgets_init', 'launchpad_register_widget');
+
+
+/**
  * Wrap YouTube video in the video-contianer wrapper.
  *
  * @param		str $html The embed HTML
@@ -857,6 +910,105 @@ function launchpad_search_flexible_where($q) {
 add_action('posts_search', 'launchpad_search_flexible_where');
 
 
+function launchpad_determine_best_template_file($post, $prefix = '') {
+	// The post type is the default second parameter.
+	$content_type = get_post_type();
+	$content_format = get_post_format();
+	
+	$file_prefix = 'content-';
+	if($prefix) {
+		$file_prefix .= 'main-';
+	}
+	
+	// If the content is singular, such as a page or single post type, handle accordingly.
+	if(is_singular()) {
+		// First, see if there is a content-main-slug.php
+		if(locate_template($file_prefix . $post->post_name . '.php')) {
+			$content_type = $post->post_name;
+			
+		// Next, if this is a page, see if there is a content-main-page-slug.php.
+		} else if(is_page() && locate_template($file_prefix . '-page-' . $post->post_name . '.php')) {
+			$content_type = 'page-' . $post->post_name;
+			
+		// Next, if this is a single post type with a content format, see if there is a content-main-posttype-format.php
+		} else if(is_single() && $content_format && locate_template($file_prefix . $content_type . '-' . $content_format . '.php')) {
+			$content_type = $content_type . '-' . $content_format;
+			
+		// Next, if this is a single post type with a content format, try content-main-format.php.
+		} else if(is_single() && $content_format && locate_template($file_prefix . $content_format . '.php')) {
+			$content_type = $content_format;
+		
+		// Next, if this is a single post type, try content-main-single-posttype.php.
+		} else if(is_single() && locate_template($file_prefix . 'single-' . $content_type . '.php')) {
+			$content_type = 'single-' . $content_type;
+		
+		// Finally, try content-main-single.php.
+		} else if(is_single() && locate_template($file_prefix . 'single.php')) {
+			$content_type = 'single';
+		}
+	
+	// If we're on an archive of blog listing page, handle accordingly.
+	} else if(is_archive() || is_home()) {
+		
+		// Get the current queried object to help decide how to handle the template.
+		$queried_object = get_queried_object();
+		
+		// If there is a queried object, get specific.
+		if($queried_object) {
+			
+			// If this is a taxonomy page.
+			if(isset($queried_object->taxonomy)) {
+				// This is the taxonomy name, not the taxonomy rewrite slug!
+				$queried_taxonomy = $queried_object->taxonomy;
+				// This is the term's slug.
+				$queried_term = $queried_object->slug;
+				
+				// First, try content-main-tax-termslug.php.
+				if(locate_template($file_prefix . $queried_taxonomy . '-' . $queried_term . '.php')) {
+					$content_type = $queried_taxonomy . '-' . $queried_term;
+				
+				// Next, try content-main-tax.php.
+				} else if(locate_template($file_prefix . $queried_taxonomy . '.php')) {
+					$content_type = $queried_taxonomy;
+					
+				// Next, try content-main-archive-posttype.php
+				} else if(locate_template($file_prefix . 'archive-' . $content_type . '.php')) {
+					$content_type = 'archive-' . $content_type;
+				
+				// Finally, try content-main-archive.php.
+				} else if(locate_template($file_prefix . 'archive.php')) {
+					$content_type = 'archive';
+				}
+			
+			// If it isn't a taxonomy, look for content-main-archive-posttype.php.
+			} else if(locate_template($file_prefix . 'archive-' . $content_type . '.php')) {
+				$content_type = 'archive-' . $content_type;
+			
+			// Finally, try content-main-archive.php.
+			} else if(locate_template($file_prefix . 'archive.php')) {
+				$content_type = 'archive';
+			}
+		
+		// If there is no queried object, look for content-main-archive-posttype.php.
+		} else if(locate_template($file_prefix . 'archive-' . $content_type . '.php')) {
+			$content_type = 'archive-' . $content_type;
+		
+		// Finally, try content-main-archive.php.
+		} else if(locate_template($file_prefix . 'archive.php')) {
+			$content_type = 'archive';
+		}
+	
+	
+	// Finally, if we're on a search page, use search as the second parameter.
+	} else if(is_search()) {
+		$content_type = 'search';
+	}
+	
+	$content_type = apply_filters('launchpad_determine_best_template_file', $content_type, $post, $prefix);
+	
+	return $content_type;
+}
+
 /**
  * Attempt to find a flexible content module either in the custom folder or core folder.
  *
@@ -877,104 +1029,80 @@ function launchpad_find_flexible_content($type = '') {
 
 
 /**
- * Determine and ouput post header content
+ * Display Flexible Content
  *
- * @param		object $post The current post object to modify.
+ * @param		object $post The current post object to display flex content for.
+ * @param		string $location The page location that references the flex's display.
  * @since		1.6
  */
-function launchpad_post_header($post) {
-	$post_header = array();
-	$post_header['image'] = '';
-	if(has_post_thumbnail($post->ID)) {
-		$post_header['image'] = get_the_post_thumbnail($post->ID, 'large');
+function launchpad_flexible_content($post = false, $location = 'main') {
+	if(!$post) {
+		return;
 	}
-	$post_header['title'] = $post->post_title;
-	$post_header['permalink'] = get_permalink($post->ID);
 	
-	$post_header_tmp = apply_filters('launchpad_post_header_fields', $post_header, $post);
-	if($post_header_tmp) {
-		$post_header = $post_header_tmp;
-	}
-	foreach($post_header as $field => $value) {
-		switch($field) {
-			case 'permalink':
-			break;
-			case 'image':
-				if($value) {
-					$post_image = '<figure>' . $value . '</figure>';
-					$post_image = apply_filters('launchpad_header_image', $post_image, $value);
-					echo $post_image;
-				}
-			break;
-			case 'title':
-				if($value) {
-					$post_title = '<h1><a href="' . $post_header['permalink']  . '">' . $value . '</a></h1>';
-					$post_title = apply_filters('launchpad_header_title', $post_title, $post_header['title'], $post_header['permalink']);
-					echo $post_title;
-				}
-			break;
-			default:
-				if($value) {
-					$value = apply_filters('launchpad_header_title-' . $field, $value);
-					echo $value;
-				}
-			break;
-		}
-	}
-}
-add_action('launchpad_post_header', 'launchpad_post_header', 1);
-
-
-/**
- * Determine and ouput post content
- *
- * @param		object $post The current post object to modify.
- * @since		1.6
- */
-function launchpad_post_content($post) {
-	$content = '';
-	$is_excerpt = true;
-	if(is_home() || is_archive()) {
-		if(has_excerpt($post->ID)) {
-			$excerpt = $post->post_excerpt;
-		} else {
-			$excerpt = apply_filters('the_content', $post->post_content);
-			$excerpt = str_replace('&nbsp;', '', $excerpt);
-			$excerpt = preg_replace('/<div.*?class="wp-caption.*?>.*?<\/div>/', '', $excerpt);
-			$excerpt = trim(strip_tags($excerpt));
-			$excerpt = explode('<!--more-->', $excerpt);
-			if(count($excerpt) > 1) {
-				$excerpt = $excerpt[0];
-			} else {
-				$excerpt = explode("\n", $excerpt[0]);
-				
-				if(strlen($excerpt[0]) < 140) {
-					$excerpt = array(implode(' ', $excerpt));
-				}
-				
-				if(count($excerpt) == 1) {	
-					$excerpt[0] = preg_replace('/(.*?\.\s.*?\.).*/', '$1', $excerpt[0]);
-				}
-				
-				$excerpt = $excerpt[0];
-			}
-			if(is_array($excerpt)) {
-				$excerpt = $excerpt[0];
-			}
-			if($excerpt) {
-				$excerpt = apply_filters('the_content', $excerpt);
+	// Handle the flexible content.
+	// Get the post types.
+	$post_types = launchpad_get_post_types();
+	
+	// If there is flexible content for our current post type, render the flexible content.
+	if(isset($post_types) && isset($post_types[$post->post_type]['flexible'])) {
+		
+		// Loop the flexible types.
+		foreach($post_types[$post->post_type]['flexible'] as $flexible_type => $flexible_details) {
+			
+			if(!isset($flexible_details['display'])) {
+				$flexible_details['display'] = 'main';
 			}
 			
+			// This is using the WordPress location as a signal for where the content will go.
+			// I'm not entirely sure this is "good" or "smart," but I'm doing it anyway.
+			if(trim($flexible_details['display']) === trim($location)) {
+				
+				// Get the post meta value for the current flexible type.
+				$flexible = get_post_meta($post->ID, $flexible_type, true);
+				
+				// If there is any matching post meta, we need to render a field.
+				if($flexible) {
+					
+					// Loop the values of the flexible content.
+					foreach($flexible as $flex) {
+						
+						// Pull out key information from the flexible type.
+						list($flex_type, $flex_values) = each($flex);
+						$flexible_prototype = $flexible_details['modules'][$flex_type];
+						
+						// Use "include locate_template" so that variables are still in scope.
+						switch($flex_type) {
+							case 'accordion':
+								include launchpad_find_flexible_content('accordion.php');
+							break;
+							case 'gallery':
+								include launchpad_find_flexible_content('gallery.php');
+							break;
+							case 'link_list':
+								include launchpad_find_flexible_content('link_list.php');
+							break;
+							case 'section_navigation':
+								include launchpad_find_flexible_content('section_navigation.php');
+							break;
+							case 'simple_content':
+								include launchpad_find_flexible_content('simple_content.php');
+							break;
+							default:
+								$path = launchpad_find_flexible_content($flex_type . '.php');
+								if($path) {
+									include $path;
+								} else {
+									trigger_error('Could not find template for ' . $flex_type . ' flexible content.');
+								}
+							break;
+						}
+					}
+				}
+			}
 		}
-		$content = $excerpt;
-	} else {
-		$content = apply_filters('the_content', $post->post_content);
-		$is_excerpt = false;
 	}
-	$content = apply_filters('launchpad_post_content_string', $content, $post, $is_excerpt);
-	echo $content;
 }
-add_action('launchpad_post_content', 'launchpad_post_content', 1);
 
 
 /**
@@ -988,25 +1116,89 @@ function launchpad_sidebar($post) {
 	$posts_page = get_option('page_for_posts');
 	
 	if($post->post_type === 'post') {
-		
-		$posts_page = get_permalink($posts_page);
-		
-		$cats = get_categories();
-		
-		foreach($cats as $cat) {
-			$sidebar_content .= '<li>';
-			$sidebar_content .= '<a href="' . $posts_page . 'category/' . $cat->slug . '/">' . $cat->name . '</a>';
-			$sidebar_content .= '</li>';
+		if(is_active_sidebar('blog_sidebar')) {
+			dynamic_sidebar('blog_sidebar');
+		} else {
+			$posts_page = get_permalink($posts_page);
+			
+			$cats = get_categories();
+			
+			foreach($cats as $cat) {
+				$sidebar_content .= '<li>';
+				$sidebar_content .= '<a href="' . $posts_page . 'category/' . $cat->slug . '/">' . $cat->name . '</a>';
+				$sidebar_content .= '</li>';
+			}
+			
+			if($sidebar_content) {
+				$sidebar_content = '<nav><h1>Categories</h1><ul>' . $sidebar_content . '</ul></nav>';
+			}
 		}
-		
-		if($sidebar_content) {
-			$sidebar_content = '<h1>Categories</h1><nav><ul>' . $sidebar_content . '</ul></nav>';
+	}
+	
+	ob_start();
+	launchpad_flexible_content($post, 'sidebar');
+	$sidebar_flexible = ob_get_contents();
+	ob_end_clean();
+	
+	$widget_location = 'below';
+	$widget_id = $post->ID;
+	
+	
+	if($sidebar_flexible) {
+		if($post->sidebar_widget_location == 'above') {
+			$widget_location = 'above';
 		}
-
+		$sidebar_content .= $sidebar_flexible;
+	} else if($post->sidebar_flexible_inherit_from_parent && $post->post_parent > 0) {
+		$tmp_post = $post;
+		while(!$sidebar_flexible && $tmp_post->post_parent) {
+			$tmp_post = get_post($tmp_post->post_parent);
+			ob_start();
+			launchpad_flexible_content($tmp_post, 'sidebar');
+			$sidebar_flexible = ob_get_contents();
+			ob_end_clean();
+			if($sidebar_flexible) {
+				break;
+			}
+		}
+		if($sidebar_flexible) {
+			if($tmp_post->sidebar_widget_location == 'above') {
+				$widget_location = 'above';
+			}
+			$widget_id = $tmp_post->ID;
+			$sidebar_content .= $sidebar_flexible;
+		}
 	}
 	
 	$sidebar_content = apply_filters('launchpad_sidebar_content', $sidebar_content, $post);
 	
+	
+	if($widget_location === 'above') {
+		dynamic_sidebar('page_' . $widget_id . '_sidebar');
+	}
 	echo $sidebar_content;
+	if($widget_location !== 'above') {
+		dynamic_sidebar('page_' . $widget_id . '_sidebar');
+	}
 }
 add_action('launchpad_sidebar', 'launchpad_sidebar', 1);
+
+
+/**
+ * A Function to Filter to Force Left Sidebar
+ *
+ * @since		1.6
+ */
+function launchpad_force_top_sidebar() {
+	return 'above';
+}
+
+
+/**
+ * A Function to Filter to Force Right Sidebar
+ *
+ * @since		1.6
+ */
+function launchpad_force_bottom_sidebar() {
+	return 'below';
+}

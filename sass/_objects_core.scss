@@ -1,4 +1,5 @@
-.frontload {
+.frontload,
+.screen-reader-text {
 	@include frontload;
 }
 
@@ -150,4 +151,11 @@ img.aligncenter {
 
 .alignright {
 	@include rem('margin-bottom', $body-line-height-px);
+}
+
+.flexible-widget {
+	.search-field {
+		display: block;
+		width: 100%;
+	}
 }
