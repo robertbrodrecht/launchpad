@@ -170,14 +170,14 @@ jQuery(document).ready(
 							cont.find('[name*="[' + index + ']"]').each(
 								function () {
 									if(ishidden) {
-										if($(this).parent().parent().parent().is('.launchpad-repeater-metabox-container')) {
-											$(this).parent().parent().parent().parent().parent().addClass('launchpad-toggle-hidden');
+										if($(this).is('.launchpad-repeater-container')) {
+											$(this).parent().addClass('launchpad-toggle-hidden');
 										} else {
 											$(this).closest('.launchpad-metabox-field').addClass('launchpad-toggle-hidden');
 										}
 									} else {
-										if($(this).parent().parent().parent().is('.launchpad-repeater-metabox-container')) {
-											$(this).parent().parent().parent().parent().parent().removeClass('launchpad-toggle-hidden');
+										if($(this).is('.launchpad-repeater-container')) {
+											$(this).parent().removeClass('launchpad-toggle-hidden');
 										} else {
 											$(this).closest('.launchpad-metabox-field').removeClass('launchpad-toggle-hidden');
 										}

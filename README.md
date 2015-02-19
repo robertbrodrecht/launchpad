@@ -35,7 +35,6 @@ Future Wants
 ============
 
 * Figure out if anything needs to be put in different projects for better sharing.
-* Something about widgets.
 * Updates through WP Admin.
 * Security: some way to check MD5 of WP Core files to make sure they weren't modified.
 * Maybe some UI for creating Metaboxes and Flexible Content

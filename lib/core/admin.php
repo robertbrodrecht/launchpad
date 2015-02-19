@@ -950,6 +950,18 @@ function launchpad_auto_help_tab() {
 						}
 						$field_content[$field['name']] .= $generic_help;
 					}
+					
+					if($field['args']['type'] === 'repeater') {
+						if(!isset($field_content[$field['name']])) {
+							$field_content[$field['name']] = '';
+						}
+						$field_content[$field['name']] .= '<p><strong>This field offers additional fields:</strong></p>';
+						foreach($field['args']['subfields'] as $single_field) {
+							if(isset($single_field['help']) && $single_field['help']) {
+								$field_content[$field['name']]  .= '<p><strong>' . $single_field['name'] . '</strong></p>' . $single_field['help'];
+							}
+						}
+					}
 				}
 				
 				// If we have created any field-based help, add it to the help text in a definition list.
@@ -1009,6 +1021,15 @@ function launchpad_auto_help_tab() {
 								$module_content[$module['name']]['fields'][$field['name']] = $field['help'];
 							}
 							
+							if($field['args']['type'] === 'repeater') {
+								$module_content[$module['name']]['fields'][$field['name']] .= '<p><strong>This field offers additional fields:</strong></p>';
+								foreach($field['args']['subfields'] as $single_field) {
+									if(isset($single_field['help']) && $single_field['help']) {
+										$module_content[$module['name']]['fields'][$field['name']]  .= '<p><strong>' . $single_field['name'] . '</strong></p>' . $single_field['help'] . '</p>';
+									}
+								}
+							}
+														
 							// Try to get generic help about the field type.
 							// Some of the more complex fields need some generic documentation.
 							$generic_help = launchpad_get_field_help($field['args']['type']);

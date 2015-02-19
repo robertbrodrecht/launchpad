@@ -733,7 +733,7 @@ function launchpad_render_field_repeater($field_output_name, $subfields, $label,
 	}
 	
 	// Repeater container.  The JavaScript looks for this when handling button clicks.
-	echo '<div id="launchpad-' . $repeater_tmp_id . '-repeater" class="launchpad-repeater-container launchpad-metabox-field">';
+	echo '<div id="launchpad-' . $repeater_tmp_id . '-repeater" class="launchpad-repeater-container launchpad-metabox-field" name="' . $field_output_name . '">';
 	
 	// Loop all the subfields.
 	foreach($subfields as $counter => $sub_fields) {
@@ -748,6 +748,10 @@ function launchpad_render_field_repeater($field_output_name, $subfields, $label,
 		
 		// Loop the subfield's fields to handle the output.
 		foreach($sub_fields as $field_key => $field) {
+			
+			if(isset($field['help'])) {
+				$field['args']['help'] = $field['help'];
+			}
 			
 			// Create a metabox field container.
 			echo '<div class="launchpad-metabox-field">';
@@ -926,7 +930,34 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 		$field_output_id = $args['name'];
 	}
 	
-	
+	if($subfield && isset($args['help'])) {
+		// Get the generic help for the type.
+		$generic_help = launchpad_get_field_help($args['type']);
+		
+		// If there is no specific field help, set it to empty.
+		if(!isset($args['help'])) {
+			$args['help'] = '';
+		}
+		
+		// Add the generic help.
+		$args['help'] .= $generic_help;
+		
+		// If there is any help related to the field, add the help hover tooltip.
+		if($args['help']) {
+			?>
+			<div class="launchpad-inline-help">
+				<span>?</span>
+				<div>
+				<?php 
+					
+					echo $args['help']; 
+					
+				?>
+				</div>
+			</div>
+			<?php
+		}
+	}
 	
 	// Sanitize it just in case.
 	$field_output_id = sanitize_title($field_output_id);
