@@ -82,10 +82,10 @@ if(!have_posts()) {
 						$header = '';
 						
 						if(has_post_thumbnail()) {
-							$header .= '<figure><a href="' . get_the_permalink($post->ID) . '">' . get_the_post_thumbnail($post->ID, (is_single() || is_singular() ? 'large' : 'medium')) . '</a></figure>';
+							$header .= '<figure><a href="' . get_permalink($post->ID) . '">' . get_the_post_thumbnail($post->ID, (is_single() || is_singular() ? 'large' : 'medium')) . '</a></figure>';
 						}
 						
-						$header .= '<h1><a href="' . get_the_permalink($post->ID) . '">' . $post->post_title . '</a></h1>';
+						$header .= '<h1><a href="' . get_permalink($post->ID) . '">' . $post->post_title . '</a></h1>';
 						
 						$header = apply_filters('launchpad_post_header_string', $header, $post);
 						echo $header;
