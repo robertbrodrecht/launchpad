@@ -526,6 +526,9 @@ function launchpad_modify_nav_class($classes, $item) {
 	
 	$classes = array_unique($classes);
 	
+	// Apply filters to allow the developer to change it.
+	$classes = apply_filters('launchpad_nav_class', $classes);
+	
 	return array_filter(
 		$classes, 
 		function($el) {
