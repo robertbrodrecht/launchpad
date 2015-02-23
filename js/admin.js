@@ -202,6 +202,10 @@ jQuery(document).ready(
 						function(index) {
 							val = $(index).val();
 							
+							if($(index).is('[type=checkbox]')) {
+								val = $(index).is(':checked')
+							}
+							
 							if(this.hide_when !== undefined) {
 								if(val == this.hide_when) {
 									show_me = false;
@@ -218,7 +222,12 @@ jQuery(document).ready(
 						}
 					);
 					
-					me.parent().parent().css('display', show_me ? 'block' : 'none');
+					me = me.parent().parent();
+					if(me.hasClass('launchpad-toggle-hidden') && show_me) {
+						me.removeClass('launchpad-toggle-hidden');
+					} else if(!me.hasClass('launchpad-toggle-hidden') && !show_me) {
+						me.addClass('launchpad-toggle-hidden');
+					}
 				}
 			);
 		}
