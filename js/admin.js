@@ -222,6 +222,8 @@ jQuery(document).ready(
 						}
 					);
 					
+					console.log(me);
+					
 					me = me.parent().parent();
 					if(me.hasClass('launchpad-toggle-hidden') && show_me) {
 						me.removeClass('launchpad-toggle-hidden');
@@ -236,16 +238,16 @@ jQuery(document).ready(
 			'change keyup',
 			'input, select, textarea',
 			function(e) {
-				handleWatchStates();
 				handleToggleStates();
+				handleWatchStates();
 			}
 		);
 		
 		var regenerate_thumbnail_ids = [];
 		
 		makeSortable();
-		handleWatchStates();
 		handleToggleStates();
+		handleWatchStates();
 		
 		if($("input.launchpad-date-picker").length) {
 			$("input.launchpad-date-picker").datepicker().unbind('keydown').unbind('keyup').unbind('keypress');
