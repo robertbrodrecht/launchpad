@@ -828,7 +828,7 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
 		);
 	}
 	
-	echo '<fieldset class="launchpad-address launchpad-metabox-fieldset"><legend>' . ($args['label'] ? $args['label'] : 'Address Details') . '</legend>';
+	echo '<fieldset class="launchpad-address launchpad-metabox-fieldset"><legend>' . (isset($args['label']) ? $args['label'] : 'Address Details') . '</legend>';
 	
 	echo '<div class="launchpad-google-map-embed">';
 	if($val['latitude'] && $val['longitude']) {
