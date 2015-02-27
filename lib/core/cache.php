@@ -169,7 +169,7 @@ function launchpad_cached($post_id, $type) {
 	global $site_options, $launchpad_is_caching;
 	
 	// If cache is disabled or the user is logged in, we don't cache.
-	if(!USE_CACHE || is_user_logged_in() || $launchpad_is_caching) {
+	if(!USE_CACHE || is_user_logged_in() || $launchpad_is_caching || $_POST) {
 		if(isset($site_options['cache_debug_comments']) && $site_options['cache_debug_comments']) {
 			// Default reason.
 			$reason = 'caching is disabled.';
@@ -182,6 +182,10 @@ function launchpad_cached($post_id, $type) {
 			// If we're already within a cache, update the reason.
 			if($launchpad_is_caching) {
 				$reason = 'caching has already started for a page fragment that this cache request is included in: ' . $launchpad_is_caching;
+			}
+			
+			if($_POST) {
+				$reason = 'a form was posted.';
 			}
 			
 			echo "\n";
