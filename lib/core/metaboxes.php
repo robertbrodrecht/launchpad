@@ -1194,7 +1194,7 @@ function launchpad_save_post_data($post_id) {
 	// This helps avoid confusing issues with time zones.
 	$cache_file = launchpad_get_cache_file();
 	if($cache_file !== false && file_exists($cache_file)) {
-		touch($cache_file, time(), time());
+		@touch($cache_file, time(), time());
 	}
 	
 	// If there is no Launchpad fields, don't affect anything.
