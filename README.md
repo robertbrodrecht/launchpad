@@ -14,8 +14,8 @@ For a detailed walk through, check out the [Codex](_codex/index.md).
 
 For the long feature list that was formerly here, see the [Codex Features List](_codex/features.md).
 
-To Do For 1.7
-=============
+To Do For 1.7 and 1.8
+=====================
 
 While I may pop back in for compatibility updates, I'm taking a break on LaunchPad to work on a child theme.
 
@@ -30,6 +30,7 @@ While I may pop back in for compatibility updates, I'm taking a break on LaunchP
   * Only pulls post_content for SEO checks
 * Review Child Theme and MU support
 * Designer feedback.
+* Responsive Images
 
 Future Wants
 ============
