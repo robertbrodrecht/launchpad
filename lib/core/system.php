@@ -527,3 +527,78 @@ function launchpad_memory_warning() {
 	}
 }
 register_shutdown_function('launchpad_memory_warning');
+
+
+/**
+ * Create an HTML Element
+ * 
+ * Use the array:
+ * array(
+ * 'type' => element name, e.g. div, span, or textNode
+ * 'attr' => array of attributes, e.g. array('class' => 'class-name')
+ * 'children' => array of children formatted the same as this array
+ * )
+ * 
+ * @param		array $element An element array.
+ * @since		1.6
+ */
+function create_element($element = array()) {
+	$type = 'textNode';
+	$attrs = array();
+	$children = array();
+	$autop = false;
+	
+	if(isset($element['type'])) {
+		$type = $element['type'];
+	}
+	if(isset($element['attr'])) {
+		$attrs = $element['attr'];
+	}
+	if(isset($element['children'])) {
+		$children = $element['children'];
+	}
+	
+	if($type != 'textNode') {
+		$return = '<' . $type;
+	}
+	$self_closing = count($children) ? true : false;
+	
+	foreach($attrs as $attr => $value) {
+		switch($attr) {
+			default:
+				$return .= ' ';
+				$return .= htmlentities($attr, ENT_QUOTES);
+				$return .= '="';
+				$return .= htmlentities($value, ENT_QUOTES);
+				$return .= '"';
+			break;
+			case 'innerHTML':
+				$self_closing = $value;
+			break;
+			case 'autop':
+				$autop = $value ? true : false;
+			break;
+		}
+	}
+	if($type != 'textNode') {
+		$return .= '>';
+	}
+	
+	if($self_closing !== false) {
+		if($self_closing !== true) {
+			if($autop) {
+				$self_closing = apply_filters('the_content', $self_closing);
+			}
+			$return .= $self_closing;
+		} else if($self_closing === true) {
+			foreach($children as $child) {
+				$return .= create_element($child);
+			}
+		}
+		if($type != 'textNode') {
+			$return .= '</' . $type . '>';
+		}
+	}
+	
+	return $return;
+}

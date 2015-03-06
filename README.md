@@ -31,6 +31,7 @@ While I may pop back in for compatibility updates, I'm taking a break on LaunchP
 * Review Child Theme and MU support
 * Designer feedback.
 * Responsive Images
+* Refactor the world to use create_element().
 
 Future Wants
 ============
