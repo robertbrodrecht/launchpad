@@ -578,6 +578,15 @@ function create_element($element = array()) {
 			case 'autop':
 				$autop = $value ? true : false;
 			break;
+			case '@children':
+				foreach($value as $condition) {
+					foreach($children as $index => $child) {
+						if($condition['matches'] == $child['attr'][$condition['key']]) {
+							$children[$index]['attr'] = array_merge($child['attr'], $condition['set']);
+						}
+					}
+				}
+			break;
 		}
 	}
 	if($type != 'textNode') {
