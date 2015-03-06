@@ -1731,3 +1731,25 @@ function launchpad_migrate_render_admin_page() {
 	</div>
 	<?php
 }
+
+
+/**
+ * Return the singular or plural version based on the count.
+ * 
+ * @param		number|array $count The number of things.
+ * @param		string $single The singular version of the string.
+ * @param		string $plural The plural version of the string.
+ * @returns		string
+ * @since		1.6
+ * @uses		launchpad_migrate_domain_replace
+ */
+function plural($count = 0, $single = '', $plural = 's') {
+	if(is_array($count)) {
+		$count = count($count);
+	}
+	if($count == 1) {
+		return $single;
+	} else {
+		return $plural;
+	}
+}
