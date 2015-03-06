@@ -547,6 +547,7 @@ function create_element($element = array()) {
 	$attrs = array();
 	$children = array();
 	$autop = false;
+	$return = '';
 	
 	if(isset($element['type'])) {
 		$type = $element['type'];

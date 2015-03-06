@@ -1743,13 +1743,13 @@ function launchpad_migrate_render_admin_page() {
  * @since		1.6
  * @uses		launchpad_migrate_domain_replace
  */
-function plural($count = 0, $single = '', $plural = 's') {
+function plural($count = 0, $single = '', $plural = false) {
 	if(is_array($count)) {
 		$count = count($count);
 	}
 	if($count == 1) {
 		return $single;
 	} else {
-		return $plural;
+		return $plural === false ? $single . 's' : $plural;
 	}
 }
