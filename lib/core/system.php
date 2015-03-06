@@ -535,7 +535,7 @@ register_shutdown_function('launchpad_memory_warning');
  * Use the array:
  * array(
  * 'type' => element name, e.g. div, span, or textNode
- * 'attr' => array of attributes, e.g. array('class' => 'class-name')
+ * 'attr' => string of attributes, e.g. 'class="class-name"', or array of attributes, e.g. array('class' => 'class-name')
  * 'children' => array of children formatted the same as this array
  * )
  * 
@@ -563,31 +563,35 @@ function create_element($element = array()) {
 	}
 	$self_closing = count($children) ? true : false;
 	
-	foreach($attrs as $attr => $value) {
-		switch($attr) {
-			default:
-				$return .= ' ';
-				$return .= htmlentities($attr, ENT_QUOTES);
-				$return .= '="';
-				$return .= htmlentities($value, ENT_QUOTES);
-				$return .= '"';
-			break;
-			case 'innerHTML':
-				$self_closing = $value;
-			break;
-			case 'autop':
-				$autop = $value ? true : false;
-			break;
-			case '@children':
-				foreach($value as $condition) {
-					foreach($children as $index => $child) {
-						if($condition['matches'] == $child['attr'][$condition['key']]) {
-							$children[$index]['attr'] = array_merge($child['attr'], $condition['set']);
+	if(is_array($attrs)) {
+		foreach($attrs as $attr => $value) {
+			switch($attr) {
+				default:
+					$return .= ' ';
+					$return .= htmlentities($attr, ENT_QUOTES);
+					$return .= '="';
+					$return .= htmlentities($value, ENT_QUOTES);
+					$return .= '"';
+				break;
+				case 'innerHTML':
+					$self_closing = $value;
+				break;
+				case 'autop':
+					$autop = $value ? true : false;
+				break;
+				case '@children':
+					foreach($value as $condition) {
+						foreach($children as $index => $child) {
+							if($condition['matches'] == $child['attr'][$condition['key']]) {
+								$children[$index]['attr'] = array_merge($child['attr'], $condition['set']);
+							}
 						}
 					}
-				}
-			break;
+				break;
+			}
 		}
+	} else if(is_string($attrs)) {
+		$return .= $attrs;
 	}
 	if($type != 'textNode') {
 		$return .= '>';
