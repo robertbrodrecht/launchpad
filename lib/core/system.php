@@ -549,6 +549,10 @@ function create_element($element = array()) {
 	$autop = false;
 	$return = '';
 	
+	if(is_string($element)) {
+		return $element;
+	}
+	
 	if(isset($element['type'])) {
 		$type = $element['type'];
 	}
