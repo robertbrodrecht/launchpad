@@ -23,7 +23,21 @@ jQuery(document).ready(
 					revert: true,
 					containment: 'parent',
 					axis: 'y',
-					items: '> div'
+					items: '> div',
+					update: function(e, ui) {
+						var textarea = ui.item.find('textarea.wp-editor-area');
+						
+						textarea.each(
+							function() {
+								var me = $(this),
+									cont = me.closest('div'),
+									clone = me.clone(true, true);
+								cont.html('');
+								cont.append(clone);
+								clone.each(handleUpdatingFlexibleModules);
+							}
+						);
+					}
 				}
 			);
 			
@@ -36,10 +50,23 @@ jQuery(document).ready(
 					revert: true,
 					containment: 'parent',
 					axis: 'y',
-					items: '> li'
+					items: '> li',
+					update: function(e, ui) {
+						var textarea = ui.item.find('textarea.wp-editor-area');
+						
+						textarea.each(
+							function() {
+								var me = $(this),
+									cont = me.closest('div'),
+									clone = me.clone(true, true);
+								cont.html('');
+								cont.append(clone);
+								clone.each(handleUpdatingFlexibleModules);
+							}
+						);
+					}
 				}
 			);
-			
 		}
 		
 		function handleUpdatingFlexibleModules() {
@@ -222,7 +249,7 @@ jQuery(document).ready(
 						}
 					);
 					
-					console.log(me);
+					//console.log(me);
 					
 					me = me.parent().parent();
 					if(me.hasClass('launchpad-toggle-hidden') && show_me) {
@@ -385,7 +412,7 @@ jQuery(document).ready(
 					master_replace_with = 'launchpad-' + new Date().getTime() + '-repeater',
 					visualeditors;
 					
-				console.log(master);
+				//console.log(master);
 				
 				master.find('[name], [data-field-name], button[data-for]').each(
 					function() {
@@ -420,7 +447,7 @@ jQuery(document).ready(
 				// Replace inner HTML
 				master.find('.launchpad-relationship-items').html('');
 				
-				console.log(master);
+				//console.log(master);
 				
 				container.append(master);
 				
