@@ -32,6 +32,7 @@ While I may pop back in for compatibility updates, I'm taking a break on LaunchP
 * Designer feedback.
 * Responsive Images
 * Refactor the world to use create_element().
+* From 4.2: Added the ability to make admin notices dismissible. Plugin and theme authors: adding .notice and .is-dismissible as adjacent classes to your notice containers should automatically make them dismissible. Please test.
 
 Future Wants
 ============
