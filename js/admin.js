@@ -1,4 +1,5 @@
 /*jslint browser: true, devel: true, sloppy: true, todo: true, white: true */
+/* global google: true, tinyMCEPreInit: true, tinyMCE: true, QTags: true, switchEditors: true, getUserSetting: true */
 
 /**
  * Admin JavaScript
@@ -107,7 +108,7 @@ jQuery(document).ready(
 				function() {
 					var me = $(this),
 						elval = me.val(),
-						cont = me.closest('.launchpad-flexible-metabox-container, .postbox')
+						cont = me.closest('.launchpad-flexible-metabox-container, .postbox'),
 						toggle = me.data('toggle');
 					
 					if(elval === null) {
@@ -227,7 +228,7 @@ jQuery(document).ready(
 					$.each(
 						watch,
 						function(index) {
-							val = $(index).val();
+							var val = $(index).val();
 							
 							if($(index).is('[type=checkbox]')) {
 								val = $(index).is(':checked')
@@ -435,7 +436,7 @@ jQuery(document).ready(
 							me.attr('data-field-name', me.attr('data-field-name').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
 						}
 						
-						if(me.is('input:not(checkbox)')) {
+						if(me.is('input:not([type=checkbox])')) {
 							me.val('');
 						}
 						if(me.is('select')) {
@@ -778,8 +779,8 @@ jQuery(document).ready(
 						
 						$('#migrate-rows-total').html(total_rows);
 						$('#migrate-files-total').html(total_files);
-					}
-				, 250);
+					}, 250
+				);
 			}
 		);
 	}
