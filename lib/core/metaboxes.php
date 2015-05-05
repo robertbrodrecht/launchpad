@@ -876,12 +876,12 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 	if($field_prefix === 'launchpad_site_options') {
 		// Get the site options.
 		if($args['label_for']) {
-			$vals = get_option($args['label_for'], '');
+			$vals = get_option($args['label_for'], null);
 		} else {
-			$vals = get_option('launchpad_site_options', '');
+			$vals = get_option('launchpad_site_options', null);
 		}
 		// If an option value exists for the current field, set it as $val.
-		if($vals)  {
+		if(!is_null($vals))  {
 			$val = $vals;
 		// Otherwise, see if there is a default value to set as $val.
 		} else {
