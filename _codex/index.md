@@ -7,7 +7,7 @@ Launchpad is an extremely opinionated WordPress theme created for developers.  L
 	<dt>Work with WordPress's natural order while extending its capabilities.</dt>
 	<dd>The template folder hierarchy follows the practices set up by WordPress's built-in themes and adds modern features like flexible content and caching.</dd>
 	<dt>Improve the end-user experience.</dt>
-	<dd>Launchpad keeps core tools (SASS and JavaScript) to a minimum and includes features like Ajax page loading and page fragment caching.</dd>
+	<dd>Launchpad keeps core tools (SASS and JavaScript) to a minimum and includes features like page fragment caching.</dd>
 	<dt>Prefer built-in solutions over plugins.</dt>
 	<dd>It's hard to trust plugins, so Launchpad includes important features in the core theme, including custom fields, flexible content, login attempts limiting, and caching.</dd>
 	<dt>Enforce best practices whenever possible.</dt>

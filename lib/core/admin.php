@@ -344,17 +344,10 @@ function launchpad_get_setting_fields() {
 								'default' => 'on'
 							)
 						),
-						'ajax_page_loads' => array(
-							'name' => 'Ajax Page Loads',
-							'args' => array(
-								'small' => 'Attempt to load pages with ajax.',
-								'type' => 'checkbox'
-							)
-						),
 						'html5_bp' => array(
 							'name' => 'HTML 5 Boilerplate',
 							'args' => array(
-								'small' => 'Include HTML5 Boilerplate in .htaccess.',
+								'small' => 'Include HTML5 Boilerplate and Security Features in .htaccess.',
 								'type' => 'checkbox'
 							)
 						),

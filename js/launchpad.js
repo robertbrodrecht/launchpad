@@ -103,7 +103,7 @@
 			);
 			
 		$(document.body).on(
-				'ajaxRequestEnd ajaxComplete load',
+				'ajaxComplete load',
 				function() {
 					setTimeout(heightMatch, 100);
 				}
@@ -372,7 +372,7 @@
 						}
 					}
 				}
-			).on('ajaxRequestEnd', reinit);
+			).on('ajaxComplete', reinit);
 		
 		/**
 		 * 60 Frames Per Second Scrolling

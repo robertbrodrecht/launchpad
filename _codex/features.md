@@ -29,10 +29,9 @@ In case I forgot anything in the previous sections...
 
 ### jQuery / JavaScript
 
-* Ajax page loads with History PushState/PopState and Google Analytics pageview events.
 * Limited JavaScript feature detection for features that matter (screen DPI, position sticky, css transitions, and touch-capable) instead of including the full Modernizr suite.
 * [60FPS scrolling](http://www.thecssninja.com/javascript/follow-up-60fps-scroll) option.  Add data-scroll-helper to the body.
-* Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit, ajaxRequestStart, ajaxRequestEnd.  More will be available eventually, I think.
+* Various custom events for hooking into JavaScript.  Currently: launchpadInit, launchpadReinit.  More will be available eventually, I think.
 * jQuery Custom Events for scrollStart, scrollStop, resizeStart, and resizeStop so that you don't have to shoot yourself in the foot by using resize and scroll events when you don't have to.
 * jQuery-based Height Match via <code>@data-height-match-group</code> with children containing <code>@data-height-match</code> or <code>@data-height-match-children</code> to height match all children.  Use either a min-width as a number or media query for when heightmatch should work.  Media queries as height-match values are not supported by IE8 (always returns false because IE8 doesn't support Media Queries).
 * Scripts are before the body close unless there is a plugin running.  Then they go at the top because plugins can't be trusted to do the right thing.

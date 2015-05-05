@@ -29,10 +29,6 @@ The next option is to include debug comments about caching.  These reveal whethe
 
 Launchpad can use HTML5 Application Cache to store files for offline use.  As Jake Archibald wrote, [Application Cache is a Douchebag](http://alistapart.com/article/application-cache-is-a-douchebag).  Launchpad does its best to mitigate issues with AppCache, but it is highly recommended to disable offline support until development is complete, then test the hell out of it to make sure it works the way you want it to if you want to have it enabled.
 
-## Ajax Page Loads
-
-If enabled, Launchpad will grab the clicked page with Ajax, replace the <code>body</code> and update the <code>body @class</code> instead of doing hard page loads.
-
 ## HTML5 Boilerplate
 
 If enabled, Launchpad will add a slightly modified version of the [HTML5 Boilerplate](http://html5boilerplate.com) .htaccess configuration to your .htaccess file.  This file attempts to set great defaults for Apache, including content caching, gzipping, and special MIME types.

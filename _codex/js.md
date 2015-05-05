@@ -15,16 +15,15 @@ Launchpad includes support for the following features in no particular order:
 2. Custom events for scrollStart, scrollEnd, resizeStart, and resizeEnd.
 3. Manage built-in fleible content, i.e. accordion list.
 4. 60FPS scrolling hack to improve scrolling on complex sites.  Just add a data-scroll-helper attribute to the body.
-5. Ajax page loads.
-6. HTML5 Application Cache management.
-7. Startup Image management for Apple's "Add to Home Screen" feature.
-8. Mobile nav menu management.
-9. Feature detection for important things so you don't HAVE to use Modernizr.
+5. HTML5 Application Cache management.
+6. Startup Image management for Apple's "Add to Home Screen" feature.
+7. Mobile nav menu management.
+8. Feature detection for important things so you don't HAVE to use Modernizr.
    1. 2x DPI detection.
    2. Touch support.
    3. Position sticky support.
    4. CSS Transition support.
-10. Height Matching.
+9. Height Matching.
 
 Some of these features require more detailed explanation.
 
@@ -49,10 +48,6 @@ Some of these features require more detailed explanation.
 	<dd>Fires when the user starts resizing for the first time.</dd>
 	<dt>resizeEnd</dt>
 	<dd>Fires when the user stops scrolling for 250ms.</dd>
-	<dt>ajaxRequestStart</dt>
-	<dd>Fires on the <code>body</code> immediately before the ajax request is sent.</dd>
-	<dt>ajaxRequestEnd</dt>
-	<dd>Fires on the <code>body</code> after the page content has been replaced.</dd>
 </dl>
 
 ## Feature Detection
@@ -79,21 +74,6 @@ So, detection of those properties are built in.  You can access this information
 	<dt>Sticky Positioning</dt>
 	<dd><code>window.supports.sticky</code> will be true if the device knows sticky positioning and a <code>css-sticky</code> or <code>css-not-sticky</code> class will be added to the body.</dd>
 </dl>
-
-## Ajax Page Loads
-
-If enabled in the WordPress admin, Launchpad will try to load pages with ajax if the page is on the same domain.  The script fetches the page and replace the contents of the <code>body</code>, the body's classes, and the <code>title</code>.  Events are fired both before and after an ajax page load:
-
-<dl>
-	<dt>ajaxRequestStart</dt>
-	<dd>Fires on the <code>body</code> immediately before the ajax request is sent.</dd>
-	<dt>ajaxRequestEnd</dt>
-	<dd>Fires after the page content has been replaced.</dd>
-</dl>
-
-You can hook into these events to handle page transitions.  Since ajax page loads don't load scripts at every page load, it's important to remember that your normal practices are probably not going to work because they are based on the assumption of a page loading your scripts fresh every time the user goes to a new page.  With ajax page loads, you MUST deligate event handling whenever possible.  If an event can't be delegated, you must add the event every time <code>launchpadReinit</code> fires.
-
-If you can't figure out how to make ajax page loads work for you, just don't use it.
 
 ## Application Cache Management
 
