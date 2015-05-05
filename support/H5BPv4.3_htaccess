@@ -7,6 +7,12 @@
 # to the main server config file (usually called `httpd.conf`), you should add
 # this logic there: http://httpd.apache.org/docs/current/howto/htaccess.html.
 
+# XML RPC has been insecure in the past.  Turn this off if you dare.
+<Files xmlrpc.php>
+  Order allow,deny
+  Deny from all
+</files>
+
 # ##############################################################################
 # # Security via 5G Blacklist                                                  #
 # ##############################################################################
