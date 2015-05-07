@@ -17,6 +17,7 @@ if($flex_values['description']) {
 		
 		$links = new WP_Query(
 				array(
+					'ignore_sticky_posts' => true,
 					'post__in' => $flex_values['links'],
 					'post_type' => 'any',
 					'order' => 'ASC',

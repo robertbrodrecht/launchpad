@@ -16,6 +16,7 @@ $start = array_pop($ancestors);
 
 $children = get_children(
 		array(
+			'ignore_sticky_posts' => true,
 			'post_parent' => $start,
 			'numberposts' => -1,
 			'post_type' => 'any',
@@ -48,6 +49,7 @@ if($children) {
 				
 					$grand_children = get_children(
 						array(
+								'ignore_sticky_posts' => true,
 								'post_parent' => $child->ID,
 								'numberposts' => -1,
 								'post_type' => 'any',
@@ -71,6 +73,7 @@ if($children) {
 				
 										$great_grand_children = get_children(
 											array(
+													'ignore_sticky_posts' => true,
 													'post_parent' => $grand_child->ID,
 													'numberposts' => -1,
 													'post_type' => 'any',
