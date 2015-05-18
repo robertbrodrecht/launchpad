@@ -63,28 +63,6 @@ function custom_launchpad_custom_post_types($post_types) {
 								)
 							)
 						),
-								'sample_side_metabox_repeater' => array(
-									'name' => 'Repeater',
-									'help' => '<p>This is a repeater.</p>',
-									'args' => array(
-										'type' => 'repeater',
-										'label' => 'HUH',
-										'subfields' => array(
-											'sample_side_metabox_repeater_a' => array(
-												'name' => 'Test Repeater A',
-												'args' => array(
-													'type' => 'wysiwyg'
-												)
-											),
-											'sample_side_metabox_repeater_b' => array(
-												'name' => 'Test Repeater B',
-												'args' => array(
-													'type' => 'wysiwyg'
-												)
-											)
-										)
-									)
-								),
 					)
 				)
 			),
