@@ -127,16 +127,6 @@ if($add_this_id) {
 				
 				<?php
 				
-				$phone = '';
-				
-				if(isset($site_options['organization_phone']) && $site_options['organization_phone']) {
-					$phone .= '<span class="tel"><span class="type">Phone</span> ' .  format_phone($site_options['organization_phone']) . '</span><br>';
-				}
-				
-				if(isset($site_options['organization_fax']) && $site_options['organization_fax']) {
-					$phone .= '<span class="fax"><span class="type">Phone</span> ' .  format_phone($site_options['organization_fax']) . '</span><br>';
-				}
-				
 				$social_links = array(
 					'Facebook' => 'organization_facebook',
 					'Twitter' => 'organization_twitter',
