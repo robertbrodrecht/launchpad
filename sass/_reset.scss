@@ -93,7 +93,7 @@ body {
 	@include rem('line-height', $body-line-height-px);
 	@include rem('font-size', $body-font-size-px);
 	font-feature-settings: "kern" "liga";
-	text-rendering: optimizeLegibility;
+	//text-rendering: optimizeLegibility;
 }
 
 a:focus {
