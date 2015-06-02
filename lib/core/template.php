@@ -17,6 +17,9 @@ if(class_exists('GFForms')) {
 	add_filter('gform_tabindex', create_function('', 'return false;'));
 }
 
+// Remove the G.D. emoji BS that WP thinks they should inject directly into the head. >:[
+remove_action('wp_head', 'print_emoji_detection_script', 7);
+remove_action('wp_print_styles', 'print_emoji_styles' );
 
 /**
  * Setup of basic theme support
