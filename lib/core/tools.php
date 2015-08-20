@@ -15,28 +15,28 @@
  * @since		1.3
  */
 function launchpad_add_media_replacement_fields($post_types) {
-	$custom_post_types = array(
-		'attachment' => array(
-			'metaboxes' => array(
-				'launchpad_replace' => array(
-					'name' => 'Media Replace',
-					'help' => '<p>Upload a new file to replace this one.  It will use the same file name.</p>',
-					'location' => 'side',
-					'position' => 'default',
-					'fields' => array(
-						'replacement' => array(
-							'name' => 'New File',
-							'help' => '<p>Upload a new file that will replace this file.  This file will be renamed to the name of the existing file, so it would be wise of you to replace the file with the same media (e.g. a JPEG with a JPEG).  This is done to preserve direct links to the file.</p>',
-							'args' => array(
-								'type' => 'file'
-							)
-						)
-					)
+	if(!isset($post_types['attachment'])) {
+		$post_types['attachment'] = array();
+	}
+	if(!isset($post_types['attachment'])) {
+		$post_types['attachment']['metaboxes'] = array();
+	}
+	$post_types['attachment']['metaboxes']['launchpad_replace'] = array(
+		'name' => 'Media Replace',
+		'help' => '<p>Upload a new file to replace this one.  It will use the same file name.</p>',
+		'location' => 'side',
+		'position' => 'default',
+		'fields' => array(
+			'replacement' => array(
+				'name' => 'New File',
+				'help' => '<p>Upload a new file that will replace this file.  This file will be renamed to the name of the existing file, so it would be wise of you to replace the file with the same media (e.g. a JPEG with a JPEG).  This is done to preserve direct links to the file.</p>',
+				'args' => array(
+					'type' => 'file'
 				)
 			)
 		)
 	);
-	return array_merge($post_types, $custom_post_types);
+	return $post_types;
 }
 add_filter('launchpad_custom_post_types', 'launchpad_add_media_replacement_fields', 1);
 

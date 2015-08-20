@@ -437,10 +437,16 @@ jQuery(document).ready(
 						}
 						
 						if(me.is('input:not([type=checkbox])')) {
-							me.val('');
+							me.val(me.data('default'));
+						} else if(me.is('input[type=checkbox]')) {
+							if(me.parent().parent().find('input:first-child').first().data('default')) {
+								me.attr('checked', 'checked');
+							} else {
+								me.removeAttr('checked');
+							}
 						}
 						if(me.is('select')) {
-							me.val('');
+							me.val(me.data('default'));
 						}
 					}
 				);

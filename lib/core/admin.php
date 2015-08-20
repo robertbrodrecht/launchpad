@@ -262,6 +262,12 @@ function launchpad_get_setting_fields() {
 								'type' => 'text'
 							)
 						),
+						'organization_youtube' => array(
+							'name' => 'YouTube',
+							'args' => array(
+								'type' => 'text'
+							)
+						),
 					)
 				),
 				'security' => array(
@@ -1113,3 +1119,110 @@ function launchpad_get_field_help($type) {
 	}
 	return $ret;
 }
+
+
+/**
+ * Add Responsive Image Fields
+ * 
+ * @since		1.3
+ */
+function launchpad_add_media_responsive_images($post_types) {
+	if(!isset($post_types['attachment'])) {
+		$post_types['attachment'] = array();
+	}
+	if(!isset($post_types['attachment'])) {
+		$post_types['attachment']['metaboxes'] = array();
+	}
+	
+	global $_wp_additional_image_sizes;
+	
+	$all_size_classes = get_intermediate_image_sizes();
+	$size_classes = array();
+	foreach($_wp_additional_image_sizes as $size_key => $size_val) {
+		$size_classes[$size_key] = $size_key . ' (' . $size_val['width'] . '×' . $size_val['height'] . ', ' . ($size_val['crop'] ? 'Cropped' : 'Uncropped') . ')';
+	}
+	
+	$post_types['attachment']['metaboxes']['launchpad_responsive_images'] = array(
+		'name' => 'Responsive Image Settings',
+		'help' => '<p>Use the following to set up responsive images that will be attached to this image. Do note that there is no way to do a one-size-fits-all solution.  We\'ll just try to do the best we can based on the sites we make.  It is best to use the MOBILE 1X image as the base image and add larger sizes to it.  This will allow browsers that use a polyfill to download the smallest possible version of the image first instead of the largest before the polyfill runs.</p>',
+		'location' => 'normal',
+		'position' => 'default',
+		'fields' => array(
+			'mobile_width' => array(
+				'name' => 'Image Width at Mobile',
+				'args' => array(
+					'type' => 'text',
+					'default' => '100vw'
+				)
+			),
+			'responsive_sizes' => array(
+				'name' => 'Sizes',
+				'help' => '<p>The sizes the image is at different media query widths.</p>',
+				'args' => array(
+					'type' => 'repeater',
+					'label' => 'Size',
+					'subfields' => array(
+						'media' => array(
+							'name' => 'Media Query',
+							'args' => array(
+								'type' => 'text',
+								'small' => 'For example: (min-width: 300px)'
+							)
+						),
+						'width' => array(
+							'name' => 'Image Width at Media Query',
+							'args' => array(
+								'type' => 'text',
+								'small' => 'For example: 300px'
+							)
+						)
+					)
+				)
+			),
+			'responsive_images' => array(
+				'name' => 'Images',
+				'help' => '<p>Attach the matching file or specify a WordPress size class.  If you upload an image AND select a size class, the specific size class of that image will be used.  If you only specify an image, the full sized image will be used.  If you only specify a size class, the size class for the current image will be used.</p>',
+				'args' => array(
+					'type' => 'repeater',
+					'label' => 'Size',
+					'subfields' => array(
+						'width' => array(
+							'name' => 'Image',
+							'args' => array(
+								'type' => 'file'
+							)
+						),
+						'size' => array(
+							'name' => 'Size Class',
+							'args' => array(
+								'type' => 'select',
+								'options' => $size_classes
+							)
+						)
+					)
+				)
+			)
+		)
+	);
+	return $post_types;
+}
+add_filter('launchpad_custom_post_types', 'launchpad_add_media_responsive_images', 2);
+
+
+
+/*
+function launchpad_image_srcset($html = false, $id = false, $caption = false, $title = false, $align = false, $url = false, $size = false, $alt = false) {
+	
+	$res = array($html, $id, $caption, $title, $align, $url, $size, $alt);
+	$eml = '';
+	foreach($res as $r) {
+		$eml .= var_export($r, true);
+	}
+	
+	wp_mail('robert@bigcom.com', 'WP Test', $eml);
+	
+	
+	return $html;
+}
+add_filter('image_send_to_editor', 'launchpad_image_srcset');
+*/
