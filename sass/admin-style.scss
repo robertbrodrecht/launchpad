@@ -378,7 +378,7 @@ small.launchpad-inline {
 		right: 0;
 		bottom: 1.75em;
 		min-width: 200px;
-		z-index: 10;
+		z-index: 999;
 		
 		&:before {
 			border-color: #000 transparent transparent transparent;

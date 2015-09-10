@@ -209,7 +209,7 @@ function file_get_contents_cache($url, $cachetime = 60, $context = false) {
 		
 		// If there are results, write them to the cache file.
 		if($results) {
-			$f = fopen($cache_file, 'w');
+			$f = @fopen($cache_file, 'w');
 			if($f) {
 				fwrite($f, $results);
 				fclose($f);
