@@ -309,7 +309,7 @@ function launchpad_get_setting_fields() {
 				),
 				'cache_options' => array(
 					'section_name' => 'Caching',
-					'description' => 'Save settings to clear all caches. Save page to clear related caches.',
+					'description' => 'Save settings to clear all caches. Save page to clear related caches.<br>Your cache folder is ' . (is_writable($cache_dir) ? 'writable' : 'not writable') . ' with ' . (count($cache_files)-2) . ' files cached and located at: ' . $cache_dir,
 					'fields' => array(
 						'cache_timeout' => array(
 							'name' => 'Cache Duration',
@@ -748,8 +748,10 @@ function launchpad_admin_script_includes() {
 	wp_register_style('launchpad_wp_admin_css', get_template_directory_uri() . '/css/admin-style.css', false, '1.0.0' );
 	wp_enqueue_style('launchpad_wp_admin_css');
 	
-	// Add admin.js.
-	wp_enqueue_script('launchpad_wp_admin_js', get_template_directory_uri() . '/js/admin-min.js');
+	// Add admin.js except on user pages because something is breaking the loader in 4.3.
+	if(stristr($GLOBALS['pagenow'], 'user') === false && stristr($GLOBALS['pagenow'], 'profile') === false) {
+		wp_enqueue_script('launchpad_wp_admin_js', get_template_directory_uri() . '/js/admin-min.js');
+	}
 }
 if(is_admin()) {
 	add_action('admin_enqueue_scripts', 'launchpad_admin_script_includes');

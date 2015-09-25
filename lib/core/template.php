@@ -315,6 +315,7 @@ function launchpad_title($echo = false) {
 		// If not, just fall through to the rest.
 		if(isset($seo['title']) && trim($seo['title'])) {
 			$title = trim($seo['title']);
+			$title = htmlentities($title, ENT_QUOTES);
 			
 			if($echo) {
 				echo $title;
@@ -343,6 +344,7 @@ function launchpad_title($echo = false) {
 	
 	// Apply filters to allow the developer to change it.
 	$title = apply_filters('launchpad_title', $title);
+	$title = htmlentities($title, ENT_QUOTES);
 	
 	$title = trim($title);
 	
@@ -406,6 +408,7 @@ function launchpad_excerpt($max_words = 32, $echo = false, $id = false) {
 	
 	// Apply filters to allow the developer to change it.
 	$excerpt = apply_filters('launchpad_excerpt', $excerpt);
+	$excerpt = htmlentities($excerpt, ENT_QUOTES);
 	
 	if($echo) {
 		echo $excerpt;
@@ -446,6 +449,8 @@ function launchpad_seo_excerpt($max_words = 32, $echo = false, $id = false) {
 	
 	// If a meta description was set, use it.
 	if(isset($seo['meta_description']) && trim($seo['meta_description'])) {
+		$seo['meta_description'] = htmlentities($seo['meta_description'], ENT_QUOTES);
+		
 		if($echo) {
 			echo $seo['meta_description'];
 		}

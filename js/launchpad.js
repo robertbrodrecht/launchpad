@@ -318,7 +318,7 @@
 		} else {
 			window.supports.ajax = false;
 			if(addthis_id.length) {
-				addthis_id = addthis_id.data('addthis_id');
+				addthis_id = addthis_id.data('addthis');
 				body.append(
 					$('<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=' + addthis_id + '"></script>')
 				);
