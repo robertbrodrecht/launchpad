@@ -132,6 +132,7 @@
 							console.log('Ajax request complete.');
 						}
 						body.trigger('ajaxRequestEnd');
+						body.trigger('addThisInit');
 					}
 				);
 		}

@@ -313,16 +313,17 @@
 		initHeightMatch();
 		$(window).load(initHeightMatch);
 		
-		if($('[data-ajax="true"]').length && !!history.pushState && !addthis_id.length) {
+		if($('[data-ajax="true"]').length && !!history.pushState) {
 			window.supports.ajax = true;
 		} else {
 			window.supports.ajax = false;
-			if(addthis_id.length) {
-				addthis_id = addthis_id.data('addthis');
-				body.append(
-					$('<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=' + addthis_id + '"></script>')
-				);
-			}
+		}
+		
+		if(addthis_id.length) {
+			addthis_id = addthis_id.data('addthis');
+			body.append(
+				$('<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=' + addthis_id + '"></script>')
+			);
 		}
 		
 		if(window.navigator.standalone && window.supports.ajax) {
@@ -419,6 +420,14 @@
 			function(e) {
 				e.preventDefault();
 				$(this).closest('dt').toggleClass('target');
+			}
+		).on(
+			'addThisInit',
+			function() {
+				if(addthis_id.length){
+				    addthis.init();
+				    addthis.toolbox('.addthis_toolbox');
+				}
 			}
 		);
 		
