@@ -13,12 +13,11 @@
 @function toRems($px) {
 	$baseline-rem: $root-font-px / 1rem;
 
-	@if $px == 0 {
-		@return 0;
-	}
-
 	@if type-of($px) == "number" {
 		@if unit($px) == "px" {
+			@if $px == 0px {
+				@return 0;
+			}
 			@return $px / $baseline-rem;
 		} @else {
 			@return $px;
@@ -29,7 +28,11 @@
 		@each $value in $px {
 			@if type-of($value) == "number" {
 				@if unit($value) == "px" {
-					$rems: append($rems, ($value / $baseline-rem));
+					@if $px == 0px {
+						$rems: append($rems, 0);
+					} @else {
+						$rems: append($rems, ($value / $baseline-rem));
+					}
 				} @else {
 					$rems: append($rems, $value);
 				}
