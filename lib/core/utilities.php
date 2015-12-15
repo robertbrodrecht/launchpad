@@ -296,6 +296,11 @@ function launchpad_paginate($url_base = '/', $current_page = 1, $total_pages = 1
 		'previous' => 'Previous',
 	);
 	
+	$qs = '';
+	if($_GET) {
+		$qs = '?' . http_build_query($_GET);
+	}
+	
 	$settings = array_merge($defaults, $options);
 	
 	$next = $settings['next'];
@@ -330,9 +335,9 @@ function launchpad_paginate($url_base = '/', $current_page = 1, $total_pages = 1
 	$ret .= '<ul class="page-navigate">';
 	if($current_page-1 > 0) {
 		if($current_page-1 === 1) {
-			$ret .= '<li class="page-previous"><a href="' . $url_base . '">' . $previous . '</a></li>';
+			$ret .= '<li class="page-previous"><a href="' . $url_base . $qs . '">' . $previous . '</a></li>';
 		} else {
-			$ret .= '<li class="page-previous"><a href="' . $url_base . 'page/' . ($current_page-1) . '/">' . $previous . '</a></li>';
+			$ret .= '<li class="page-previous"><a href="' . $url_base . 'page/' . ($current_page-1) . '/' . $qs . '">' . $previous . '</a></li>';
 		}
 	} else {
 		$ret .= '<li class="page-previous"><span>' . $previous . '</span></li>';
@@ -342,14 +347,14 @@ function launchpad_paginate($url_base = '/', $current_page = 1, $total_pages = 1
 			$ret .= '<li class="page-number page-number-current"><span>' . $start_page . '</span></li>';							
 		} else {
 			if($start_page === 1) {
-				$ret .= '<li class="page-number"><a href="' . $url_base . '">' . $start_page . '</a></li>';							
+				$ret .= '<li class="page-number"><a href="' . $url_base . $qs . '">' . $start_page . '</a></li>';							
 			} else {
-				$ret .= '<li class="page-number"><a href="' . $url_base . 'page/' . $start_page . '/">' . $start_page . '</a></li>';
+				$ret .= '<li class="page-number"><a href="' . $url_base . 'page/' . $start_page . '/' . $qs . '">' . $start_page . '</a></li>';
 			}
 		}
 	}
 	if($current_page+1 <= $total_pages) {
-		$ret .= '<li class="page-next"><a href="' . $url_base . 'page/' . ($current_page+1) . '/">' . $next . '</a></li>';
+		$ret .= '<li class="page-next"><a href="' . $url_base . 'page/' . ($current_page+1) . '/' . $qs . '">' . $next . '</a></li>';
 	} else {
 		$ret .= '<li class="page-next"><span>' . $next . '</span></li>';
 	}
