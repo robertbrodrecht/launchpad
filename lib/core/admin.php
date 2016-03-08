@@ -749,9 +749,9 @@ function launchpad_admin_script_includes() {
 	wp_enqueue_style('launchpad_wp_admin_css');
 	
 	// Add admin.js except on user pages because something is breaking the loader in 4.3.
-	if(stristr($GLOBALS['pagenow'], 'user') === false && stristr($GLOBALS['pagenow'], 'profile') === false) {
+	//if(stristr($GLOBALS['pagenow'], 'user') === false && stristr($GLOBALS['pagenow'], 'profile') === false) {
 		wp_enqueue_script('launchpad_wp_admin_js', get_template_directory_uri() . '/js/admin-min.js');
-	}
+	//}
 }
 if(is_admin()) {
 	add_action('admin_enqueue_scripts', 'launchpad_admin_script_includes');

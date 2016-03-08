@@ -104,7 +104,7 @@ jQuery(document).ready(
 		}
 		
 		function handleToggleStates() {
-			$('[data-toggle]').each(
+			$('[data-toggle]:not(.hide-if-no-js)').each(
 				function() {
 					var me = $(this),
 						elval = me.val(),
