@@ -232,6 +232,12 @@ function launchpad_get_setting_fields() {
 								'type' => 'text'
 							)
 						),
+						'default_og_image' => array(
+							'name' => 'Default OG Image',
+							'args' => array(
+								'type' => 'file'
+							)	
+						),
 						'organization_twitter' => array(
 							'name' => 'Twitter',
 							'args' => array(
