@@ -595,7 +595,7 @@ function launchpad_register_widget() {
 		array(
 			'name' => 'Blog Sidebar',
 			'id' => 'blog_sidebar',
-			'before_widget' => '<section id="flexible-widget">',
+			'before_widget' => '<section class="flexible-widget">',
 			'after_widget' => '</section>',
 			'before_title' => '<h1>',
 			'after_title' => '</h1>',
