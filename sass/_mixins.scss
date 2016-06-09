@@ -1,3 +1,9 @@
+// *****************************
+// *                           *
+// * UNIT CONVERSION FUNCTIONS *
+// *                           *
+// *****************************
+
 // Figure out the root font percentage from a pixel value.
 @function rootRemPercent($px) {
 	@return $px/16px*100*1%;
@@ -7,25 +13,28 @@
 @function toRems($px) {
 	$baseline-rem: $root-font-px / 1rem;
 
-	@if $px == 0 {
-		@return 0;
-	}
-
 	@if type-of($px) == "number" {
-		@if unit($px) == "rem" {
-			@return $px;
-		} @else {
+		@if unit($px) == "px" {
+			@if $px == 0px {
+				@return 0;
+			}
 			@return $px / $baseline-rem;
+		} @else {
+			@return $px;
 		}
 	} @else {
 		$rems: ();
 
 		@each $value in $px {
-			@if type-of($px) == "number" {
-				@if $value == 0 {
-					$rems: append($rems, $value);
+			@if type-of($value) == "number" {
+				@if unit($value) == "px" {
+					@if $px == 0px {
+						$rems: append($rems, 0);
+					} @else {
+						$rems: append($rems, ($value / $baseline-rem));
+					}
 				} @else {
-					$rems: append($rems, ($value / $baseline-rem));
+					$rems: append($rems, $value);
 				}
 			} @else {
 				$rems: append($rems, $value);
@@ -45,7 +54,7 @@
 	
 	@if type-of($rem) == "number" and unit($rem) == "rem" {
 		$rem: ($rem / ($rem * 0 + 1)) * ($root_font_fix / ($root_font_fix * 0 + 1));
-		@return $rem + "em";
+		@return $rem * 1em;
 	} @else {
 		@return $rem;
 	}
@@ -56,6 +65,21 @@
 	#{$property}: $values;
 	#{$property}: toRems($values);
 }
+
+// Make a REM'd propert with pixel fallback for each list item.
+@mixin rems($convert) {
+	@each $property, $values in $convert {
+		@include rem($property, $values);
+	}
+}
+
+
+
+// *****************************
+// *                           *
+// * MEDIA QUERY SHORTCUTS     *
+// *                           *
+// *****************************
 
 // Retina media query.
 @mixin media-2x {
@@ -73,12 +97,16 @@
 // Max-width media query.
 @mixin media-max($size) {
 	@if type-of($size) == "number" {
-		$size: toRems($size);
+		@if unit($size) != "rem" {
+			$size: toRems($size);
+		}
 	} @else {
 		$size: toRems(map-get($break-points, $size));
 	}
 	
-	$size: mqRemToEm($size);
+	@if unit($size) == "rem" {
+		$size: mqRemToEm($size);
+	}
 	
 	@media (max-width: $size) {
 		@content;
@@ -88,12 +116,16 @@
 // Min-width media query.
 @mixin media-min($size) {
 	@if type-of($size) == "number" {
-		$size: toRems($size);
+		@if unit($size) != "rem" {
+			$size: toRems($size);
+		}
 	} @else {
 		$size: toRems(map-get($break-points, $size));
 	}
 	
-	$size: mqRemToEm($size);
+	@if unit($size) == "rem" {
+		$size: mqRemToEm($size);
+	}
 	
 	@media (min-width: $size) {
 		@content;
@@ -103,23 +135,32 @@
 // Create a media query that matches the inner range of two values.
 @mixin media-range($small, $large) {
 	@if type-of($small) == "number" {
-		$small: toRems($small);
+		@if unit($small) != "rem" {
+			$small: toRems($small);
+		}
 	} @else {
 		$small: toRems(map-get($break-points, $small));
 	}
 	@if type-of($large) == "number" {
-		$large: toRems($large);
+		@if unit($large) != "rem" {
+			$large: toRems($large);
+		}
 	} @else {
 		$large: toRems(map-get($break-points, $large));
 	}
+	
 	@if $small > $large {
 		$tmp_small: $small;
 		$small: $large;
 		$large: $tmp_small;
 	}
 	
-	$small: mqRemToEm($small);
-	$large: mqRemToEm($large);
+	@if unit($small) == "rem" {
+		$small: mqRemToEm($small);
+	}
+	@if unit($large) == "rem" {
+		$large: mqRemToEm($large);
+	}
 	
 	@media (min-width: $small) and (max-width: $large) {
 		@content;
@@ -129,47 +170,157 @@
 // Create a media query that matches the outer range of two values.
 @mixin media-range-outer($small, $large) {
 	@if type-of($small) == "number" {
-		$small: toRems($small);
+		@if unit($small) != "rem" {
+			$small: toRems($small);
+		}
 	} @else {
 		$small: toRems(map-get($break-points, $small));
 	}
 	@if type-of($large) == "number" {
-		$large: toRems($large);
+		@if unit($large) != "rem" {
+			$large: toRems($large);
+		}
 	} @else {
 		$large: toRems(map-get($break-points, $large));
 	}
-	
-	$small: mqRemToEm($small);
-	$large: mqRemToEm($large);
 	
 	@if $small > $large {
 		$tmp_small: $small;
 		$small: $large;
 		$large: $tmp_small;
 	}
+	
+	@if unit($small) == "rem" {
+		$small: mqRemToEm($small);
+	}
+	@if unit($large) == "rem" {
+		$large: mqRemToEm($large);
+	}	
+	
 	@media (max-width: $small), (min-width: $large) {
 		@content;
 	}
 }
 
-// DO NOT USE THIS MIXIN.  INTERNAL USE ONLY!
-@mixin private-media-guess($small, $large) {
-	@if $small != "" and $large != "" {
-		@if map-get($break-points, $small) > map-get($break-points, $large) {
-			$tmp_small: $small;
-			$small: $large;
-			$large: $tmp_small;
+
+
+// *****************************
+// *                           *
+// * DRY'ING OUT CSS           *
+// *                           *
+// *****************************
+
+// Make an unordered list into a dropdown.
+// Options are: 
+// * fade: add support for dropdowns that fade in on hover.
+// * fit: make the dropdown take up 100% width and evenly distribute between lis.
+@mixin dropdown($options: ()) {
+	@include unlist;
+	
+	@if index($options, "fit") {
+		display: table;
+		table-layout: fixed;
+		width: 100%;
+	} @else {
+		display: block;
+	}
+	
+	white-space: nowrap;
+	
+	> li {
+		@if index($options, "fit") {
+			display: table-cell;
+		} @else {
+			display: inline;
 		}
-		@include media-range($small, $large) {
-			@content;
-		}
-	} @else if $large == "" {
-		@include media-max($small) {
-			@content;
-		}
-	} @else if $small == "" {
-		@include media-min($large) {
-			@content;
+		
+		> a {
+			display: inline-block;
 		}
 	}
+	
+	li {
+		position: relative;
+		
+		ul {
+			display: block;
+			position: absolute;
+			visibility: hidden;
+			
+			@if index($options, "fade") {
+				opacity: 0;
+				-webkit-transition: visibility 0s .5s, opacity .25s ease-in .25s;
+				-moz-transition: visibility 0s .5s, opacity .25s ease-in .25s;
+				-ms-transition: visibility 0s .5s, opacity .25s ease-in .25s;
+				transition: visibility 0s .5s, opacity .25s ease-in .25s;
+			}
+			
+			li,
+			a {
+				display: block;
+			}
+			
+			li > ul,
+			li:hover > ul,
+			li.target > ul {
+				left: 100%;
+				top: 0;
+			}
+		}
+		
+		&:hover > ul,
+		&.target > ul {
+			visibility: visible;
+			
+			@if index($options, "fade") {
+				opacity: 1;
+				-webkit-transition: visibility 0s 0s, opacity .25s ease-out 0s;
+				-moz-transition: visibility 0s 0s, opacity .25s ease-out 0s;
+				-ms-transition: visibility 0s 0s, opacity .25s ease-out 0s;
+				transition: visibility 0s 0s, opacity .25s ease-out 0s;
+			}
+		}
+	}
+}
+
+// Hide for visual browsers.
+@mixin frontload {
+	border: 0px !important;
+	box-shadow: none !important;
+	clip: auto !important;
+	height: 0px  !important;
+	overflow: hidden !important;
+	position: absolute !important;
+	width: 0px !important;
+}
+
+// Set up for an image replacement.
+@mixin image-replace {
+	clip: auto;
+	overflow: hidden;
+	position: relative;
+	text-indent: 110%;
+	white-space: nowrap;
+}
+
+// The ugly way to clearfix.
+// You should ask yourself why overflow: hidden or 
+// overflow: auto isn't working for you.
+@mixin ugly-clearfix {
+	&:before {
+		content: '';
+		display: table;
+	}
+	
+	&:after {
+		clear: both;
+		content: '';
+		display: table;
+	}
+}
+
+// Make a list not-a-list
+@mixin unlist {
+	list-style: none;
+	padding: 0;
 }

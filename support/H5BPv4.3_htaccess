@@ -7,6 +7,47 @@
 # to the main server config file (usually called `httpd.conf`), you should add
 # this logic there: http://httpd.apache.org/docs/current/howto/htaccess.html.
 
+# XML RPC has been insecure in the past.  Turn this off if you dare.
+<Files xmlrpc.php>
+  Order allow,deny
+  Deny from all
+</files>
+
+# ##############################################################################
+# # Security via 5G Blacklist                                                  #
+# ##############################################################################
+
+# http://perishablepress.com/5g-blacklist-2013/
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase /
+	RewriteCond %{QUERY_STRING} (\"|%22).*(<|>|%3) [NC,OR]
+	RewriteCond %{QUERY_STRING} (javascript:).*(\;) [NC,OR]
+	RewriteCond %{QUERY_STRING} (<|%3C).*script.*(>|%3) [NC,OR]
+	RewriteCond %{QUERY_STRING} (\\|\.\./|`|=\'$|=%27$) [NC,OR]
+	RewriteCond %{QUERY_STRING} (\;|\'|\"|%22).*(union|select|insert|drop|update|md5|benchmark|or|and|if) [NC,OR]
+	RewriteCond %{QUERY_STRING} (base64_encode|localhost|mosconfig) [NC,OR]
+	RewriteCond %{QUERY_STRING} (boot\.ini|echo.*kae|etc/passwd) [NC,OR]
+	RewriteCond %{QUERY_STRING} (GLOBALS|REQUEST)(=|\[|%) [NC]
+	RewriteRule .* - [F]
+</IfModule>
+
+<IfModule mod_setenvif.c>
+	# SetEnvIfNoCase User-Agent ^$ keep_out
+	SetEnvIfNoCase User-Agent (binlar|casper|cmsworldmap|comodo|diavol|dotbot|feedfinder|flicky|ia_archiver|jakarta|kmccrew|nutch|planetwork|purebot|pycurl|skygrid|sucker|turnit|vikspider|zmeu) keep_out
+	<limit GET POST PUT>
+		Order Allow,Deny
+		Allow from all
+		Deny from env=keep_out
+	</limit>
+</IfModule>
+
+<ifModule mod_rewrite.c>
+	RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
+	RewriteRule .* - [F]
+</IfModule>
+
 # ##############################################################################
 # # CROSS-ORIGIN RESOURCE SHARING (CORS)                                       #
 # ##############################################################################
@@ -48,8 +89,9 @@
 # Allow access from all domains for web fonts
 
 <IfModule mod_headers.c>
-    <FilesMatch "\.(eot|font.css|otf|ttc|ttf|woff)$">
+    <FilesMatch "\.(eot|font.css|otf|ttc|ttf|woff|woff2)$">
         Header set Access-Control-Allow-Origin "*"
+        Header set Cache-Control: public
     </FilesMatch>
 </IfModule>
 
@@ -246,6 +288,18 @@ AddDefaultCharset utf-8
     RewriteRule "(^|/)\." - [F]
 </IfModule>
 
+# Block access to WordPress core files.
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase /
+	RewriteRule ^wp-admin/includes/ - [F,L]
+	RewriteRule !^wp-includes/ - [S=3]
+	RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
+	RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
+	RewriteRule ^wp-includes/theme-compat/ - [F,L]
+</IfModule>
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Block access to backup and source files.
@@ -257,6 +311,26 @@ AddDefaultCharset utf-8
     Deny from all
     Satisfy All
 </FilesMatch>
+<files wp-config.php>
+	Order deny,allow
+	Deny from all
+</files>
+<files readme.html>
+	Order allow,deny
+	Deny from all
+</files>
+<files license.txt>
+	Order allow,deny
+	Deny from all
+</files>
+<files install.php>
+	Order allow,deny
+	Deny from all
+</files>
+<files error_log>
+	Order allow,deny
+	Deny from all
+</files>
 
 # ------------------------------------------------------------------------------
 # | Secure Sockets Layer (SSL)                                                 |

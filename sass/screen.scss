@@ -1,11 +1,8 @@
-@import "compass";			// Compass.
 @import "variables";		// Custom variables.
 @import "mixins";			// Custom mixins.
-@import "extend";			// Things to extend.
+@import "reset";			// Reset with user-configured baseline grid.
 @import "grid";				// Generate the grid.
 @import "objects";			// OOCSS stuff. Generates vertical grids from variables.
-//@import "foundation";		// Foundation?
-@import "reset";			// Reset with user-configured baseline grid.
 @import "typography";		// Typography gets included in print and editor styles, too.
 
 // Most of your stuff should go here, except:
@@ -19,13 +16,9 @@
 // 
 // Notes:
 // 
-// * extend %frontload for easy browser hiding.
-// * extend %image-replace for easy text-replacement
+// * include frontload for easy browser hiding.
+// * include image-replace for easy text-replacement
 // * div.system-notification is a good element to create and put user notifications in.
-// * .row is a container of columns.
-// * .column-X is a column of width X where X is a percent in increments of 5 
-//   from 10 - 100, and the special widths 33 and 66.
-// * Use .push-X, .pull-X, and .offset-X where X behaves as it does in .column-X.
 // * @include rem(attribute, pixel_val) and @include toRems(pixel_val) creates rem 
 //   units from pixels. Rems are created from settings in _variables.scss.
 // * Use variables $root-font-px to set the html's font-size as a percent of the 
@@ -36,5 +29,7 @@
 // * Use variables $column-master-outer-width and $column-master-gutter-width to define
 //   the correct percentages based on the desired gutter width at the desired contaienr
 //   width.
+
+@import "wireframe";		// Some basic classes to do stuff.  Remove when you're ready to develop.
 
 @import 'ie';				// IE8/9 Tweaks.  See file for details on how to do it.

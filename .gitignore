@@ -1,7 +1,6 @@
 .DS_Store
-css/
-js/*-min.js
-js/*-min.map
 codekit-config.json
+config.codekit
 .sass-cache
 README.html
+

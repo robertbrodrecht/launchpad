@@ -9,6 +9,7 @@
  * @since		1.0
  */
 
-get_header();	
-launchpad_get_template_part('content', get_post_type());
+get_header();
+$content_type = launchpad_determine_best_template_file($post);
+launchpad_get_template_part('content', $content_type);
 get_footer();

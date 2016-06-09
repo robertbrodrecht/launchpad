@@ -6,33 +6,48 @@
  * 
  * @package 	Launchpad
  * @since		1.0
- * @todo		Determine where to trigger custom actions.  http://archive.extralogical.net/2007/06/wphooks/
- * @todo		Add custom fields array to post types in custom.
- * @todo		TEST THIS: Add a function for: file_get_contents_cache($url, $cache_timeout);
  */
 
 global $site_options;
 
-$site_options = get_option('launchpad_site_options', '');
+$site_options = array();
 
-/** YOUR FUNCTIONS GO HERE.  */
-locate_template('functions-custom.php', true, true);
-
+/** YOUR FUNCTIONS GO IN HERE.  */
+locate_template('lib/custom/custom.php', true, true);
 
 
 /** System functions like theme activation, rewrites, etc. */
-locate_template('functions/system.php', true, true);
+locate_template('lib/core/system.php', true, true);
+/** Code that manipulates the .htaccess file. */
+locate_template('lib/core/htaccess.php', true, true);
 /** Modifications to the admin area like options pages and admin cleanup. */
-locate_template('functions/admin.php', true, true);
+locate_template('lib/core/admin.php', true, true);
+/** Handle metaboxes and metabox forms. */
+locate_template('lib/core/metaboxes.php', true, true);
+/** SEO related stuff that isn't part of the template tags. */
+locate_template('lib/core/seo.php', true, true);
 /** Security related features like limit login attempts. */
-locate_template('functions/security.php', true, true);
-/** Post Type related code for registering and creating metaboxes.  */
-locate_template('functions/post-types.php', true, true);
-/** Code for custom API calls.  */
-locate_template('functions/api.php', true, true);
+locate_template('lib/core/security.php', true, true);
+/** Post Type related code for registering and creating metaboxes. */
+locate_template('lib/core/post-types.php', true, true);
+/** Cache-related functions. */
+locate_template('lib/core/cache.php', true, true);
 /** Template related modifications such as nav menu registration, header cleanup, page cache, etc.  */
-locate_template('functions/template.php', true, true);
-/** Cache-related functions.  */
-locate_template('functions/cache.php', true, true);
-/** Custom functions for handling various duties.  */
-locate_template('functions/utilities.php', true, true);
+locate_template('lib/core/template.php', true, true);
+/** Custom functions for handling various duties. */
+locate_template('lib/core/utilities.php', true, true);
+/** Code for custom API calls. */
+locate_template('lib/core/api.php', true, true);
+/** Code for tools like regen thumbnails. */
+locate_template('lib/core/tools.php', true, true);
+
+$launchpad_options = launchpad_get_setting_fields();
+
+// Loop all the settings and add support for them.
+foreach($launchpad_options as $page_id => $page_details) {
+	foreach($page_details['sections'] as $section_id => $section_details) {
+		foreach($section_details['fields'] as $launchpad_option_id => $launchpad_option_details) {
+			$site_options[$launchpad_option_id] = get_option($launchpad_option_id, '');
+		}
+	}
+}

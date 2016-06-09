@@ -25,10 +25,10 @@
 }
 
 *, *:before, *:after {
-	-moz-box-sizing: border-box; 
 	box-sizing: border-box;
 }
 
+/*
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -41,74 +41,105 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video 
+*/
+
+* {
 	border: 0;
-	font: inherit;
-	font-size: 100%;
 	margin: 0;
 	padding: 0;
 	vertical-align: baseline;
+}
+
+* + * {
+	@include rem('margin', $body-line-height-px 0 0 0);
+	
+	body > &,
+	header &,
+	nav & {
+		margin: 0;
+	}
 }
 
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 audio,
 canvas,
 video {
     display: inline-block;
 }
+
 audio:not([controls]) {
     display: none;
     height: 0;
 }
+
 [hidden] {
     display: none;
 }
+
 html {
-    font-family: sans-serif;
+    font-family: $font-copy;
 	font-size: rootRemPercent($root-font-px);
+	text-size-adjust: none;
 }
+
 body {
-	line-height: 1;
-	-webkit-font-feature-settings: "kern" "liga";
-	-moz-font-feature-settings: "kern" "liga";
-	-ms-font-feature-settings: "kern" "liga";
+	background: #FFF;
+	color: #333;
+	@include rem('line-height', $body-line-height-px);
+	@include rem('font-size', $body-font-size-px);
 	font-feature-settings: "kern" "liga";
-	text-rendering: optimizeLegibility;
-    -webkit-text-size-adjust: none;
-    -moz-text-size-adjust: none;
-    -ms-text-size-adjust: none;
-    text-size-adjust: none;
+	//text-rendering: optimizeLegibility;
 }
+
 a:focus {
     outline: thin dotted;
 }
+
 a:active,
 a:hover {
     outline: 0;
 }
-ol, ul {
-	list-style: none;
-}
-blockquote {
-	quotes: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-// Normalize.
 
 abbr[title] {
     border-bottom: 1px dotted;
 }
 
+blockquote {
+	quotes: none;
+}
+
+ol, ul, blockquote {
+	padding-left: 2em;
+}
+
+ol {
+	list-style-type: decimal;
+}
+
+ul {
+	list-style-type: circle;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+
 b,
-strong {
-    font-weight: 700;
+strong,
+th {
+	font-weight: 700;
+}
+
+th, td {
+	text-align: left;
+	vertical-align: top;
 }
 
 i,
@@ -128,11 +159,19 @@ mark {
     color: #000;
 }
 
+ins {
+	text-decoration: none;
+}
+
+del {
+	text-decoration: line-through;
+}
+
 code,
 kbd,
 pre,
 samp {
-    font-family: monospace, serif;
+    font-family: $font-mono;
     font-size: 1em;
 }
 
@@ -169,6 +208,11 @@ img {
     border: 0;
 }
 
+.main img {
+	height: auto;
+	max-width: 100%;
+}
+
 svg:not(:root) {
     overflow: hidden;
 }
@@ -176,7 +220,6 @@ svg:not(:root) {
 fieldset {
     border: 1px solid #c0c0c0;
     padding: .5em;
-	@include rem('margin-bottom', $body-line-height-px);
 }
 
 legend {
@@ -195,7 +238,9 @@ textarea {
 
 button,
 input {
+	border: 1px solid #CCC;
     line-height: normal;
+	padding: .5em 1em;
 }
 
 button,
@@ -244,157 +289,4 @@ input::-moz-focus-inner {
 textarea {
     overflow: auto;
     vertical-align: top;
-}
-
-// Set sane defaults.
-
-body {
-	background: #FFF;
-	color: #333;
-	@include rem('line-height', $body-line-height-px);
-	@include rem('font-size', $body-font-size-px);
-	-webkit-font-smoothing: antialiased;
-	-moz-font-smoothing: antialiased;
-	-ms-font-smoothing: antialiased;
-	font-smoothing: antialiased;
-	-webkit-text-size-adjust: none;
-	-moz-text-size-adjust: none;
-	-ms-text-size-adjust: none;
-	text-size-adjust: none;
-}
-
-form, table, ul, ol, p {
-	@include rem('margin-bottom', $body-line-height-px);
-}
-
-ol, ul, blockquote {
-	padding-left: 2em;
-}
-
-ol {
-	list-style-type: decimal;
-}
-
-ul {
-	list-style-type: circle;
-}
-
-table {
-	width: 100%;
-}
-
-th {
-	font-weight: 700;
-}
-
-th, td {
-	text-align: left;
-	vertical-align: top;
-}
-
-h1, h2, h3, h4, h5, h6 {
-	font-weight: normal;
-	text-transform: uppercase;
-}
-
-ins {
-	text-decoration: none;
-}
-
-del {
-	text-decoration: line-through;
-}
-
-body > header h1 {
-	margin: 0;
-}
-
-nav ul {
-	list-style:none;
-	margin-bottom: 0;
-	padding: 0;
-}
-
-.grid-item {
-	background: rgba(0, 0, 255, .25);
-	position: absolute;
-	z-index: 201;
-}
-
-.grid-item:nth-child(even) {
-	background: rgba(0, 0, 255, .1);
-}
-
-.grid-item.vertical {
-	height: 100%;
-	top: 0;
-	width: 1px; 
-}
-
-.grid-item.horizontal {
-	height: 1px;
-	left: 0;
-	width: 100%;
-}
-
-.frontload {
-	@extend %frontload;
-}
-
-.admin-bar {
-	margin-top: 28px;
-}
-
-#apple-standalone-startup-image {
-	background-size: cover;
-	bottom: 0;
-	left: 0;
-	position: fixed;
-	right: 0;
-	top: 0;
-	
-	img {
-		display: block;
-		width: 100%;
-	}
-}
-
-
-#skip-to-content {
-	@include rem('padding', 5px 20px);
-	
-	background: #FFF;
-	display: inline-block;
-	left: 0;
-	line-height: 1.5;
-	position: absolute;
-	top: 0;
-	-webkit-transition: all .25s ease-in;
-	-moz-transition: all .25s ease-in;
-	transition: all .25s ease-in;
-	-webkit-transform: translateY(-100%);
-	-moz-transform: translateY(-100%);
-	-ms-transform: translateY(-100%);
-	transform: translateY(-100%);
-	z-index: 100;
-}
-
-#skip-to-content:focus,
-#skip-to-content:active {
-	-webkit-transition: all .25s ease-out;
-	-moz-transition: all .25s ease-out;
-	transition: all .25s ease-out;
-	-webkit-transform: translateY(0);
-	-moz-transform: translateY(0);
-	-ms-transform: translateY(0);
-	transform: translateY(0);
-}
-
-.msie-8 ~ #skip-to-content {
-	top: -100%;
-	
-	&:focus,
-	&:active {
-		top: 0;
-	}
 }

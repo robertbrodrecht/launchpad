@@ -1,9 +1,9 @@
 @import "variables";
 @import "mixins";
-@import "extend";
 @import "reset";
 @import "typography";
 
+#skip-to-content,
 #header,
 #footer,
 #navigation,
@@ -17,5 +17,12 @@ a {
 }
 
 a:after {
-	content: " <" attr(href) ">";
+	color: #EEE;
+	content: " [" attr(href) "]";
+}
+
+h1, h2, h3, h4 {
+	a:after {
+		display: none;
+	}
 }
