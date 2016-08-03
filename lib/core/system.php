@@ -368,14 +368,16 @@ function launchpad_handle_uploaded_files($meta) {
 		return;
 	}
 	
-	$file = wp_upload_dir($meta['file']);
-	$orig_file_name = pathinfo($meta['file'], PATHINFO_BASENAME);
-	
-	$upload_folder = $file['path'] . '/';
-	@launchpad_compress_image($upload_folder . $orig_file_name);
-	if(isset($meta['sizes'])) {
-		foreach($meta['sizes'] as $size) {
-			@launchpad_compress_image($upload_folder . $size['file']);
+	if(isset($meta['file'])) {
+		$file = wp_upload_dir($meta['file']);
+		$orig_file_name = pathinfo($meta['file'], PATHINFO_BASENAME);
+		
+		$upload_folder = $file['path'] . '/';
+		@launchpad_compress_image($upload_folder . $orig_file_name);
+		if(isset($meta['sizes'])) {
+			foreach($meta['sizes'] as $size) {
+				@launchpad_compress_image($upload_folder . $size['file']);
+			}
 		}
 	}
 	

@@ -206,6 +206,8 @@ function launchpad_pdf_handler() {
 		exit;
 	}
 	
+	$_GET['mpdf'] = true;
+	
 	$file = get_bloginfo('wpurl') . '/' . $file . '/?' . http_build_query($_GET);
 	
 	include $_SERVER['DOCUMENT_ROOT'] . THEME_PATH . '/lib/third-party/mpdf/mpdf.php';

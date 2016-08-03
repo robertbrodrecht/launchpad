@@ -29,8 +29,10 @@ $excerpt = launchpad_seo_excerpt();
 	<body <?php body_class('no-js'); ?><?= $add_this_id ? ' data-addthis="' . $add_this_id . '"' : '' ?>>
 		<script>document.body.className = document.body.className.replace(/no-js/g, 'js');</script>
 		<!--[if IE 9]><span class="msie-9"></span><![endif]-->
+		<?php if(!isset($_GET['mpdf'])) { ?>
 		<input type="checkbox" id="mobile-nav-toggle" class="ui-toggle">
 		<a href="#main" id="skip-to-content">Skip to Content</a>
+		<?php } ?>
 		<header id="header" role="banner">
 			<h1 id="logo"><a href="/"><?php bloginfo('name') ?></a></h1>
 		</header>

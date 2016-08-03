@@ -315,7 +315,7 @@ function launchpad_title($echo = false) {
 		// If not, just fall through to the rest.
 		if(isset($seo['title']) && trim($seo['title'])) {
 			$title = trim($seo['title']);
-			$title = htmlentities($title, ENT_QUOTES);
+			$title = $title;
 			
 			if($echo) {
 				echo $title;
@@ -344,7 +344,7 @@ function launchpad_title($echo = false) {
 	
 	// Apply filters to allow the developer to change it.
 	$title = apply_filters('launchpad_title', $title);
-	$title = htmlentities($title, ENT_QUOTES);
+	$title = $title;
 	
 	$title = trim($title);
 	
