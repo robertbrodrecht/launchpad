@@ -125,92 +125,61 @@ function launchpad_add_head_modifications() {
 		
 		?>
 		<?php if(isset($site_options['fb_app_id']) && $site_options['fb_app_id']) { ?>
-		
-		<meta property="fb:app_id" content="<?php echo $site_options['fb_app_id'] ?>">
+			<meta property="fb:app_id" content="<?php echo $site_options['fb_app_id'] ?>">
 		<?php } ?>
 		<?php if(isset($site_options['fb_admin_id']) && $site_options['fb_admin_id']) { ?>
-		<?php foreach(explode(',', $site_options['fb_admin_id']) as $fb_admin_id) { ?>
-		
-		<meta property="fb:admins" content="<?php echo trim($fb_admin_id) ?>">
+			<?php foreach(explode(',', $site_options['fb_admin_id']) as $fb_admin_id) { ?>
+				<meta property="fb:admins" content="<?php echo trim($fb_admin_id) ?>">
+			<?php } ?>
 		<?php } ?>
-		<?php } ?>
-		
 		<?php
-		
-		$card_type = 'website';
-		if(is_single() || is_singular()) {
-			$card_type = 'article';
-		}
-		
-		?>
-		
-		<meta property="og:title" content="<?php launchpad_title(true); ?>">
-		<meta property="og:description" content="<?php echo $excerpt; ?>">
-		<meta property="og:type" content="<?php echo $card_type ?>">
-		<meta property="og:url" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
-		<meta property="og:site_name" content="<?php bloginfo('name') ?>">
-		<?php
-		
-		if(has_post_thumbnail()) {
-			$thumbnail = get_post_thumbnail_id();
-			$thumbnail = wp_get_attachment_image_src($thumbnail, 'opengraph');
-			if($thumbnail) {
-				?>
-				
-		<meta property="og:image" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php echo $thumbnail[0] ?>">
-		<meta property="og:image:width" content="<?php echo $thumbnail[1] ?>">
-		<meta property="og:image:height" content="<?php echo $thumbnail[2] ?>">
-				<?php
+			// Setting up Card names for Twitter & Facebook along with OG Meta
+			$f_card_type = 'website';
+			$t_card_type = 'summary';
+			if(is_single() || is_singular()) {
+				$f_card_type = 'article';
 			}
-		}
-		
-		?>
-	
-		<?php
-		
-		$card_type = 'summary';
-		if((is_single() || is_singular()) && has_post_thumbnail()) {
-			$card_type = 'summary_with_large_image';
-		}
-		
-		?>
-	
-		<meta property="twitter:card" content="<?php echo $card_type ?>">
-		<meta property="twitter:url" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
-		<meta property="twitter:title" content="<?php launchpad_title(true); ?>">
-		<meta property="twitter:description" content="<?php echo $excerpt; ?>">
-		<?php
-		
-		if(has_post_thumbnail()) {
-			$thumbnail = get_post_thumbnail_id();
-			$thumbnail = wp_get_attachment_image_src($thumbnail, 'large'); // Large to hopefully stay under 1MB.
-			if($thumbnail) {
-				?>
-	
-		<meta property="twitter:image" content="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php echo $thumbnail[0] ?>">
-		<meta property="twitter:image:width" content="<?php echo $thumbnail[1] ?>">
-		<meta property="twitter:image:height" content="<?php echo $thumbnail[2] ?>">
-				<?php
+			if((is_single() || is_singular()) && has_post_thumbnail()) {
+				$t_card_type = 'summary_with_large_image';
 			}
-		}
-		
 		?>
-		<?php if(isset($site_options['twitter_card_username']) && $site_options['twitter_card_username']) { ?>
-		
-		<meta property="twitter:site" content="@<?php echo $site_options['twitter_card_username'] ?>">
-		<?php } ?>
-	
+			<meta name="twitter:card" content="<?= $t_card_type ?>">
+			<meta property="og:type" content="<?= $f_card_type ?>">
+			<?php if(isset($site_options['twitter_card_username']) && $site_options['twitter_card_username']) { ?>
+				<meta name="twitter:site" content="@<?= $site_options['twitter_card_username'] ?>">
+				<meta name="twitter:creator" content="@<?= $site_options['twitter_card_username'] ?>">
+			<?php } ?>
+			<meta property="og:site_name" content="<?php bloginfo('name') ?>">
+			<meta name="twitter:title" property="og:title" content="<?php launchpad_title(true); ?>">
+			<meta name="twitter:description" property="og:description" content="<?= $excerpt; ?>">
+			<meta name="twitter:url" property="og:url" content="http://<?= $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
+		<?php
+			if(has_post_thumbnail()) {
+				$thumbnail = get_post_thumbnail_id();
+				if(!$thumbnail){
+					// Default OG Image Fallback
+					$thumbnail = $site_options['default_og_image'];
+				}
+				$thumbnail = wp_get_attachment_image_src($thumbnail, 'opengraph');
+				if($thumbnail) {
+					?>
+					<meta property="og:image" content="http://<?= $_SERVER['HTTP_HOST'] ?><?= $thumbnail[0] ?>">
+					<meta property="og:image:width" content="<?= $thumbnail[1] ?>">
+					<meta property="og:image:height" content="<?= $thumbnail[2] ?>">
+					<?php
+				}
+			}
+		?>
 		<?php if(defined('GA_ID') && GA_ID != '') { ?>
-	
-		<script id="google-analytics">
-		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-		
-		  ga('create', '<?php echo GA_ID ?>', 'auto');
-		  ga('send', 'pageview');
-		</script>
+			<script id="google-analytics">
+				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+				
+				ga('create', '<?php echo GA_ID ?>', 'auto');
+				ga('send', 'pageview');
+			</script>
 		<?php 
 		
 		}
@@ -595,7 +564,7 @@ function launchpad_register_widget() {
 		array(
 			'name' => 'Blog Sidebar',
 			'id' => 'blog_sidebar',
-			'before_widget' => '<section id="flexible-widget">',
+			'before_widget' => '<section class="flexible-widget">',
 			'after_widget' => '</section>',
 			'before_title' => '<h1>',
 			'after_title' => '</h1>',
