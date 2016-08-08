@@ -377,7 +377,7 @@ function launchpad_excerpt($max_words = 32, $echo = false, $id = false) {
 	
 	// Apply filters to allow the developer to change it.
 	$excerpt = apply_filters('launchpad_excerpt', $excerpt);
-	$excerpt = htmlentities($excerpt, ENT_QUOTES);
+	//$excerpt = htmlentities($excerpt, ENT_QUOTES);
 	
 	if($echo) {
 		echo $excerpt;
