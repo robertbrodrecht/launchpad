@@ -406,13 +406,19 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
  */
 function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '', $args = array(), $val = false) {
 	// Output a WYSIWYG editor.  Just the base code.
-	$field_media_bitton = (!$args['media_button'] && isset($args['media_button']))?false:true;
+	if(!isset($args['media_button']) {
+		$args['media_button'] = false;
+	} else if($args['media_button'] == true) {
+		$args['media_button'] = true;
+	} else {
+		$args['media_button'] = false;
+	}
 	wp_editor(
 			$val, 
 			$field_output_id,
 			array(
 				'wpautop' => true,
-				'media_buttons' => $field_media_button,
+				'media_buttons' => $args['media_button'],
 				'textarea_name' => $field_output_name,
 				'textarea_rows' => 10,
 				'tinymce' => true,
