@@ -406,7 +406,7 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
  */
 function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '', $args = array(), $val = false) {
 	// Output a WYSIWYG editor.  Just the base code.
-	if(!isset($args['media_button']) {
+	if(!isset($args['media_button'])) {
 		$args['media_button'] = false;
 	} else if($args['media_button'] == true) {
 		$args['media_button'] = true;
