@@ -364,7 +364,7 @@ jQuery(document).ready(
 					config	= {
 						title: 'Upload File',
 						button: {
-							text: 'Add File'
+							text: 'Add File',
 						},
 						multiple: false  // Set this to true to allow multiple files to be selected
 					},
@@ -385,11 +385,10 @@ jQuery(document).ready(
 								update.attr('value', attachment.id);
 								
 								remove_link = $('<a href="#" class="launchpad-delete-file" data-for="' + me.data('for') + '" onclick="document.getElementById(this.getAttribute(\'data-for\')).value=\'\'; this.parentNode.removeChild(this); return false;"><img src="' + (attachment.sizes && attachment.sizes.thumbnail ?  attachment.sizes.thumbnail.url :  attachment.icon) + '"></a>');
-								
 								if(delete_link.length) {
 									delete_link.replaceWith(remove_link);
 								} else {
-									update.parent().append(remove_link);
+									update.parent().find('label').after(remove_link);
 								}
 							} else {
 								alert('There was a problem attaching the media.  Please contact your developer.');
