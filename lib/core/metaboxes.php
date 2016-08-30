@@ -121,12 +121,9 @@ function launchpad_render_field_checkbox($field_output_name, $field_output_id = 
 	// the empty value in the querystring array.
 	echo '<input type="hidden" name="' . $field_output_name . '" value="" data-default="' . htmlentities($args['default']) . '">';
 	if($subfield) {
-		echo '<label class="' . $class . '">';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">';
 	}
 	echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . '>';
-	if($subfield) {
-		echo ' ' . $subfield . '</label>';
-	}
 }
 
 
@@ -155,7 +152,7 @@ function launchpad_render_field_generic($field_output_name, $field_output_id = '
 	
 	// Text is pretty simple.  Just output the field.
 	if($subfield) {
-		echo '<label class="' . $class . '">' . $subfield . ' ';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
 	
 	if($val) {
@@ -175,11 +172,8 @@ function launchpad_render_field_generic($field_output_name, $field_output_id = '
 		$args['type'] = 'text';
 		$add_class .= ' launchpad-date-picker';
 	}
-	
+
 	echo '<input type="' . $args['type'] . '" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . htmlentities($val) . '" class="regular-text' . $add_class . '"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
-	if($subfield) {
-		echo '</label>';
-	}
 }
 
 
@@ -208,12 +202,9 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	
 	// Text is pretty simple.  Just output the field.
 	if($subfield) {
-		echo '<label class="' . $class . '">' . $subfield . ' ';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
 	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . ($val ? htmlentities($val) : '') . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
-	if($subfield) {
-		echo '</label>';
-	}
 }
 
 
@@ -242,12 +233,39 @@ function launchpad_render_field_textarea($field_output_name, $field_output_id = 
 	
 	// Textarea is pretty simple.  Just output the field.
 	if($subfield) {
-		echo '<label class="' . $class . '">' . $subfield . ' ';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '<label>';
 	}
 	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : ''). (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">' . html_entity_decode($val) . '</textarea>';
-	if($subfield) {
-		echo '</label>';
+}
+
+/**
+ * Render A Code Textarea
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $field_output_id The field's "id" attribute.
+ * @param		array $args The arguments on the field
+ * @param		bool $val Whether the checkbox is checked.
+ * @param		string $class A class to use on the label if this is a subfield.
+ * @param		bool|string $subfield If truthy, creates a label with $subfield as the text.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_code($field_output_name, $field_output_id = '', $args = array(), $val = false, $class = '', $subfield = false) {
+	$field_output_name = trim($field_output_name);
+	$field_output_id = trim($field_output_id);
+	if(!$field_output_name) {
+		return;
 	}
+	
+	if(!$field_output_id) {
+		$field_output_id = $field_output_name;
+	}
+	
+	// Textarea is pretty simple.  Just output the field.
+	if($subfield) {
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '<label>';
+	}
+	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="2" cols="5" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : ''). (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">' . html_entity_decode($val) . '</textarea>';
 }
 
 
@@ -277,7 +295,7 @@ function launchpad_render_field_select($field_output_name, $field_output_id = ''
 	
 	// Output a select and pass options to launchpad_create_select_options()
 	if($subfield) {
-		echo '<label class="' . $class . '">' . $subfield . ' ';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
 	
 	// Create the select.
@@ -285,9 +303,6 @@ function launchpad_render_field_select($field_output_name, $field_output_id = ''
 	echo '<option value="">Select One</option>';
 	echo launchpad_create_select_options($options, $val);
 	echo '</select>';
-	if($subfield) {
-		echo '</label>';
-	}
 }
 
 
@@ -317,7 +332,7 @@ function launchpad_render_field_selectmulti($field_output_name, $field_output_id
 	
 	// Output a select and pass options to launchpad_create_select_options()
 	if($subfield) {
-		echo '<label class="' . $class . '">' . $subfield . ' ';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</labe>';
 	}
 	
 	// The empty hidden field allows the user to actually select none.
@@ -327,9 +342,6 @@ function launchpad_render_field_selectmulti($field_output_name, $field_output_id
 	echo '<select name="' . $field_output_name . '[]" size="10" multiple="multiple" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
 	echo launchpad_create_select_options($options, $val);
 	echo '</select>';
-	if($subfield) {
-		echo '</label>';
-	}
 }
 
 
@@ -361,11 +373,15 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
 	// Add a hidden field with the ID.
 	// JavaScript will handle updating the hidden field when a photo is selected.
 	if($subfield) {
-		echo '<label class="' . $class . '">' . $subfield . ' ';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
+	}
+	
+	if(!isset($args['size'])){
+		$args['size'] = 'thumbnail';
 	}
 	
 	if((int) $val > 0) {
-		$img = wp_get_attachment_image((int) $val, 'thumbnail', true);
+		$img = wp_get_attachment_image((int) $val, $args['size'], true);
 		$existing = wp_get_attachment_metadata((int) $val);
 		
 		if(!$img && $existing) {
@@ -381,16 +397,13 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
 	}
 	
 	// The file ID is stored here.
-	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" ' . (array_key_exists('limit', $args) ? 'data-limit="' . html_entity_decode($args['limit']) . '"' : '') . ' class="file-button">Upload File</button>';
-	
+
 	// If there is an existing image, add a "remove" button.
 	if($existing) {
 		echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $field_output_id . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
 	}
-	
-	if($subfield) {
-		echo '</label>';
-	}
+		
+	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" ' . (array_key_exists('limit', $args) ? 'data-limit="' . html_entity_decode($args['limit']) . '"' : '') . ' class="file-button">Upload File</button>';
 }
 
 
@@ -406,25 +419,75 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
  */
 function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '', $args = array(), $val = false) {
 	// Output a WYSIWYG editor.  Just the base code.
-	if(!isset($args['media_button'])) {
-		$args['media_button'] = true;
-	} else if($args['media_button'] == false) {
-		$args['media_button'] = false;
-	} else {
-		$args['media_button'] = true;
+    if(!isset($args['media_button'])) {
+        $args['media_button'] = false;
+    } else if($args['media_button'] == true) {
+        $args['media_button'] = true;
+    } else {
+        $args['media_button'] = false;
+    }
+    
+    if(!isset($args['text_tab'])) {
+        $args['text_tab'] = true;
+    } else if($args['text_tab'] == false) {
+        $args['text_tab'] = false;
+    } else {
+        $args['text_tab'] = true;
+    }
+    
+	if($args['buttons'] == false) {
+		add_filter("mce_buttons", "extended_editor_mce_buttons", 0);
+		add_filter("mce_buttons_2", "extended_editor_mce_buttons_2", 0);
+    }
+    
+    wp_editor(
+            $val, 
+            $field_output_id,
+            array(
+                'wpautop' => true,
+                'media_buttons' => $args['media_button'],
+                'quicktags' => $args['text_tab'],
+                'textarea_name' => $field_output_name,
+                'textarea_rows' => 10,
+                'tinymce' => true,
+                'drag_drop_upload' => true
+            )
+        );
+}
+
+function extended_editor_mce_buttons($buttons) {
+
+	$remove = array(
+		"bold",
+		"italic",
+		"strikethrough",
+		"bullist",
+		"numlist",
+		"blockquote",
+		"hr",
+		"alignleft",
+		"aligncenter",
+		"alignright",
+		"link",
+		"unlink",
+		"separator",
+		"fullscreen",
+		"wp_more",
+		"wp_adv"
+	);
+	
+	foreach($remove as $r){
+		if ( ( $key = array_search( $r, $buttons ) ) !== false ){
+			unset( $buttons[$key] );
+		}
 	}
-	wp_editor(
-			$val, 
-			$field_output_id,
-			array(
-				'wpautop' => true,
-				'media_buttons' => $args['media_button'],
-				'textarea_name' => $field_output_name,
-				'textarea_rows' => 10,
-				'tinymce' => true,
-				'drag_drop_upload' => true
-			)
-		);
+ 
+    return $buttons;
+
+}
+function extended_editor_mce_buttons_2($buttons) {
+	// the second toolbar line
+	return array();
 }
 
 
@@ -454,7 +517,7 @@ function launchpad_render_field_menu($field_output_name, $field_output_id = '', 
 	// The menu field is essentially the same for select except we automagially pre-populate
 	// the select with the saved menus.
 	if($subfield) {
-		echo '<label class="' . $class . '">' . $subfield . ' ';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
 	
 	// Grab all nav menus.
@@ -471,9 +534,6 @@ function launchpad_render_field_menu($field_output_name, $field_output_id = '', 
 	echo '<option value="">Select One</option>';
 	echo launchpad_create_select_options($menu_list, $val);
 	echo '</select>';
-	if($subfield) {
-		echo '</label>';
-	}
 }
 
 
@@ -741,13 +801,13 @@ function launchpad_render_field_repeater($field_output_name, $subfields, $label,
 	
 	// Repeater container.  The JavaScript looks for this when handling button clicks.
 	echo '<div id="launchpad-' . $repeater_tmp_id . '-repeater" class="launchpad-repeater-container launchpad-metabox-field" name="' . $field_output_name . '">';
-	
+
 	// Loop all the subfields.
 	foreach($subfields as $counter => $sub_fields) {
 		// The repeater fields container.
 		echo '<div class="launchpad-flexible-metabox-container launchpad-repeater-metabox-container">'; 
 		// The "collapse field" handler.
-		echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><br></div>';
+		echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><span class="toggle-indicator"></span><br></div>';
 		// The remove button.
 		echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
 		// The name of the repeater.
@@ -986,6 +1046,9 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 		break;
 		case 'textarea':
 			launchpad_render_field_textarea($field_output_name, $field_output_id, $args, $val, $class, $subfield);
+		break;
+		case 'code':
+			launchpad_render_field_code($field_output_name, $field_output_id, $args, $val, $class, $subfield);
 		break;
 		case 'select':
 			launchpad_render_field_select(
@@ -1323,13 +1386,13 @@ function launchpad_meta_box_handler($post, $args) {
 				case 'relationship':
 				case 'repeater':
 				case 'taxonomy':
-				case 'wysiwyg':
+// 				case 'wysiwyg':
 				break;
 				default:
-					echo '<label>';
+					echo '<label for="'.$k.'">';
 				break;
 			}
-				
+	
 			$v['args']['name'] = $k;
 			
 			// If there is a set value, override the developer specified value (if any).
@@ -1345,6 +1408,19 @@ function launchpad_meta_box_handler($post, $args) {
 				echo $v['name']; 
 			}
 			
+			switch($v['args']['type']) {
+				case 'address':
+				case 'relationship':
+				case 'repeater':
+				case 'taxonomy':
+// 				case 'wysiwyg':
+				case 'checkbox':
+				break;
+				default:
+					echo '</label>';
+				break;
+			}
+			
 			// Render the form field.	
 			launchpad_render_form_field($v['args'], false, 'launchpad_meta'); 
 			
@@ -1354,14 +1430,10 @@ function launchpad_meta_box_handler($post, $args) {
 			}
 			
 			switch($v['args']['type']) {
-				case 'address':
-				case 'relationship':
-				case 'repeater':
-				case 'taxonomy':
-				case 'wysiwyg':
+				case 'checkbox':
+					echo '</label>';
 				break;
 				default:
-					echo '</label>';
 				break;
 			}
 			
@@ -1714,7 +1786,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	}
 	
 	// Output the sort handle and field name.
-	echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><br></div>';
+	echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><span class="toggle-indicator"></span></div>';
 	echo '<h3>' . $details['name'] . '</h3>';
 	
 	// Generate a unique ID for this flexible module to prevent collision.
