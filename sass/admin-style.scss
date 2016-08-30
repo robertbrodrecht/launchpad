@@ -1,5 +1,11 @@
 // This needs serious clean up.
 
+$white: #FFF;
+$lighter-grey: #FDFDFD;
+$light-grey: #EEEEEE;
+$med-grey: #DDDDDD;
+$dark-grey: #999999;
+
 body {
 	font-style: normal;
 }
@@ -9,10 +15,30 @@ body {
 }
 
 .launchpad-metabox-field {
+	box-sizing: border-box;
+	border-top: 1px solid $light-grey;
+	padding: 1em 0;
 	margin-bottom: 1em;
 	
+	&:last-of-type{
+		margin-bottom: 0;
+		padding-bottom: none;
+	}
+	
+	> .launchpad-metabox-field{
+		border-top: none;
+		border-bottom: none;
+		padding-top: 0;
+	}
+		
 	label {
 		display: block;
+		font-weight: bold;
+		input,
+		button,
+		.button{
+			font-weight: normal;
+		}
 	}
 
 	input[type=text],
@@ -22,14 +48,31 @@ body {
 	input[type=tel],
 	input[type=time],
 	input[type=url],
-	select,
 	textarea {
 		display: block;
+		font-weight: normal;
+		margin-top: 1em;
+		max-width: 50em;
+		padding: .5em .75em;
 		width: 100%;
 	}
 	
+	select{
+		margin-top: 1em;
+		width: 25em;
+	}
+	
 	textarea {
-		height: 12em;
+		max-width: none;
+		height: 16em;
+		&.code{
+			color: #82878c;
+			font:{
+				family: monospace, sans-serif;
+			}
+			height: 6em;
+			resize: none;
+		}
 	}
 	
 	textarea.small-text {
@@ -39,10 +82,15 @@ body {
 	label > small {
 		display: block;
 	}
+	
+	&[class*=col]{
+		width: 100%;
+	}
+
 }
 
 .launchpad-metabox-fieldset {
-	border: 1px solid #DDD;
+	border: 1px solid $light-grey;
 	clear: both;
 	margin-bottom: 1em;
 	padding: 1em 1em 0% 1em;
@@ -194,39 +242,63 @@ small.launchpad-inline {
 }
 
 .launchpad-delete-file {
-	background: #EFEFEF;
-	border: 1px solid silver;
+	background: $white;
+	border: 1px solid $light-grey;
 	display: block;
 	margin-top: .5em;
-	padding: 1em;
-	padding-top: 2em;
+	max-width: 150px;
+	padding: 10px;
 	position: relative;
 	text-align: center;
+	img{
+		line-height: 0;
+		margin-bottom: 0;
+		position: relative;
+		z-index: 2;
+	}
+	
+	&:before {
+		background: $white;
+		border: 1px solid $light-grey;
+		color: #a00;
+		content: '×';
+		display: none;
+		font-size: 14px;
+		line-height: 20px;
+		position: absolute;
+		right: -10px;
+		text-align: center;
+		text-transform: uppercase;
+		top: -10px;
+		border-radius: 100%;
+		height: 20px;
+		width: 20px;
+		z-index: 1;
+		&:hover{
+			color: red;
+		}
+	}
+	
+	&:hover{
+		&:before{
+			display: block;
+			&:hover{
+				color: red;
+			}
+		}
+	}
+	
+	> * {
+		height: auto;
+		max-width: 150px;
+		width: auto;
+	}
 }
 
-.launchpad-delete-file:before {
-	color: #000;
-	content: '× Click To Remove';
+.button.launchpad-full-button {
 	display: block;
-	font-size: 10px;
-	line-height: 1.5em;
-	padding: 0px 5px;
-	position: absolute;
-	right: 0;
-	text-align: center;
-	text-transform: uppercase;
-	top: 0;
-}
-
-.launchpad-delete-file > * {
-	height: auto;
-	max-width: 150px;
-	width: auto;
-}
-
-.launchpad-full-button {
-	display: block;
-	width: 100%;
+	margin-top: 1em;
+// 	width: 100%;
 }
 
 .launchpad-help-container {
@@ -254,25 +326,20 @@ small.launchpad-inline {
 }
 
 .launchpad-inline-help {
-	font-size: 11px;
 	position: relative;
-	
-	* {
-		font-size: 11px;
-	}
 
 	span {
-		background: #EFEFEF;
-		border: 1px solid silver;
+		background: $white;
+		border: 1px solid $med-grey;
 		border-radius: 1.5em;
-		color: gray;
+		color: $dark-grey;
 		cursor: help;
 		display: inline-block;
 		float: right;
 		position: relative;
-		font-weight: bold;
 		height: 1.5em;
 		line-height: 1.5em;
+		margin-bottom: 1em;
 		margin-left: 1em;
 		text-align: center;
 		width: 1.5em;
@@ -280,34 +347,20 @@ small.launchpad-inline {
 	}
 	
 	div {
-		background: #EFEFEF;
-		border: 1px solid silver;
-		box-shadow: 0px 5px 8px rgba(0, 0, 0, .25);
+		background: $white;
+		box-shadow: 0px 2px 3px rgba(0, 0, 0, .15);
 		display: none;
-		font-size: 10px;
 		padding: 15px;
 		position: absolute;
 		right: -10px;
 		top: 2.25em;
 		width: 300px;
 		z-index: 10;
-		
-		&:before {
-			border-color: transparent transparent silver transparent;
-			border-style: solid;
-			border-width: 0 5px 5px 5px;
-			content: '';
-			height: 0px;
-			position: absolute;
-			right: 12px;
-			top: -5px;
-			width: 0px;
-		}
-		
+
 		&:after {
-			border-color: transparent transparent #EFEFEF transparent;
+			border-color: transparent transparent $white transparent;
 			border-style: solid;
-			border-width: 0 4px 4px 4px;
+			border-width: 0 9px 9px 9px;
 			content: '';
 			height: 0px;
 			position: absolute;
@@ -418,7 +471,7 @@ small.launchpad-inline {
 		}
 		
 		a {
-			color: #EEE;
+			color: $light-grey;
 			display: block;
 			padding: 10px 10px;
 			text-decoration: none;
@@ -454,21 +507,37 @@ small.launchpad-inline {
 }
 
 .launchpad-flexible-container-placeholder {
-	border: 5px dashed gray;
+	border: 2px dashed $med-grey;
 	margin: 2em 1em;
 }
 
 .launchpad-flexible-metabox-container {
-	background: #FDFDFD;
-	border: 1px solid #DDD;
-	margin: 2em 1em;
+	background: $white;
+	border: 1px solid $med-grey;
+	border-bottom: none;
+	margin: 0 1em;
 	padding-bottom: 1em;
 	
+	&:first-of-type{
+		margin-top: 2em;
+	}
+	
+	&:last-of-type{
+		border: 1px solid $med-grey;
+	}
+
 	&.closed {
-		height: 22px;
+		background: $lighter-grey;
+		height: 42px;
 		overflow: hidden;
+		padding-bottom: 0;
+		transition: background-color 0.2s ease-in-out;
+
+		&:hover{
+			background: $light-grey;
+		}
 		
-		.handlediv::before {
+		.toggle-indicator::before {
 			content: '\f140' !important;
 		}
 		
@@ -512,11 +581,17 @@ small.launchpad-inline {
 	
 	h3 {
 		cursor: move;
-		margin-bottom: 3em;
+		margin-bottom: 1em;
 	}
 	
 	.launchpad-metabox-field {
-		padding: .5em 2em;
+		padding: 1em 2em;
+	}
+	
+	.handlediv{
+		cursor: pointer;
+		line-height: 44px;
+		text-align: center;
 	}
 }
 
@@ -553,7 +628,7 @@ small.launchpad-inline {
 
 
 .launchpad-repeater-container.launchpad-metabox-field + .launchpad-repeater-container.launchpad-metabox-field {
-	border-top: 1px solid #DDD;
+	border-top: 1px solid $med-grey;
 	padding-top: 1em;
 }
 
@@ -567,8 +642,8 @@ small.launchpad-inline {
 }
 
 .launchpad-relationship-container {
-	background: #FFF;
-	border: 1px solid #DDDDDD;
+	background: $white;
+	border: 1px solid $med-grey;
 	margin-top: .5em;
 	overflow: hidden;
 	
@@ -604,10 +679,10 @@ small.launchpad-inline {
 	
 	.launchpad-relationship-search {
 		background: #EFEFEF;
-		border-right: 1px solid #DDDDDD;
+		border-right: 1px solid $med-grey;
 		
 		#side-sortables & {
-			border-bottom: 1px solid #DDDDDD;
+			border-bottom: 1px solid $med-grey;
 			border-right: 0;
 		}
 		
@@ -706,8 +781,8 @@ dl.launchpad-inline-listing {
 }
 
 .launchpad-serp-preview {
-	background: #FFF;
-	border: 1px solid #DDD;
+	background: $white;
+	border: 1px solid $med-grey;
 	color: #545454;
 	font-family: arial, sans-serif;
 	font-size: 13px;
@@ -904,7 +979,7 @@ body.login {
 }
 
 .ui-datepicker {
-	background: #FFF;
+	background: $white;
 	border: 1px solid silver;
 	padding: 10px;
 	
@@ -925,7 +1000,7 @@ body.login {
 		text-align: center;
 	}
 	.ui-state-active {
-		background: #DDD;
+		background: $med-grey;
 	}
 	
 	table a {
@@ -975,7 +1050,7 @@ body.login {
 }
 
 #migrate-status {
-	background: #FFF;
+	background: $white;
 	margin-top: 1.5em;
 	padding: 3em;
 	text-align: center;
