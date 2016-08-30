@@ -79,7 +79,9 @@ function launchpad_add_head_modifications() {
 		$ajax = 'true';
 	}
 	
-	$excerpt = launchpad_seo_excerpt();
+	$use_id = (is_singular() ? $post->ID : get_page_by_path(trim($_SERVER['REQUEST_URI'], '/'))->ID);
+	
+	$excerpt = launchpad_seo_excerpt(32, false, $use_id);
 
 	?>
 	
@@ -91,28 +93,10 @@ function launchpad_add_head_modifications() {
 		<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name') ?> RSS Feed" href="/feed/">
 		<?php if(is_single() || is_page()) { ?>
 		
-		<link rel="canonical" href="http://<?php echo $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
+		<link rel="canonical" href="http://<?php echo $_SERVER['HTTP_HOST'] ?><?= get_permalink($use_id); ?>">
 		<?php } ?>
 		
-		<link rel="apple-touch-icon" sizes="57x57"   href="/images/icons/apple-touch-icon-57x57.png">
-		<link rel="apple-touch-icon" sizes="72x72"   href="/images/icons/apple-touch-icon-72x72.png">
-		<link rel="apple-touch-icon" sizes="114x114" href="/images/icons/apple-touch-icon-114x114.png">
-		<link rel="apple-touch-icon" sizes="120x120" href="/images/icons/apple-touch-icon-120x120.png">
-		<link rel="apple-touch-icon" sizes="144x144" href="/images/icons/apple-touch-icon-144x144.png">
-		<link rel="apple-touch-icon" sizes="152x152" href="/images/icons/apple-touch-icon-152x152.png">
-		
-		<link href="/images/icons/startup-iphone-320x460.jpg" rel="apple-touch-startup-image" media="(device-width: 320px)">
-		<link href="/images/icons/startup-iphone4-640x920.jpg" rel="apple-touch-startup-image" media="(device-width: 320px) and (-webkit-min-device-pixel-ratio: 2)">
-		<link href="/images/icons/startup-iphone5-640x1096.jpg" rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-min-device-pixel-ratio: 2)">
-		<link href="/images/icons/ipad-portrait-768x1004.jpg" rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait)">
-		<link href="/images/icons/ipad-landscape-1024x748.jpg" rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape)">
-		<link href="/images/icons/ipad-retina-portrait-1536x2008.jpg" rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)">
-		<link href="/images/icons/ipad-retina-landscape-2048x1496.jpg" rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)">
-		
 		<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
-		<meta name="apple-mobile-web-app-title" content="<?php bloginfo('name') ?>">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		
 		<meta name="description" content="<?php echo $excerpt; ?>">
 		<?php
@@ -152,7 +136,7 @@ function launchpad_add_head_modifications() {
 			<meta property="og:site_name" content="<?php bloginfo('name') ?>">
 			<meta name="twitter:title" property="og:title" content="<?php launchpad_title(true); ?>">
 			<meta name="twitter:description" property="og:description" content="<?= $excerpt; ?>">
-			<meta name="twitter:url" property="og:url" content="http://<?= $_SERVER['HTTP_HOST'] ?><?php the_permalink(); ?>">
+			<meta name="twitter:url" property="og:url" content="http://<?= $_SERVER['HTTP_HOST'] ?><?= get_permalink($use_id); ?>">
 		<?php
 			if(has_post_thumbnail()) {
 				$thumbnail = get_post_thumbnail_id();
