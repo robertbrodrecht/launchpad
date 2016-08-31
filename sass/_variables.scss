@@ -8,7 +8,7 @@ $body-line-height-px: 16px;
 // Column-related settings.  
 $column-master-outer-width: 960px; // Used to convert columns to percents.
 $column-master-gutter-width: 30px; // The column gutter in pixels.
-$column-count: 100; // The number of columns in the grid.
+$column-count: 12; // The number of columns in the grid.
 
 // This is used for media queries if you use the mixins @media-max, @media-min, @media-range, and @media-outer-range.
 // You can add your own, like xlarge: 1200px.

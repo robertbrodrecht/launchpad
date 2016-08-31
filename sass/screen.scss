@@ -31,4 +31,19 @@
 //   width.
 
 @import "wireframe";		// Some basic classes to do stuff.  Remove when you're ready to develop.
+
 @import 'ie';				// IE8/9 Tweaks.  See file for details on how to do it.
+
+
+
+#TEST {
+	@include col(6, gutter);
+}
+
+#TEST2 {
+	@include col(50 of 100, gutter);
+}
+
+#TEST3 {
+	@include col(50%, gutter gutter-margin);
+}

@@ -200,11 +200,11 @@ div.nav-header {
 	}
 	
 	> section {
-		@include col(50);
+		@include col(50 of 100);
 		float: left;
 		
 		@include media-max(medium) {
-			@include col(100);
+			@include col(100 of 100);
 			@include rems((margin-bottom: $body-line-height-px*2));
 			
 			float: none;
@@ -274,28 +274,28 @@ div.nav-header {
 	@include row();
 	
 	.main-content {
-		@include col(100/$column-count * 75);
+		@include col(75%);
 		margin-top: 0;
 		
 		@include media-max(medium) {
-			@include col(100/$column-count * 66);
+			@include col(66%);
 		}
 		
 		@include media-max(small) {
-			@include col(100/$column-count * 100);
+			@include col(100%);
 		}
 	}
 	
 	.sidebar-content {
-		@include col(100/$column-count * 25);
+		@include col(25%);
 		margin-top: 0;
 		
 		@include media-max(medium) {
-			@include col(100/$column-count * 33);
+			@include col(33%);
 		}
 		
 		@include media-max(small) {
-			@include col(100/$column-count * 100);
+			@include col(100%);
 		}
 	}
 	
@@ -309,10 +309,10 @@ div.nav-header {
 	
 	&.sidebar-left {
 		.main-content {
-			@include push(100/$column-count * 25);
+			@include push(25%);
 			
 			@include media-max(medium) {
-				@include push(100/$column-count * 33);
+				@include push(33%);
 			}
 			
 			@include media-max(small) {
@@ -322,10 +322,10 @@ div.nav-header {
 		}
 		
 		.sidebar-content {
-			@include pull(100/$column-count * 75);
+			@include pull(75%);
 			
 			@include media-max(medium) {
-				@include pull(100/$column-count * 66);
+				@include pull(66%);
 			}
 			
 			@include media-max(small) {
@@ -337,10 +337,10 @@ div.nav-header {
 	
 	&.sidebar-right {
 		.main-content {
-			@include pull(100/$column-count * 25);
+			@include pull(25%);
 			
 			@include media-max(medium) {
-				@include pull(100/$column-count * 33);
+				@include pull(33%);
 			}
 			
 			@include media-max(small) {
@@ -350,10 +350,10 @@ div.nav-header {
 		}
 		
 		.sidebar-content {
-			@include push(100/$column-count * 75);
+			@include push(75%);
 			
 			@include media-max(medium) {
-				@include push(100/$column-count * 66);
+				@include push(66%);
 			}
 			
 			@include media-max(small) {
