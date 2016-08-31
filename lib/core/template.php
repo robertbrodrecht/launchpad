@@ -21,6 +21,15 @@ if(class_exists('GFForms')) {
 remove_action('wp_head', 'print_emoji_detection_script', 7);
 remove_action('wp_print_styles', 'print_emoji_styles' );
 
+
+// Remove the G.D. recent comments BS that WP thinks they should inject directly into the head. >:[
+function launchpad_remove_recent_comments_style() {
+	global $wp_widget_factory;
+	remove_action('wp_head', array($wp_widget_factory->widgets['WP_Widget_Recent_Comments'], 'recent_comments_style'));
+}
+add_action('widgets_init', 'launchpad_remove_recent_comments_style');
+
+
 /**
  * Setup of basic theme support
  *
@@ -70,7 +79,7 @@ add_action('after_setup_theme', 'launchpad_theme_setup');
  * @since		1.6
  */
 function launchpad_add_head_modifications() {
-	global $site_options, $wp_query;
+	global $site_options, $wp_query, $post;
 	
 	$add_this_id = $site_options['add_this_id'];
 	
