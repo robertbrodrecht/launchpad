@@ -102,7 +102,7 @@ function launchpad_add_head_modifications() {
 		<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name') ?> RSS Feed" href="/feed/">
 		<?php if(is_single() || is_page()) { ?>
 		
-		<link rel="canonical" href="http://<?php echo $_SERVER['HTTP_HOST'] ?><?= get_permalink($use_id); ?>">
+		<link rel="canonical" href="<?= get_permalink($use_id); ?>">
 		<?php } ?>
 		
 		<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
@@ -145,7 +145,7 @@ function launchpad_add_head_modifications() {
 			<meta property="og:site_name" content="<?php bloginfo('name') ?>">
 			<meta name="twitter:title" property="og:title" content="<?php launchpad_title(true); ?>">
 			<meta name="twitter:description" property="og:description" content="<?= $excerpt; ?>">
-			<meta name="twitter:url" property="og:url" content="http://<?= $_SERVER['HTTP_HOST'] ?><?= get_permalink($use_id); ?>">
+			<meta name="twitter:url" property="og:url" content="<?= get_permalink($use_id); ?>">
 		<?php
 			if(has_post_thumbnail()) {
 				$thumbnail = get_post_thumbnail_id();
