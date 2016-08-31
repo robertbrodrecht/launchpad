@@ -2,7 +2,7 @@
 $column-adjust: 100/$column-count;
 
 // Calculate the gutter width.
-$gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
+//$gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 
 // Create styles for a grid row.
 // Options are: 
@@ -11,6 +11,7 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 // * no-margin: prevent the row from having margin-left and margin-right set to "auto"
 // * no-float: don't automatically apply float: left to children
 @mixin row($options: ()) {
+	$gutter: $column-master-gutter-width;
 	
 	@if index($options, "gutter") and not index($options, "table") {
 		margin-left: 0-$gutter;
@@ -48,7 +49,22 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 // * gutter: whether to assume a gutter when calculating the width.
 // * gutter-margin: add a gutter-sized margin-left.
 @mixin col($width: $column-count, $options: ()) {
-	$width: $column-adjust*$width;
+	
+	$gutter: $column-master-gutter-width;
+	
+	@if type-of($width) == 'list' {
+		@if length($width) == 3 {
+			$width: nth($width, 1) / nth($width, 3) * 100;
+		} else {
+			$width: $column-adjust*nth($width, 1);
+		}
+	} @else {
+		$width: $column-adjust*$width;
+	}
+	
+	 @if unitless($width) != false {
+		$width:  $width / ($width * 0 + 1);
+	}
 	
 	@if $width == 100 {
 		clear: both;
@@ -61,17 +77,15 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 	}
 	
 	@if ($width == 33) or ($width == 66) {
-		@if index($options, "gutter") {
-			width: $width*1%-$gutter+.3333;
-		} @else {
-			width: $width*1%+.3333;
-		}
+		width: $width*1%+.3333;
 	} @else {
-		@if index($options, "gutter") {
-			width: $width*1%-$gutter;
-		} @else {
-			width: $width*1%;
-		}		
+		$width: $width*1%;	
+	}
+	
+	@if index($options, "gutter") {
+		width: calc(#{$width} - #{$gutter});
+	} @else {
+		width: $width;
 	}
 }
 

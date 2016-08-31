@@ -66,18 +66,15 @@
 	}
 }
 
-// Calculate the gutter width.
-$gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
-
 .gallery {
 	@include ugly-clearfix;
 	
-	margin-left: 0-$gutter;
+	margin-left: $column-master-gutter-width;
 	
 	> * {
 		display: block;
 		float: left;
-		margin-left: $gutter;
+		margin-left: $column-master-gutter-width;
 	}
 				
 	img {
@@ -90,7 +87,8 @@ $gutter: ($column-master-gutter-width/$column-master-outer-width)*100*1%;
 		
 		&.gallery-columns-#{$i} {
 			> * {
-				width: (100/$i)*1%-$gutter;
+				$width: (100/$i)*1%;
+				width: calc(#{$width} - #{$column-master-gutter-width});
 			}
 		}
 	}
