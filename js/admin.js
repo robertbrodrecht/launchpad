@@ -653,7 +653,7 @@ jQuery(document).ready(
 			}
 		);
 		
-		$('textarea[maxlength]').keyup(
+		$('.launchpad-metabox-field textarea[maxlength]').keyup(
 			function(e) {
 				var me = $(this),
 					range;
@@ -672,7 +672,7 @@ jQuery(document).ready(
 					}
 				}
 			}
-		).add('input[maxlength]').on(
+		).add('.launchpad-metabox-field input[maxlength]').on(
 			'keyup',
 			function() {
 				var me = $(this);

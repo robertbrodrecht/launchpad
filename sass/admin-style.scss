@@ -65,6 +65,7 @@ body {
 	textarea {
 		max-width: none;
 		height: 16em;
+		
 		&.code{
 			color: #82878c;
 			font:{
@@ -365,7 +366,7 @@ small.launchpad-inline {
 		position: absolute;
 		right: -10px;
 		top: 2.25em;
-		width: 300px;
+		width: 400px;
 		z-index: 10;
 
 		&:after {
