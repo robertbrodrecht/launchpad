@@ -100,6 +100,17 @@ body {
 	}
 }
 
+.inside > .launchpad-metabox-field:first-of-type {
+	border-top: 0;
+}
+
+.inside > .launchpad-metabox-field {
+	margin-left: -12px;
+	margin-right: -12px;
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
 .launchpad-address {
 	margin-top: .25em;
 	
