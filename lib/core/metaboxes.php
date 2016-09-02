@@ -124,6 +124,9 @@ function launchpad_render_field_checkbox($field_output_name, $field_output_id = 
 		echo '<label class="' . $class . '" for="' . $field_output_id . '">';
 	}
 	echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . '>';
+	if($subfield) {
+		echo ' ' . $subfield . '</label>';
+	}
 }
 
 
@@ -233,7 +236,7 @@ function launchpad_render_field_textarea($field_output_name, $field_output_id = 
 	
 	// Textarea is pretty simple.  Just output the field.
 	if($subfield) {
-		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '<label>';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
 	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : ''). (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">' . html_entity_decode($val) . '</textarea>';
 }
@@ -263,7 +266,7 @@ function launchpad_render_field_code($field_output_name, $field_output_id = '', 
 	
 	// Textarea is pretty simple.  Just output the field.
 	if($subfield) {
-		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '<label>';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
 	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="2" cols="5" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : ''). (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">' . html_entity_decode($val) . '</textarea>';
 }
@@ -332,7 +335,7 @@ function launchpad_render_field_selectmulti($field_output_name, $field_output_id
 	
 	// Output a select and pass options to launchpad_create_select_options()
 	if($subfield) {
-		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</labe>';
+		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
 	
 	// The empty hidden field allows the user to actually select none.
