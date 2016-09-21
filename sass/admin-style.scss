@@ -544,6 +544,7 @@ small.launchpad-inline {
 	background: $white;
 	border: 2px solid $med-gray;
 	margin: 2em 1em;
+	margin-top: 3em;
 	padding-bottom: 1em;
 	position: relative;
 	
@@ -634,12 +635,10 @@ small.launchpad-inline {
 	}
 	
 	.launchpad-mid-flexible-insert {
-		opacity: 0;
 		position: absolute;
-		right: -1em;
-		top: .7em;
+		right: 0;
+		top: -2.5em;
 		transition: opacity .25s ease, visibility 0s .25s;
-		visibility: hidden;
 		
 		.launchpad-mid-flexible-insert-plus {
 			background: $white;
@@ -666,12 +665,6 @@ small.launchpad-inline {
 		&:hover ul {
 			display: block;
 		}
-	}
-	
-	&:hover .launchpad-mid-flexible-insert {
-		opacity: 1;
-		transition: opacity .25s ease, visibility 0s 0s;
-		visibility: visible;
 	}
 }
 

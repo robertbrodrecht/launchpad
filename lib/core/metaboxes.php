@@ -1780,7 +1780,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	echo '<div class="launchpad-flexible-metabox-container">';
 	
 	echo '<div class="launchpad-mid-flexible-insert">';
-	echo '<span class="launchpad-mid-flexible-insert-plus" title="Add Content Module Above">+</span>';
+	echo '<span class="launchpad-mid-flexible-insert-plus" title="Add Content Module">+</span>';
 	
 	$all_modules = launchpad_get_default_flexible_modules();
 	
