@@ -513,8 +513,9 @@ small.launchpad-inline {
 	
 	h3 {
 		font-size: 1.1em;
-		margin-bottom: 1em;
-		margin-top: .8em;
+		margin: 0;
+		padding-bottom: 1em;
+		padding-top: .8em;
 	}
 }
 
@@ -526,8 +527,7 @@ small.launchpad-inline {
 .launchpad-flexible-metabox-container {
 	background: $white;
 	border: 1px solid $med-grey;
-	border-bottom: none;
-	margin: 0 1em;
+	margin: 2em 1em;
 	padding-bottom: 1em;
 	
 	&:first-of-type{
@@ -592,8 +592,17 @@ small.launchpad-inline {
 	}
 	
 	h3 {
+		background: #FAFAFA;
 		cursor: move;
-		margin-bottom: 1em;
+		margin-bottom: 0;
+		padding-bottom: 1em;
+	}
+	
+	.launchpad-module-title:not(:focus) {
+		appearance: none;
+		background: transparent;
+		border: 0;
+		box-shadow: none;
 	}
 	
 	.launchpad-metabox-field {
@@ -622,7 +631,7 @@ small.launchpad-inline {
 	}
 	
 	h3 {
-		margin-left: 2em;
+		padding-left: 2em;
 	}
 	
 	td > & {

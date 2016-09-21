@@ -423,7 +423,7 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
 function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '', $args = array(), $val = false) {
 	// Output a WYSIWYG editor.  Just the base code.
     if(!isset($args['media_button'])) {
-        $args['media_button'] = false;
+        $args['media_button'] = true;
     } else if($args['media_button'] == true) {
         $args['media_button'] = true;
     } else {
@@ -438,7 +438,7 @@ function launchpad_render_field_wysiwyg($field_output_name, $field_output_id = '
         $args['text_tab'] = true;
     }
     
-	if($args['buttons'] == false) {
+	if(isset($args['buttons']) && $args['buttons'] == false) {
 		add_filter("mce_buttons", "extended_editor_mce_buttons", 0);
 		add_filter("mce_buttons_2", "extended_editor_mce_buttons_2", 0);
     }
@@ -1790,10 +1790,22 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	
 	// Output the sort handle and field name.
 	echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><span class="toggle-indicator"></span></div>';
-	echo '<h3>' . $details['name'] . '</h3>';
 	
 	// Generate a unique ID for this flexible module to prevent collision.
 	$flex_uid = preg_replace('/[^A-Za-z0-9\-\_]/', '', $field_name . '-' . uniqid());
+	
+	
+	// @TODO: Leaving the following options in case we need to roll back.
+	
+	// This is the normal way.
+	//echo '<h3>' . $details['name'] . '</h3>';
+	
+	// This is the easiest way to add in a name-able title.
+	//echo '<h3>' . $details['name'] . (isset($values['title']) ? ': ' . $values['title'] : '') . '</h3>';
+	
+	echo '<h3><input type="text" name="launchpad_meta[' . $type . '][' . $flex_uid . '][' . $field_name . '][module_title]" value="' . sanitize_text_field(isset($values['module_title']) && $values['module_title'] ? $values['module_title'] : $details['name']) . '" class="launchpad-module-title"></h3>';
+	
+	
 	
 	// Loop the field details.
 	if(isset($details['fields'])) {
