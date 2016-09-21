@@ -598,7 +598,9 @@ small.launchpad-inline {
 		}
 	}
 	
-	.launchpad-flexible-metabox-close {
+	.launchpad-flexible-metabox-close,
+	.launchpad-flexible-metabox-move-up,
+	.launchpad-flexible-metabox-move-down {
 		color: inherit;
 		float: right;
 		font-size: 14px;
@@ -607,6 +609,15 @@ small.launchpad-inline {
 		text-align: center;
 		text-decoration: none;
 		width: 2em;
+	}
+
+	&:first-of-type .launchpad-flexible-metabox-move-up,	
+	&:last-of-type .launchpad-flexible-metabox-move-down {
+		display: none;
+	}
+	
+	.handlediv {
+		margin-right: 1em;
 	}
 	
 	h3 {

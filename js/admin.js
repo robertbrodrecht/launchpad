@@ -13,8 +13,69 @@
 jQuery(document).ready(
 	function($, undefined) {
 		
+		$(document.body).on(
+			'click',
+			'.launchpad-flexible-metabox-move-up',
+			function(e) {
+				var p = $(e.target).closest('.launchpad-flexible-metabox-container');
+				e.preventDefault();
+								
+				p.find('.wp-editor-container textarea').each(
+					function() {
+						try { tinyMCE.execCommand('mceRemoveEditor', true, this.id); } catch(e){ console.log(e); }
+					}
+				);
+				
+				setTimeout(
+					function() {
+						p.prev().before(p);
+						setTimeout(
+							function() {
+								p.find('.wp-editor-container textarea').each(
+									function() {
+										try { tinyMCE.execCommand('mceAddEditor', true, this.id); } catch(e){ console.log(e); }
+									}
+								);									
+							}, 1
+						);
+					}, 1
+				);
+			}
+		);
+		
+		
+		$(document.body).on(
+			'click',
+			'.launchpad-flexible-metabox-move-down',
+			function(e) {
+				var p = $(e.target).closest('.launchpad-flexible-metabox-container');
+				e.preventDefault();
+								
+				p.find('.wp-editor-container textarea').each(
+					function() {
+						try { tinyMCE.execCommand('mceRemoveEditor', true, this.id); } catch(e){ console.log(e); }
+					}
+				);
+				
+				setTimeout(
+					function() {
+						p.next().after(p);
+						setTimeout(
+							function() {
+								p.find('.wp-editor-container textarea').each(
+									function() {
+										try { tinyMCE.execCommand('mceAddEditor', true, this.id); } catch(e){ console.log(e); }
+									}
+								);									
+							}, 1
+						);
+					}, 1
+				);
+			}
+		);
+		
 		function makeSortable() {
-			//jQuery('.launchpad-flexible-container, .launchpad-repeater-container').sortable('destroy');
+			//jQuery('.launchpad-flexible-container, .launchpad-repeater-container, .launchpad-relationship-items').sortable('destroy');
 			$('.launchpad-flexible-container, .launchpad-repeater-container').sortable(
 				{
 					handle: 'h3',
@@ -25,17 +86,17 @@ jQuery(document).ready(
 					containment: 'parent',
 					axis: 'y',
 					items: '> div',
-					update: function(e, ui) {
-						var textarea = ui.item.find('textarea.wp-editor-area');
-						
-						textarea.each(
+					start: function(event, ui) {
+						$(ui.item).find('.wp-editor-container textarea').each(
 							function() {
-								var me = $(this),
-									cont = me.closest('div'),
-									clone = me.clone(true, true);
-								cont.html('');
-								cont.append(clone);
-								clone.each(handleUpdatingFlexibleModules);
+								try { tinyMCE.execCommand('mceRemoveEditor', true, this.id); } catch(e){ console.log(e); }
+							}
+						);
+					},
+					stop: function(event, ui) {
+						$(ui.item).find('.wp-editor-container textarea').each(
+							function() {
+								try { tinyMCE.execCommand('mceAddEditor', true, this.id); } catch(e){ console.log(e); }
 							}
 						);
 					}
@@ -51,21 +112,7 @@ jQuery(document).ready(
 					revert: true,
 					containment: 'parent',
 					axis: 'y',
-					items: '> li',
-					update: function(e, ui) {
-						var textarea = ui.item.find('textarea.wp-editor-area');
-						
-						textarea.each(
-							function() {
-								var me = $(this),
-									cont = me.closest('div'),
-									clone = me.clone(true, true);
-								cont.html('');
-								cont.append(clone);
-								clone.each(handleUpdatingFlexibleModules);
-							}
-						);
-					}
+					items: '> li'
 				}
 			);
 		}
@@ -89,6 +136,7 @@ jQuery(document).ready(
 				QTags._buttonsInit();
 			} catch(e){}
 			
+			/*
 			switchEditors.switchto(
 				$(tinymceconfig.selector)
 				.closest('.wp-editor-wrap')
@@ -97,6 +145,7 @@ jQuery(document).ready(
 						(getUserSetting('editor') === 'html' ? 'html' : 'tmce')
 					).get(0)
 			);
+			*/
 			
 			if (!window.wpActiveEditor) {
 				window.wpActiveEditor = edId;

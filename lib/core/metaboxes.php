@@ -1809,6 +1809,13 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	
 	echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
 	
+	
+	echo '<a href="#" class="launchpad-flexible-metabox-move-up" title="Move Up">⇡</a>';
+	echo '<a href="#" class="launchpad-flexible-metabox-move-down" title="Move Down">⇣</a>';
+	
+	
+	//⬆
+	
 	// If there are help details for the module, include them here.
 	if(isset($details['help'])) {
 		?>
@@ -1820,7 +1827,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	}
 	
 	// Output the sort handle and field name.
-	echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')"><span class="toggle-indicator"></span></div>';
+	echo '<div class="handlediv" onclick="jQuery(this).parent().toggleClass(\'closed\')" title="Hide Fields"><span class="toggle-indicator"></span></div>';
 	
 	// Generate a unique ID for this flexible module to prevent collision.
 	$flex_uid = preg_replace('/[^A-Za-z0-9\-\_]/', '', $field_name . '-' . uniqid());
