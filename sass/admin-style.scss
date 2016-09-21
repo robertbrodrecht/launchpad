@@ -542,10 +542,14 @@ small.launchpad-inline {
 
 .launchpad-flexible-metabox-container {
 	background: $white;
-	border: 1px solid $dark-gray;
+	border: 2px solid $med-gray;
 	margin: 2em 1em;
 	padding-bottom: 1em;
 	position: relative;
+	
+	.launchpad-flexible-metabox-container {
+		border: 1px solid $light-gray;
+	}
 
 	&.closed {
 		background: $lighter-gray;
