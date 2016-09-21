@@ -1729,6 +1729,8 @@ function launchpad_get_default_flexible_modules() {
  * @since		1.0
  */
 function launchpad_get_flexible_field($type = false, $field_name = false, $post_id = false, $values = array()) {
+	global $post;
+	
 	// The default assumption is that we are not on AJAX.
 	$is_ajax = false;
 	
@@ -1776,6 +1778,35 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	
 	// Print the container and the close link.
 	echo '<div class="launchpad-flexible-metabox-container">';
+	
+	echo '<div class="launchpad-mid-flexible-insert">';
+	echo '<span class="launchpad-mid-flexible-insert-plus" title="Add Content Module Above">+</span>';
+	
+	$all_modules = launchpad_get_default_flexible_modules();
+	
+	?>
+				<ul>
+					<?php
+					
+					// Loop all flexible modules so the user can pick them from a hover list.
+					foreach($all_modules as $k => $v) {
+						$add_metabox = true;
+						if(isset($v['limit'])) {
+							$add_metabox = $v['limit']($post);
+							if($add_metabox !== true && $add_metabox !== false) {
+								$add_metabox = true;
+							}
+						}
+						if($add_metabox) {
+							echo '<li><a href="#" class="launchpad-flexible-link" data-launchpad-flexible-type="' . $type . '" data-launchpad-flexible-name="' . $k . '" data-launchpad-flexible-post-id="' . ($post ? $post->ID : $post) . '" title="' . (isset($v['help']) ? sanitize_text_field($v['help']) : '') . '"><span class="' . (isset($v['icon']) && $v['icon'] ? $v['icon'] : 'dashicons dashicons-plus-alt') . '"></span> ' . $v['name'] . '</a></li>';
+						}
+					}
+					
+					?>
+				</ul>
+	<?php
+	echo '</div>';
+	
 	echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
 	
 	// If there are help details for the module, include them here.

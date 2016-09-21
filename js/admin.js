@@ -516,7 +516,11 @@ jQuery(document).ready(
 						
 						visualeditors = data.find('textarea.wp-editor-area');
 						
-						$('#launchpad-flexible-container-' + me.data('launchpad-flexible-type')).append(data);
+						if(me.is('.launchpad-flexible-add *')) {
+							$('#launchpad-flexible-container-' + me.data('launchpad-flexible-type')).append(data);
+						} else {
+							me.closest('.launchpad-flexible-metabox-container').before(data);
+						}
 
 						if(visualeditors.length) {
 							visualeditors.each(handleUpdatingFlexibleModules);
