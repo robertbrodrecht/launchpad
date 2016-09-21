@@ -598,11 +598,12 @@ small.launchpad-inline {
 		padding-bottom: 1em;
 	}
 	
-	.launchpad-module-title:not(:focus) {
+	.launchpad-module-title {
 		appearance: none;
 		background: transparent;
 		border: 0;
 		box-shadow: none;
+		padding: 0;
 	}
 	
 	.launchpad-metabox-field {
