@@ -295,12 +295,25 @@
 }
 
 // Set up for an image replacement.
-@mixin image-replace {
+@mixin image-replace($image: false, $width: false, $height: false, $size: false) {
+	@if($image) {
+		background-image: url(#{$image});
+	}
+	background-repeat: no-repeat;
+	@if($size) {
+		background-size: $size;
+	}
 	clip: auto;
+	@if($height) {
+		height: $height;
+	}
 	overflow: hidden;
 	position: relative;
 	text-indent: 110%;
 	white-space: nowrap;
+	@if($width) {
+		width: $width;
+	}
 }
 
 // The ugly way to clearfix.

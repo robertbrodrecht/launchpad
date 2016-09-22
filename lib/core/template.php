@@ -88,7 +88,16 @@ function launchpad_add_head_modifications() {
 		$ajax = 'true';
 	}
 	
-	$use_id = (is_singular() ? $post->ID : get_page_by_path(trim($_SERVER['REQUEST_URI'], '/'))->ID);
+	if(is_singular()) {
+		$use_id = $post ? $post->ID : 0;
+	} else {
+		$page_by_path = get_page_by_path(trim($_SERVER['REQUEST_URI'], '/'));
+		if($page_by_path) {
+			$use_id = $page_by_path->ID;
+		} else {
+			$use_id = $post ? $post->ID : 0;
+		}
+	}
 	
 	$excerpt = launchpad_seo_excerpt(32, false, $use_id);
 

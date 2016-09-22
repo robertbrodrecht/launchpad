@@ -532,6 +532,35 @@ register_shutdown_function('launchpad_memory_warning');
 
 
 /**
+ * Change the FROM name on e-mails to the site name.
+ *
+ * @since		1.0
+ */
+add_filter(
+	'wp_mail_from_name', 
+	function($name) {
+	    return get_bloginfo('name');
+	}
+);
+
+
+/**
+ * Change the FROM address on e-mails to the organization e-mail.
+ *
+ * @since		1.0
+ */
+add_filter(
+	'wp_mail_from', 
+	function($from){
+	    global $site_options;
+		if(isset($site_options['organization_email']) && $site_options['organization_email']){
+        	$from = $site_options['organization_email'];
+		}
+		return $from;
+	}
+);
+
+/**
  * Create an HTML Element
  * 
  * Use the array:
