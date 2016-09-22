@@ -105,7 +105,7 @@ function launchpad_add_head_modifications() {
 		<link rel="canonical" href="<?= get_permalink($use_id); ?>">
 		<?php } ?>
 		
-		<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		<meta name="description" content="<?php echo $excerpt; ?>">
 		<?php
