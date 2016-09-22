@@ -274,6 +274,12 @@ function launchpad_get_setting_fields() {
 								'type' => 'text'
 							)
 						),
+						'organization_flickr' => array(
+							'name' => 'Flickr',
+							'args' => array(
+								'type' => 'text'
+							)
+						),
 					)
 				),
 				'security' => array(

@@ -290,3 +290,35 @@ textarea {
     overflow: auto;
     vertical-align: top;
 }
+
+input {
+    font: inherit;
+}
+
+::-webkit-input-placeholder {
+    color: inherit;
+}
+
+:-moz-placeholder {
+    color: inherit;
+}
+
+::-moz-placeholder {
+    color: inherit;
+}
+
+:-ms-input-placeholder {
+    color: inherit;
+}
+
+::-ms-input-placeholder {
+    color: inherit;
+}
+
+:placeholder-shown {
+    color: inherit;
+}
+
+a, button, input, select, textarea, label, summary {
+    touch-action: manipulation;
+}
