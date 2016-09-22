@@ -338,7 +338,7 @@ The following field types are available:
 	<dt>wysiwyg</dt>
 	<dd>A WordPress editor, complete with visual and text only views and media buttons.</dd>
 	<dt>row</dt>
-	<dd>Mainly used for grouping fields on a single row. *NOTE: USE AT YOUR OWN RISK. I HAVE NOT YET TESTED COMPLEX FIELD TYPES IN A ROW. YOU SHOULD PROBABLY STICK TO ONLY TEXT/CHECKBOX/SELECT!!!*</dd>
+	<dd>Mainly used for grouping fields on a single row. <strong>NOTE: USE AT YOUR OWN RISK. I HAVE NOT YET TESTED COMPLEX FIELD TYPES IN A ROW. YOU SHOULD PROBABLY STICK TO ONLY TEXT/CHECKBOX/SELECT!!!</strong></dd>
 </dl>
 
 For a complete example of all the field types, look at lib/custom/examples.php.
