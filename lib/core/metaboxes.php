@@ -142,7 +142,7 @@ function launchpad_render_field_checkbox($field_output_name, $field_output_id = 
  * @see			launchpad_render_form_field
  * @since		1.0
  */
-function launchpad_render_field_generic($field_output_name, $field_output_id = '', $args, $val = false, $class = '', $subfield = false) {
+function launchpad_render_field_generic($field_output_name, $field_output_id = '', $args = array(), $val = false, $class = '', $subfield = false) {
 	$field_output_name = trim($field_output_name);
 	$field_output_id = trim($field_output_id);
 	if(!$field_output_name) {
@@ -176,7 +176,7 @@ function launchpad_render_field_generic($field_output_name, $field_output_id = '
 		$add_class .= ' launchpad-date-picker';
 	}
 
-	echo '<input type="' . $args['type'] . '" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . htmlentities($val) . '" class="regular-text' . $add_class . '"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
+	echo '<input type="' . $args['type'] . '" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . (isset($args['placeholder']) ? 'placeholder="' . $args['placeholder'] . '"' : '') . ' value="' . htmlentities($val) . '" class="regular-text' . $add_class . '"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
 }
 
 
@@ -207,7 +207,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
-	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . ($val ? htmlentities($val) : '') . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . (isset($args['placeholder']) ? 'placeholder="' . $args['placeholder'] . '"' : '') . ' value="' . ($val ? htmlentities($val) : '') . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
 }
 
 
