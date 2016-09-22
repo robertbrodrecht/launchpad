@@ -91,10 +91,10 @@ function launchpad_geocode($addr_string = false) {
 	$addr_string = trim($addr_string);
 	$geocode = false;
 	
-	if($site_options['google_maps_api']) {
+	if($site_options['google_geocoding_api']) {
 		$geocode = file_get_contents_cache(
 			'https://maps.googleapis.com/maps/api/geocode/json?address=' . 
-				urlencode($addr_string) . '&key=' . $site_options['google_maps_api'],
+				urlencode($addr_string) . '&key=' . $site_options['google_geocoding_api'],
 				86400
 		);
 		$geocode = json_decode($geocode);

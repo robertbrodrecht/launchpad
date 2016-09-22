@@ -405,6 +405,13 @@ function launchpad_get_setting_fields() {
 						'google_maps_api' => array(
 							'name' => 'Google Maps API Key',
 							'args' => array(
+								'small' => 'Required to show maps.',
+								'type' => 'text'
+							)
+						),
+						'google_geocoding_api' => array(
+							'name' => 'Google Geocoding API Key',
+							'args' => array(
 								'small' => 'Required to perform geocoding on address fields, but you may not need it.',
 								'type' => 'text'
 							)

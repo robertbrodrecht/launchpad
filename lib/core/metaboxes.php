@@ -903,7 +903,7 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
 	echo '<div class="launchpad-google-map-embed">';
 	if($val['latitude'] && $val['longitude']) {
 		echo '<iframe width="100%" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="//maps.google.com/maps?q=' . $val['latitude'] . ',' . $val['longitude'] . '+(Your Location)&amp;output=embed"></iframe>';
-	} else if(!$site_options['google_maps_api']) {
+	} else if(!$site_options['google_geocoding_api']) {
 		echo '<div class="small-notice">Address Geocoding is not Enabled</div>';
 	}
 	echo '</div>';
