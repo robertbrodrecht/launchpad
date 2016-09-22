@@ -856,6 +856,110 @@ function launchpad_render_field_repeater($field_output_name, $subfields, $label,
 
 
 /**
+ * Render A Row
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		array $subfields The fields that go in the repeater.
+ * @param		string $label The name of the repeater.
+ * @param		string $field_prefix The prefix to use on the field name.
+ * @param		array $val The values to populate.
+ * @see			launchpad_render_form_field
+ * @since		1.0
+ */
+function launchpad_render_field_row($field_output_name, $args, $subfields, $val) {
+	
+	// If there are values to populate, we need to do a bit of trickery.
+	// And by "trickery" I mean: This is an inelegant hack.
+	// Basically, since repeaters are defined with only one set of subfields,
+	// we need to convert all the values into duplicates of the subfield
+	// so that the script thinks there are multiple subfields with values.
+	if($val) {
+		// Get a copy of the original subfields for the repeater.
+		$orig_subfield = $subfields;
+		
+		// Overwrite it with an empty array.
+		$subfields = array();
+		
+		// Loop the values.
+		while($val) {
+			// Create a temporary copy of the original subfields.
+			$tmp_subfield = $orig_subfield;
+			
+			// Shift the first value off of the values.
+			$tmp_vals = array_shift($val);
+			
+			// Loop the values and set the value as the field's value.
+			foreach($tmp_vals as $tmp_key => $tmp_val) {
+				if(isset($tmp_subfield[$tmp_key])) {
+					$tmp_subfield[$tmp_key]['args']['value'] = $tmp_val;
+				}
+			}
+			// Add the value to the subfield.
+			array_push($subfields, $tmp_subfield);
+		}
+		
+	// Again, this is kind of a hack.  Since populating the values
+	// will "fake" multiple sets of sub fields, we need to normalize
+	// to an array of subfields so the developer doesn't have to deal
+	// with varying syntax to create repeaters versus other field types.
+	} else {
+		$subfields = array($subfields);
+	}
+	
+	if(!isset($args['columns'])) {
+		$args['columns'] = count($args['subfields']);
+	}
+	
+	if($args['columns'] < 1) {
+		$args['columns'] = 1;
+	} else if($args['columns'] > 4) {
+		$args['columns'] = 4;
+	}
+	
+	// Repeater container.  The JavaScript looks for this when handling button clicks.
+	echo '<div class="launchpad-metabox-row launchpad-metabox-columns-' . $args['columns'] . ' ' . $args['class'] . '">';
+
+	// Loop all the subfields.
+	foreach($subfields as $counter => $sub_fields) {
+		
+		// Loop the subfield's fields to handle the output.
+		foreach($sub_fields as $field_key => $field) {
+			echo '<div class="launchpad-metabox-column">';
+			
+			if(isset($field['help'])) {
+				$field['args']['help'] = $field['help'];
+			}
+			
+			// Create a metabox field container.
+			echo '<div class="launchpad-metabox-field">';
+			
+			// Recursively create the field.
+			launchpad_render_form_field(
+					array_merge(
+						$field['args'], 
+						array(
+							'name' => $field_output_name . '[' . $field_key . ']'
+						)
+					), 
+					$field['name'], 
+					''
+				);
+			
+			// Close the metabox field container.
+			echo '</div>';
+			// Close the repeater fields container.
+			echo '</div>';
+		}
+		
+	}
+	
+	// Close the repeater container.
+	echo '</div>';
+
+}
+
+
+/**
  * Render Address Fields
  * 
  * @param		string $field_output_name The field's "name" attribute.
@@ -1107,6 +1211,14 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 				isset($args['subfields']) ? $args['subfields'] : array(), 
 				isset($args['label']) ? $args['label'] : 'Item', 
 				$field_prefix, 
+				$val
+			);
+		break;
+		case 'row':
+			launchpad_render_field_row(
+				$field_output_name, 
+				$args,
+				isset($args['subfields']) ? $args['subfields'] : array(), 
 				$val
 			);
 		break;
@@ -1389,6 +1501,7 @@ function launchpad_meta_box_handler($post, $args) {
 				case 'relationship':
 				case 'repeater':
 				case 'taxonomy':
+				case 'row':
 // 				case 'wysiwyg':
 				break;
 				default:
@@ -1407,7 +1520,7 @@ function launchpad_meta_box_handler($post, $args) {
 			}
 			
 			// If this is not a checkbox, show the name before the field.
-			if($v['args']['type'] !== 'checkbox' && $v['args']['type'] !== 'address') {
+			if($v['args']['type'] !== 'checkbox' && $v['args']['type'] !== 'address' && $v['args']['type'] !== 'row') {
 				echo $v['name']; 
 			}
 			
@@ -1418,6 +1531,7 @@ function launchpad_meta_box_handler($post, $args) {
 				case 'taxonomy':
 // 				case 'wysiwyg':
 				case 'checkbox':
+				case 'row':
 				break;
 				default:
 					echo '</label>';
@@ -1855,6 +1969,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 			switch($field['args']['type']) {
 				case 'wysiwyg':
 				case 'repeater':
+				case 'row':
 					$use_label = false;
 				break;
 			}
@@ -1919,14 +2034,30 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 				$field['args']['value'] = $values[$sub_field_name];
 			}
 			
+			// Rows are weird. In order to keep a flat value hierarchy, we have to manipulate some things.
+			if($field['args']['type'] === 'row') {
+				foreach($field['args']['subfields'] as $key => &$data) {
+					if($values[$key]) {
+						$data['args']['value'] = $values[$key];
+					}
+				}
+			}
+			
+			// Try to keep a flat value hierarchy for rows.  Rows are transparent.
+			if($field['args']['type'] !== 'row') {
+				$field_input_name = 'launchpad_meta[' . $type . '][' . $flex_uid . '][' . $field_name . '][' . $sub_field_name . ']';
+			} else {
+				$field_input_name = 'launchpad_meta[' . $type . '][' . $flex_uid . '][' . $field_name . ']';				
+			}
+			
 			// Render the form field.
 			launchpad_render_form_field(
 					array_merge(
 						$field['args'], 
 						array(
-							'name' => 'launchpad_meta[' . $type . '][' . $flex_uid . '][' . $field_name . '][' . $sub_field_name . ']',
+							'name' => $field_input_name,
 							'id' => $id,
-							'label' => $field['name']
+							'label' => isset($field['name']) ? $field['name'] : ''
 						)
 					), 
 					false, 

@@ -677,6 +677,31 @@ small.launchpad-inline {
 			display: block;
 		}
 	}
+	
+	.launchpad-metabox-row {
+		overflow: hidden;
+		margin: -1em -2em;
+		
+		.launchpad-metabox-column {
+			float: left;
+		}
+		
+		&.launchpad-metabox-columns-1 > .launchpad-metabox-column {
+			width: 100%;
+		}
+		
+		&.launchpad-metabox-columns-2 > .launchpad-metabox-column {
+			width: 50%;
+		}
+		
+		&.launchpad-metabox-columns-3 > .launchpad-metabox-column {
+			width: 33.3333%;
+		}
+
+		&.launchpad-metabox-columns-4 > .launchpad-metabox-column {
+			width: 25%;
+		}
+	}
 }
 
 .launchpad-repeater-container {
