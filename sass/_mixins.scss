@@ -337,3 +337,14 @@
 	list-style: none;
 	padding: 0;
 }
+
+
+@mixin iconify($size, $circle: false) {
+	display: inline-block;
+	@if $circle {
+		border-radius: 50%;
+	}
+	
+	@include rems((height: $size, line-height: $size, width: $size));
+	text-align: center;
+}
