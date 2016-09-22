@@ -295,7 +295,11 @@ Metaboxes and Flexible Content use the field arrays to define what fields are av
 			<dt>label</dt>
 			<dd>For repeater fields, the label above the repeater. For address fields, the legend of the fieldset containing the address.</dd>
 			<dt>subfields</dt>
-			<dd>For repeater fields, the subfields array is the same as the fields array.</dd>
+			<dd>For repeater fields and row fields, the subfields array is the same as the fields array.</dd>
+			<dt>columns</dt>
+			<dd>Specify columns on row fields for more fine-grained control.</dd>
+			<dt>class</dt>
+			<dd>Specify a class on row fields for more fine-grained control. Use admin-styles.scss to add specific styles for this class.</dd>
 			<dt>toggle</dt>
 			<dd>For native controls, you may specify fields to toggle and what values for the current field cause the field to hide.  This is done as an array like: array('input_1' => array('show_when' => ''), 'input_2' => array('hide_when' => 'test')).  With the previous array, both input_1 and input_2 would be shown by default.  If the user then typed 't' into the field, input_1 would be hidden and input_2 would be shown.  If the user continued typing until the value was "test", input_1 would remain hidden and input_2 would hide.  Toggling is scoped to the current metabox!</dd>
 			<dt>watch</dt>
@@ -333,6 +337,8 @@ The following field types are available:
 	<dd>An HTML textarea.</dd>
 	<dt>wysiwyg</dt>
 	<dd>A WordPress editor, complete with visual and text only views and media buttons.</dd>
+	<dt>row</dt>
+	<dd>Mainly used for grouping fields on a single row. *NOTE: USE AT YOUR OWN RISK. I HAVE NOT YET TESTED COMPLEX FIELD TYPES IN A ROW. YOU SHOULD PROBABLY STICK TO ONLY TEXT/CHECKBOX/SELECT!!!*</dd>
 </dl>
 
 For a complete example of all the field types, look at lib/custom/examples.php.
