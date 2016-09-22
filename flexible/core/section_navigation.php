@@ -28,7 +28,7 @@ if($children) {
 
 ?>
 
-<section class="flexible-<?php echo sanitize_title($flex_type) ?>">
+<section class="flexible flexible-<?php echo sanitize_title($flex_type) ?>">
 <?php if($flex_values['title']) { ?>
 	<h1><?php echo $flex_values['title'] ?></h1>
 <?php } ?>
