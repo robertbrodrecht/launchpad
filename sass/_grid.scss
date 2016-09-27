@@ -29,6 +29,10 @@ $column-adjust: 100/$column-count;
 	}
 	
 	> * {
+		+ * {
+			margin-top: 0;
+		}
+		
 		@if not index($options, "table") and not index($options, "no-float") {
 			float: left;
 		}

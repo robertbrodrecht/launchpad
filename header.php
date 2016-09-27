@@ -41,3 +41,13 @@ $excerpt = launchpad_seo_excerpt();
 			<?php launchpad_wp_nav_menu(array('theme_location' => 'primary', 'menu_class' => 'nav-header', 'container' => false)); ?>
 		</nav>
 		<section id="main" class="main" role="main" aria-live="polite" aria-relevant="text">
+
+
+<div class="row">
+	<div class="column col-4 col-large-6 col-medium-8 col-small-12" style="background: red;">
+		a
+	</div>
+	<div class="column col-8 col-large-6 col-medium-4 col-small-12" style="background: green;">
+		b
+	</div>
+</div>

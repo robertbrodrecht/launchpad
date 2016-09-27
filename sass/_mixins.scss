@@ -339,6 +339,7 @@
 }
 
 
+// Turn a character into an icon-like thing.
 @mixin iconify($size, $circle: false) {
 	display: inline-block;
 	@if $circle {
