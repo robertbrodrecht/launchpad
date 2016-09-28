@@ -1675,7 +1675,7 @@ function launchpad_migrate_render_admin_page() {
 									?>
 									<div class="launchpad-metabox-field">
 										<label>
-											<input type="checkbox" name="migrate_database[<?= $table ?>]" value="<?= htmlentities(json_encode($details)) ?>"<?= !isset($_POST['migrate_database']) || $_POST['migrate_database'][$table] ? ' checked="checked"' : '' ?> data-rows="<?= $details->rows ?>" data-files="<?= $details->files ?>">
+											<input type="checkbox" name="migrate_database[<?= $table ?>]" value="<?= htmlentities(json_encode($details)) ?>"<?= !isset($_POST['migrate_database']) || $_POST['migrate_database'][$table] ? ' checked="checked"' : '' ?> data-launchpad-rows="<?= $details->rows ?>" data-launchpad-files="<?= $details->files ?>">
 											<?= $table ?>
 										</label>
 									</div>

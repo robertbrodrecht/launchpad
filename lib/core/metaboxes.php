@@ -119,11 +119,11 @@ function launchpad_render_field_checkbox($field_output_name, $field_output_id = 
 	// This allows for unchecked checkboxes to have an empty value.
 	// Because PHP is good for the job, a checked checkbox overwrites 
 	// the empty value in the querystring array.
-	echo '<input type="hidden" name="' . $field_output_name . '" value="" data-default="' . htmlentities($args['default']) . '">';
+	echo '<input type="hidden" name="' . $field_output_name . '" value="" data-launchpad-default="' . htmlentities($args['default']) . '">';
 	if($subfield) {
 		echo '<label class="' . $class . '" for="' . $field_output_id . '">';
 	}
-	echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . '>';
+	echo '<input type="checkbox" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . ($val ? ' checked="checked"' : '') . (isset($args['toggle']) ? ' data-launchpad-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-launchpad-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . '>';
 	if($subfield) {
 		echo ' ' . $subfield . '</label>';
 	}
@@ -176,7 +176,7 @@ function launchpad_render_field_generic($field_output_name, $field_output_id = '
 		$add_class .= ' launchpad-date-picker';
 	}
 
-	echo '<input type="' . $args['type'] . '" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . (isset($args['placeholder']) ? 'placeholder="' . $args['placeholder'] . '"' : '') . ' value="' . htmlentities($val) . '" class="regular-text' . $add_class . '"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
+	echo '<input type="' . $args['type'] . '" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . (isset($args['placeholder']) ? 'placeholder="' . $args['placeholder'] . '"' : '') . ' value="' . htmlentities($val) . '" class="regular-text' . $add_class . '"' . (isset($args['maxlength']) ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-launchpad-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-launchpad-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-launchpad-default="' . htmlentities($args['default']) . '">';
 }
 
 
@@ -207,7 +207,7 @@ function launchpad_render_field_text($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
-	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . (isset($args['placeholder']) ? 'placeholder="' . $args['placeholder'] . '"' : '') . ' value="' . ($val ? htmlentities($val) : '') . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
+	echo '<input type="text" name="' . $field_output_name . '" id="' . $field_output_id . '" ' . (isset($args['placeholder']) ? 'placeholder="' . $args['placeholder'] . '"' : '') . ' value="' . ($val ? htmlentities($val) : '') . '" class="regular-text"' . (isset($args['maxlength']) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : '') . (isset($args['toggle']) ? ' data-launchpad-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-launchpad-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-launchpad-default="' . htmlentities($args['default']) . '">';
 }
 
 
@@ -238,7 +238,7 @@ function launchpad_render_field_textarea($field_output_name, $field_output_id = 
 	if($subfield) {
 		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
-	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : ''). (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">' . html_entity_decode($val) . '</textarea>';
+	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="10" cols="50" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : ''). (isset($args['toggle']) ? ' data-launchpad-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-launchpad-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-launchpad-default="' . htmlentities($args['default']) . '">' . html_entity_decode($val) . '</textarea>';
 }
 
 /**
@@ -268,7 +268,7 @@ function launchpad_render_field_code($field_output_name, $field_output_id = '', 
 	if($subfield) {
 		echo '<label class="' . $class . '" for="' . $field_output_id . '">' . $subfield . '</label>';
 	}
-	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="2" cols="5" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : ''). (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">' . html_entity_decode($val) . '</textarea>';
+	echo '<textarea name="' . $field_output_name . '" id="' . $field_output_id . '" rows="2" cols="5" class="large-text code"' . (array_key_exists('maxlength', $args) && (int) $args['maxlength'] ? ' maxlength="' . (int) $args['maxlength'] . '"' : ''). (isset($args['toggle']) ? ' data-launchpad-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-launchpad-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-launchpad-default="' . htmlentities($args['default']) . '">' . html_entity_decode($val) . '</textarea>';
 }
 
 
@@ -302,7 +302,7 @@ function launchpad_render_field_select($field_output_name, $field_output_id = ''
 	}
 	
 	// Create the select.
-	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
+	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-launchpad-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-launchpad-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-launchpad-default="' . htmlentities($args['default']) . '">';
 	echo '<option value="">Select One</option>';
 	echo launchpad_create_select_options($options, $val);
 	echo '</select>';
@@ -342,7 +342,7 @@ function launchpad_render_field_selectmulti($field_output_name, $field_output_id
 	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
 	
 	// Create the select.
-	echo '<select name="' . $field_output_name . '[]" size="10" multiple="multiple" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
+	echo '<select name="' . $field_output_name . '[]" size="10" multiple="multiple" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-launchpad-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-launchpad-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-launchpad-default="' . htmlentities($args['default']) . '">';
 	echo launchpad_create_select_options($options, $val);
 	echo '</select>';
 }
@@ -406,7 +406,7 @@ function launchpad_render_field_file($field_output_name, $field_output_id = '', 
 		echo '<br><a href="#" class="launchpad-delete-file" onclick="document.getElementById(\'' . $field_output_id . '\').value=\'\'; this.parentNode.removeChild(this); return false;">' . $existing . '</a>';
 	}
 		
-	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-for="' . $field_output_id . '" ' . (array_key_exists('limit', $args) ? 'data-limit="' . html_entity_decode($args['limit']) . '"' : '') . ' class="file-button">Upload File</button>';
+	echo '<input type="hidden" name="' . $field_output_name . '" id="' . $field_output_id . '" value="' . $val . '" class="regular-text"><button type="button" class="launchpad-full-button launchpad-file-button button insert-media add_media" data-launchpad-for="' . $field_output_id . '" ' . (array_key_exists('limit', $args) ? 'data-launchpad-limit="' . html_entity_decode($args['limit']) . '"' : '') . ' class="file-button">Upload File</button>';
 }
 
 
@@ -533,7 +533,7 @@ function launchpad_render_field_menu($field_output_name, $field_output_id = '', 
 	}
 	
 	// Create the select.
-	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-default="' . htmlentities($args['default']) . '">';
+	echo '<select name="' . $field_output_name . '" id="' . $field_output_id . '"' . (isset($args['toggle']) ? ' data-launchpad-toggle="' . htmlentities(json_encode($args['toggle'])) . '"' : '') . (isset($args['watch']) ? ' data-launchpad-watch="' . htmlentities(json_encode($args['watch'])) . '"' : '') . ' data-launchpad-default="' . htmlentities($args['default']) . '">';
 	echo '<option value="">Select One</option>';
 	echo launchpad_create_select_options($menu_list, $val);
 	echo '</select>';
@@ -582,7 +582,7 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	
 	
 	// Field container.
-	echo '<div class="launchpad-relationship-container" data-post-type="' . $post_type_str . '" data-field-name="' . $field_output_name . '[]" data-limit="' . $limit . '" data-query="' . htmlentities(json_encode($query)) . '">';
+	echo '<div class="launchpad-relationship-container" data-launchpad-post-type="' . $post_type_str . '" data-launchpad-field-name="' . $field_output_name . '[]" data-launchpad-limit="' . $limit . '" data-launchpad-query="' . htmlentities(json_encode($query)) . '">';
 	
 	// Default Value
 	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
@@ -619,7 +619,7 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 		}
 		
 		// Output the option.
-		echo '<li><a href="#" data-id="' . $p->ID . '">' . $p->post_title . ' <small>' . $small . '</small></a></li>';
+		echo '<li><a href="#" data-launchpad-id="' . $p->ID . '">' . $p->post_title . ' <small>' . $small . '</small></a></li>';
 	}
 	
 	// Close post list container.
@@ -660,7 +660,7 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 			}
 			
 			// Output the option.
-			echo '<li><a href="#" data-id="' . $post_id->ID . '"><input type="hidden" name="' . $field_output_name . '[]" value="' . $post_id->ID . '">' . $post_id->post_title . ' <small>' . $small . '</small></a></li>';
+			echo '<li><a href="#" data-launchpad-id="' . $post_id->ID . '"><input type="hidden" name="' . $field_output_name . '[]" value="' . $post_id->ID . '">' . $post_id->post_title . ' <small>' . $small . '</small></a></li>';
 		}
 	}
 	
@@ -851,7 +851,7 @@ function launchpad_render_field_repeater($field_output_name, $subfields, $label,
 	echo '</div>';
 	
 	// Add a button that will be used to add repeater items.
-	echo '<button type="button" class="button launchpad-repeater-add" data-for="launchpad-' . $repeater_tmp_id . '-repeater">Add Additional ' . $label . '</button>';
+	echo '<button type="button" class="button launchpad-repeater-add" data-launchpad-for="launchpad-' . $repeater_tmp_id . '-repeater">Add Additional ' . $label . '</button>';
 }
 
 
@@ -1002,7 +1002,7 @@ function launchpad_render_field_address($field_output_name, $field_output_id = '
 		);
 	}
 	
-	echo '<fieldset class="launchpad-address launchpad-metabox-fieldset" data-default="' . htmlentities($args['default']) . '"><legend>' . (isset($args['label']) ? $args['label'] : 'Address Details') . '</legend>';
+	echo '<fieldset class="launchpad-address launchpad-metabox-fieldset" data-launchpad-default="' . htmlentities($args['default']) . '"><legend>' . (isset($args['label']) ? $args['label'] : 'Address Details') . '</legend>';
 	
 	echo '<div class="launchpad-google-map-embed">';
 	if($val['latitude'] && $val['longitude']) {
@@ -1449,7 +1449,7 @@ if(is_admin()) {
 function launchpad_meta_box_handler($post, $args) {
 	
 	if(isset($args['args']['watch'])) {
-		echo '<div data-watch="' . htmlentities(json_encode($args['args']['watch'])) . '"></div>';
+		echo '<div data-launchpad-watch="' . htmlentities(json_encode($args['args']['watch'])) . '"></div>';
 	}
 	
 	// Loop the fields that go into the metabox.
@@ -1582,7 +1582,7 @@ function launchpad_flexible_handler($post, $args) {
 	
 	$watch = '';
 	if(isset($args['args']['watch'])) {
-		$watch = ' data-watch="' . htmlentities(json_encode($args['args']['watch'])) . '"';
+		$watch = ' data-launchpad-watch="' . htmlentities(json_encode($args['args']['watch'])) . '"';
 	}
 	
 	// Render the flexible container.

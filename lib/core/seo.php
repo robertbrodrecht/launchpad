@@ -320,9 +320,9 @@ function launchpad_seo_meta_box_handler($post, $args) {
 		<hr class="launchpad-hr">
 		<h3 class="launchpad-sub-section-heading">SERP Preview: Would you click through to read your content?</h3>
 		<div class="launchpad-serp-preview">
-			<div id="serp-heading" data-post-title="<?php echo esc_html($post->post_title); ?>" class="launchpad-serp-heading"><?php echo preg_replace($keyword_bold_preg, '<strong>$1</strong>', substr($title_natural, 0 , 70)) . (strlen($title_natural) > 70 ? '...' : ''); ?></div>
+			<div id="serp-heading" data-launchpad-post-title="<?php echo esc_html($post->post_title); ?>" class="launchpad-serp-heading"><?php echo preg_replace($keyword_bold_preg, '<strong>$1</strong>', substr($title_natural, 0 , 70)) . (strlen($title_natural) > 70 ? '...' : ''); ?></div>
 			<div class="launchpad-serp-url"><?php echo preg_replace($keyword_bold_preg, '<strong>$1</strong>', preg_replace('|^http://|i','', $permalink)) ?></div>
-			<div id="serp-meta" data-post-excerpt="<?php echo esc_html(launchpad_excerpt(100, false, $post->ID)); ?>" class="launchpad-serp-meta"><?php echo preg_replace($keyword_bold_preg, '<strong>$1</strong>', substr($seo_exerpt, 0 , 155)) . (strlen($seo_exerpt) > 155 ? ' ...' : ''); ?></div>
+			<div id="serp-meta" data-launchpad-post-excerpt="<?php echo esc_html(launchpad_excerpt(100, false, $post->ID)); ?>" class="launchpad-serp-meta"><?php echo preg_replace($keyword_bold_preg, '<strong>$1</strong>', substr($seo_exerpt, 0 , 155)) . (strlen($seo_exerpt) > 155 ? ' ...' : ''); ?></div>
 		</div>
 		<div class="launchpad-table-columns">
 			<div>

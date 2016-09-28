@@ -153,12 +153,12 @@ jQuery(document).ready(
 		}
 		
 		function handleToggleStates() {
-			$('[data-toggle]:not(.hide-if-no-js)').each(
+			$('[data-launchpad-toggle]:not(.hide-if-no-js)').each(
 				function() {
 					var me = $(this),
 						elval = me.val(),
 						cont = me.closest('.launchpad-flexible-metabox-container, .postbox'),
-						toggle = me.data('toggle');
+						toggle = me.data('launchpad-toggle');
 					
 					if(elval === null) {
 						elval = '';
@@ -268,10 +268,10 @@ jQuery(document).ready(
 		}
 		
 		function handleWatchStates() {
-			$('[data-watch]').each(
+			$('[data-launchpad-watch]').each(
 				function() {
 					var me = $(this),
-						watch = me.data('watch'),
+						watch = me.data('launchpad-watch'),
 						show_me = true;
 						
 					$.each(
@@ -419,21 +419,21 @@ jQuery(document).ready(
 					},
 					custom_uploader;
 					
-					if(me.data('limit')) {
-						config.library = {type: me.data('limit')};
+					if(me.data('launchpad-limit')) {
+						config.library = {type: me.data('launchpad-limit')};
 					}
 					
 					custom_uploader = wp.media(config).on(
 						'select', 
 						function() {
 							var attachment = custom_uploader.state().get('selection').first().toJSON(),
-								update = $('#' + me.data('for')),
+								update = $('#' + me.data('launchpad-for')),
 								delete_link = update.parent().find('.launchpad-delete-file'),
 								remove_link;
 							if(update.length) {
 								update.attr('value', attachment.id);
 								
-								remove_link = $('<a href="#" class="launchpad-delete-file" data-for="' + me.data('for') + '" onclick="document.getElementById(this.getAttribute(\'data-for\')).value=\'\'; this.parentNode.removeChild(this); return false;"><img src="' + (attachment.sizes && attachment.sizes.thumbnail ?  attachment.sizes.thumbnail.url :  attachment.icon) + '"></a>');
+								remove_link = $('<a href="#" class="launchpad-delete-file" data-launchpad-for="' + me.data('launchpad-for') + '" onclick="document.getElementById(this.getAttribute(\'data-launchpad-for\')).value=\'\'; this.parentNode.removeChild(this); return false;"><img src="' + (attachment.sizes && attachment.sizes.thumbnail ?  attachment.sizes.thumbnail.url :  attachment.icon) + '"></a>');
 								if(delete_link.length) {
 									delete_link.replaceWith(remove_link);
 								} else {
@@ -455,7 +455,7 @@ jQuery(document).ready(
 			'button.launchpad-repeater-add',
 			function() {
 				var me = $(this),
-					container_id = me.data('for'),
+					container_id = me.data('launchpad-for'),
 					container = $('#' + container_id),
 					master = container.children().first().clone(),
 					master_replace_with = 'launchpad-' + new Date().getTime() + '-repeater',
@@ -463,7 +463,7 @@ jQuery(document).ready(
 					
 				//console.log(master);
 				
-				master.find('[name], [data-field-name], button[data-for]').each(
+				master.find('[name], [data-field-name], button[data-launchpad-for]').each(
 					function() {
 						var me = $(this);
 						
@@ -474,8 +474,8 @@ jQuery(document).ready(
 							}
 						}
 						
-						if(me.is('button[data-for]')) {
-							me.attr('data-for', me.attr('data-for').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
+						if(me.is('button[data-launchpad-for]')) {
+							me.attr('data-launchpad-for', me.attr('data-launchpad-for').replace(/launchpad\-.*?\-repeater/g, master_replace_with));
 							me.parent().find('a.launchpad-delete-file').remove();
 							me.parent().find('input[type=hidden]').get(0).value = '';
 						}
@@ -485,16 +485,16 @@ jQuery(document).ready(
 						}
 						
 						if(me.is('input:not([type=checkbox])')) {
-							me.val(me.data('default'));
+							me.val(me.data('launchpad-default'));
 						} else if(me.is('input[type=checkbox]')) {
-							if(me.parent().parent().find('input:first-child').first().data('default')) {
+							if(me.parent().parent().find('input:first-child').first().data('launchpad-default')) {
 								me.attr('checked', 'checked');
 							} else {
 								me.removeAttr('checked');
 							}
 						}
 						if(me.is('select')) {
-							me.val(me.data('default'));
+							me.val(me.data('launchpad-default'));
 						}
 					}
 				);
@@ -600,14 +600,14 @@ jQuery(document).ready(
 				}
 				
 				$.get(
-					'/wp-admin/admin-ajax.php?action=search_posts&post_type=' + container.data('post-type') + '&query=' + (container.data('query') ? encodeURIComponent($.param(container.data('query'))) : '') + '&terms=' + me.val() + '&nonce=' + launchpad_nonce,
+					'/wp-admin/admin-ajax.php?action=search_posts&post_type=' + container.data('launchpad-post-type') + '&query=' + (container.data('launchpad-query') ? encodeURIComponent($.param(container.data('launchpad-query'))) : '') + '&terms=' + me.val() + '&nonce=' + launchpad_nonce,
 					function(data) {
 						listing.html('');
 						$.each(
 							data,
 							function() {
 								listing.append(
-									$('<li><a href="#" data-id="' + this.ID + '">' + this.post_title + ' <small>' + this.ancestor_chain + '</small></a></li>')
+									$('<li><a href="#" data-launchpad-id="' + this.ID + '">' + this.post_title + ' <small>' + this.ancestor_chain + '</small></a></li>')
 								);
 							}
 						);
@@ -622,14 +622,18 @@ jQuery(document).ready(
 					cp = me.clone(),
 					container = me.closest('.launchpad-relationship-container'),
 					addto = container.find('.launchpad-relationship-items'),
-					fname = container.data('field-name'),
-					limit = container.data('limit');
+					fname = container.data('launchpad-field-name'),
+					limit = container.data('launchpad-limit');
 				
 				e.preventDefault();
 				
-				cp.append($('<input type="hidden" name="' + fname + '" value="' + me.data('id') + '">'));
+				cp.append($('<input type="hidden" name="' + fname + '" value="' + me.data('launchpad-id') + '">'));
 				
-				if(!$('[value="' + me.data('id') + '"]', addto).length && (+limit <= 0 || $('[value]', addto).length < +limit)) {
+				if(typeof limit === 'undefined') {
+					limit = -1;
+				}
+				
+				if(!$('[value="' + me.data('launchpad-id') + '"]', addto).length && (+limit <= 0 || $('[value]', addto).length < +limit)) {
 					me = $('<li>');
 					me.css('height', 0);
 					me.append(cp);
@@ -747,7 +751,7 @@ jQuery(document).ready(
 				parsed_val = parsed_val.replace(/^\s+/, '').replace(/\s+$/, '');
 				
 				if(parsed_val === '') {
-					parsed_val = serp_head.data('post-title');
+					parsed_val = serp_head.data('launchpad-post-title');
 				}
 				if(parsed_val) {
 					serp_head.html(
@@ -771,7 +775,7 @@ jQuery(document).ready(
 				parsed_val = parsed_val.replace(/^\s+/, '').replace(/\s+$/, '');
 				
 				if(parsed_val === '') {
-					parsed_val = serp_head.data('post-excerpt');
+					parsed_val = serp_head.data('launchpad-post-excerpt');
 				}
 				if(parsed_val) {
 					serp_head.html(
@@ -824,12 +828,12 @@ jQuery(document).ready(
 						$('#migrate-table-checkbox :checked').each(
 							function() {
 								var me = $(this);
-								if(me.data('rows')) {
-									total_rows += (+me.data('rows'));
+								if(me.data('launchpad-rows')) {
+									total_rows += (+me.data('launchpad-rows'));
 								}
 								if(count_rows) {
-									if(me.data('files')) {
-										total_files += (+me.data('files'));
+									if(me.data('launchpad-files')) {
+										total_files += (+me.data('launchpad-files'));
 									}
 								}
 							}
