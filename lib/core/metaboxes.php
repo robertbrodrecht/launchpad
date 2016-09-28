@@ -1465,7 +1465,7 @@ function launchpad_meta_box_handler($post, $args) {
 		if($add_metabox_field) {
 	
 		?>
-		<div class="launchpad-metabox-field">
+		<div class="launchpad-metabox-field <?= isset($v['args']['class']) ? $v['args']['class'] : '' ?>">
 			<?php
 			
 			// Get the generic help for the type.
@@ -1978,7 +1978,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 			$id = preg_replace('/[^A-Za-z0-9]/', '', $field_name . '' . $sub_field_name . '' . uniqid());
 			
 			// Print the field container.
-			echo '<div class="launchpad-metabox-field">';
+			echo '<div class="launchpad-metabox-field ' . (isset($field['args']['class']) ? $field['args']['class'] : '') . '">';
 			
 			// Get the help information for this field type.
 			$generic_help = launchpad_get_field_help($field['args']['type']);
