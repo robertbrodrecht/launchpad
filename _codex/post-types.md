@@ -276,6 +276,8 @@ Metaboxes and Flexible Content use the field arrays to define what fields are av
 		<dl>
 			<dt>type</dt>
 			<dd>The type of field to display.  See below for specific types that are available.</dd>
+			<dt>class</dt>
+			<dd>Add custom classes to the <code>.launchpad-metabox-field</code>.</dd>
 			<dt>default</dt>
 			<dd>The default value of the field.</dd>
 			<dt>options</dt>
