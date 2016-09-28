@@ -1921,7 +1921,7 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	<?php
 	echo '</div>';
 	
-	echo '<a href="#" onclick="jQuery(this).parent().remove(); return false;" class="launchpad-flexible-metabox-close">&times;</a>';
+	echo '<a href="#" class="launchpad-flexible-metabox-close">&times;</a>';
 	
 	
 	echo '<a href="#" class="launchpad-flexible-metabox-move-up" title="Move Up">⇡</a>';

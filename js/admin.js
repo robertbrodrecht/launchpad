@@ -46,6 +46,46 @@ jQuery(document).ready(
 		
 		$(document.body).on(
 			'click',
+			'.launchpad-flexible-container div.handlediv',
+			function(e) {
+				var me = $(e.target).closest('div.handlediv'),
+					currentState = me.parent().hasClass('closed');
+				
+				if(e.altKey || e.ctrlKey) {
+					if(currentState) {
+						me.closest('.inside').find('.launchpad-flexible-metabox-container').addClass('closed');
+					} else {
+						me.closest('.inside').find('.launchpad-flexible-metabox-container').removeClass('closed');						
+					}
+				}
+			}
+		);
+		
+		$(document.body).on(
+			'click',
+			'.launchpad-flexible-metabox-close',
+			function(e) {
+				var me = $(e.target).closest('.inside');
+				
+				e.preventDefault();
+				
+				if(e.altKey || e.ctrlKey) {
+					if(confirm('Do you really want to remove all modules?')) {
+						me.find('.launchpad-flexible-metabox-close').each(
+							function(i) {
+								$(this).trigger('click');
+							}
+						);						
+					}
+				} else {
+					$(this).parent().animate({'opacity': 0, 'height': 0}, function(){$(this).remove();});
+				}
+			}
+		);
+		
+		
+		$(document.body).on(
+			'click',
 			'.launchpad-flexible-metabox-move-down',
 			function(e) {
 				var p = $(e.target).closest('.launchpad-flexible-metabox-container');
