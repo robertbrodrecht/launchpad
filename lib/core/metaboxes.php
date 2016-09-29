@@ -1830,8 +1830,6 @@ function launchpad_get_default_flexible_modules() {
 }
 
 
-
-
 /**
  * Get Flexible Content Layout
  *
@@ -1922,13 +1920,9 @@ function launchpad_get_flexible_field($type = false, $field_name = false, $post_
 	echo '</div>';
 	
 	echo '<a href="#" class="launchpad-flexible-metabox-close">&times;</a>';
-	
-	
 	echo '<a href="#" class="launchpad-flexible-metabox-move-up" title="Move Up">⇡</a>';
 	echo '<a href="#" class="launchpad-flexible-metabox-move-down" title="Move Down">⇣</a>';
 	
-	
-	//⬆
 	
 	// If there are help details for the module, include them here.
 	if(isset($details['help'])) {

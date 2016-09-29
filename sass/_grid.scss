@@ -147,3 +147,37 @@ $column-adjust: 100/$column-count;
 		}
 	}
 }
+
+// Generate various column settings for a selector or root-level.
+// This generates about 3.5KB of code every time you use it, so be smart 
+// about how you use it. You can use this as a stand-alone mixin in the root CSS
+// to generate .col-1, etc, as generic classes.
+@mixin columns($gutter: '', $and: '') {
+	@if $and != '' {
+		$and: '&';
+	}
+	
+	@for $col from 1 through 12 {
+		#{$and}.col-#{$col} {
+			@if $gutter != '' {
+				@include col($col of 12, gutter gutter-margin);
+			} @else {
+				@include col($col of 12);
+			}
+		}
+	}
+	
+	@each $size, $px in $break-points {
+		@include media-max($size) {
+			@for $col from 1 through 12 {
+				#{$and}.col-#{$size}-#{$col} {
+					@if $gutter != '' {
+						@include col($col of 12, gutter gutter-margin);
+					} @else {
+						@include col($col of 12);
+					}
+				}
+			}
+		}
+	}
+}
