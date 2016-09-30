@@ -463,14 +463,15 @@
 		).getPropertyValue('content')
 	);
 	
+	window.currentMediaQuerySize = function() {
+		return window.getComputedStyle(
+				document.querySelector('meta[name="viewport"]')
+			).getPropertyValue('content');
+	};
+	
 	$(document).ready(init);
 })(window.jQuery, this);
 
-window.currentMediaQuerySize = function() {
-	return window.getComputedStyle(
-			document.querySelector('meta[name="viewport"]')
-		).getPropertyValue('content');
-};
 
 /**
  * Custom jQuery Events
