@@ -439,9 +439,38 @@
 		reinit();
 	}
 	
+	$(window).on(
+		'resize',
+		function() {
+			var curViewPortValue = window.getComputedStyle(
+				document.querySelector('meta[name="viewport"]')
+			).getPropertyValue('content');
+			
+			if(
+				curViewPortValue !== 
+				$('meta[name="viewport"]').attr('data-current-size')
+			) {
+				$('meta[name="viewport"]').attr('data-current-size', curViewPortValue);
+				$(window).trigger('mediaQueryChange', [curViewPortValue]);
+			}
+		}
+	);
+	
+	$('meta[name="viewport"]').attr(
+		'data-current-size', 
+		window.getComputedStyle(
+			document.querySelector('meta[name="viewport"]')
+		).getPropertyValue('content')
+	);
+	
 	$(document).ready(init);
 })(window.jQuery, this);
 
+window.currentMediaQuerySize = function() {
+	return window.getComputedStyle(
+			document.querySelector('meta[name="viewport"]')
+		).getPropertyValue('content');
+};
 
 /**
  * Custom jQuery Events

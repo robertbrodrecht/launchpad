@@ -273,6 +273,18 @@ a, button, input, select, textarea, label, summary {
   -ms-touch-action: manipulation;
       touch-action: manipulation; }
 
+meta[name="viewport"] {
+  content: "large";
+  display: none; }
+
+@media (max-width: 48em) {
+  meta[name="viewport"] {
+    content: "medium"; } }
+
+@media (max-width: 35.5em) {
+  meta[name="viewport"] {
+    content: "small"; } }
+
 .grid-item {
   background: rgba(0, 0, 255, 0.25);
   position: absolute;
