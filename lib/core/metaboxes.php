@@ -592,7 +592,7 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	
 	$query = array_merge(
 		array(
-			'post_type' => explode(',', $post_type),
+			'post_type' => explode(',', $post_type_str),
 			'posts_per_page' => 25,
 			'post_status' => 'any'
 		),
@@ -2166,6 +2166,10 @@ function launchpad_get_post_list() {
 		}
 	} else {
 		$query_extra = array();
+	}
+	
+	if(is_array($_GET['post_type'])) {
+		$_GET['post_type'] = implode(',', $_GET['post_type']);
 	}
 	
 	// If there are search terms, search for the terms.
