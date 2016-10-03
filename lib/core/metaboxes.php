@@ -592,11 +592,13 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	
 	$query = array_merge(
 		array(
-			'post_type' => $post_type,
+			'post_type' => explode(',', $post_type),
 			'posts_per_page' => 25,
+			'post_status' => 'any'
 		),
 		$query
 	);
+	
 	
 	// Select the most recent 25 items in the post type.
 	$preload = new WP_Query($query);
@@ -1644,6 +1646,25 @@ function launchpad_flexible_handler($post, $args) {
  * @since		1.0
  */
 function launchpad_get_default_flexible_modules() {
+	$post_type_list = get_post_types();
+	$post_type_list_limited = array();
+	
+	foreach($post_type_list as $post_type_item) {
+		switch($post_type_item) {
+			default:
+				$post_type_list_limited[] = $post_type_item;
+			break;
+			case 'attachment':
+			case 'revision':
+			case 'nav_menu_item':
+			case 'bighashtags':
+			case 'lo_form_responses':
+			case 'lo_forms':
+				// Ignore these.
+			break;
+		}
+	}
+	
 	$return = array(
 		'accordion' => array(
 			'name' => 'Accordion List',
@@ -1758,7 +1779,7 @@ function launchpad_get_default_flexible_modules() {
 					'help' => '<p>The items to display in the actual link list.</p>',
 					'args' => array(
 						'type' => 'relationship',
-						'post_type' => 'any',
+						'post_type' => implode(',', $post_type_list_limited),
 						'limit' => 25
 					)
 				)
@@ -1821,7 +1842,7 @@ function launchpad_get_default_flexible_modules() {
 					)
 				)
 			)
-		),
+		)
 	);
 	
 	$return = apply_filters('launchpad_modify_default_flexible_modules', $return);
@@ -2153,7 +2174,8 @@ function launchpad_get_post_list() {
 				array_merge(
 					array(
 						'post_type' => explode(',', $_GET['post_type']),
-						's' => $_GET['terms']
+						's' => $_GET['terms'],
+						'post_status' => 'any'
 					),
 					$query_extra
 				)
@@ -2165,7 +2187,8 @@ function launchpad_get_post_list() {
 				array_merge(
 					array(
 						'post_type' => explode(',', $_GET['post_type']),
-						'posts_per_page' => 25
+						'posts_per_page' => 25,
+						'post_status' => 'any'
 					),
 					$query_extra
 				)
