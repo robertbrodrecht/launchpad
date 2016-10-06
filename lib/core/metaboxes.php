@@ -673,6 +673,147 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
 	echo '</div>';
 }
 
+/**
+ * Render A Relationship Taxonomy Field
+ * 
+ * @param		string $field_output_name The field's "name" attribute.
+ * @param		string $post_type The post type to use.  Maybe try "any" if you want all types.
+ * @param		int $limit The max number of fields to allow.
+ * @param		bool $val Whether the checkbox is checked.
+ * @see			launchpad_render_form_field
+ * @see			launchpad_get_post_list
+ * @since		1.0
+ */
+function launchpad_render_field_relationship_taxonomy($field_output_name, $tax_type = '', $limit = -1, $val = false) {
+	$field_output_name = trim($field_output_name);
+	if(!$field_output_name) {
+		return;
+	}
+	
+	$tax_type_str = '';
+	
+	if(is_string($tax_type)) {
+		$tax_type = trim($tax_type);
+		if($tax_type === '') {
+			$tax_type = 'category';
+		}
+	} else if(is_array($tax_type)) {
+		if(empty($tax_type)) {
+			$tax_type = 'category';
+		}
+	}
+	
+	if(is_array($tax_type)) {
+		$tax_type_str = implode(',', $tax_type);
+	} else {
+		$tax_type_str = $tax_type;
+	}
+	
+	// This field is quite complex.  A lot of the functionality is handeled via JavaScript
+	// and the search_posts API that is driven by launchpad_get_post_list().
+	
+	
+	
+	// Field container.
+	echo '<div class="launchpad-relationship-container" data-tax-type="' . $tax_type_str . '" data-launchpad-field-name="' . $field_output_name . '[]"  data-launchpad-limit="' . $limit . '">';
+	
+	// Default Value
+	echo '<input type="hidden" name="' . $field_output_name . '" value="">';
+	
+	// Post list container.
+	echo '<div class="launchpad-relationship-search"><label><input type="search" class="launchpad-relationship-taxonomy-search-field" placeholder="Search"></label><ul class="launchpad-relationship-list">';
+	
+	$query = get_terms(
+		array(
+			'taxonomy' => $tax_type_str,
+			'hide_empty' => true,
+			'number' => 25
+		)
+	);
+
+	// Loop each.
+	foreach($query as $p) {
+		// Get a list of acnestors.
+		$ancestors = get_terms(
+			array(
+				'taxonomy' => $tax_type_str,
+				'fields' => 'id',
+				'hide_empty' => true,
+				'parent' => $p->term_id
+			)
+		);
+		
+		// This will keep the ancestor hierarchy.
+		$small = '';
+		
+		// If there are ancestors, loop them and add them to the small.
+		if($ancestors) {
+			$ancestors = array_reverse($ancestors);
+			foreach($ancestors as $key => $ancestor) {
+				$ancestor = get_term_by('id', $ancestor, $tax_type_str);
+				$small .= ($key > 0 ? ' » ' : '') . $ancestor->name;
+			}
+		}
+		
+		// Output the option.
+		echo '<li><a href="#" data-launchpad-id="' . $p->term_id . '">' . $p->name . ' <small>' . $small . '</small></a></li>';
+	}
+	
+	// Close post list container.
+	echo '</ul></div>';
+	
+	// Add a note about how many items can go in the list.
+	if($limit > 0) {
+		$tmp_item_count_note = 'Maximum of ' . $limit . ' item' . ($limit == 1 ? '' : 's');
+	} else {
+		$tmp_item_count_note = 'Add as many as you like';
+	}
+	
+	// "Selected" list container.
+	echo '<div class="launchpad-relationship-items-container">';
+	echo '<strong> Saved Items (' . $tmp_item_count_note . ')</strong>';
+	echo '<ul class="launchpad-relationship-items">';
+	
+	// If there are values, we need to populate them.
+	if($val) {
+		// Loop the values.
+		foreach($val as $ID) {
+			// Get the post for the value.
+			$term = get_term_by('id',$ID,$tax_type_str);
+
+			// Get the post acncestors for the value.
+			$ancestors = get_terms(
+				array(
+					'taxonomy' => $tax_type_str,
+					'fields' => 'id',
+					'hide_empty' => true,
+					'parent' => $term->term_id
+				)
+			);
+			
+			// This will keep the ancestor hierarchy.
+			$small = '';
+			
+			// If there are ancestors, loop them and add them to the small.
+			if($ancestors) {
+				$ancestors = array_reverse($ancestors);
+				foreach($ancestors as $key => $ancestor) {
+					$ancestor = get_term_by('id', $ancestor, $tax_type_str);
+					$small .= ($key > 0 ? ' » ' : '') . $ancestor->name;
+				}
+			}
+			
+			// Output the option.
+			echo '<li><a href="#" data-launchpad-id="' . $term->term_id . '"><input type="hidden" name="' . $field_output_name . '[]" value="' . $term->term_id . '">' . $term->name . ' <small>' . $small . '</small></a></li>';
+		}
+	}
+	
+	// Close the "selected" list container.
+	echo '</ul></div>';
+	
+	// Close the field container.
+	echo '</div>';
+}
 
 /**
  * Render A Taxonomy Field
@@ -1200,10 +1341,10 @@ function launchpad_render_form_field($args, $subfield = false, $field_prefix = '
 			);
 		break;
 		case 'taxonomy':
-			launchpad_render_field_taxonomy(
+			launchpad_render_field_relationship_taxonomy(
 				$field_output_name, 
 				isset($args['taxonomy']) ? $args['taxonomy'] : 'category', 
-				isset($args['multiple']) ? $args['multiple'] : false, 
+				isset($args['limit']) ? $args['limit'] : -1,
 				$val
 			);
 		break;
@@ -2233,4 +2374,79 @@ function launchpad_get_post_list() {
 if($GLOBALS['pagenow'] === 'admin-ajax.php') {
 	add_action('wp_ajax_search_posts', 'launchpad_get_post_list');
 	//add_action('wp_ajax_nopriv_search_posts', 'launchpad_get_post_list');
+}
+
+/**
+ * AJAX Post Filter for Relationship Field
+ *
+ * @since		1.0
+ */
+function launchpad_get_taxonomy_list() {
+	check_ajax_referer('launchpad-admin-ajax-request', 'nonce');
+	
+	// JSON output header.
+	header('Content-type: application/json');
+	
+	// Trim the requested search terms.
+	$_GET['terms'] = trim($_GET['terms']);
+	
+	// If there are search terms, search for the terms.
+	if($_GET['terms']) {
+		$res = get_terms(
+			array(
+				'taxonomy' => $_GET['tax_type'],
+				'hide_empty' => true,
+				'search' => $_GET['terms']
+			)
+		);
+	// If there are no terms, get the most recent 25 of post_type.
+	} else {
+		$res = get_terms(
+			array(
+				'taxonomy' => $_GET['tax_type'],
+				'hide_empty' => true,
+				'number' => 25
+			)
+		);
+	}
+	
+	// Empty return array to populate.
+	$ret = array();
+	
+	// Loop the taxonomies.
+	foreach($res as $p) {
+		// Get a list of acnestors.
+		$ancestors = get_terms(
+			array(
+				'taxonomy' => $_GET['tax_type'],
+				'fields' => 'id',
+				'hide_empty' => true,
+				'parent' => $p->term_id
+			)
+		);
+		
+		// This will keep the ancestor hierarchy.
+		$small = '';
+		
+		// If there are ancestors, loop them and add them to the small.
+		if($ancestors) {
+			$ancestors = array_reverse($ancestors);
+			foreach($ancestors as $key => $ancestor) {
+				$ancestor = get_term_by('id', $ancestor, $_GET['tax_type']);
+				$small .= ($key > 0 ? ' » ' : '') . $ancestor->name;
+			}
+		}
+		
+		// Assing small to the ancestor_chain.
+		$p->ancestor_chain = $small;
+		// Add the post to the return variable.
+		$ret[] = $p;
+	}
+	
+	// Output the JSON.
+	echo json_encode($ret);
+	exit;
+}
+if($GLOBALS['pagenow'] === 'admin-ajax.php') {
+	add_action('wp_ajax_search_taxonomy', 'launchpad_get_taxonomy_list');
 }
