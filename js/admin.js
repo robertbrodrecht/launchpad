@@ -655,6 +655,32 @@ jQuery(document).ready(
 				);
 			}
 		).on(
+			'keyup input',
+			'.launchpad-relationship-taxonomy-search-field',
+			function(e) {
+				var me = $(this),
+					container = me.closest('.launchpad-relationship-container'),
+					listing = container.find('.launchpad-relationship-list');
+				if(e.type === 'input' && this.value.replace(/\s/, '') !== '') {
+					return;
+				}
+				
+				$.get(
+					'/wp-admin/admin-ajax.php?action=search_taxonomy&tax_type=' + container.data('tax-type') + '&terms=' + me.val() + '&nonce=' + launchpad_nonce,
+					function(data) {
+						listing.html('');
+						$.each(
+							data,
+							function() {
+								listing.append(
+									$('<li><a href="#" data-id="' + this.term_id + '">' + this.name + ' <small>' + this.ancestor_chain + '</small></a></li>')
+								);
+							}
+						);
+					}
+				);
+			}
+		).on(
 			'click',
 			'.launchpad-relationship-list a',
 			function(e) {
@@ -672,7 +698,7 @@ jQuery(document).ready(
 				if(typeof limit === 'undefined') {
 					limit = -1;
 				}
-				
+
 				if(!$('[value="' + me.data('launchpad-id') + '"]', addto).length && (+limit <= 0 || $('[value]', addto).length < +limit)) {
 					me = $('<li>');
 					me.css('height', 0);
