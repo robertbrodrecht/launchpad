@@ -681,7 +681,7 @@ function launchpad_render_field_relationship($field_output_name, $post_type = ''
  * @param		int $limit The max number of fields to allow.
  * @param		bool $val Whether the checkbox is checked.
  * @see			launchpad_render_form_field
- * @see			launchpad_get_post_list
+ * @see			launchpad_get_taxonomy_list
  * @since		1.0
  */
 function launchpad_render_field_relationship_taxonomy($field_output_name, $tax_type = '', $limit = -1, $val = false) {
