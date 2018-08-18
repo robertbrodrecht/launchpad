@@ -2416,14 +2416,7 @@ function launchpad_get_taxonomy_list() {
 	// Loop the taxonomies.
 	foreach($res as $p) {
 		// Get a list of acnestors.
-		$ancestors = get_terms(
-			array(
-				'taxonomy' => $_GET['tax_type'],
-				'fields' => 'id',
-				'hide_empty' => true,
-				'parent' => $p->term_id
-			)
-		);
+		$ancestors = get_ancestors($p->term_id, $_GET['tax_type']);
 		
 		// This will keep the ancestor hierarchy.
 		$small = '';
