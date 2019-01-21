@@ -649,5 +649,9 @@ function create_element($element = array()) {
 		}
 	}
 	
+	$void_elements = explode(',', 'area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr');
+	if(!in_array($type, $void_elements) && $self_closing === false) {
+		$return .= '</' . $type . '>';
+	}
 	return $return;
 }
