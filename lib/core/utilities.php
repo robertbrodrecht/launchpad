@@ -250,7 +250,7 @@ function launchpad_auto_paginate($next = 'Next', $prev = 'Prev', $link_count = 5
 					// Matches querystrings.
 					'/\?.*?$/',
 					// Matches page/#/
-					'/page.*?$/'
+					'/\/page.*?$/'
 				),
 				'',
 				$_SERVER['REQUEST_URI']
