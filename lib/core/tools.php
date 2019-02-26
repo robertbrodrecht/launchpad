@@ -833,6 +833,11 @@ if($GLOBALS['pagenow'] === 'admin-ajax.php') {
  * 
  * @since		1.5
  */
+/**
+ * Recursively Replace Hosts
+ * 
+ * @since		1.5
+ */
 function launchpad_migrate_domain_replace($input = '', $local, $remote) {
 	// If the current item is an array or object, we need to recurse.
 	if(is_array($input) || is_object($input)) {
@@ -843,7 +848,16 @@ function launchpad_migrate_domain_replace($input = '', $local, $remote) {
 		}
 	// Otherwise, we just replace the local host with the remote host.
 	} else {
-		$input = str_replace(parse_url($local, PHP_URL_HOST), parse_url($remote, PHP_URL_HOST), $input);
+		$input_unserialized = maybe_unserialize($input);
+		if(is_array($input_unserialized) || is_object($input_unserialized)) {
+			foreach($input_unserialized as &$child) {
+				// Recurse.
+				$child = launchpad_migrate_domain_replace($child, $local, $remote);
+			}
+			$input = serialize($input_unserialized);
+		} else {
+			$input = str_replace(parse_url($local, PHP_URL_HOST), parse_url($remote, PHP_URL_HOST), $input);
+		}
 	}
 	// Return the modified input.
 	return $input;
